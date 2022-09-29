@@ -12,11 +12,32 @@ void main() {
   group('Test Requests to Coinbase API Endpoints', () {
     setUp(() {});
 
+    test('Get Products', () async {
+      List<Product> products = await getProducts(isSandbox: isSbx);
+      print('Products: $products');
+
+      expect(products.isNotEmpty, isTrue);
+    });
+
     test('Get Products from Production', () async {
       List<Product> products = await getProducts();
       print('Products: $products');
 
       expect(products.isNotEmpty, isTrue);
+    });
+
+    test('Get Specific Product from Production', () async {
+      Product? product = await getProduct('BTC-USD');
+      print('Product: $product');
+
+      expect(product.id, 'BTC-USD');
+    });
+
+    test('Get Specific Product from Sandbox', () async {
+      Product? product = await getProduct('BTC-USD', isSandbox: true);
+      print('Product: $product');
+
+      expect(product.id, 'BTC-USD');
     });
   });
 }
