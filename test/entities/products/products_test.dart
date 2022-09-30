@@ -1,6 +1,6 @@
 import 'dart:io' show Platform;
 
-import 'package:coinbase_cloud_exchange_dart_client/src/entities/products.dart';
+import 'package:coinbase_cloud_exchange_dart_client/src/entities/products/products.dart';
 import 'package:coinbase_cloud_exchange_dart_client/src/models/product.dart';
 import 'package:test/test.dart';
 
@@ -14,14 +14,14 @@ void main() {
 
     test('Get Products', () async {
       List<Product> products = await getProducts(isSandbox: isSbx);
-      print('Products: $products');
+      // print('Products: $products');
 
       expect(products.isNotEmpty, isTrue);
     });
 
     test('Get Products from Production', () async {
       List<Product> products = await getProducts();
-      print('Products: $products');
+      // print('Products: $products');
 
       expect(products.isNotEmpty, isTrue);
     });
