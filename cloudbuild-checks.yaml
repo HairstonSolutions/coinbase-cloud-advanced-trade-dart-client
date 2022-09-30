@@ -1,0 +1,32 @@
+steps:
+  - id: 'commit id'
+    name: 'alpine'
+    entrypoint: 'sh'
+    args:
+      - '-eEuo'
+      - 'pipefail'
+      - '-c'
+      - |-
+        echo "***********************"
+        echo "Commit SHA: $COMMIT_SHA"
+        echo "***********************"
+
+  - id: Download Dependencies
+    name: dart
+    entrypoint: dart
+    args: [ 'pub', 'get' ]
+
+  - id: Check Format of Source
+    name: dart
+    entrypoint: dart
+    args: [ 'format', '--set-exit-if-changed', 'lib/' ]
+
+  - id: Check Format of Tests
+    name: dart
+    entrypoint: dart
+    args: [ 'format', '--set-exit-if-changed', 'test/' ]
+
+  - id: Run Tests
+    name: dart
+    entrypoint: dart
+    args: [ 'test' ]
