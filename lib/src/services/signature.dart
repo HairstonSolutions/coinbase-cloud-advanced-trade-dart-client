@@ -2,10 +2,10 @@ import 'dart:convert';
 
 import 'package:crypto/crypto.dart';
 
-String signature(
-    String secret, String httpMethod, String requestPath, String body) {
-  late String returnSignature;
+import '../models/signature.dart';
 
+Signature signature(
+    String secret, String httpMethod, String requestPath, String body) {
   var currentTimestamp = DateTime.now().millisecondsSinceEpoch / 1000; // in ms
   String cbAccessTimestamp = currentTimestamp.toString();
 
@@ -20,7 +20,7 @@ String signature(
   Digest hmacHashedMessageDigest = hmac.convert(messageToSign.codeUnits);
 
   // Convert HMAC Digest into the final Base64 Encoded Signature Hash
-  returnSignature = base64Encode(hmacHashedMessageDigest.bytes);
+  String returnSignature = base64Encode(hmacHashedMessageDigest.bytes);
 
-  return returnSignature;
+  return Signature(returnSignature, cbAccessTimestamp, messageToSign);
 }
