@@ -11,6 +11,17 @@ class Fee {
         'usdVolume=$usdVolume}';
     return all;
   }
+
+  static Fee convertJson(var jsonObject) {
+    double? makerFeeRate = double.parse(jsonObject['maker_fee_rate']);
+    double? takerFeeRate = double.parse(jsonObject['taker_fee_rate']);
+
+    double? usdVolume = (jsonObject['usd_volume'] == null)
+        ? 0.0
+        : double.parse(jsonObject['usd_volume']);
+
+    return Fee(makerFeeRate, takerFeeRate, usdVolume);
+  }
 }
 
 /*
