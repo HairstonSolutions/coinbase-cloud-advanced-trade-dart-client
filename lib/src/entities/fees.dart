@@ -15,22 +15,11 @@ Future<Fee> getFees(
   if (response.statusCode == 200) {
     String data = response.body;
     var jsonResponse = jsonDecode(data);
-    fees = convertFeesJson(jsonResponse);
+    fees = Fee.convertJson(jsonResponse);
   } else {
     var url = response.request?.url.toString();
     print('Request to URL $url failed.');
   }
 
   return fees;
-}
-
-Fee convertFeesJson(var jsonObject) {
-  double? makerFeeRate = double.parse(jsonObject['maker_fee_rate']);
-  double? takerFeeRate = double.parse(jsonObject['taker_fee_rate']);
-
-  double? usdVolume = (jsonObject['usd_volume'] == null)
-      ? 0.0
-      : double.parse(jsonObject['usd_volume']);
-
-  return Fee(makerFeeRate, takerFeeRate, usdVolume);
 }

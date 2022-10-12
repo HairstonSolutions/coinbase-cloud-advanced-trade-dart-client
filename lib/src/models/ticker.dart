@@ -16,6 +16,18 @@ class Ticker {
         'price=$price, size=$size, time=$time}';
     return all;
   }
+
+  static Ticker convertJson(var jsonObject) {
+    double? ask = double.parse(jsonObject['ask']);
+    double? bid = double.parse(jsonObject['bid']);
+    double? volume = double.parse(jsonObject['volume']);
+    int? tradeId = jsonObject['trade_id'];
+    double? price = double.parse(jsonObject['price']);
+    double? size = double.parse(jsonObject['size']);
+    String? time = jsonObject['time'];
+
+    return Ticker(ask, bid, volume, tradeId, price, size, time);
+  }
 }
 
 /*
