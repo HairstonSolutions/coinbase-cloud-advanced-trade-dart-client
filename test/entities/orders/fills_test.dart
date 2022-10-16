@@ -13,10 +13,12 @@ String? cbAccessKey = envVars['COINBASE_ACCESS_KEY'];
 String? cbSecret = envVars['COINBASE_SECRET'];
 String? cbPassphrase = envVars['COINBASE_PASSPHRASE'];
 bool isSbx = checkEnvSandbox == 'true' ? true : false;
+String? skipTests = envVars['SKIP_TESTS'];
+bool skip = skipTests == 'false' ? false : true;
 Credential credentials = Credential(cbAccessKey!, cbSecret!, cbPassphrase!);
 
 void main() {
-  group('Test Fills', skip: true, () {
+  group('Test Fills', skip: skip, () {
     setUp(() {});
 
     test('Authorized Get with body (Fills)', () async {
@@ -73,7 +75,7 @@ void main() {
     });
   });
 
-  group('Test for Fills by Order ID', skip: true, () {
+  group('Test for Fills by Order ID', skip: skip, () {
     test('My Test', () async {
       String orderId = "f2f954f4-e257-4aab-a3ac-3b2f2faa1e43";
       List<Fill> fills = await getFillsByOrderId(orderId,
