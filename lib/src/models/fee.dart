@@ -1,3 +1,5 @@
+import 'package:coinbase_cloud_exchange_dart_client/src/services/tools.dart';
+
 class Fee {
   final double? makerFeeRate;
   final double? takerFeeRate;
@@ -16,9 +18,8 @@ class Fee {
     double? makerFeeRate = double.parse(jsonObject['maker_fee_rate']);
     double? takerFeeRate = double.parse(jsonObject['taker_fee_rate']);
 
-    double? usdVolume = (jsonObject['usd_volume'] == null)
-        ? 0.0
-        : double.parse(jsonObject['usd_volume']);
+    double? usdVolume =
+        nullableDouble(jsonObject, 'usd_volume', notNullable: true);
 
     return Fee(makerFeeRate, takerFeeRate, usdVolume);
   }

@@ -11,13 +11,15 @@ String? cbAccessKey = envVars['COINBASE_ACCESS_KEY'];
 String? cbSecret = envVars['COINBASE_SECRET'];
 String? cbPassphrase = envVars['COINBASE_PASSPHRASE'];
 bool isSbx = checkEnvSandbox == 'true' ? true : false;
+String? skipTests = envVars['SKIP_TESTS'];
+bool skip = skipTests == 'false' ? false : true;
 Credential credentials = Credential(cbAccessKey!, cbSecret!, cbPassphrase!);
 
 void main() {
   group('Test Fees Endpoint', () {
     setUp(() {});
 
-    test('Get Fees for a User', skip: true, () async {
+    test('Get Fees for a User', skip: skip, () async {
       Fee? myFees = await getFees(credential: credentials, isSandbox: true);
       print('Fees: $myFees');
 
