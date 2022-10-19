@@ -4,8 +4,8 @@ import 'package:coinbase_cloud_exchange_dart_client/src/models/ticker.dart';
 import 'package:coinbase_cloud_exchange_dart_client/src/services/network.dart';
 import 'package:http/http.dart' as http;
 
-Future<Ticker> getTicker(String tickerId, {bool isSandbox = false}) async {
-  late Ticker ticker;
+Future<Ticker?> getTicker(String tickerId, {bool isSandbox = false}) async {
+  Ticker? ticker;
 
   http.Response response =
       await get('/products/$tickerId/ticker', isSandbox: isSandbox);

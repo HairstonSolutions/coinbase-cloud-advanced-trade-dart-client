@@ -24,7 +24,7 @@ Future<List<Product>> getProducts({bool isSandbox = false}) async {
   return products;
 }
 
-Future<Product> getProduct(String tickerId, {bool isSandbox = false}) async {
+Future<Product?> getProduct(String tickerId, {bool isSandbox = false}) async {
   late Product product;
 
   http.Response response =

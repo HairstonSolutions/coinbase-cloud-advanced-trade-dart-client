@@ -18,7 +18,7 @@ bool skip = skipTests == 'false' ? false : true;
 Credential credentials = Credential(cbAccessKey!, cbSecret!, cbPassphrase!);
 
 void main() {
-  group('Test Fills', skip: skip, () {
+  group('Test Orders', skip: skip, () {
     setUp(() {});
 
     test('Authorized Get with body (orders)', () async {
@@ -76,6 +76,41 @@ void main() {
 
       expect(orders.isNotEmpty, true);
       expect(orders.length <= limit, true);
+    });
+  });
+
+  group('Test Individual Orders', skip: skip, () {
+    test('Get Individual Order', () async {
+      String orderId = '23290936-4561-4724-8502-b0313b63ee8d';
+      Order? order = await getOrder(
+        orderId: orderId,
+        credential: credentials,
+        isSandbox: true,
+      );
+
+      expect(order?.id == orderId, true);
+    });
+
+    test('Individual Order Does Not Exist', () async {
+      String orderId = 'b0313b63ee8d';
+      Order? order = await getOrder(
+        orderId: orderId,
+        credential: credentials,
+        isSandbox: true,
+      );
+
+      expect(order, null);
+    });
+
+    test('Get Individual Order by client order ID', () async {
+      String clientOrderId = '66f3b900-7849-42ef-8c5d-2662dd389ca6';
+      Order? order = await getOrderByClientOid(
+        clientOid: clientOrderId,
+        credential: credentials,
+        isSandbox: true,
+      );
+
+      expect(order?.clientOid == clientOrderId, true);
     });
   });
 }

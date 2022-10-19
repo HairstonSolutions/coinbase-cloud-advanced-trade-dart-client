@@ -33,3 +33,45 @@ Future<List<Order>> getOrders(
 
   return orders;
 }
+
+Future<Order?> getOrder(
+    {required String orderId,
+    required Credential credential,
+    bool isSandbox = false}) async {
+  Order? order;
+
+  http.Response response = await getAuthorized('/orders/$orderId',
+      credential: credential, isSandbox: isSandbox);
+
+  if (response.statusCode == 200) {
+    String data = response.body;
+    var jsonResponse = jsonDecode(data);
+    order = Order.convertJson(jsonResponse);
+  } else {
+    var url = response.request?.url.toString();
+    print('Request to URL $url failed.');
+  }
+
+  return order;
+}
+
+Future<Order?> getOrderByClientOid(
+    {required String clientOid,
+    required Credential credential,
+    bool isSandbox = false}) async {
+  Order? order;
+
+  http.Response response = await getAuthorized('/orders/client:$clientOid',
+      credential: credential, isSandbox: isSandbox);
+
+  if (response.statusCode == 200) {
+    String data = response.body;
+    var jsonResponse = jsonDecode(data);
+    order = Order.convertJson(jsonResponse);
+  } else {
+    var url = response.request?.url.toString();
+    print('Request to URL $url failed.');
+  }
+
+  return order;
+}
