@@ -30,14 +30,16 @@ void main() {
       Product? product = await getProduct('BTC-USD');
       print('Product: $product');
 
-      expect(product.id, 'BTC-USD');
+      expect(product != null, true);
+      expect(product?.id, 'BTC-USD');
     });
 
     test('Get Specific Product from Sandbox', () async {
       Product? product = await getProduct('BTC-USD', isSandbox: true);
       print('Product: $product');
 
-      expect(product.id, 'BTC-USD');
+      expect(product != null, true);
+      expect(product?.id, 'BTC-USD');
     });
   });
 }

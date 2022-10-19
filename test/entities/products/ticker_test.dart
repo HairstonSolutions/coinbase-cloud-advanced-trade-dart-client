@@ -16,14 +16,14 @@ void main() {
       Ticker? ticker = await getTicker('BTC-USD');
       print(ticker);
 
-      expect(ticker.tradeId! > 0, true);
+      expect(ticker != null, true);
     });
 
     test('Get Ticker from sandbox', () async {
       Ticker? ticker = await getTicker('BTC-USD', isSandbox: true);
       print(ticker);
 
-      expect(ticker.tradeId! > 0, true);
+      expect(ticker != null, true);
     });
   });
 }

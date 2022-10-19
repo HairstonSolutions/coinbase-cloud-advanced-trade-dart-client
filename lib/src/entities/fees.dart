@@ -5,9 +5,9 @@ import 'package:coinbase_cloud_exchange_dart_client/src/models/fee.dart';
 import 'package:coinbase_cloud_exchange_dart_client/src/services/network.dart';
 import 'package:http/http.dart' as http;
 
-Future<Fee> getFees(
+Future<Fee?> getFees(
     {required Credential credential, bool isSandbox = false}) async {
-  late Fee fees;
+  Fee? fees;
 
   http.Response response = await getAuthorized('/Fees',
       credential: credential, isSandbox: isSandbox);
