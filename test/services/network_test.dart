@@ -10,6 +10,8 @@ String? cbAccessKey = envVars['COINBASE_ACCESS_KEY'];
 String? cbSecret = envVars['COINBASE_SECRET'];
 String? cbPassphrase = envVars['COINBASE_PASSPHRASE'];
 bool isSbx = checkEnvSandbox == 'true' ? true : false;
+String? skipTests = envVars['SKIP_TESTS'];
+bool skip = skipTests == 'false' ? false : true;
 Credential credentials = Credential(cbAccessKey!, cbSecret!, cbPassphrase!);
 
 void main() {
@@ -34,7 +36,7 @@ void main() {
     });
   });
 
-  group('Test Authorized Requests to Coinbase API Endpoints', skip: true, () {
+  group('Test Authorized Requests to Coinbase API Endpoints', skip: skip, () {
     setUp(() {});
 
     test('Authorized Get with no body (Fees)', () async {
@@ -65,9 +67,29 @@ void main() {
 
       expect(response.statusCode == 200, isTrue);
     });
+
+    test('Authorized POST with body (order)', skip: true, () async {
+      String requestPath = "/orders";
+      Map<String, dynamic>? body = {
+        'profile_id': 'default',
+        'side': 'buy',
+        'product_id': 'BTC-USD',
+        'type': 'limit',
+        'time_in_force': 'GTC',
+        'size': 1,
+        'price': 200.00
+      };
+
+      var response = await postAuthorized(requestPath,
+          body: body, credential: credentials, isSandbox: true);
+      var url = response.request?.url.toString();
+      print('Response Code: ${response.statusCode} to URL: $url');
+
+      expect(response.statusCode == 200, isTrue);
+    });
   });
 
-  group('Test Requests to Coinbase API Endpoints', skip: false, () {
+  group('Test Requests to Coinbase API Endpoints', () {
     setUp(() {});
 
     test('Get Products from Production', () async {
