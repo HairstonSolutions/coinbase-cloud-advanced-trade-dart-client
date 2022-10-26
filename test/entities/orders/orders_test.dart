@@ -113,4 +113,122 @@ void main() {
       expect(order?.clientOid == clientOrderId, true);
     });
   });
+
+  group('Create Orders', skip: skip, () {
+    test('Create Limit order for 1 Bitcoin', () async {
+      String side = 'buy';
+      String productId = 'BTC-USD';
+      String profileId = 'default';
+      String type = 'limit';
+      String timeInForce = 'GTC';
+      num size = 1;
+      num price = 300.00;
+      String stp = 'dc';
+      String cancelAfter = 'hour';
+      bool postOnly = true;
+
+      Order? createdOrder = await createOrder(
+          side: side,
+          productId: productId,
+          profileId: profileId,
+          type: type,
+          size: size,
+          price: price,
+          timeInForce: timeInForce,
+          stp: stp,
+          cancelAfter: cancelAfter,
+          postOnly: postOnly,
+          credential: credentials,
+          isSandbox: true);
+
+      print(createdOrder);
+      expect(createdOrder != null, true);
+    });
+
+    test('Create Market order for 1 ETH', () async {
+      String side = 'buy';
+      String productId = 'ETH-BTC';
+      String profileId = 'default';
+      String type = 'market';
+      num size = 1;
+
+      Order? createdOrder = await createOrder(
+          side: side,
+          productId: productId,
+          profileId: profileId,
+          type: type,
+          size: size,
+          credential: credentials,
+          isSandbox: true);
+
+      print(createdOrder);
+      expect(createdOrder != null, true);
+    });
+
+    test('Create Market order for 1 BTC of ETH', () async {
+      String side = 'sell';
+      String productId = 'ETH-BTC';
+      String profileId = 'default';
+      String type = 'market';
+      num funds = 10;
+
+      Order? createdOrder = await createOrder(
+          side: side,
+          productId: productId,
+          profileId: profileId,
+          type: type,
+          funds: funds,
+          credential: credentials,
+          isSandbox: true);
+
+      print(createdOrder);
+      expect(createdOrder != null, true);
+    });
+
+    test('Create Market order for 1000 EUR of BTC', () async {
+      String side = 'buy';
+      String productId = 'BTC-EUR';
+      String profileId = 'default';
+      String type = 'market';
+      num funds = 1000;
+
+      Order? createdOrder = await createOrder(
+          side: side,
+          productId: productId,
+          profileId: profileId,
+          type: type,
+          funds: funds,
+          credential: credentials,
+          isSandbox: true);
+
+      print(createdOrder);
+      expect(createdOrder != null, true);
+    });
+
+    test('Create stop limit order for EUR BTC', () async {
+      String side = 'sell';
+      String productId = 'BTC-EUR';
+      String profileId = 'default';
+      String type = 'limit';
+      num size = 1;
+      num price = 1;
+      String stop = 'loss';
+      num stopPrice = 50000;
+
+      Order? createdOrder = await createOrder(
+          side: side,
+          productId: productId,
+          profileId: profileId,
+          type: type,
+          size: size,
+          price: price,
+          stop: stop,
+          stopPrice: stopPrice,
+          credential: credentials,
+          isSandbox: true);
+
+      print(createdOrder);
+      expect(createdOrder != null, true);
+    });
+  });
 }

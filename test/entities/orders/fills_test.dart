@@ -44,7 +44,9 @@ void main() {
         }
       } else {
         var url = response.request?.url.toString();
-        print('Request to URL $url failed.');
+        print(
+            'Request to URL $url failed: Response code ${response.statusCode}');
+        print('Error Response Message: ${response.body}');
       }
 
       var url = response.request?.url.toString();
