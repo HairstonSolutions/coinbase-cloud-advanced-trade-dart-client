@@ -28,7 +28,8 @@ Future<List<Order>> getOrders(
     }
   } else {
     var url = response.request?.url.toString();
-    print('Request to URL $url failed.');
+    print('Request to URL $url failed: Response code ${response.statusCode}');
+    print('Error Response Message: ${response.body}');
   }
 
   return orders;
@@ -49,7 +50,8 @@ Future<Order?> getOrder(
     order = Order.convertJson(jsonResponse);
   } else {
     var url = response.request?.url.toString();
-    print('Request to URL $url failed.');
+    print('Request to URL $url failed: Response code ${response.statusCode}');
+    print('Error Response Message: ${response.body}');
   }
 
   return order;
@@ -70,7 +72,8 @@ Future<Order?> getOrderByClientOid(
     order = Order.convertJson(jsonResponse);
   } else {
     var url = response.request?.url.toString();
-    print('Request to URL $url failed.');
+    print('Request to URL $url failed: Response code ${response.statusCode}');
+    print('Error Response Message: ${response.body}');
   }
 
   return order;
@@ -126,7 +129,8 @@ Future<Order?> createOrder(
     order = Order.convertJson(jsonResponse);
   } else {
     var url = response.request?.url.toString();
-    print('Request to URL $url failed.');
+    print('Request to URL $url failed: Response code ${response.statusCode}');
+    print('Error Response Message: ${response.body}');
   }
 
   return order;

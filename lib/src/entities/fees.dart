@@ -18,7 +18,7 @@ Future<Fee?> getFees(
     fees = Fee.convertJson(jsonResponse);
   } else {
     var url = response.request?.url.toString();
-    print('Request to URL $url failed.');
+    print('Request to URL $url failed: Response code ${response.statusCode}');
   }
 
   return fees;
