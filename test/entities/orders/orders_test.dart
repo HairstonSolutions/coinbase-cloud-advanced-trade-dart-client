@@ -144,5 +144,91 @@ void main() {
       print(createdOrder);
       expect(createdOrder != null, true);
     });
+
+    test('Create Market order for 1 ETH', () async {
+      String side = 'buy';
+      String productId = 'ETH-BTC';
+      String profileId = 'default';
+      String type = 'market';
+      num size = 1;
+
+      Order? createdOrder = await createOrder(
+          side: side,
+          productId: productId,
+          profileId: profileId,
+          type: type,
+          size: size,
+          credential: credentials,
+          isSandbox: true);
+
+      print(createdOrder);
+      expect(createdOrder != null, true);
+    });
+
+    test('Create Market order for 1 BTC of ETH', () async {
+      String side = 'sell';
+      String productId = 'ETH-BTC';
+      String profileId = 'default';
+      String type = 'market';
+      num funds = 10;
+
+      Order? createdOrder = await createOrder(
+          side: side,
+          productId: productId,
+          profileId: profileId,
+          type: type,
+          funds: funds,
+          credential: credentials,
+          isSandbox: true);
+
+      print(createdOrder);
+      expect(createdOrder != null, true);
+    });
+
+    test('Create Market order for 1000 EUR of BTC', () async {
+      String side = 'buy';
+      String productId = 'BTC-EUR';
+      String profileId = 'default';
+      String type = 'market';
+      num funds = 1000;
+
+      Order? createdOrder = await createOrder(
+          side: side,
+          productId: productId,
+          profileId: profileId,
+          type: type,
+          funds: funds,
+          credential: credentials,
+          isSandbox: true);
+
+      print(createdOrder);
+      expect(createdOrder != null, true);
+    });
+
+    test('Create stop limit order for EUR BTC', () async {
+      String side = 'sell';
+      String productId = 'BTC-EUR';
+      String profileId = 'default';
+      String type = 'limit';
+      num size = 1;
+      num price = 1;
+      String stop = 'loss';
+      num stopPrice = 50000;
+
+      Order? createdOrder = await createOrder(
+          side: side,
+          productId: productId,
+          profileId: profileId,
+          type: type,
+          size: size,
+          price: price,
+          stop: stop,
+          stopPrice: stopPrice,
+          credential: credentials,
+          isSandbox: true);
+
+      print(createdOrder);
+      expect(createdOrder != null, true);
+    });
   });
 }
