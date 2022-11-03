@@ -103,3 +103,37 @@ Future<http.Response> postAuthorized(String endpoint,
 
   return response;
 }
+
+Future<http.Response> deleteAuthorized(String endpoint,
+    {Map<String, dynamic>? queryParameters,
+    Map<String, dynamic>? body,
+    required Credential credential,
+    bool isSandbox = false}) async {
+  String coinbaseApi = isSandbox ? coinbaseApiSandbox : coinbaseApiProduction;
+
+  String params =
+      (queryParameters != null) ? convertParamsToString(queryParameters)! : "";
+
+  String bodyJson = (body != null) ? json.encode(body) : "";
+
+  Signature? cbSignature =
+      signature(credential.secret, "DELETE", endpoint, "$params$bodyJson");
+
+  var url = Uri.https(coinbaseApi, endpoint, queryParameters);
+  Map<String, String> requestHeaders = {
+    HttpHeaders.acceptHeader: 'application/json',
+    "CB-ACCESS-TIMESTAMP": cbSignature.timestamp,
+    "CB-ACCESS-KEY": credential.accessKey,
+    "CB-ACCESS-PASSPHRASE": credential.passphrase,
+    "CB-ACCESS-SIGN": cbSignature.signature
+  };
+
+  if (body != null) {
+    requestHeaders.addAll({HttpHeaders.contentTypeHeader: 'application/json'});
+  }
+
+  http.Response response =
+      await http.delete(url, headers: requestHeaders, body: bodyJson);
+
+  return response;
+}

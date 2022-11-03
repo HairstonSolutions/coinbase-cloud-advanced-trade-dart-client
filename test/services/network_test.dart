@@ -84,6 +84,26 @@ void main() {
           body: body, credential: credentials, isSandbox: true);
       var url = response.request?.url.toString();
       print('Response Code: ${response.statusCode} to URL: $url');
+      print(response.body);
+
+      expect(response.statusCode == 200, isTrue);
+    });
+
+    test('Authorized Delete with query Params (an order)', skip: true,
+        () async {
+      String requestPath = "/orders";
+      String orderId = "de807e77-dcc9-42fb-99dc-326f825931c8";
+      Map<String, dynamic>? queryParameters = {
+        'profile_id': 'default',
+        'product_id': 'BTC-USD'
+      };
+
+      var response = await deleteAuthorized('$requestPath/$orderId',
+          queryParameters: queryParameters,
+          credential: credentials,
+          isSandbox: true);
+      var url = response.request?.url.toString();
+      print('Response Code: ${response.statusCode} to URL: $url');
 
       expect(response.statusCode == 200, isTrue);
     });
