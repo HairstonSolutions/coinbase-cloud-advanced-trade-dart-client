@@ -231,4 +231,95 @@ void main() {
       expect(createdOrder != null, true);
     });
   });
+
+  group('Cancel Orders', skip: skip, () {
+    test('Create order to cancel', skip: true, () async {
+      String side = 'buy';
+      String productId = 'BTC-USD';
+      String profileId = 'default';
+      String type = 'limit';
+      String timeInForce = 'GTC';
+      num size = 1;
+      num price = 9000.00;
+      String stp = 'dc';
+      String cancelAfter = 'hour';
+      bool postOnly = true;
+
+      Order? createdOrder = await createOrder(
+          side: side,
+          productId: productId,
+          profileId: profileId,
+          type: type,
+          size: size,
+          price: price,
+          timeInForce: timeInForce,
+          stp: stp,
+          cancelAfter: cancelAfter,
+          postOnly: postOnly,
+          credential: credentials,
+          isSandbox: true);
+
+      print(createdOrder);
+      expect(createdOrder != null, true);
+    });
+
+    test('Cancel specific order', skip: true, () async {
+      String orderId = '9b902da3-e7bc-4133-b7f8-695c1337b77f';
+
+      bool result = await cancelOrder(
+          orderId: orderId, credential: credentials, isSandbox: true);
+
+      expect(result, isTrue);
+    });
+
+    test('Cancel specific order with product ID', skip: true, () async {
+      String orderId = '5d84a118-58b0-45e2-a365-bac689cb93f5';
+      String productId = 'BTC-USD';
+
+      bool result = await cancelOrder(
+          orderId: orderId,
+          productId: productId,
+          credential: credentials,
+          isSandbox: true);
+
+      expect(result, isTrue);
+    });
+
+    test('Immediately cancel newly created Order', skip: true, () async {
+      String side = 'buy';
+      String productId = 'BTC-USD';
+      String profileId = 'default';
+      String type = 'limit';
+      String timeInForce = 'GTC';
+      num size = 1;
+      num price = 9500.00;
+      String stp = 'dc';
+      String cancelAfter = 'hour';
+      bool postOnly = true;
+
+      Order? createdOrder = await createOrder(
+          side: side,
+          productId: productId,
+          profileId: profileId,
+          type: type,
+          size: size,
+          price: price,
+          timeInForce: timeInForce,
+          stp: stp,
+          cancelAfter: cancelAfter,
+          postOnly: postOnly,
+          credential: credentials,
+          isSandbox: true);
+
+      String orderId = createdOrder!.id!;
+
+      bool result = await cancelOrder(
+          orderId: orderId,
+          productId: productId,
+          credential: credentials,
+          isSandbox: true);
+
+      expect(result, isTrue);
+    });
+  });
 }

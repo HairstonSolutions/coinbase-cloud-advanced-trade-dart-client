@@ -92,7 +92,7 @@ void main() {
     test('Authorized Delete with query Params (an order)', skip: true,
         () async {
       String requestPath = "/orders";
-      String orderId = "de807e77-dcc9-42fb-99dc-326f825931c8";
+      String orderId = "aa221d31-bbc6-4563-9005-211448ddf47c";
       Map<String, dynamic>? queryParameters = {
         'profile_id': 'default',
         'product_id': 'BTC-USD'
@@ -104,6 +104,7 @@ void main() {
           isSandbox: true);
       var url = response.request?.url.toString();
       print('Response Code: ${response.statusCode} to URL: $url');
+      print('Response Body: ${response.body}');
 
       expect(response.statusCode == 200, isTrue);
     });

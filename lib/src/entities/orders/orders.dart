@@ -136,6 +136,39 @@ Future<Order?> createOrder(
   return order;
 }
 
+Future<bool> cancelOrder(
+    {required String orderId,
+    String? profileId,
+    String? productId,
+    required Credential credential,
+    bool isSandbox = false}) async {
+  Map<String, dynamic>? queryParameters = {};
+
+  (profileId != null)
+      ? queryParameters.addAll({'profile_id': profileId})
+      : queryParameters.addAll({'profile_id': 'default'});
+  (productId != null)
+      ? queryParameters.addAll({'product_id': productId})
+      : null;
+
+  http.Response response = await deleteAuthorized('/orders/$orderId',
+      queryParameters: queryParameters,
+      credential: credential,
+      isSandbox: true);
+
+  if (response.statusCode == 200) {
+    String data = response.body;
+    print('Order $data Cancelled Successfully');
+    return true;
+  } else {
+    var url = response.request?.url.toString();
+    print('Request to URL $url failed: Response code ${response.statusCode}');
+    print('Error Response Message: ${response.body}');
+  }
+
+  return false;
+}
+
 bool _validType(String type) {
   if (type == 'limit') return true;
   if (type == 'market') return true;
