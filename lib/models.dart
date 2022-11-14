@@ -1,5 +1,6 @@
 library models;
 
+export 'src/models/account.dart';
 export 'src/models/credential.dart';
 export 'src/models/fee.dart';
 export 'src/models/fill.dart';
