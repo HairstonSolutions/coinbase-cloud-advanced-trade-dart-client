@@ -21,7 +21,23 @@ void main() {
       List<Account> accounts =
           await getAccounts(credential: credentials, isSandbox: true);
 
+      print('Accounts : $accounts');
       expect(accounts.isEmpty, false);
+    });
+
+    test('Get Account by Currency name for an API key', () async {
+      Account? account = await getAccountByCurrency('BTC',
+          credential: credentials, isSandbox: true);
+
+      print('Account : $account');
+      expect(account?.currency, 'BTC');
+    });
+
+    test('Account NA for given Currency name for an API key', () async {
+      Account? account = await getAccountByCurrency('DOGE',
+          credential: credentials, isSandbox: true);
+
+      expect(account, null);
     });
   });
 }

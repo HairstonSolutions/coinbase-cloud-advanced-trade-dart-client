@@ -27,3 +27,18 @@ Future<List<Account>> getAccounts(
 
   return accounts;
 }
+
+Future<Account?> getAccountByCurrency(String currency,
+    {required Credential credential, bool isSandbox = false}) async {
+  List<Account> accounts =
+      await getAccounts(credential: credential, isSandbox: isSandbox);
+
+  if (accounts.isNotEmpty) {
+    for (Account account in accounts) {
+      if (account.currency == currency) {
+        return account;
+      }
+    }
+  }
+  return null;
+}
