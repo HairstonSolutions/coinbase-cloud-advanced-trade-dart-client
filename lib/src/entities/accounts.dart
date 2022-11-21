@@ -24,8 +24,23 @@ Future<List<Account>> getAccounts(
     print('Request to URL $url failed: Response code ${response.statusCode}');
     print('Error Response Message: ${response.body}');
   }
-
   return accounts;
+}
+
+Future<Account?> getAccount(String accountId,
+    {required Credential credential, bool isSandbox = false}) async {
+  http.Response response = await getAuthorized('/accounts/$accountId',
+      credential: credential, isSandbox: isSandbox);
+
+  if (response.statusCode == 200) {
+    var jsonObject = jsonDecode(response.body);
+    return Account.convertJson(jsonObject);
+  } else {
+    var url = response.request?.url.toString();
+    print('Request to URL $url failed: Response code ${response.statusCode}');
+    print('Error Response Message: ${response.body}');
+  }
+  return null;
 }
 
 Future<Account?> getAccountByCurrency(String currency,
