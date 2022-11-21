@@ -25,6 +25,18 @@ void main() {
       expect(accounts.isEmpty, false);
     });
 
+    test('Get Account by Account ID for an API key', () async {
+      Account? originAccount = await getAccountByCurrency('BTC',
+          credential: credentials, isSandbox: true);
+
+      String accountId = originAccount!.id!;
+      Account? account =
+          await getAccount(accountId, credential: credentials, isSandbox: true);
+
+      print('Account : $account');
+      expect(account?.currency, 'BTC');
+    });
+
     test('Get Account by Currency name for an API key', () async {
       Account? account = await getAccountByCurrency('BTC',
           credential: credentials, isSandbox: true);
