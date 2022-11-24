@@ -1,5 +1,6 @@
-library models;
+library advanced_trade;
 
+export 'src/advanced_trade/models/credential.dart';
 export 'src/shared/models/account.dart';
 export 'src/shared/models/fee.dart';
 export 'src/shared/models/fill.dart';
