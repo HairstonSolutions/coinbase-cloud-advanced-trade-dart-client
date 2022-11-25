@@ -53,5 +53,70 @@ void main() {
       print('Accounts: $accounts');
       expect(accounts.isNotEmpty, true);
     });
+
+    test('Get Account by Currency name for an API key', () async {
+      Account? account = await getAccountByCurrency('BTC',
+          credential: credentials, isSandbox: true);
+
+      print('Account : $account');
+      expect(account?.currency, 'BTC');
+    });
+
+    test('Get Account by Account ID for an API key', () async {
+      Account? originAccount = await getAccountByCurrency('BTC',
+          credential: credentials, isSandbox: true);
+
+      String accountId = originAccount!.uuid!;
+      Account? account = await getAccount(
+          uuid: accountId, credential: credentials, isSandbox: true);
+
+      print('Account : $account');
+      expect(account?.currency, 'BTC');
+    });
+
+    test('Account NA for given Currency name for an API key', () async {
+      Account? account = await getAccountByCurrency('DOGE',
+          credential: credentials, isSandbox: true);
+
+      expect(account, null);
+    });
+
+    test('Authorized Get Account by Account ID', () async {
+      List<Account?> accounts =
+          await getAccounts(credential: credentials, isSandbox: true);
+      print('Accounts: $accounts');
+
+      String? accountUUID = accounts.first?.uuid;
+
+      Account? account = await getAccount(
+          uuid: accountUUID, credential: credentials, isSandbox: true);
+      print('Accounts: $account');
+      expect(account?.uuid, accountUUID);
+    });
+
+    test('Get Account Balance by Account Currency', () async {
+      String currency = 'BTC';
+      double? balance = await getAccountBalance(
+          currency: currency, credential: credentials, isSandbox: true);
+      expect(balance != null, true);
+    });
+
+    test('Get Account Balance by Account UUID', () async {
+      String currency = 'BTC';
+      Account? account = await getAccountByCurrency(currency,
+          credential: credentials, isSandbox: true);
+      String? uuid = account?.uuid;
+      double? balance = await getAccountBalance(
+          uuid: uuid, credential: credentials, isSandbox: true);
+      expect(balance != null, true);
+    });
+
+    test(
+        'Get Account Balance cancels when neither a uuid or currency is provided',
+        () async {
+      double? balance =
+          await getAccountBalance(credential: credentials, isSandbox: true);
+      expect(balance, null);
+    });
   });
 }
