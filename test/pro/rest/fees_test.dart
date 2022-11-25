@@ -1,8 +1,8 @@
 import 'dart:io' show Platform;
 
 import 'package:coinbase_cloud_exchange_dart_client/src/pro/models/credential.dart';
+import 'package:coinbase_cloud_exchange_dart_client/src/pro/models/fee.dart';
 import 'package:coinbase_cloud_exchange_dart_client/src/pro/rest/fees.dart';
-import 'package:coinbase_cloud_exchange_dart_client/src/shared/models/fee.dart';
 import 'package:test/test.dart';
 
 Map<String, String> envVars = Platform.environment;

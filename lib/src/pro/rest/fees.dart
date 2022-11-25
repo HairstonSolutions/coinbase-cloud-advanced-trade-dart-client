@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:coinbase_cloud_exchange_dart_client/src/pro/models/credential.dart';
+import 'package:coinbase_cloud_exchange_dart_client/src/pro/models/fee.dart';
 import 'package:coinbase_cloud_exchange_dart_client/src/pro/services/network.dart';
-import 'package:coinbase_cloud_exchange_dart_client/src/shared/models/fee.dart';
 import 'package:http/http.dart' as http;
 
 Future<Fee?> getFees(
