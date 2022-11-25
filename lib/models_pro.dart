@@ -1,6 +1,6 @@
-library models;
+library models_pro;
 
-export 'src/shared/models/account.dart';
+export 'src/pro/models/account.dart';
 export 'src/shared/models/fee.dart';
 export 'src/shared/models/fill.dart';
 export 'src/shared/models/order.dart';
