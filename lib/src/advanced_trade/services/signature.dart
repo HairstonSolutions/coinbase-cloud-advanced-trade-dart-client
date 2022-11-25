@@ -1,8 +1,8 @@
 import 'package:coinbase_cloud_exchange_dart_client/src/shared/models/signature.dart';
 import 'package:crypto/crypto.dart';
 
-Signature signature(
-    String secret, String httpMethod, String requestPath, String body) {
+Signature signature(String secret, String httpMethod, String requestPath,
+    {String body = ''}) {
   var currentTimestamp = (DateTime.now().millisecondsSinceEpoch / 1000).floor();
   String cbAccessTimestamp = currentTimestamp.toString();
 

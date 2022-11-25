@@ -3,7 +3,6 @@ import 'dart:io' show HttpHeaders;
 import 'package:coinbase_cloud_exchange_dart_client/src/advanced_trade/models/credential.dart';
 import 'package:coinbase_cloud_exchange_dart_client/src/advanced_trade/services/signature.dart';
 import 'package:coinbase_cloud_exchange_dart_client/src/shared/models/signature.dart';
-import 'package:coinbase_cloud_exchange_dart_client/src/shared/services/tools.dart';
 import 'package:http/http.dart' as http;
 
 const String coinbaseApiProduction = 'coinbase.com';
@@ -16,15 +15,9 @@ Future<http.Response> getAuthorized(String endpoint,
     bool isSandbox = false}) async {
   String coinbaseApi = isSandbox ? coinbaseApiSandbox : coinbaseApiProduction;
 
-  String params =
-      (queryParameters == null) ? "" : convertParamsToString(queryParameters)!;
-
   String fullEndpoint = '/api/v3/brokerage$endpoint';
 
-  Signature? cbSignature =
-      signature(credential.apiSecret, "GET", fullEndpoint, params);
-
-  print(cbSignature);
+  Signature? cbSignature = signature(credential.apiSecret, "GET", fullEndpoint);
 
   var url = Uri.https(coinbaseApi, fullEndpoint, queryParameters);
   Map<String, String> requestHeaders = {
