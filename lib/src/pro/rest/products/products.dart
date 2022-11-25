@@ -1,7 +1,7 @@
 import 'dart:convert';
 
+import 'package:coinbase_cloud_exchange_dart_client/src/pro/models/product.dart';
 import 'package:coinbase_cloud_exchange_dart_client/src/pro/services/network.dart';
-import 'package:coinbase_cloud_exchange_dart_client/src/shared/models/product.dart';
 import 'package:http/http.dart' as http;
 
 Future<List<Product>> getProducts({bool isSandbox = false}) async {
