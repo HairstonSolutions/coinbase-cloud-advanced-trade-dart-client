@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:coinbase_cloud_exchange_dart_client/src/shared/services/tools.dart';
 
 class LimitGTD {
@@ -9,6 +11,35 @@ class LimitGTD {
 
   LimitGTD(this.quoteSize, this.baseSize, this.limitPrice, this.endTime,
       this.postOnly);
+
+  String? toCBJson() {
+    if (quoteSize != null || baseSize != null) {
+      Map<String, dynamic> map = {
+        'quote_size': quoteSize,
+        'base_size': baseSize,
+        'limit_price': limitPrice,
+        'end_time': endTime?.toIso8601String(),
+        'post_only': postOnly,
+      };
+
+      String body = jsonEncode(map);
+      return body;
+    }
+    return null;
+  }
+
+  String? toJson() {
+    Map<String, dynamic> map = {
+      'quoteSize': quoteSize,
+      'baseSize': baseSize,
+      'limitPrice': limitPrice,
+      'endTime': endTime?.toIso8601String(),
+      'postOnly': postOnly,
+    };
+
+    String body = jsonEncode(map);
+    return body;
+  }
 
   @override
   String toString() {

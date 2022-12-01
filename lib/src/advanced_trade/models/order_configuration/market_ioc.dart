@@ -8,19 +8,32 @@ class MarketIOC {
 
   MarketIOC(this.quoteSize, this.baseSize);
 
+  String? toCBJson() {
+    if (quoteSize != null || baseSize != null) {
+      Map<String, dynamic> map = {
+        'quote_size': quoteSize,
+        'base_size': baseSize
+      };
+
+      String body = jsonEncode(map);
+      return body;
+    }
+    return null;
+  }
+
+  String? toJson() {
+    Map<String, dynamic> map = {'quoteSize': quoteSize, 'baseSize': baseSize};
+
+    String body = jsonEncode(map);
+    return body;
+  }
+
   @override
   String toString() {
     String all = '{'
         'quoteSize=$quoteSize, baseSize=$baseSize'
         '}';
     return all;
-  }
-
-  String toJson() {
-    Map<String, dynamic> map = {'quoteSize': quoteSize, 'baseSize': baseSize};
-
-    String body = jsonEncode(map);
-    return body;
   }
 
   static MarketIOC convertJson(var jsonObject) {
