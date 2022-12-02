@@ -1,0 +1,60 @@
+{
+  "order_id": "0000-000000-000000",
+  "product_id": "BTC-USD",
+  "user_id": "2222-000000-000000",
+  "order_configuration": {
+    "market_market_ioc": {
+      "quote_size": "10.00",
+      "base_size": "0.001"
+    },
+    "limit_limit_gtc": {
+      "quote_size": "10.00",
+      "base_size": "0.001",
+      "limit_price": "10000.00",
+      "post_only": false
+    },
+    "limit_limit_gtd": {
+      "quote_size": "10.00",
+      "base_size": "0.001",
+      "limit_price": "10000.00",
+      "end_time": "2021-05-31T09:59:59Z",
+      "post_only": false
+    },
+    "stop_limit_stop_limit_gtc": {
+      "quote_size": "10.00",
+      "base_size": "0.001",
+      "limit_price": "10000.00",
+      "stop_price": "20000.00",
+      "stop_direction": "UNKNOWN_STOP_DIRECTION"
+    },
+    "stop_limit_stop_limit_gtd": {
+      "quote_size": "10",
+      "base_size": "0.001",
+      "limit_price": "10000.00",
+      "stop_price": "20000.00",
+      "end_time": "2021-05-31T09:59:59Z",
+      "stop_direction": "UNKNOWN_STOP_DIRECTION"
+    }
+  },
+  "side": "UNKNOWN_ORDER_SIDE",
+  "client_order_id": "11111-000000-000000",
+  "status": "PENDING",
+  "time_in_force": "UNKNOWN_TIME_IN_FORCE",
+  "created_time": "2021-05-31T09:59:59Z",
+  "completion_percentage": "50",
+  "filled_size": "0.001",
+  "average_filled_price": "50",
+  "fee": "string",
+  "number_of_fills": "2",
+  "filled_value": "10000",
+  "pending_cancel": true,
+  "size_in_quote": false,
+  "total_fees": "5.00",
+  "size_inclusive_of_fees": false,
+  "total_value_after_fees": "25",
+  "trigger_status": "UNKNOWN_TRIGGER_STATUS",
+  "order_type": "UNKNOWN_ORDER_TYPE",
+  "reject_reason": "REJECT_REASON_UNSPECIFIED",
+  "settled": true,
+  "product_type": "UNKNOWN_PRODUCT_TYPE"
+}
