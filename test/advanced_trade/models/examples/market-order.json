@@ -1,0 +1,33 @@
+{
+  "order_id": "22222222-2222-2222-2222-222222222",
+  "product_id": "BTC-USD",
+  "user_id": "22222222-2222-2222-2222-222222222",
+  "order_configuration": {
+    "market_market_ioc": {
+      "quote_size": "25"
+    }
+  },
+  "side": "BUY",
+  "client_order_id": "22222222-2222-2222-2222-222222222",
+  "status": "FILLED",
+  "time_in_force": "IMMEDIATE_OR_CANCEL",
+  "created_time": "2022-11-26T19:39:22.842332Z",
+  "completion_percentage": "100",
+  "filled_size": "0.0015092999063604",
+  "average_filled_price": "16465.1799999997538779",
+  "fee": "",
+  "number_of_fills": "3",
+  "filled_value": "24.8508946322067594",
+  "pending_cancel": false,
+  "size_in_quote": true,
+  "total_fees": "0.1491053677932406",
+  "size_inclusive_of_fees": true,
+  "total_value_after_fees": "25",
+  "trigger_status": "INVALID_ORDER_TYPE",
+  "order_type": "MARKET",
+  "reject_reason": "REJECT_REASON_UNSPECIFIED",
+  "settled": true,
+  "product_type": "SPOT",
+  "reject_message": "",
+  "cancel_message": "Internal error"
+}
