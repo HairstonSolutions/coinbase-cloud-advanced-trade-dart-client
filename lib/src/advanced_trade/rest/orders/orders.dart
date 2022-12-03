@@ -47,3 +47,26 @@ Future<List<Order>> getOrders(
 
   return orders;
 }
+
+Future<Order?> getOrder(
+    {required String orderId,
+    required Credential credential,
+    bool isSandbox = false}) async {
+  Order? order;
+
+  http.Response response = await getAuthorized('/orders/historical/$orderId',
+      credential: credential, isSandbox: isSandbox);
+
+  if (response.statusCode == 200) {
+    String data = response.body;
+    var jsonResponse = jsonDecode(data);
+    var jsonOrder = jsonResponse['order'];
+    order = Order.convertJson(jsonOrder);
+  } else {
+    var url = response.request?.url.toString();
+    print('Request to URL $url failed: Response code ${response.statusCode}');
+    print('Error Response Message: ${response.body}');
+  }
+
+  return order;
+}
