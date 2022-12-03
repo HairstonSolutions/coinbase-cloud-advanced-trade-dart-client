@@ -39,4 +39,30 @@ void main() {
       expect(orders.isNotEmpty, true);
     });
   });
+
+  group('Test Individual Orders', skip: skip, () {
+    test('Get Individual Order', () async {
+      List<Order> orders =
+          await getOrders(credential: credentials, isSandbox: true);
+      String? orderId = orders.first.orderId;
+      Order? order = await getOrder(
+        orderId: orderId!,
+        credential: credentials,
+        isSandbox: true,
+      );
+
+      expect(order?.orderId, orderId);
+    });
+
+    test('Individual Order Does Not Exist', () async {
+      String orderId = 'b0313b63ee8d';
+      Order? order = await getOrder(
+        orderId: orderId,
+        credential: credentials,
+        isSandbox: true,
+      );
+
+      expect(order, null);
+    });
+  });
 }
