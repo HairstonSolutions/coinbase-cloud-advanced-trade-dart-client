@@ -3,6 +3,9 @@ double? nullableDouble(var jsonObject, String key,
   if (notNullable == true) {
     return (jsonObject[key] == null) ? 0.0 : double.parse(jsonObject[key]);
   }
+  if (jsonObject[key] == "") {
+    return null;
+  }
   return (jsonObject[key] == null) ? null : double.parse(jsonObject[key]);
 }
 

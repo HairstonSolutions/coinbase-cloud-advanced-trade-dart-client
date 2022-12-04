@@ -1,3 +1,5 @@
+import 'package:coinbase_cloud_exchange_dart_client/src/shared/services/tools.dart';
+
 class Product {
   final String? productId;
   final double? price;
@@ -102,7 +104,7 @@ class Product {
     String? productType = jsonObject['product_type'];
     String? quoteCurrencyId = jsonObject['quote_currency_id'];
     String? baseCurrencyId = jsonObject['base_currency_id'];
-    double? midMarketPrice = double.parse(jsonObject['mid_market_price']);
+    double? midMarketPrice = nullableDouble(jsonObject, 'mid_market_price');
 
     return Product(
         productId,
