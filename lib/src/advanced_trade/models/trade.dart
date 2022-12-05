@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:coinbase_cloud_exchange_dart_client/src/shared/services/tools.dart';
+
 class Trade {
   final String? tradeId;
   final String? productId;
@@ -59,8 +61,8 @@ class Trade {
     double? size = double.parse(jsonObject['size']);
     DateTime? time = DateTime.parse(jsonObject['time']);
     String? side = jsonObject['side'];
-    double? bid = double.parse(jsonObject['bid']);
-    double? ask = double.parse(jsonObject['ask']);
+    double? bid = nullableDouble(jsonObject, 'bid');
+    double? ask = nullableDouble(jsonObject, 'ask');
 
     return Trade(tradeId, productId, price, size, time, side, bid, ask);
   }
