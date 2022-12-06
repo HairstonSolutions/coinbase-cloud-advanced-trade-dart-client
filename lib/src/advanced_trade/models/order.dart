@@ -1,5 +1,5 @@
-import 'package:coinbase_cloud_exchange_dart_client/src/advanced_trade/models/order_configuration.dart';
-import 'package:coinbase_cloud_exchange_dart_client/src/shared/services/tools.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/advanced_trade/models/order_configuration.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/shared/services/tools.dart';
 
 class Order {
   final String? orderId;

@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-import 'package:coinbase_cloud_exchange_dart_client/src/pro/models/credential.dart';
-import 'package:coinbase_cloud_exchange_dart_client/src/pro/models/fill.dart';
-import 'package:coinbase_cloud_exchange_dart_client/src/pro/services/network.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/pro/models/credential.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/pro/models/fill.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/pro/services/network.dart';
 import 'package:http/http.dart' as http;
 
 Future<List<Fill>> getFills(

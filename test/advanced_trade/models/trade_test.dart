@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:coinbase_cloud_exchange_dart_client/src/advanced_trade/models/trade.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/advanced_trade/models/trade.dart';
 import 'package:test/test.dart';
 
 import '../../tools.dart';

@@ -1,9 +1,9 @@
 import 'dart:io' show Platform;
 
-import 'package:coinbase_cloud_exchange_dart_client/src/advanced_trade/models/account.dart';
-import 'package:coinbase_cloud_exchange_dart_client/src/advanced_trade/models/credential.dart';
-import 'package:coinbase_cloud_exchange_dart_client/src/advanced_trade/rest/accounts.dart';
-import 'package:coinbase_cloud_exchange_dart_client/src/advanced_trade/services/network.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/advanced_trade/models/account.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/advanced_trade/models/credential.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/advanced_trade/rest/accounts.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/advanced_trade/services/network.dart';
 import 'package:test/test.dart';
 
 Map<String, String> envVars = Platform.environment;

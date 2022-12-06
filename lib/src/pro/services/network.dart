@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'dart:io' show HttpHeaders;
 
-import 'package:coinbase_cloud_exchange_dart_client/src/pro/models/credential.dart';
-import 'package:coinbase_cloud_exchange_dart_client/src/pro/services/signature.dart';
-import 'package:coinbase_cloud_exchange_dart_client/src/shared/models/signature.dart';
-import 'package:coinbase_cloud_exchange_dart_client/src/shared/services/tools.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/pro/models/credential.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/pro/services/signature.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/shared/models/signature.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/shared/services/tools.dart';
 import 'package:http/http.dart' as http;
 
 const String coinbaseApiProduction = 'api.exchange.coinbase.com';

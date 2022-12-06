@@ -1,11 +1,11 @@
 import 'dart:io' show Platform;
 
-import 'package:coinbase_cloud_exchange_dart_client/src/advanced_trade/models/credential.dart';
-import 'package:coinbase_cloud_exchange_dart_client/src/advanced_trade/models/fill.dart';
-import 'package:coinbase_cloud_exchange_dart_client/src/advanced_trade/models/order.dart';
-import 'package:coinbase_cloud_exchange_dart_client/src/advanced_trade/rest/orders/fills.dart';
-import 'package:coinbase_cloud_exchange_dart_client/src/advanced_trade/rest/orders/orders.dart';
-import 'package:coinbase_cloud_exchange_dart_client/src/advanced_trade/services/network.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/advanced_trade/models/credential.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/advanced_trade/models/fill.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/advanced_trade/models/order.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/advanced_trade/rest/orders/fills.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/advanced_trade/rest/orders/orders.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/advanced_trade/services/network.dart';
 import 'package:test/test.dart';
 
 Map<String, String> envVars = Platform.environment;

@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:coinbase_cloud_exchange_dart_client/src/shared/models/signature.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/shared/models/signature.dart';
 import 'package:crypto/crypto.dart';
 
 Signature signature(

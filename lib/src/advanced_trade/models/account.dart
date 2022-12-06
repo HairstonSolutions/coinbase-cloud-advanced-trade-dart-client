@@ -1,4 +1,4 @@
-import 'package:coinbase_cloud_exchange_dart_client/src/shared/services/tools.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/shared/services/tools.dart';
 
 class Account {
   final String? uuid;

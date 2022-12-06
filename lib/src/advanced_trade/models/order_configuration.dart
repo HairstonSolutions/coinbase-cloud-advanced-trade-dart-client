@@ -1,10 +1,10 @@
 import 'dart:convert';
 
-import 'package:coinbase_cloud_exchange_dart_client/src/advanced_trade/models/order_configuration/limit_gtc.dart';
-import 'package:coinbase_cloud_exchange_dart_client/src/advanced_trade/models/order_configuration/limit_gtd.dart';
-import 'package:coinbase_cloud_exchange_dart_client/src/advanced_trade/models/order_configuration/market_ioc.dart';
-import 'package:coinbase_cloud_exchange_dart_client/src/advanced_trade/models/order_configuration/stop_limit_gtc.dart';
-import 'package:coinbase_cloud_exchange_dart_client/src/advanced_trade/models/order_configuration/stop_limit_gtd.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/advanced_trade/models/order_configuration/limit_gtc.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/advanced_trade/models/order_configuration/limit_gtd.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/advanced_trade/models/order_configuration/market_ioc.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/advanced_trade/models/order_configuration/stop_limit_gtc.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/advanced_trade/models/order_configuration/stop_limit_gtd.dart';
 
 class OrderConfiguration {
   final LimitGTC? limitGTC;

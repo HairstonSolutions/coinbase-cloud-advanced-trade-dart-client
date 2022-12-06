@@ -1,3 +1,13 @@
+## 0.2.0
+
+- Rename to "coinbase_cloud_advanced_trade_client"
+- Primary Support for Advanced Trade API
+- Pro Exchange is now secondary
+- Get Account Details
+- Get Orders, Order-Fills
+- Get Products
+- Get Product Market Trades
+
 ## 0.1.1
 
 - Signature Support for Advanced Trade API.
