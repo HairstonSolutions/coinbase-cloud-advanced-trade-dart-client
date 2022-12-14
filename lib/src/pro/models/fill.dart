@@ -1,6 +1,6 @@
 class Fill {
   final int? tradeId;
-  final String? createdAt;
+  final DateTime? createdAt;
   final String? productId;
   final String? orderId;
   final String? userId;
@@ -40,7 +40,7 @@ class Fill {
 
   static Fill convertJson(var jsonObject) {
     int? tradeId = jsonObject['trade_id'];
-    String? createdAt = jsonObject['created_at'];
+    DateTime? createdAt = DateTime.parse(jsonObject['created_at']);
     String? productId = jsonObject['product_id'];
     String? orderId = jsonObject['order_id'];
     String? userId = jsonObject['user_id'];

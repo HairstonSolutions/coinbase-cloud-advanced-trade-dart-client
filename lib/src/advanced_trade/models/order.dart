@@ -10,7 +10,7 @@ class Order {
   final String? clientOrderId;
   final String? status;
   final String? timeInForce;
-  final String? createdTime;
+  final DateTime? createdTime;
   final double? completionPercentage;
   final double? filledSize;
   final double? averageFilledPrice;
@@ -90,7 +90,7 @@ class Order {
     String? clientOrderId = jsonObject['client_order_id'];
     String? status = jsonObject['status'];
     String? timeInForce = jsonObject['time_in_force'];
-    String? createdTime = jsonObject['created_time'];
+    DateTime? createdTime = DateTime.parse(jsonObject['created_time']);
     double? completionPercentage =
         nullableDouble(jsonObject, 'completion_percentage');
     double? filledSize = nullableDouble(jsonObject, 'filled_size');

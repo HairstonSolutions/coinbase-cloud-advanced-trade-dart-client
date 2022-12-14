@@ -7,9 +7,9 @@ class Account {
   final double? availableBalance;
   final bool? isDefault;
   final bool? active;
-  final String? createdAt;
-  final String? updatedAt;
-  final String? deletedAt;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
+  final DateTime? deletedAt;
   final String? type;
   final bool? ready;
   final double? holdValue;
@@ -47,9 +47,11 @@ class Account {
     double? availableBalance = nullableDouble(ab, 'value');
     bool? isDefault = jsonObject['default'];
     bool? active = jsonObject['active'];
-    String? createdAt = jsonObject['created_at'];
-    String? updatedAt = jsonObject['updated_at'];
-    String? deletedAt = jsonObject['deleted_at'];
+    DateTime? createdAt = DateTime.parse(jsonObject['created_at']);
+    DateTime? updatedAt = DateTime.parse(jsonObject['updated_at']);
+    DateTime? deletedAt = (jsonObject['deleted_at'] != null)
+        ? DateTime.parse(jsonObject['deleted_at'])
+        : null;
     String? type = jsonObject['type'];
     bool? ready = jsonObject['ready'];
     var hold = jsonObject['hold'];
