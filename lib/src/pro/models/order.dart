@@ -13,9 +13,9 @@ class Order {
   final String? type; // limit market stop
   final String? timeInForce; // GTC GTT IOC FOK
   final bool? postOnly; // if true, forces order to be maker only
-  final String? createdAt; // timestamp at which order was placed
-  final String? expireTime; // timestamp at which order expires
-  final String? doneAt; // timestamp at which order was done
+  final DateTime? createdAt; // timestamp at which order was placed
+  final DateTime? expireTime; // timestamp at which order expires
+  final DateTime? doneAt; // timestamp at which order was done
   final String?
       doneReason; // reason order was done (filled, rejected, or otherwise)
   final String? rejectReason; // reason order was rejected by engine
@@ -82,9 +82,13 @@ class Order {
     String? type = jsonObject['type'];
     String? timeInForce = jsonObject['time_in_force'];
     bool? postOnly = jsonObject['post_only'];
-    String? createdAt = jsonObject['created_at'];
-    String? expireTime = jsonObject['expire_time'];
-    String? doneAt = jsonObject['done_at'];
+    DateTime? createdAt = DateTime.parse(jsonObject['created_at']);
+    DateTime? expireTime = (jsonObject['expire_time'] != null)
+        ? DateTime.parse(jsonObject['expire_time'])
+        : null;
+    DateTime? doneAt = (jsonObject['done_at'] != null)
+        ? DateTime.parse(jsonObject['done_at'])
+        : null;
     String? doneReason = jsonObject['done_reason'];
     String? rejectReason = jsonObject['reject_reason'];
     double? fillFees = double.parse(jsonObject['fill_fees']);

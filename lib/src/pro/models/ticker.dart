@@ -5,7 +5,7 @@ class Ticker {
   final int? tradeId;
   final double? price;
   final double? size;
-  final String? time;
+  final DateTime? time;
 
   Ticker(this.ask, this.bid, this.volume, this.tradeId, this.price, this.size,
       this.time);
@@ -24,7 +24,7 @@ class Ticker {
     int? tradeId = jsonObject['trade_id'];
     double? price = double.parse(jsonObject['price']);
     double? size = double.parse(jsonObject['size']);
-    String? time = jsonObject['time'];
+    DateTime? time = DateTime.parse(jsonObject['time']);
 
     return Ticker(ask, bid, volume, tradeId, price, size, time);
   }
