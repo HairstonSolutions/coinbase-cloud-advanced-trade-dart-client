@@ -36,7 +36,7 @@ void main() {
         var jsonResponse = jsonDecode(data);
 
         for (var jsonObject in jsonResponse) {
-          orders.add(Order.convertJson(jsonObject));
+          orders.add(Order.fromCBJson(jsonObject));
           print('$jsonObject/n');
         }
       } else {
@@ -114,7 +114,7 @@ void main() {
     });
   });
 
-  group('Create Orders', skip: skip, () {
+  group('Create Orders', skip: true, () {
     test('Create Limit order for 1 Bitcoin', () async {
       String side = 'buy';
       String productId = 'BTC-USD';

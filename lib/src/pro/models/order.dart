@@ -55,6 +55,91 @@ class Order {
       this.stop,
       this.stopPrice);
 
+  Order.fromCBJson(Map<String, dynamic> json)
+      : id = json['id'],
+        clientOid = json['client_oid'],
+        profileId = json['profile_id'],
+        productId = json['product_id'],
+        side = json['side'],
+        price = nullableDouble(json, 'price'),
+        size = nullableDouble(json, 'size'),
+        funds = nullableDouble(json, 'funds'),
+        specifiedFunds = nullableDouble(json, 'specified_funds'),
+        type = json['type'],
+        timeInForce = json['time_in_force'],
+        postOnly = json['post_only'],
+        createdAt = DateTime.parse(json['created_at']),
+        expireTime = (json['expire_time'] != null)
+            ? DateTime.parse(json['expire_time'])
+            : null,
+        doneAt =
+            (json['done_at'] != null) ? DateTime.parse(json['done_at']) : null,
+        doneReason = json['done_reason'],
+        rejectReason = json['reject_reason'],
+        fillFees = double.parse(json['fill_fees']),
+        filledSize = double.parse(json['filled_size']),
+        executedValue = double.parse(json['executed_value']),
+        status = json['status'],
+        settled = json['settled'],
+        stop = json['stop'],
+        stopPrice = nullableDouble(json, 'stop_price');
+
+  Order.fromJson(Map<String, dynamic> json)
+      : id = json['id'],
+        clientOid = json['clientOid'],
+        profileId = json['profileId'],
+        productId = json['productId'],
+        side = json['side'],
+        price = json['price'],
+        size = json['size'],
+        funds = json['funds'],
+        specifiedFunds = json['specifiedFunds'],
+        type = json['type'],
+        timeInForce = json['timeInForce'],
+        postOnly = json['postOnly'],
+        createdAt = DateTime.parse(json['createdAt']),
+        expireTime = (json['expireTime'] != null)
+            ? DateTime.parse(json['expireTime'])
+            : null,
+        doneAt =
+            (json['doneAt'] != null) ? DateTime.parse(json['doneAt']) : null,
+        doneReason = json['doneReason'],
+        rejectReason = json['rejectReason'],
+        fillFees = json['fillFees'],
+        filledSize = json['filledSize'],
+        executedValue = json['executedValue'],
+        status = json['status'],
+        settled = json['settled'],
+        stop = json['stop'],
+        stopPrice = json['stopPrice'];
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'clientOid': clientOid,
+        'profileId': profileId,
+        'productId': productId,
+        'side': side,
+        'price': price,
+        'size': size,
+        'funds': funds,
+        'specifiedFunds': specifiedFunds,
+        'type': type,
+        'timeInForce': timeInForce,
+        'postOnly': postOnly,
+        'createdAt': createdAt?.toIso8601String(),
+        'expireTime': expireTime?.toIso8601String(),
+        'doneAt': doneAt?.toIso8601String(),
+        'doneReason': doneReason,
+        'rejectReason': rejectReason,
+        'fillFees': fillFees,
+        'filledSize': filledSize,
+        'executedValue': executedValue,
+        'status': status,
+        'settled': settled,
+        'stop': stop,
+        'stopPrice': stopPrice
+      };
+
   @override
   String toString() {
     String all = '{id=$id, clientOid=$clientOid, profileId=$profileId, '
@@ -68,83 +153,4 @@ class Order {
         '}';
     return all;
   }
-
-  static Order convertJson(var jsonObject) {
-    String? id = jsonObject['id'];
-    String? clientOid = jsonObject['client_oid'];
-    String? profileId = jsonObject['profile_id'];
-    String? productId = jsonObject['product_id'];
-    String? side = jsonObject['side'];
-    double? price = nullableDouble(jsonObject, 'price');
-    double? size = nullableDouble(jsonObject, 'size');
-    double? funds = nullableDouble(jsonObject, 'funds');
-    double? specifiedFunds = nullableDouble(jsonObject, 'specified_funds');
-    String? type = jsonObject['type'];
-    String? timeInForce = jsonObject['time_in_force'];
-    bool? postOnly = jsonObject['post_only'];
-    DateTime? createdAt = DateTime.parse(jsonObject['created_at']);
-    DateTime? expireTime = (jsonObject['expire_time'] != null)
-        ? DateTime.parse(jsonObject['expire_time'])
-        : null;
-    DateTime? doneAt = (jsonObject['done_at'] != null)
-        ? DateTime.parse(jsonObject['done_at'])
-        : null;
-    String? doneReason = jsonObject['done_reason'];
-    String? rejectReason = jsonObject['reject_reason'];
-    double? fillFees = double.parse(jsonObject['fill_fees']);
-    double? filledSize = double.parse(jsonObject['filled_size']);
-    double? executedValue = double.parse(jsonObject['executed_value']);
-    String? status = jsonObject['status'];
-    bool? settled = jsonObject['settled'];
-    String? stop = jsonObject['stop'];
-    double? stopPrice = nullableDouble(jsonObject, 'stop_price');
-
-    return Order(
-        id,
-        clientOid,
-        profileId,
-        productId,
-        side,
-        price,
-        size,
-        funds,
-        specifiedFunds,
-        type,
-        timeInForce,
-        postOnly,
-        createdAt,
-        expireTime,
-        doneAt,
-        doneReason,
-        rejectReason,
-        fillFees,
-        filledSize,
-        executedValue,
-        status,
-        settled,
-        stop,
-        stopPrice);
-  }
 }
-
-/*
-{
-  id: 927700a7-8bb0-4d1b-97b0-05f1f6f75732,
-  client_oid: 2b1f96e1-62a4-4d62-8367-62271851505d,
-  product_id: LINK-USD,
-  profile_id: c1173eaa-6451-4a0e-9c3a-334076c8a44d,
-  side: buy,
-  funds: 994.0300000000000000,
-  specified_funds: 1000.0000000000000000,
-  type: market,
-  post_only: false,
-  created_at: 2022-10-10T05:11:46.92006Z,
-  done_at: 2022-10-10T05:11:46.92006Z,
-  done_reason: canceled,
-  fill_fees: 0.0000000000000000,
-  filled_size: 0.00000000,
-  executed_value: 0.0000000000000000,
-  status: done,
-  settled: true
-}/n
- */
