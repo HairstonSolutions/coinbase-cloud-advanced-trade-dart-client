@@ -9,15 +9,15 @@ void main() {
   group('Test Fill Object Injection', () {
     String exampleProductJsonFile =
         'advanced_trade/models/examples/product.json';
-    String? exampleProductJson;
+    String? exampleProductCBJson;
 
     setUp(() async {
-      exampleProductJson = await getJsonFromFile(exampleProductJsonFile);
+      exampleProductCBJson = await getJsonFromFile(exampleProductJsonFile);
     });
 
     test('Test Example Order JSON Import Object conversion', () {
-      var jsonAsMap = jsonDecode(exampleProductJson!);
-      Product? exampleProduct = Product.convertJson(jsonAsMap);
+      var cbJsonAsMap = jsonDecode(exampleProductCBJson!);
+      Product? exampleProduct = Product.fromCBJson(cbJsonAsMap);
 
       print('Product Object: $exampleProduct');
 
@@ -45,6 +45,43 @@ void main() {
       expect(exampleProduct.quoteCurrencyId, "USD");
       expect(exampleProduct.baseCurrencyId, "BTC");
       expect(exampleProduct.midMarketPrice, 140.22);
+    });
+
+    test('Example Order JSON Import, Serialize, deserialize', () {
+      var cbJsonAsMap = jsonDecode(exampleProductCBJson!);
+      Product exampleProduct = Product.fromCBJson(cbJsonAsMap);
+      var serializedProduct = exampleProduct.toJson();
+
+      Product deserializedProduct = Product.fromJson(serializedProduct);
+
+      print('Deserialized Product Object: $deserializedProduct');
+
+      expect(deserializedProduct.productId, 'BTC-USD');
+      expect(deserializedProduct.price, 140.21);
+      expect(deserializedProduct.pricePercentageChange24h, "9.43%");
+      expect(deserializedProduct.volume24h, 1908432);
+      expect(deserializedProduct.volumePercentageChange24h, "9.43%");
+      expect(deserializedProduct.baseIncrement, 0.00000001);
+      expect(deserializedProduct.quoteIncrement, 0.00000001);
+      expect(deserializedProduct.quoteMinSize, 0.00000001);
+      expect(deserializedProduct.quoteMaxSize, 1000);
+      expect(deserializedProduct.baseName, "Bitcoin");
+      expect(deserializedProduct.quoteName, "US Dollar");
+      expect(deserializedProduct.watched, true);
+      expect(deserializedProduct.isDisabled, false);
+      expect(deserializedProduct.isNew, true);
+      expect(deserializedProduct.status, "string");
+      expect(deserializedProduct.cancelOnly, true);
+      expect(deserializedProduct.limitOnly, true);
+      expect(deserializedProduct.postOnly, true);
+      expect(deserializedProduct.tradingDisabled, false);
+      expect(deserializedProduct.auctionMode, true);
+      expect(deserializedProduct.productType, "UNKNOWN_PRODUCT_TYPE");
+      expect(deserializedProduct.quoteCurrencyId, "USD");
+      expect(deserializedProduct.baseCurrencyId, "BTC");
+      expect(deserializedProduct.midMarketPrice, 140.22);
+
+      print('Serialized Product: ${jsonEncode(deserializedProduct)}');
     });
   });
 }

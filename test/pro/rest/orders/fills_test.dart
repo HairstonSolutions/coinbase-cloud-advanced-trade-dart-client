@@ -3,7 +3,7 @@ import 'dart:io' show Platform;
 
 import 'package:coinbase_cloud_advanced_trade_client/src/pro/models/credential.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/pro/models/fill.dart';
-import 'package:coinbase_cloud_advanced_trade_client/src/pro/rest//orders/fills.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/pro/rest/orders/fills.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/pro/services/network.dart';
 import 'package:test/test.dart';
 

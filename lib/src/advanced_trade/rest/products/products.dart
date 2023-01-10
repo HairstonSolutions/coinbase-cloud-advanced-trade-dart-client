@@ -23,7 +23,7 @@ Future<List<Product>> getProducts(
     var jsonProducts = jsonResponse['products'];
 
     for (var jsonObject in jsonProducts) {
-      products.add(Product.convertJson(jsonObject));
+      products.add(Product.fromCBJson(jsonObject));
     }
   } else {
     var url = response.request?.url.toString();
@@ -44,7 +44,7 @@ Future<Product?> getProduct(
   if (response.statusCode == 200) {
     var jsonResponse = jsonDecode(response.body);
 
-    return Product.convertJson(jsonResponse);
+    return Product.fromCBJson(jsonResponse);
   } else {
     var url = response.request?.url.toString();
     print('Request to URL $url failed: Response code ${response.statusCode}');
