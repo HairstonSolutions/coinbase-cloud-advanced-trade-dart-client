@@ -6,9 +6,11 @@ import 'package:test/test.dart';
 import '../../tools.dart';
 
 void main() {
-  group('Test Order Object Injection', () {
+  group('Order Object Injection', () {
     String exampleOrderJsonFile = 'advanced_trade/models/examples/order.json';
     String? exampleOrderJson;
+    String exampleOrderJsonFile2 = 'advanced_trade/models/examples/order2.json';
+    String? exampleOrderJson2;
     String openOrderJsonFile = 'advanced_trade/models/examples/open-order.json';
     String? openOrderJson;
     String marketOrderJsonFile =
@@ -17,13 +19,14 @@ void main() {
 
     setUp(() async {
       exampleOrderJson = await getJsonFromFile(exampleOrderJsonFile);
+      exampleOrderJson2 = await getJsonFromFile(exampleOrderJsonFile2);
       openOrderJson = await getJsonFromFile(openOrderJsonFile);
       marketOrderJson = await getJsonFromFile(marketOrderJsonFile);
     });
 
-    test('Test Example Order JSON Import Object conversion', () {
+    test('Example Order JSON Import Object conversion', () {
       var jsonAsMap = jsonDecode(exampleOrderJson!);
-      Order? exampleOrder = Order.convertJson(jsonAsMap);
+      Order? exampleOrder = Order.fromCBJson(jsonAsMap);
 
       print('Order Object: $exampleOrder');
 
@@ -32,10 +35,9 @@ void main() {
       expect(exampleOrder.settled, true);
     });
 
-    test('Test Example Order JSON Import Object conversion order configuration',
-        () {
+    test('Example Order JSON Import Object conversion order configuration', () {
       var jsonAsMap = jsonDecode(exampleOrderJson!);
-      Order? exampleOrder = Order.convertJson(jsonAsMap);
+      Order? exampleOrder = Order.fromCBJson(jsonAsMap);
       expect(exampleOrder.orderConfiguration?.marketIOC?.quoteSize, 10.00);
       expect(exampleOrder.orderConfiguration?.limitGTC?.limitPrice, 10000.00);
       expect(exampleOrder.orderConfiguration?.limitGTD?.quoteSize, 10.00);
@@ -45,9 +47,9 @@ void main() {
           'UNKNOWN_STOP_DIRECTION');
     });
 
-    test('Test Example Open Order JSON Import Object conversion', () {
+    test('Example Open Order JSON Import Object conversion', () {
       var jsonAsMap = jsonDecode(openOrderJson!);
-      Order? openOrder = Order.convertJson(jsonAsMap);
+      Order? openOrder = Order.fromCBJson(jsonAsMap);
 
       print('Open Order Object: $openOrder');
 
@@ -59,9 +61,9 @@ void main() {
       expect(openOrder.orderConfiguration?.limitGTC?.postOnly, false);
     });
 
-    test('Test Example Market Order JSON Import Object conversion', () {
+    test('Example Market Order JSON Import Object conversion', () {
       var jsonAsMap = jsonDecode(marketOrderJson!);
-      Order? marketOrder = Order.convertJson(jsonAsMap);
+      Order? marketOrder = Order.fromCBJson(jsonAsMap);
 
       print('Market Order Object: $marketOrder');
 
@@ -71,6 +73,53 @@ void main() {
       expect(marketOrder.timeInForce, 'IMMEDIATE_OR_CANCEL');
       expect(marketOrder.settled, true);
       expect(marketOrder.orderConfiguration?.marketIOC?.quoteSize, 25);
+    });
+
+    test('Example Order JSON Import, Serialize, deserialize', () {
+      var jsonAsMap = jsonDecode(exampleOrderJson!);
+      Order? exampleOrder = Order.fromCBJson(jsonAsMap);
+      var serializedOrder = exampleOrder.toJson();
+
+      Order? deserializedOrder = Order.fromJson(serializedOrder);
+
+      print('Deserialized Order Object: $deserializedOrder');
+      print(jsonEncode(deserializedOrder));
+
+      expect(deserializedOrder.orderConfiguration?.marketIOC?.quoteSize, 10.00);
+      expect(
+          deserializedOrder.orderConfiguration?.limitGTC?.limitPrice, 10000.00);
+      expect(deserializedOrder.orderConfiguration?.limitGTD?.quoteSize, 10.00);
+      expect(deserializedOrder.orderConfiguration?.stopLimitGTC?.stopPrice,
+          20000.00);
+      expect(deserializedOrder.orderConfiguration?.stopLimitGTD?.stopDirection,
+          'UNKNOWN_STOP_DIRECTION');
+
+      print(deserializedOrder.orderConfiguration);
+      print(deserializedOrder.orderConfiguration?.toJson());
+      print(deserializedOrder.orderConfiguration?.toCBJson());
+      print(jsonEncode(deserializedOrder.orderConfiguration?.toCBJson()));
+    });
+
+    test('Example Order JSON Import, Serialize, II', () {
+      var jsonAsMap = jsonDecode(exampleOrderJson2!);
+      Order? exampleOrder = Order.fromCBJson(jsonAsMap);
+      var serializedOrder = exampleOrder.toJson();
+
+      Order? deserializedOrder = Order.fromJson(serializedOrder);
+
+      print('Deserialized Order as CB Map: ${deserializedOrder.toCBJson()}');
+      print(
+          'Deserialized Order as CB JSON: ${jsonEncode(deserializedOrder.toCBJson())}');
+      print(deserializedOrder.orderConfiguration);
+      print(jsonEncode(deserializedOrder.orderConfiguration?.toCBJson()));
+
+      expect(deserializedOrder.orderConfiguration?.marketIOC?.quoteSize, 10.00);
+      expect(deserializedOrder.orderConfiguration?.limitGTC?.limitPrice, null);
+      expect(deserializedOrder.orderConfiguration?.limitGTD?.quoteSize, null);
+      expect(
+          deserializedOrder.orderConfiguration?.stopLimitGTC?.stopPrice, null);
+      expect(deserializedOrder.orderConfiguration?.stopLimitGTD?.stopDirection,
+          null);
     });
   });
 }

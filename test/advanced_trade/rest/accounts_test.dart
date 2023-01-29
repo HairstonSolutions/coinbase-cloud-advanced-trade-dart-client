@@ -75,7 +75,7 @@ void main() {
     });
 
     test('Account NA for given Currency name for an API key', () async {
-      Account? account = await getAccountByCurrency('DOGE',
+      Account? account = await getAccountByCurrency('DOGES',
           credential: credentials, isSandbox: true);
 
       expect(account, null);
