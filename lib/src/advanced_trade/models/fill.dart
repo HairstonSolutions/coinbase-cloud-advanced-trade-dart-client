@@ -30,6 +30,55 @@ class Fill {
       this.userId,
       this.side);
 
+  Fill.fromJson(Map<String, dynamic> json)
+      : entryId = json['entryId'],
+        tradeId = json['tradeId'],
+        orderId = json['orderId'],
+        tradeTime = DateTime.parse(json['tradeTime']),
+        tradeType = json['tradeType'],
+        price = json['price'],
+        size = json['size'],
+        commission = json['commission'],
+        productId = json['productId'],
+        sequenceTimestamp = DateTime.parse(json['sequenceTimestamp']),
+        liquidityIndicator = json['liquidityIndicator'],
+        sizeInQuote = json['sizeInQuote'],
+        userId = json['userId'],
+        side = json['side'];
+
+  Map<String, dynamic> toJson() => {
+        'entryId': entryId,
+        'tradeId': tradeId,
+        'orderId': orderId,
+        'tradeTime': tradeTime?.toIso8601String(),
+        'tradeType': tradeType,
+        'price': price,
+        'size': size,
+        'commission': commission,
+        'productId': productId,
+        'sequenceTimestamp': sequenceTimestamp?.toIso8601String(),
+        'liquidityIndicator': liquidityIndicator,
+        'sizeInQuote': sizeInQuote,
+        'userId': userId,
+        'side': side
+      };
+
+  Fill.fromCBJson(Map<String, dynamic> json)
+      : entryId = json['entry_id'],
+        tradeId = json['trade_id'],
+        orderId = json['order_id'],
+        tradeTime = DateTime.parse(json['trade_time']),
+        tradeType = json['trade_type'],
+        price = double.parse(json['price']),
+        size = double.parse(json['size']),
+        commission = double.parse(json['commission']),
+        productId = json['product_id'],
+        sequenceTimestamp = DateTime.parse(json['sequence_timestamp']),
+        liquidityIndicator = json['liquidity_indicator'],
+        sizeInQuote = json['size_in_quote'],
+        userId = json['user_id'],
+        side = json['side'];
+
   @override
   String toString() {
     String all = '{'
@@ -41,39 +90,5 @@ class Fill {
         'userId=$userId, side=$side'
         '}';
     return all;
-  }
-
-  static Fill convertJson(var jsonObject) {
-    String? entryId = jsonObject['entry_id'];
-    String? tradeId = jsonObject['trade_id'];
-    String? orderId = jsonObject['order_id'];
-    DateTime? tradeTime = DateTime.parse(jsonObject['trade_time']);
-    String? tradeType = jsonObject['trade_type'];
-    double? price = double.parse(jsonObject['price']);
-    double? size = double.parse(jsonObject['size']);
-    double? commission = double.parse(jsonObject['commission']);
-    String? productId = jsonObject['product_id'];
-    DateTime? sequenceTimestamp =
-        DateTime.parse(jsonObject['sequence_timestamp']);
-    String? liquidityIndicator = jsonObject['liquidity_indicator'];
-    bool? sizeInQuote = jsonObject['size_in_quote'];
-    String? userId = jsonObject['user_id'];
-    String? side = jsonObject['side'];
-
-    return Fill(
-        entryId,
-        tradeId,
-        orderId,
-        tradeTime,
-        tradeType,
-        price,
-        size,
-        commission,
-        productId,
-        sequenceTimestamp,
-        liquidityIndicator,
-        sizeInQuote,
-        userId,
-        side);
   }
 }

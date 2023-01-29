@@ -18,9 +18,9 @@ void main() {
       microFillJson = await getJsonFromFile(microFillJsonFile);
     });
 
-    test('Test Example Order JSON Import Object conversion', () {
+    test('Example Fill JSON Import Object conversion', () {
       var jsonAsMap = jsonDecode(exampleFillJson!);
-      Fill? exampleFill = Fill.convertJson(jsonAsMap);
+      Fill? exampleFill = Fill.fromCBJson(jsonAsMap);
 
       print('Fill Object: $exampleFill');
 
@@ -35,9 +35,9 @@ void main() {
       expect(exampleFill.sizeInQuote, false);
     });
 
-    test('Test Example Order JSON Import Object conversion', () {
+    test('Example Fill JSON Import Object conversion', () {
       var jsonAsMap = jsonDecode(microFillJson!);
-      Fill? exampleFill = Fill.convertJson(jsonAsMap);
+      Fill? exampleFill = Fill.fromCBJson(jsonAsMap);
 
       print('Fill Object: $exampleFill');
 
@@ -50,6 +50,16 @@ void main() {
       expect(exampleFill.commission, 0.0000000028064);
       expect(exampleFill.productId, 'BTC-USD');
       expect(exampleFill.sizeInQuote, false);
+    });
+
+    test('Example Fill JSON Import, Serialize, deserialize', () {
+      var jsonAsMap = jsonDecode(microFillJson!);
+      Fill? exampleFill = Fill.fromCBJson(jsonAsMap);
+      var serializedFill = exampleFill.toJson();
+
+      Fill? deserializedFill = Fill.fromJson(serializedFill);
+      print('Deserialized Fill Object: $deserializedFill');
+      print(jsonEncode(deserializedFill));
     });
   });
 }

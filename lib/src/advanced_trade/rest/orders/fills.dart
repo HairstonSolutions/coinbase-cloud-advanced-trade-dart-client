@@ -33,7 +33,7 @@ Future<List<Fill>> getFills(
     String? jsonCursor = jsonResponse['cursor'];
 
     for (var jsonObject in jsonAccounts) {
-      orders.add(Fill.convertJson(jsonObject));
+      orders.add(Fill.fromCBJson(jsonObject));
     }
     // Recursive Break
     if (jsonCursor != null && jsonCursor != '') {
