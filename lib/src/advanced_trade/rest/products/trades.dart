@@ -24,7 +24,7 @@ Future<List<Trade>> getTrades(
     var jsonTrades = jsonResponse['trades'];
 
     for (var jsonObject in jsonTrades) {
-      trades.add(Trade.convertJson(jsonObject));
+      trades.add(Trade.fromCBJson(jsonObject));
     }
   } else {
     var url = response.request?.url.toString();
