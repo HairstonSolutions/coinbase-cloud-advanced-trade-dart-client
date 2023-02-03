@@ -40,7 +40,7 @@ void main() {
         var jsonResponse = jsonDecode(data);
 
         for (var jsonObject in jsonResponse) {
-          fills.add(Fill.convertJson(jsonObject));
+          fills.add(Fill.fromCBJson(jsonObject));
         }
       } else {
         var url = response.request?.url.toString();
