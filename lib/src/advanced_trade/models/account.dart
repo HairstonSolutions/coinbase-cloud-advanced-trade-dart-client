@@ -28,8 +28,54 @@ class Account {
       this.ready,
       this.holdValue);
 
+  Account.fromJson(Map<String, dynamic> json)
+      : uuid = json['uuid'],
+        name = json['name'],
+        currency = json['currency'],
+        availableBalance = json['availableBalance'],
+        isDefault = json['isDefault'],
+        active = json['active'],
+        createdAt = DateTime.parse(json['createdAt']),
+        updatedAt = DateTime.parse(json['updatedAt']),
+        deletedAt = DateTime.parse(json['deletedAt']),
+        type = json['type'],
+        ready = json['ready'],
+        holdValue = json['holdValue'];
+
+  Map<String, dynamic> toJson() => {
+        'uuid': uuid,
+        'name': name,
+        'currency': currency,
+        'availableBalance': availableBalance,
+        'isDefault': isDefault,
+        'active': active,
+        'createdAt': createdAt?.toIso8601String(),
+        'updatedAt': updatedAt?.toIso8601String(),
+        'deletedAt': deletedAt?.toIso8601String(),
+        'type': type,
+        'ready': ready,
+        'holdValue': holdValue
+      };
+
+  Account.fromCBJson(Map<String, dynamic> json)
+      : uuid = json['uuid'],
+        name = json['name'],
+        currency = json['currency'],
+        availableBalance =
+            AvailableBalance.fromCBJson(json['available_balance']).value,
+        isDefault = json['default'],
+        active = json['active'],
+        createdAt = DateTime.parse(json['created_at']),
+        updatedAt = DateTime.parse(json['updated_at']),
+        deletedAt = (json['deleted_at'] != null)
+            ? DateTime.parse(json['deleted_at'])
+            : null,
+        type = json['type'],
+        ready = json['ready'],
+        holdValue = Hold.fromCBJson(json['hold']).value;
+
   @override
-  String toString() {
+  toString() {
     String all = '{'
         'uuid=$uuid, name=$name, currency=$currency, '
         'availableBalance=$availableBalance, isDefault=$isDefault, '
@@ -38,56 +84,26 @@ class Account {
         '}';
     return all;
   }
-
-  static Account convertJson(var jsonObject) {
-    String? uuid = jsonObject['uuid'];
-    String? name = jsonObject['name'];
-    String? currency = jsonObject['currency'];
-    var ab = jsonObject['available_balance'];
-    double? availableBalance = nullableDouble(ab, 'value');
-    bool? isDefault = jsonObject['default'];
-    bool? active = jsonObject['active'];
-    DateTime? createdAt = DateTime.parse(jsonObject['created_at']);
-    DateTime? updatedAt = DateTime.parse(jsonObject['updated_at']);
-    DateTime? deletedAt = (jsonObject['deleted_at'] != null)
-        ? DateTime.parse(jsonObject['deleted_at'])
-        : null;
-    String? type = jsonObject['type'];
-    bool? ready = jsonObject['ready'];
-    var hold = jsonObject['hold'];
-    double? holdValue = nullableDouble(hold, 'value');
-
-    return Account(uuid, name, currency, availableBalance, isDefault, active,
-        createdAt, updatedAt, deletedAt, type, ready, holdValue);
-  }
 }
 
-/*
-{
-  "accounts": [
-    {
-      "uuid": "8bfc20d7-f7c6-4422-bf07-8243ca4169fe",
-      "name": "BTC Wallet",
-      "currency": "BTC",
-      "available_balance": {
-        "value": "1.23",
-        "currency": "BTC"
-      },
-      "default": false,
-      "active": true,
-      "created_at": "2021-05-31T09:59:59Z",
-      "updated_at": "2021-05-31T09:59:59Z",
-      "deleted_at": "2021-05-31T09:59:59Z",
-      "type": "ACCOUNT_TYPE_UNSPECIFIED",
-      "ready": true,
-      "hold": {
-        "value": "1.23",
-        "currency": "BTC"
-      }
-    }
-  ],
-  "has_next": true,
-  "cursor": "789100",
-  "size": 0
+class AvailableBalance {
+  double? value;
+  String? currency;
+
+  AvailableBalance(this.value, this.currency);
+
+  AvailableBalance.fromCBJson(Map<String, dynamic> json)
+      : value = nullableDouble(json, 'value'),
+        currency = json['currency'];
 }
- */
+
+class Hold {
+  double? value;
+  String? currency;
+
+  Hold(this.value, this.currency);
+
+  Hold.fromCBJson(Map<String, dynamic> json)
+      : value = nullableDouble(json, 'value'),
+        currency = json['currency'];
+}
