@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:coinbase_cloud_advanced_trade_client/src/shared/services/tools.dart';
 
 class LimitGTC {
@@ -10,32 +8,31 @@ class LimitGTC {
 
   LimitGTC(this.quoteSize, this.baseSize, this.limitPrice, this.postOnly);
 
-  String? toCBJson() {
-    if (quoteSize != null || baseSize != null) {
-      Map<String, dynamic> map = {
+  LimitGTC.fromJson(Map<String, dynamic> json)
+      : quoteSize = json['quoteSize'],
+        baseSize = json['baseSize'],
+        limitPrice = json['limitPrice'],
+        postOnly = json['postOnly'];
+
+  Map<String, dynamic> toJson() => {
+        'quoteSize': quoteSize,
+        'baseSize': baseSize,
+        'limitPrice': limitPrice,
+        'postOnly': postOnly
+      };
+
+  LimitGTC.fromCBJson(Map<String, dynamic> json)
+      : quoteSize = nullableDouble(json, 'quote_size'),
+        baseSize = nullableDouble(json, 'base_size'),
+        limitPrice = nullableDouble(json, 'limit_price'),
+        postOnly = json['post_only'];
+
+  Map<String, dynamic> toCBJson() => {
         'quote_size': quoteSize,
         'base_size': baseSize,
         'limit_price': limitPrice,
-        'post_only': postOnly,
+        'post_only': postOnly
       };
-
-      String body = jsonEncode(map);
-      return body;
-    }
-    return null;
-  }
-
-  String? toJson() {
-    Map<String, dynamic> map = {
-      'quoteSize': quoteSize,
-      'baseSize': baseSize,
-      'limitPrice': limitPrice,
-      'postOnly': postOnly,
-    };
-
-    String body = jsonEncode(map);
-    return body;
-  }
 
   @override
   String toString() {
@@ -44,14 +41,5 @@ class LimitGTC {
         'postOnly=$postOnly'
         '}';
     return all;
-  }
-
-  static LimitGTC convertJson(var jsonObject) {
-    double? quoteSize = nullableDouble(jsonObject, 'quote_size');
-    double? baseSize = nullableDouble(jsonObject, 'base_size');
-    double? limitPrice = nullableDouble(jsonObject, 'limit_price');
-    bool? postOnly = jsonObject['post_only'];
-
-    return LimitGTC(quoteSize, baseSize, limitPrice, postOnly);
   }
 }

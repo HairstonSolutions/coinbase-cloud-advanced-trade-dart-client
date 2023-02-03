@@ -3,7 +3,7 @@ import 'dart:io' show Platform;
 
 import 'package:coinbase_cloud_advanced_trade_client/src/pro/models/credential.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/pro/models/fill.dart';
-import 'package:coinbase_cloud_advanced_trade_client/src/pro/rest//orders/fills.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/pro/rest/orders/fills.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/pro/services/network.dart';
 import 'package:test/test.dart';
 
@@ -40,7 +40,7 @@ void main() {
         var jsonResponse = jsonDecode(data);
 
         for (var jsonObject in jsonResponse) {
-          fills.add(Fill.convertJson(jsonObject));
+          fills.add(Fill.fromCBJson(jsonObject));
         }
       } else {
         var url = response.request?.url.toString();

@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:coinbase_cloud_advanced_trade_client/src/shared/services/tools.dart';
 
 class StopLimitGTC {
@@ -12,34 +10,35 @@ class StopLimitGTC {
   StopLimitGTC(this.quoteSize, this.baseSize, this.limitPrice, this.stopPrice,
       this.stopDirection);
 
-  String? toCBJson() {
-    if (quoteSize != null || baseSize != null) {
-      Map<String, dynamic> map = {
+  StopLimitGTC.fromJson(Map<String, dynamic> json)
+      : quoteSize = json['quoteSize'],
+        baseSize = json['baseSize'],
+        limitPrice = json['limitPrice'],
+        stopPrice = json['stopPrice'],
+        stopDirection = json['stopDirection'];
+
+  Map<String, dynamic> toJson() => {
+        'quoteSize': quoteSize,
+        'baseSize': baseSize,
+        'limitPrice': limitPrice,
+        'stopPrice': stopPrice,
+        'stopDirection': stopDirection
+      };
+
+  StopLimitGTC.fromCBJson(Map<String, dynamic> json)
+      : quoteSize = nullableDouble(json, 'quote_size'),
+        baseSize = nullableDouble(json, 'base_size'),
+        limitPrice = nullableDouble(json, 'limit_price'),
+        stopPrice = nullableDouble(json, 'stop_price'),
+        stopDirection = json['stop_direction'];
+
+  Map<String, dynamic> toCBJson() => {
         'quote_size': quoteSize,
         'base_size': baseSize,
         'limit_price': limitPrice,
         'stop_price': stopPrice,
         'stop_direction': stopDirection,
       };
-
-      String body = jsonEncode(map);
-      return body;
-    }
-    return null;
-  }
-
-  String? toJson() {
-    Map<String, dynamic> map = {
-      'quoteSize': quoteSize,
-      'baseSize': baseSize,
-      'limitPrice': limitPrice,
-      'stopPrice': stopPrice,
-      'stopDirection': stopDirection,
-    };
-
-    String body = jsonEncode(map);
-    return body;
-  }
 
   @override
   String toString() {
@@ -48,16 +47,5 @@ class StopLimitGTC {
         'stopPrice=$stopPrice, stopDirection=$stopDirection'
         '}';
     return all;
-  }
-
-  static StopLimitGTC convertJson(var jsonObject) {
-    double? quoteSize = nullableDouble(jsonObject, 'quote_size');
-    double? baseSize = nullableDouble(jsonObject, 'base_size');
-    double? limitPrice = nullableDouble(jsonObject, 'limit_price');
-    double? stopPrice = nullableDouble(jsonObject, 'stop_price');
-    String? stopDirection = jsonObject['stop_direction'];
-
-    return StopLimitGTC(
-        quoteSize, baseSize, limitPrice, stopPrice, stopDirection);
   }
 }

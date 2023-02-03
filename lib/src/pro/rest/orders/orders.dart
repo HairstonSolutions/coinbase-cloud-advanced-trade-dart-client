@@ -24,7 +24,7 @@ Future<List<Order>> getOrders(
     var jsonResponse = jsonDecode(data);
 
     for (var jsonObject in jsonResponse) {
-      orders.add(Order.convertJson(jsonObject));
+      orders.add(Order.fromCBJson(jsonObject));
     }
   } else {
     var url = response.request?.url.toString();
@@ -47,7 +47,7 @@ Future<Order?> getOrder(
   if (response.statusCode == 200) {
     String data = response.body;
     var jsonResponse = jsonDecode(data);
-    order = Order.convertJson(jsonResponse);
+    order = Order.fromCBJson(jsonResponse);
   } else {
     var url = response.request?.url.toString();
     print('Request to URL $url failed: Response code ${response.statusCode}');
@@ -69,7 +69,7 @@ Future<Order?> getOrderByClientOid(
   if (response.statusCode == 200) {
     String data = response.body;
     var jsonResponse = jsonDecode(data);
-    order = Order.convertJson(jsonResponse);
+    order = Order.fromCBJson(jsonResponse);
   } else {
     var url = response.request?.url.toString();
     print('Request to URL $url failed: Response code ${response.statusCode}');
@@ -126,7 +126,7 @@ Future<Order?> createOrder(
   if (response.statusCode == 200) {
     String data = response.body;
     var jsonResponse = jsonDecode(data);
-    order = Order.convertJson(jsonResponse);
+    order = Order.fromCBJson(jsonResponse);
   } else {
     var url = response.request?.url.toString();
     print('Request to URL $url failed: Response code ${response.statusCode}');

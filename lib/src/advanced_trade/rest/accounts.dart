@@ -27,7 +27,7 @@ Future<List<Account>> getAccounts(
     String? jsonCursor = jsonResponse['cursor'];
 
     for (var jsonObject in jsonAccounts) {
-      accounts.add(Account.convertJson(jsonObject));
+      accounts.add(Account.fromCBJson(jsonObject));
     }
     // Recursive Break
     if (jsonCursor != null && jsonCursor != '') {
@@ -74,7 +74,7 @@ Future<Account?> getAccount(
     var jsonResponse = jsonDecode(response.body);
     var jsonAccount = jsonResponse['account'];
 
-    return Account.convertJson(jsonAccount);
+    return Account.fromCBJson(jsonAccount);
   } else {
     var url = response.request?.url.toString();
     print('Request to URL $url failed: Response code ${response.statusCode}');

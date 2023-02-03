@@ -1,0 +1,15 @@
+{
+  "created_at": "2021-12-24T17:01:00.300546Z",
+  "trade_id": 36916683,
+  "product_id": "BTC-USD",
+  "order_id": "200d07ba-e12b-494b-9a97-07fb0a94a95f",
+  "user_id": "61b2242f9ad43702b15c816e",
+  "profile_id": "c1173eaa-6451-4a0e-9c3a-334076c8a44d",
+  "liquidity": "M",
+  "price": "99.98000000",
+  "size": "8.00000000",
+  "fee": "3.9992000000000000",
+  "side": "buy",
+  "settled": true,
+  "usd_volume": "799.8400000000000000"
+}

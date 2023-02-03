@@ -28,6 +28,52 @@ class Fill {
       this.settled,
       this.usdVolume);
 
+  Fill.fromCBJson(Map<String, dynamic> json)
+      : tradeId = json['trade_id'],
+        createdAt = DateTime.parse(json['created_at']),
+        productId = json['product_id'],
+        orderId = json['order_id'],
+        userId = json['user_id'],
+        profileId = json['profile_id'],
+        liquidity = json['liquidity'],
+        price = double.parse(json['price']),
+        size = double.parse(json['size']),
+        fee = double.parse(json['fee']),
+        side = json['side'],
+        settled = json['settled'],
+        usdVolume = double.parse(json['usd_volume']);
+
+  Fill.fromJson(Map<String, dynamic> json)
+      : tradeId = json['tradeId'],
+        createdAt = DateTime.parse(json['createdAt']),
+        productId = json['productId'],
+        orderId = json['orderId'],
+        userId = json['userId'],
+        profileId = json['profileId'],
+        liquidity = json['liquidity'],
+        price = json['price'],
+        size = json['size'],
+        fee = json['fee'],
+        side = json['side'],
+        settled = json['settled'],
+        usdVolume = json['usdVolume'];
+
+  Map<String, dynamic> toJson() => {
+        'tradeId': tradeId,
+        'createdAt': createdAt?.toIso8601String(),
+        'productId': productId,
+        'orderId': orderId,
+        'userId': userId,
+        'profileId': profileId,
+        'liquidity': liquidity,
+        'price': price,
+        'size': size,
+        'fee': fee,
+        'side': side,
+        'settled': settled,
+        'usdVolume': usdVolume
+      };
+
   @override
   String toString() {
     String all = '{tradeId=$tradeId, createdAt=$createdAt, '
@@ -37,42 +83,4 @@ class Fill {
         '}';
     return all;
   }
-
-  static Fill convertJson(var jsonObject) {
-    int? tradeId = jsonObject['trade_id'];
-    DateTime? createdAt = DateTime.parse(jsonObject['created_at']);
-    String? productId = jsonObject['product_id'];
-    String? orderId = jsonObject['order_id'];
-    String? userId = jsonObject['user_id'];
-    String? profileId = jsonObject['profile_id'];
-    String? liquidity = jsonObject['liquidity'];
-    double? price = double.parse(jsonObject['price']);
-    double? size = double.parse(jsonObject['size']);
-    double? fee = double.parse(jsonObject['fee']);
-    String? side = jsonObject['side'];
-    bool settled = jsonObject['settled'];
-    double? usdVolume = double.parse(jsonObject['usd_volume']);
-
-    return Fill(tradeId, createdAt, productId, orderId, userId, profileId,
-        liquidity, price, size, fee, side, settled, usdVolume);
-  }
 }
-
-/*
-EXAMPLE Fill: "BTC-USD"
-{
-  "created_at": "2021-12-24T17:01:00.300546Z",
-  "trade_id": 36916683,
-  "product_id": "BTC-USD",
-  "order_id": "200d07ba-e12b-494b-9a97-07fb0a94a95f",
-  "user_id": "61b2242f9ad43702b15c816e",
-  "profile_id": "c1173eaa-6451-4a0e-9c3a-334076c8a44d",
-  "liquidity": "M",
-  "price": "99.98000000",
-  "size": "8.00000000",
-  "fee": "3.9992000000000000",
-  "side": "buy",
-  "settled": true,
-  "usd_volume": "799.8400000000000000"
-}
- */

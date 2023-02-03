@@ -27,7 +27,7 @@ Future<List<Order>> getOrders(
     String? jsonCursor = jsonResponse['cursor'];
 
     for (var jsonObject in jsonAccounts) {
-      orders.add(Order.convertJson(jsonObject));
+      orders.add(Order.fromCBJson(jsonObject));
     }
     // Recursive Break
     if (jsonCursor != null && jsonCursor != '') {
@@ -61,7 +61,7 @@ Future<Order?> getOrder(
     String data = response.body;
     var jsonResponse = jsonDecode(data);
     var jsonOrder = jsonResponse['order'];
-    order = Order.convertJson(jsonOrder);
+    order = Order.fromCBJson(jsonOrder);
   } else {
     var url = response.request?.url.toString();
     print('Request to URL $url failed: Response code ${response.statusCode}');
