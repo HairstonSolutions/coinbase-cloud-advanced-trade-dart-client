@@ -1,3 +1,7 @@
+## 0.2.1
+
+- Native JSON Serialization / Deserialization of AT model objects
+
 ## 0.2.0
 
 - Rename to "coinbase_cloud_advanced_trade_client"
