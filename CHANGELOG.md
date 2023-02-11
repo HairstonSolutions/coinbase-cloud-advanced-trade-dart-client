@@ -1,4 +1,4 @@
-## 0.2.x
+## 0.2.2
 
 - Bug Fix: Coinbase Pro Fill Model CB JSON Conversion for USD Volume
 

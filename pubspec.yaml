@@ -1,7 +1,7 @@
 name: coinbase_cloud_advanced_trade_client
 description: Dart Client for building applications that interact with the Coinbase Cloud Advanced Trade & Pro Crypto
   Exchange APIs for automated trading and managing accounts.
-version: 0.2.1
+version: 0.2.2
 
 environment:
   sdk: '>=2.17.3 <3.0.0'
