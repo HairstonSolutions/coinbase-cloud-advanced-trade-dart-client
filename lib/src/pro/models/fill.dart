@@ -1,3 +1,5 @@
+import 'package:coinbase_cloud_advanced_trade_client/src/shared/services/tools.dart';
+
 class Fill {
   final int? tradeId;
   final DateTime? createdAt;
@@ -41,7 +43,7 @@ class Fill {
         fee = double.parse(json['fee']),
         side = json['side'],
         settled = json['settled'],
-        usdVolume = double.parse(json['usd_volume']);
+        usdVolume = nullableDouble(json, 'usd_volume');
 
   Fill.fromJson(Map<String, dynamic> json)
       : tradeId = json['tradeId'],

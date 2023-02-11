@@ -1,3 +1,7 @@
+## 0.2.x
+
+- Bug Fix: Coinbase Pro Fill Model CB JSON Conversion for USD Volume
+
 ## 0.2.1
 
 - Native JSON Serialization / Deserialization of AT model objects
