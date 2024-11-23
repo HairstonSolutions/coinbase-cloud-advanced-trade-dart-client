@@ -5,8 +5,8 @@ import 'package:coinbase_cloud_advanced_trade_client/src/advanced_trade/services
 import 'package:coinbase_cloud_advanced_trade_client/src/shared/models/signature.dart';
 import 'package:http/http.dart' as http;
 
-const String coinbaseApiProduction = 'coinbase.com';
-const String coinbaseApiSandbox = 'coinbase.com';
+const String coinbaseApiProduction = 'api.coinbase.com';
+const String coinbaseApiSandbox = 'api-public.sandbox.exchange.coinbase.com';
 // const String coinbaseApiSandbox = 'sandbox.coinbase.com/api/v3/brokerage';
 
 Future<http.Response> getAuthorized(String endpoint,
