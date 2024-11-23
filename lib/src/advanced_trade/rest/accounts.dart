@@ -18,7 +18,7 @@ Future<List<Account>> getAccounts(
   http.Response response = await getAuthorized('/accounts',
       queryParameters: queryParameters,
       credential: credential,
-      isSandbox: true);
+      isSandbox: isSandbox);
 
   if (response.statusCode == 200) {
     String data = response.body;

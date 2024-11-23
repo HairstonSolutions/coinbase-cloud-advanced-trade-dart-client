@@ -15,7 +15,7 @@ Future<List<Product>> getProducts(
   http.Response response = await getAuthorized('/products',
       queryParameters: queryParameters,
       credential: credential,
-      isSandbox: true);
+      isSandbox: isSandbox);
 
   if (response.statusCode == 200) {
     String data = response.body;

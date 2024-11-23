@@ -16,7 +16,7 @@ Future<List<Trade>> getTrades(
   http.Response response = await getAuthorized('/products/$productId/ticker',
       queryParameters: queryParameters,
       credential: credential,
-      isSandbox: true);
+      isSandbox: isSandbox);
 
   if (response.statusCode == 200) {
     String data = response.body;

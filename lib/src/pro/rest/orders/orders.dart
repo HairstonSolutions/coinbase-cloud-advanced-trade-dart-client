@@ -154,7 +154,7 @@ Future<bool> cancelOrder(
   http.Response response = await deleteAuthorized('/orders/$orderId',
       queryParameters: queryParameters,
       credential: credential,
-      isSandbox: true);
+      isSandbox: isSandbox);
 
   if (response.statusCode == 200) {
     String data = response.body;

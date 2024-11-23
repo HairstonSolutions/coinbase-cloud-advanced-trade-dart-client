@@ -23,7 +23,7 @@ void main() {
       var response = await getAuthorized(requestPath,
           queryParameters: queryParameters,
           credential: credentials,
-          isSandbox: true);
+          isSandbox: false);
       var url = response.request?.url.toString();
       print('Response Code: ${response.statusCode} to URL: $url');
       print('Response body: ${response.body} to URL: $url');
@@ -34,7 +34,7 @@ void main() {
 
     test('Get all Fills as a list of Fills', () async {
       List<Fill>? fills =
-          await getFills(credential: credentials, isSandbox: true);
+          await getFills(credential: credentials, isSandbox: false);
       print('Fills: $fills');
 
       expect(fills.isNotEmpty, true);
@@ -42,10 +42,10 @@ void main() {
 
     test('Get all Fills by order ID', () async {
       List<Order>? orders =
-          await getOrders(credential: credentials, isSandbox: true);
+          await getOrders(credential: credentials, isSandbox: false);
       String? orderId = orders.last.orderId;
       List<Fill>? fills = await getFills(
-          orderId: orderId, credential: credentials, isSandbox: true);
+          orderId: orderId, credential: credentials, isSandbox: false);
       print('Fills: $fills');
 
       expect(fills.isNotEmpty, true);
@@ -54,10 +54,10 @@ void main() {
 
     test('Get all Fills by product ID', () async {
       List<Order>? orders =
-          await getOrders(credential: credentials, isSandbox: true);
+          await getOrders(credential: credentials, isSandbox: false);
       String? productId = orders.last.productId;
       List<Fill>? fills = await getFills(
-          productId: productId, credential: credentials, isSandbox: true);
+          productId: productId, credential: credentials, isSandbox: false);
       print('Fills: $fills');
 
       expect(fills.isNotEmpty, true);

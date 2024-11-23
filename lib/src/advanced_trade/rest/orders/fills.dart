@@ -24,7 +24,7 @@ Future<List<Fill>> getFills(
   http.Response response = await getAuthorized('/orders/historical/fills',
       queryParameters: queryParameters,
       credential: credential,
-      isSandbox: true);
+      isSandbox: isSandbox);
 
   if (response.statusCode == 200) {
     String data = response.body;

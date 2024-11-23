@@ -18,7 +18,7 @@ Future<List<Order>> getOrders(
   http.Response response = await getAuthorized('/orders/historical/batch',
       queryParameters: queryParameters,
       credential: credential,
-      isSandbox: true);
+      isSandbox: isSandbox);
 
   if (response.statusCode == 200) {
     String data = response.body;

@@ -22,7 +22,7 @@ void main() {
       var response = await getAuthorized(requestPath,
           queryParameters: queryParameters,
           credential: credentials,
-          isSandbox: true);
+          isSandbox: false);
       var url = response.request?.url.toString();
       print('Response Code: ${response.statusCode} to URL: $url');
       print('Response body: ${response.body} to URL: $url');
@@ -33,7 +33,7 @@ void main() {
 
     test('Get all Orders as a list of Orders', () async {
       List<Order>? orders =
-          await getOrders(credential: credentials, isSandbox: true);
+          await getOrders(credential: credentials, isSandbox: false);
       print('Orders: $orders');
 
       expect(orders.isNotEmpty, true);
@@ -43,12 +43,12 @@ void main() {
   group('Test Individual Orders', skip: skip, () {
     test('Get Individual Order', () async {
       List<Order> orders =
-          await getOrders(credential: credentials, isSandbox: true);
+          await getOrders(credential: credentials, isSandbox: false);
       String? orderId = orders.first.orderId;
       Order? order = await getOrder(
         orderId: orderId!,
         credential: credentials,
-        isSandbox: true,
+        isSandbox: false,
       );
 
       expect(order?.orderId, orderId);
@@ -59,7 +59,7 @@ void main() {
       Order? order = await getOrder(
         orderId: orderId,
         credential: credentials,
-        isSandbox: true,
+        isSandbox: false,
       );
 
       expect(order, null);
