@@ -22,4 +22,20 @@ void main() {
       expect(convertParamsToString(queryParameters), "");
     });
   });
+
+  group('Test Generating Signature', () {
+    setUp(() {});
+
+    test('Test Generate Signature', () {
+      final secret = 'mysecret';
+      final method = 'GET';
+      final path = '/v3/brokerage/products';
+      final body = '';
+      final signature = generateSignature(secret, method, path, body);
+
+      expect(signature.signature.isNotEmpty, true);
+      expect(signature.timestamp.isNotEmpty, true);
+      expect(signature.messageToSign.isNotEmpty, true);
+    });
+  });
 }
