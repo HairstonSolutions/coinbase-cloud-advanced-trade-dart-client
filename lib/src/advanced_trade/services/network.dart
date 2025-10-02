@@ -2,12 +2,10 @@ import 'dart:io' show HttpHeaders;
 
 import 'package:coinbase_cloud_advanced_trade_client/src/advanced_trade/models/credential.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/advanced_trade/services/signature.dart';
-import 'package:coinbase_cloud_advanced_trade_client/src/shared/models/signature.dart';
 import 'package:http/http.dart' as http;
 
 const String coinbaseApiProduction = 'api.coinbase.com';
-const String coinbaseApiSandbox = 'api-public.sandbox.exchange.coinbase.com';
-// const String coinbaseApiSandbox = 'sandbox.coinbase.com/api/v3/brokerage';
+const String coinbaseApiSandbox = 'api-sandbox.coinbase.com';
 
 Future<http.Response> getAuthorized(String endpoint,
     {Map<String, dynamic>? queryParameters,
@@ -17,17 +15,14 @@ Future<http.Response> getAuthorized(String endpoint,
 
   String fullEndpoint = '/api/v3/brokerage$endpoint';
 
-  Signature? cbSignature = signature(credential.apiSecret, "GET", fullEndpoint);
+  String jwtToken = await generateCoinbaseJwt(credential.apiKeyName,
+      credential.privateKeyPEM, "GET $coinbaseApi$fullEndpoint");
 
-  var url = Uri.https(coinbaseApi, fullEndpoint, queryParameters);
+  var url = Uri.https(coinbaseApi, fullEndpoint);
   Map<String, String> requestHeaders = {
     HttpHeaders.acceptHeader: 'application/json',
-    "CB-ACCESS-TIMESTAMP": cbSignature.timestamp,
-    "CB-ACCESS-KEY": credential.apiKey,
-    "CB-ACCESS-SIGN": cbSignature.signature
+    "Authorization": "Bearer $jwtToken",
   };
 
-  http.Response response = await http.get(url, headers: requestHeaders);
-
-  return response;
+  return await http.get(url, headers: requestHeaders);
 }

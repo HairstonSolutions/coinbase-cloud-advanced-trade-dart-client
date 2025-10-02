@@ -1,3 +1,16 @@
+- Migrate Auth to Coinbase AT API Key Version 2
+- Generate Coinbase JWT Token with key signature
+- Refactor Credential to v2
+- Update Sandbox URL
+- Remove Accepted Environment Variable "COINBASE_API_KEY"
+- Remove Accepted Environment Variable "COINBASE_API_SECRET"
+- Introduce new Environment Variable "COINBASE_API_KEY_NAME"
+- Introduce new Environment Variable "COINBASE_PRIVATE_KEY"
+
+## 0.3.0
+
+- Upgrade to Dart 3.3.0
+
 ## 0.2.2
 
 - Bug Fix: Coinbase Pro Fill Model CB JSON Conversion for USD Volume
