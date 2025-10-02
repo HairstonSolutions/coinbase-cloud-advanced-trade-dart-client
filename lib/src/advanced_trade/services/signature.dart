@@ -1,23 +1,53 @@
-import 'package:coinbase_cloud_advanced_trade_client/src/shared/models/signature.dart';
-import 'package:crypto/crypto.dart';
+import 'dart:math';
 
-Signature signature(String secret, String httpMethod, String requestPath,
-    {String body = ''}) {
-  var currentTimestamp = (DateTime.now().millisecondsSinceEpoch / 1000).floor();
-  String cbAccessTimestamp = currentTimestamp.toString();
+import 'package:jose/jose.dart';
 
-  // Create the pre-hash string by concatenating required parts
-  String messageToSign = cbAccessTimestamp + httpMethod + requestPath + body;
+/// Generates a JWT for authenticating with the Coinbase API.
+///
+/// [keyName] - The Coinbase API Key Name (used for 'sub' and 'kid').
+/// [privateKeyPem] - The PEM-encoded EC private key string.
+/// [uri] - The request URI, formatted as "METHOD host/path".
+///
+/// Returns a signed JWT string.
+Future<String> generateCoinbaseJwt(
+  String keyName,
+  String privateKeyPem,
+  String uri,
+) async {
+  // Set the token's expiration time to 2 minutes from now
+  var expiry = DateTime.now().add(const Duration(minutes: 2));
+  var notBefore = DateTime.now();
 
-  // Binary Encode Secret into an 8-bit Byte sequence (Binary)
-  List<int> binaryKey = secret.codeUnits;
+  // Create the JWT claims
+  final claims = JsonWebTokenClaims.fromJson({
+    'iss': 'cdp',
+    'nbf': notBefore.millisecondsSinceEpoch ~/ 1000,
+    'exp': expiry.millisecondsSinceEpoch ~/ 1000,
+    'sub': keyName,
+    'uri': uri,
+  });
 
-  // Get the Sha256 keyed-hash message authentication code (HMAC)
-  Hmac hmac = Hmac(sha256, binaryKey);
-  Digest hmacHashedMessageDigest = hmac.convert(messageToSign.codeUnits);
+  // Create a builder for the JWS
+  final builder = JsonWebSignatureBuilder();
 
-  // Convert HMAC Digest into the final Signature Hash
-  String returnSignature = hmacHashedMessageDigest.toString();
+  // Set the JWT payload
+  builder.jsonContent = claims.toJson();
 
-  return Signature(returnSignature, cbAccessTimestamp, messageToSign);
+  // Add the private key for signing
+  final key = JsonWebKey.fromPem(privateKeyPem);
+  builder.addRecipient(key, algorithm: 'ES256');
+
+  // Set protected headers
+  final nonce = Random.secure().nextInt(1 << 32).toString();
+  builder.setProtectedHeader('kid', keyName);
+  builder.setProtectedHeader('nonce', nonce);
+  builder.setProtectedHeader('typ', 'JWT');
+
+  // Build the JWS and sign it
+  final jws = builder.build();
+
+  // Serialize to compact format
+  final token = jws.toCompactSerialization();
+
+  return token;
 }

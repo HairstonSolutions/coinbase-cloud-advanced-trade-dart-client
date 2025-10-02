@@ -9,11 +9,12 @@ import 'package:coinbase_cloud_advanced_trade_client/src/advanced_trade/services
 import 'package:test/test.dart';
 
 Map<String, String> envVars = Platform.environment;
-String? cbApiKey = envVars['COINBASE_API_KEY'];
-String? cbApiSecret = envVars['COINBASE_API_SECRET'];
+String? apiKeyName = envVars['COINBASE_API_KEY_NAME'];
+String? privateKeyPEM = envVars['COINBASE_PRIVATE_KEY'];
 String? skipTests = envVars['SKIP_TESTS'];
 bool skip = skipTests == 'false' ? false : true;
-Credential credentials = Credential(cbApiKey!, cbApiSecret!);
+Credential credentials =
+    Credential(apiKeyName: apiKeyName!, privateKeyPEM: privateKeyPEM!);
 
 void main() {
   group('Test Get Fills Requests to Coinbase AT API Endpoints', skip: skip, () {

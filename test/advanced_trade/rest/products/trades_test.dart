@@ -9,11 +9,12 @@ import 'package:coinbase_cloud_advanced_trade_client/src/advanced_trade/services
 import 'package:test/test.dart';
 
 Map<String, String> envVars = Platform.environment;
-String? cbApiKey = envVars['COINBASE_API_KEY'];
-String? cbApiSecret = envVars['COINBASE_API_SECRET'];
+String? apiKeyName = envVars['COINBASE_API_KEY_NAME'];
+String? privateKeyPEM = envVars['COINBASE_PRIVATE_KEY'];
 String? skipTests = envVars['SKIP_TESTS'];
 bool skip = skipTests == 'false' ? false : true;
-Credential credentials = Credential(cbApiKey!, cbApiSecret!);
+Credential credentials =
+    Credential(apiKeyName: apiKeyName!, privateKeyPEM: privateKeyPEM!);
 
 void main() {
   group('Test Get Trades Requests to Coinbase AT API', skip: skip, () {
@@ -21,7 +22,7 @@ void main() {
       String productId = 'BTC-USD';
       String requestPath = '/products/$productId/ticker';
       var response = await getAuthorized(requestPath,
-          credential: credentials, isSandbox: true);
+          credential: credentials, isSandbox: false);
       var url = response.request?.url.toString();
       print('Response Code: ${response.statusCode} to URL: $url');
       print('Response body: ${response.body} to URL: $url');
@@ -34,7 +35,7 @@ void main() {
     test('Authorized Get Trades', () async {
       String productId = 'MEDIA-USD';
       List<Trade?> trades = await getTrades(
-          productId: productId, credential: credentials, isSandbox: true);
+          productId: productId, credential: credentials, isSandbox: false);
       print('Products: $trades');
       expect(trades.isNotEmpty, true);
     });
@@ -46,7 +47,7 @@ void main() {
           productId: productId,
           limit: limit,
           credential: credentials,
-          isSandbox: true);
+          isSandbox: false);
       print('Trades: $trades');
       expect(trades.isNotEmpty, true);
       expect(trades.length, 100);
@@ -55,7 +56,7 @@ void main() {
     test('Get Trade by Product ID', () async {
       String productId = 'BTC-USD';
       List<Trade?> trades = await getTrades(
-          productId: productId, credential: credentials, isSandbox: true);
+          productId: productId, credential: credentials, isSandbox: false);
 
       print('Trade : $trades');
       expect(trades.first?.productId, productId);
@@ -63,11 +64,11 @@ void main() {
 
     test('Get Trade by Product ID II', () async {
       List<Product?> originProducts =
-          await getProducts(credential: credentials, isSandbox: true);
+          await getProducts(credential: credentials, isSandbox: false);
 
       String? productId = originProducts.first?.productId;
       List<Trade?> trades = await getTrades(
-          productId: productId, credential: credentials, isSandbox: true);
+          productId: productId, credential: credentials, isSandbox: false);
 
       print('Trades : $trades');
       expect(trades.first?.productId!, productId);
