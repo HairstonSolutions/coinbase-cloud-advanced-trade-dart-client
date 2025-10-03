@@ -7,10 +7,20 @@ import 'package:http/http.dart' as http;
 
 Future<List<Product>> getProducts(
     {int? limit = 250,
+    int? offset,
+    String? productType,
+    List<String>? productIds,
+    String? contractExpiryType,
     required Credential credential,
     bool isSandbox = false}) async {
   List<Product> products = [];
-  Map<String, dynamic>? queryParameters = {'limit': '$limit'};
+  Map<String, String> queryParameters = {
+    'limit': '$limit',
+    if (offset != null) 'offset': '$offset',
+    if (productType != null) 'product_type': productType,
+    if (productIds != null) 'product_ids': productIds.join(','),
+    if (contractExpiryType != null) 'contract_expiry_type': contractExpiryType,
+  };
 
   http.Response response = await getAuthorized('/products',
       queryParameters: queryParameters,
@@ -36,9 +46,15 @@ Future<List<Product>> getProducts(
 
 Future<Product?> getProduct(
     {required String? productId,
+    bool? getTradabilityStatus,
     required Credential credential,
     bool isSandbox = false}) async {
+  Map<String, String> queryParameters = {
+    if (getTradabilityStatus != null) 'get_tradability_status': '$getTradabilityStatus',
+  };
+
   http.Response response = await getAuthorized('/products/$productId',
+      queryParameters: queryParameters,
       credential: credential, isSandbox: isSandbox);
 
   if (response.statusCode == 200) {
