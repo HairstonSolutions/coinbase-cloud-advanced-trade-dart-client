@@ -33,7 +33,7 @@ void main() {
     });
 
     test('Authorized Get Trades', () async {
-      String productId = 'MEDIA-USD';
+      String productId = 'BTC-USD';
       List<Trade?> trades = await getTrades(
           productId: productId, credential: credentials, isSandbox: false);
       print('Products: $trades');

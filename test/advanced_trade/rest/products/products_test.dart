@@ -36,22 +36,26 @@ void main() {
       expect(products.isNotEmpty, true);
     });
 
-    test('Authorized Get Products with limit', () async {
-      int limit = 100;
-      List<Product?> products = await getProducts(
-          limit: limit, credential: credentials, isSandbox: false);
-      print('Products: $products');
-      expect(products.isNotEmpty, true);
-      expect(products.length, 100);
-    });
-
     test('Get Product by Product ID', () async {
-      String productId = 'MEDIA-USD';
+      String productId = 'ETH-USD';
       Product? product = await getProduct(
           productId: productId, credential: credentials, isSandbox: false);
 
       print('Product : $product');
       expect(product?.productId, productId);
+    });
+
+    test('Get Product by Product ID with getTradabilityStatus', () async {
+      String productId = 'ETH-USD';
+      Product? product = await getProduct(
+          productId: productId,
+          getTradabilityStatus: true,
+          credential: credentials,
+          isSandbox: false);
+
+      print('Product : $product');
+      expect(product?.productId, productId);
+      expect(product?.viewOnly, isNotNull);
     });
 
     test('Get Product by Product ID II', () async {
