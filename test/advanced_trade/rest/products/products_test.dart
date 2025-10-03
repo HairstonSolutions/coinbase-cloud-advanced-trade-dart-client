@@ -45,13 +45,35 @@ void main() {
       expect(products.length, 100);
     });
 
+    test('Authorized Get Products with productIds', () async {
+      List<String> productIds = ['BTC-USD', 'ETH-USD'];
+      List<Product?> products = await getProducts(
+          productIds: productIds, credential: credentials, isSandbox: false);
+      print('Products: $products');
+      expect(products.isNotEmpty, true);
+      expect(products.length, 2);
+    });
+
     test('Get Product by Product ID', () async {
-      String productId = 'MEDIA-USD';
+      String productId = 'ETH-USD';
       Product? product = await getProduct(
           productId: productId, credential: credentials, isSandbox: false);
 
       print('Product : $product');
       expect(product?.productId, productId);
+    });
+
+    test('Get Product by Product ID with getTradabilityStatus', () async {
+      String productId = 'ETH-USD';
+      Product? product = await getProduct(
+          productId: productId,
+          getTradabilityStatus: true,
+          credential: credentials,
+          isSandbox: false);
+
+      print('Product : $product');
+      expect(product?.productId, productId);
+      expect(product?.viewOnly, isNotNull);
     });
 
     test('Get Product by Product ID II', () async {
