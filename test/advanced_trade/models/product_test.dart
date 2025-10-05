@@ -6,7 +6,7 @@ import 'package:test/test.dart';
 import '../../tools.dart';
 
 void main() {
-  group('Test Fill Object Injection', () {
+  group('Test Product Object Injection', () {
     String exampleProductJsonFile =
         'advanced_trade/models/examples/product.json';
     String? exampleProductCBJson;
@@ -15,39 +15,52 @@ void main() {
       exampleProductCBJson = await getJsonFromFile(exampleProductJsonFile);
     });
 
-    test('Test Example Order JSON Import Object conversion', () {
+    test('Test Example Product JSON Import Object conversion', () {
       var cbJsonAsMap = jsonDecode(exampleProductCBJson!);
       Product? exampleProduct = Product.fromCBJson(cbJsonAsMap);
 
       print('Product Object: $exampleProduct');
 
       expect(exampleProduct.productId, 'BTC-USD');
-      expect(exampleProduct.price, 140.21);
-      expect(exampleProduct.pricePercentageChange24h, "9.43%");
-      expect(exampleProduct.volume24h, 1908432);
-      expect(exampleProduct.volumePercentageChange24h, "9.43%");
+      expect(exampleProduct.price, 43423.01);
+      expect(exampleProduct.pricePercentageChange24h, '0.45');
+      expect(exampleProduct.volume24h, 12345.67);
+      expect(exampleProduct.volumePercentageChange24h, '2.34');
       expect(exampleProduct.baseIncrement, 0.00000001);
-      expect(exampleProduct.quoteIncrement, 0.00000001);
-      expect(exampleProduct.quoteMinSize, 0.00000001);
-      expect(exampleProduct.quoteMaxSize, 1000);
-      expect(exampleProduct.baseName, "Bitcoin");
-      expect(exampleProduct.quoteName, "US Dollar");
-      expect(exampleProduct.watched, true);
+      expect(exampleProduct.quoteIncrement, 0.01);
+      expect(exampleProduct.quoteMinSize, 1.00);
+      expect(exampleProduct.quoteMaxSize, 1000000.00);
+      expect(exampleProduct.baseMinSize, 0.0001);
+      expect(exampleProduct.baseMaxSize, 200);
+      expect(exampleProduct.baseName, 'Bitcoin');
+      expect(exampleProduct.quoteName, 'US Dollar');
+      expect(exampleProduct.watched, false);
       expect(exampleProduct.isDisabled, false);
-      expect(exampleProduct.isNew, true);
-      expect(exampleProduct.status, "string");
-      expect(exampleProduct.cancelOnly, true);
-      expect(exampleProduct.limitOnly, true);
-      expect(exampleProduct.postOnly, true);
+      expect(exampleProduct.isNew, false);
+      expect(exampleProduct.status, 'online');
+      expect(exampleProduct.cancelOnly, false);
+      expect(exampleProduct.limitOnly, false);
+      expect(exampleProduct.postOnly, false);
       expect(exampleProduct.tradingDisabled, false);
-      expect(exampleProduct.auctionMode, true);
-      expect(exampleProduct.productType, "UNKNOWN_PRODUCT_TYPE");
-      expect(exampleProduct.quoteCurrencyId, "USD");
-      expect(exampleProduct.baseCurrencyId, "BTC");
-      expect(exampleProduct.midMarketPrice, 140.22);
+      expect(exampleProduct.auctionMode, false);
+      expect(exampleProduct.productType, 'SPOT');
+      expect(exampleProduct.quoteCurrencyId, 'USD');
+      expect(exampleProduct.baseCurrencyId, 'BTC');
+      expect(exampleProduct.midMarketPrice, 43423.00);
+      expect(exampleProduct.alias, '');
+      expect(exampleProduct.aliasTo, []);
+      expect(exampleProduct.baseDisplaySymbol, 'BTC');
+      expect(exampleProduct.quoteDisplaySymbol, 'USD');
+      expect(exampleProduct.viewOnly, false);
+      expect(exampleProduct.priceIncrement, 0.01);
+      expect(exampleProduct.displayName, 'BTC/USD');
+      expect(exampleProduct.productVenue, 'CBE');
+      expect(exampleProduct.approximateQuote24hVolume, 536000000);
+      expect(exampleProduct.newAt, DateTime.parse('2023-01-01T00:00:00Z'));
+      expect(exampleProduct.marketCap, 850000000000);
     });
 
-    test('Example Order JSON Import, Serialize, deserialize', () {
+    test('Example Product JSON Import, Serialize, deserialize', () {
       var cbJsonAsMap = jsonDecode(exampleProductCBJson!);
       Product exampleProduct = Product.fromCBJson(cbJsonAsMap);
       var serializedProduct = exampleProduct.toJson();
@@ -57,29 +70,42 @@ void main() {
       print('Deserialized Product Object: $deserializedProduct');
 
       expect(deserializedProduct.productId, 'BTC-USD');
-      expect(deserializedProduct.price, 140.21);
-      expect(deserializedProduct.pricePercentageChange24h, "9.43%");
-      expect(deserializedProduct.volume24h, 1908432);
-      expect(deserializedProduct.volumePercentageChange24h, "9.43%");
+      expect(deserializedProduct.price, 43423.01);
+      expect(deserializedProduct.pricePercentageChange24h, '0.45');
+      expect(deserializedProduct.volume24h, 12345.67);
+      expect(deserializedProduct.volumePercentageChange24h, '2.34');
       expect(deserializedProduct.baseIncrement, 0.00000001);
-      expect(deserializedProduct.quoteIncrement, 0.00000001);
-      expect(deserializedProduct.quoteMinSize, 0.00000001);
-      expect(deserializedProduct.quoteMaxSize, 1000);
-      expect(deserializedProduct.baseName, "Bitcoin");
-      expect(deserializedProduct.quoteName, "US Dollar");
-      expect(deserializedProduct.watched, true);
+      expect(deserializedProduct.quoteIncrement, 0.01);
+      expect(deserializedProduct.quoteMinSize, 1.00);
+      expect(deserializedProduct.quoteMaxSize, 1000000.00);
+      expect(deserializedProduct.baseMinSize, 0.0001);
+      expect(deserializedProduct.baseMaxSize, 200);
+      expect(deserializedProduct.baseName, 'Bitcoin');
+      expect(deserializedProduct.quoteName, 'US Dollar');
+      expect(deserializedProduct.watched, false);
       expect(deserializedProduct.isDisabled, false);
-      expect(deserializedProduct.isNew, true);
-      expect(deserializedProduct.status, "string");
-      expect(deserializedProduct.cancelOnly, true);
-      expect(deserializedProduct.limitOnly, true);
-      expect(deserializedProduct.postOnly, true);
+      expect(deserializedProduct.isNew, false);
+      expect(deserializedProduct.status, 'online');
+      expect(deserializedProduct.cancelOnly, false);
+      expect(deserializedProduct.limitOnly, false);
+      expect(deserializedProduct.postOnly, false);
       expect(deserializedProduct.tradingDisabled, false);
-      expect(deserializedProduct.auctionMode, true);
-      expect(deserializedProduct.productType, "UNKNOWN_PRODUCT_TYPE");
-      expect(deserializedProduct.quoteCurrencyId, "USD");
-      expect(deserializedProduct.baseCurrencyId, "BTC");
-      expect(deserializedProduct.midMarketPrice, 140.22);
+      expect(deserializedProduct.auctionMode, false);
+      expect(deserializedProduct.productType, 'SPOT');
+      expect(deserializedProduct.quoteCurrencyId, 'USD');
+      expect(deserializedProduct.baseCurrencyId, 'BTC');
+      expect(deserializedProduct.midMarketPrice, 43423.00);
+      expect(deserializedProduct.alias, '');
+      expect(deserializedProduct.aliasTo, []);
+      expect(deserializedProduct.baseDisplaySymbol, 'BTC');
+      expect(deserializedProduct.quoteDisplaySymbol, 'USD');
+      expect(deserializedProduct.viewOnly, false);
+      expect(deserializedProduct.priceIncrement, 0.01);
+      expect(deserializedProduct.displayName, 'BTC/USD');
+      expect(deserializedProduct.productVenue, 'CBE');
+      expect(deserializedProduct.approximateQuote24hVolume, 536000000);
+      expect(deserializedProduct.newAt, DateTime.parse('2023-01-01T00:00:00Z'));
+      expect(deserializedProduct.marketCap, 850000000000);
 
       print('Serialized Product: ${jsonEncode(deserializedProduct)}');
     });

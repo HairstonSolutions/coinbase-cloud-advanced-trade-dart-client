@@ -6,11 +6,17 @@ import 'package:coinbase_cloud_advanced_trade_client/src/advanced_trade/services
 import 'package:http/http.dart' as http;
 
 Future<List<Product>> getProducts(
-    {int? limit = 250,
+    {int? offset,
+    String? productType,
+    String? contractExpiryType,
     required Credential credential,
     bool isSandbox = false}) async {
   List<Product> products = [];
-  Map<String, dynamic>? queryParameters = {'limit': '$limit'};
+  Map<String, String> queryParameters = {
+    if (offset != null) 'offset': '$offset',
+    if (productType != null) 'product_type': productType,
+    if (contractExpiryType != null) 'contract_expiry_type': contractExpiryType,
+  };
 
   http.Response response = await getAuthorized('/products',
       queryParameters: queryParameters,
@@ -36,10 +42,18 @@ Future<List<Product>> getProducts(
 
 Future<Product?> getProduct(
     {required String? productId,
+    bool? getTradabilityStatus,
     required Credential credential,
     bool isSandbox = false}) async {
+  Map<String, String> queryParameters = {
+    if (getTradabilityStatus != null)
+      'get_tradability_status': '$getTradabilityStatus',
+  };
+
   http.Response response = await getAuthorized('/products/$productId',
-      credential: credential, isSandbox: isSandbox);
+      queryParameters: queryParameters,
+      credential: credential,
+      isSandbox: isSandbox);
 
   if (response.statusCode == 200) {
     var jsonResponse = jsonDecode(response.body);
