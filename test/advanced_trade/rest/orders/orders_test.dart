@@ -25,7 +25,8 @@ void main() {
           credential: credentials,
           isSandbox: false);
       var url = response.request?.url.toString();
-      print('Response Code: ${response.statusCode} to URL: $url');
+      print(
+          'Response Code: ${response.statusCode} to URL: $url with query parameters: $queryParameters');
       print('Response body: ${response.body} to URL: $url');
 
       expect(response.statusCode == 200, isTrue);
