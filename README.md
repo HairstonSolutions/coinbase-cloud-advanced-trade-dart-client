@@ -1,39 +1,85 @@
-<!-- 
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
+# Coinbase Advanced Trade API Client
 
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/guides/libraries/writing-package-pages). 
+[![pub version](https://img.shields.io/pub/v/coinbase_cloud_advanced_trade_client.svg)](https://pub.dev/packages/coinbase_cloud_advanced_trade_client)
 
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-library-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/developing-packages). 
--->
-
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
+A Dart client for the Coinbase Advanced Trade API. This package provides an easy-to-use interface for interacting with
+the Coinbase Advanced Trade API, allowing you to manage your account, place orders, and get market data.
 
 ## Features
 
-TODO: List what your package can do. Maybe include images, gifs, or videos.
+* **Accounts:** Get a list of your accounts and a single account's details.
+* **Orders:** Create and cancel orders, and get a list of your orders.
+* **Products:** Get a list of available products, a single product's details, and recent trades for a product.
+* **Fills:** Get a list of your fills.
 
 ## Getting started
 
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
+### Installation
+
+To use this package, add `coinbase_cloud_advanced_trade_client` as a dependency in your `pubspec.yaml` file.
+
+```yaml
+dependencies:
+  coinbase_cloud_advanced_trade_client: ^1.0.0 # Replace with the latest version
+```
+
+Then, run `dart pub get` or `flutter pub get`.
+
+### API Keys
+
+You will need to generate API keys from your Coinbase account. You can find instructions on how to do this in
+the [Coinbase documentation](https://docs.cdp.coinbase.com/coinbase-app/authentication-authorization/api-key-authentication).
 
 ## Usage
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder. 
+Here is a simple example of how to use the client to get a list of products:
 
 ```dart
-const like = 'sample';
+import 'package:coinbase_cloud_advanced_trade_client/coinbase_cloud_advanced_trade_client.dart';
+
+void main() async {
+  // Create a credential object with your API key and private key.
+  // It is recommended to store these securely, for example, using environment variables.
+  final credential = Credential(
+    apiKeyName: 'YOUR_API_KEY_NAME',
+    privateKeyPEM: 'YOUR_PRIVATE_KEY',
+  );
+
+  // Get a list of products.
+  try {
+    List<Product> products = await getProducts(credential: credential);
+    for (var product in products) {
+      print('Product: ${product.productId}, Price: ${product.price}');
+    }
+  } catch (e) {
+    print('Error getting products: $e');
+  }
+
+  // Get a single product.
+  try {
+    Product? product = await getProduct(productId: 'BTC-USD', credential: credential);
+    if (product != null) {
+      print('Product: ${product.productId}, Price: ${product.price}');
+    }
+  } catch (e) {
+    print('Error getting product: $e');
+  }
+}
 ```
+
+For more detailed examples, please see the `example/` directory.
 
 ## Additional information
 
-TODO: Tell users more about the package: where to find more information, how to 
-contribute to the package, how to file issues, what response they can expect 
-from the package authors, and more.
+### Coinbase Advanced Trade API Documentation
+
+For more information about the Coinbase Advanced Trade API, please see the
+official [Coinbase documentation](https://docs.cdp.coinbase.com/coinbase-app/advanced-trade-apis/overview).
+
+### Contributing
+
+Contributions are welcome! Please feel free to submit a pull request or open an issue.
+
+### License
+
+This package is licensed under the [Apache License 2.0](LICENSE).
