@@ -4,6 +4,14 @@ import 'package:coinbase_cloud_advanced_trade_client/src/pro/models/product.dart
 import 'package:coinbase_cloud_advanced_trade_client/src/pro/services/network.dart';
 import 'package:http/http.dart' as http;
 
+/// Gets a list of available products.
+///
+/// This function makes a GET request to the /products endpoint of the Coinbase
+/// Pro API.
+///
+/// [isSandbox] - Whether to use the sandbox environment.
+///
+/// Returns a list of [Product] objects.
 Future<List<Product>> getProducts({bool isSandbox = false}) async {
   List<Product> products = [];
 
@@ -24,6 +32,16 @@ Future<List<Product>> getProducts({bool isSandbox = false}) async {
   return products;
 }
 
+/// Gets a single product by product ID.
+///
+/// This function makes a GET request to the /products/{product_id} endpoint of
+/// the Coinbase Pro API.
+///
+/// [tickerId] - The ID of the product to be returned.
+/// [isSandbox] - Whether to use the sandbox environment.
+///
+/// Returns a [Product] object, or null if no product is found for the given
+/// product ID.
 Future<Product?> getProduct(String tickerId, {bool isSandbox = false}) async {
   late Product product;
 

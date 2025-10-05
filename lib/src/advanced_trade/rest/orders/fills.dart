@@ -5,7 +5,20 @@ import 'package:coinbase_cloud_advanced_trade_client/src/advanced_trade/models/f
 import 'package:coinbase_cloud_advanced_trade_client/src/advanced_trade/services/network.dart';
 import 'package:http/http.dart' as http;
 
-// Recursive for Paginated requests
+/// Gets a list of fills for the current user.
+///
+/// This function makes a GET request to the /orders/historical/fills endpoint
+/// of the Coinbase Advanced Trade API. It supports pagination using a cursor.
+/// Paginated requests use recursion.
+///
+/// [limit] - A limit on the number of fills to be returned.
+/// [orderId] - An optional order ID to filter fills by.
+/// [productId] - An optional product ID to filter fills by.
+/// [cursor] - A cursor for pagination.
+/// [credential] - The user's API credentials.
+/// [isSandbox] - Whether to use the sandbox environment.
+///
+/// Returns a list of [Fill] objects.
 Future<List<Fill>> getFills(
     {int? limit = 1000,
     String? orderId,

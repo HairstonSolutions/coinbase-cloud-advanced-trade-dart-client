@@ -1,3 +1,11 @@
+/// Parses a double from a JSON object, returning null if the value is null or an
+/// empty string.
+///
+/// [jsonObject] - The JSON object to parse the double from.
+/// [key] - The key of the double to parse.
+/// [notNullable] - Whether to return 0.0 if the value is null.
+///
+/// Returns a double, or null if the value is null or an empty string.
 double? nullableDouble(var jsonObject, String key,
     {bool? notNullable = false}) {
   if (notNullable == true) {
@@ -9,6 +17,11 @@ double? nullableDouble(var jsonObject, String key,
   return (jsonObject[key] == null) ? null : double.parse(jsonObject[key]);
 }
 
+/// Converts a map of query parameters to a string.
+///
+/// [queryParameters] - The map of query parameters to convert.
+///
+/// Returns a string representation of the query parameters.
 String? convertParamsToString(Map<String, dynamic> queryParameters) {
   late String conversion;
   conversion = "";

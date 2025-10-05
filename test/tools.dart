@@ -1,6 +1,12 @@
 import 'dart:convert';
 import 'dart:io' show File;
 
+/// Reads a JSON file from the test directory and returns its contents as a
+/// string.
+///
+/// [filename] - The name of the file to read.
+///
+/// Returns the contents of the file as a string.
 Future<String> getJsonFromFile(String filename) async {
   String exampleJson = '';
   final file = File('test/$filename');

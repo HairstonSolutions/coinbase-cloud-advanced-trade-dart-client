@@ -5,6 +5,17 @@ import 'package:coinbase_cloud_advanced_trade_client/src/pro/models/order.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/pro/services/network.dart';
 import 'package:http/http.dart' as http;
 
+/// Gets a list of orders for the current user.
+///
+/// This function makes a GET request to the /orders endpoint of the Coinbase Pro
+/// API.
+///
+/// [limit] - A limit on the number of orders to be returned.
+/// [status] - The status of the orders to be returned.
+/// [credential] - The user's API credentials.
+/// [isSandbox] - Whether to use the sandbox environment.
+///
+/// Returns a list of [Order] objects.
 Future<List<Order>> getOrders(
     {int limit = 1000,
     String status = 'all',
@@ -35,6 +46,17 @@ Future<List<Order>> getOrders(
   return orders;
 }
 
+/// Gets a single order for the current user by order ID.
+///
+/// This function makes a GET request to the /orders/{order_id} endpoint of the
+/// Coinbase Pro API.
+///
+/// [orderId] - The ID of the order to be returned.
+/// [credential] - The user's API credentials.
+/// [isSandbox] - Whether to use the sandbox environment.
+///
+/// Returns an [Order] object, or null if no order is found for the given
+/// order ID.
 Future<Order?> getOrder(
     {required String orderId,
     required Credential credential,
@@ -57,6 +79,17 @@ Future<Order?> getOrder(
   return order;
 }
 
+/// Gets a single order for the current user by client OID.
+///
+/// This function makes a GET request to the /orders/client:{client_oid} endpoint
+/// of the Coinbase Pro API.
+///
+/// [clientOid] - The client OID of the order to be returned.
+/// [credential] - The user's API credentials.
+/// [isSandbox] - Whether to use the sandbox environment.
+///
+/// Returns an [Order] object, or null if no order is found for the given
+/// client OID.
 Future<Order?> getOrderByClientOid(
     {required String clientOid,
     required Credential credential,
@@ -79,6 +112,29 @@ Future<Order?> getOrderByClientOid(
   return order;
 }
 
+/// Creates a new order.
+///
+/// This function makes a POST request to the /orders endpoint of the Coinbase
+/// Pro API.
+///
+/// [side] - The side of the order ('buy' or 'sell').
+/// [productId] - The product ID to place the order for.
+/// [profileId] - The profile ID to place the order for.
+/// [type] - The type of order ('limit', 'market', or 'stop').
+/// [size] - The size of the order.
+/// [price] - The price of the order.
+/// [funds] - The amount of funds to use for the order.
+/// [timeInForce] - The time in force for the order.
+/// [stp] - The self-trade prevention flag for the order.
+/// [stop] - The stop type for the order.
+/// [stopPrice] - The stop price for the order.
+/// [cancelAfter] - The cancel after time for the order.
+/// [postOnly] - A flag to indicate that the order should only be a maker order.
+/// [clientOid] - A client-supplied order ID.
+/// [credential] - The user's API credentials.
+/// [isSandbox] - Whether to use the sandbox environment.
+///
+/// Returns an [Order] object, or null if the order could not be created.
 Future<Order?> createOrder(
     {required String side,
     required String productId,
@@ -136,6 +192,18 @@ Future<Order?> createOrder(
   return order;
 }
 
+/// Cancels a single order.
+///
+/// This function makes a DELETE request to the /orders/{order_id} endpoint of
+/// the Coinbase Pro API.
+///
+/// [orderId] - The ID of the order to be canceled.
+/// [profileId] - The profile ID of the order to be canceled.
+/// [productId] - The product ID of the order to be canceled.
+/// [credential] - The user's API credentials.
+/// [isSandbox] - Whether to use the sandbox environment.
+///
+/// Returns true if the order was canceled successfully, false otherwise.
 Future<bool> cancelOrder(
     {required String orderId,
     String? profileId,
@@ -169,6 +237,11 @@ Future<bool> cancelOrder(
   return false;
 }
 
+/// Checks if the given order type is valid.
+///
+/// [type] - The order type to check.
+///
+/// Returns true if the order type is valid, false otherwise.
 bool _validType(String type) {
   if (type == 'limit') return true;
   if (type == 'market') return true;
@@ -176,6 +249,11 @@ bool _validType(String type) {
   return false;
 }
 
+/// Checks if the given time in force is valid.
+///
+/// [timeInForce] - The time in force to check.
+///
+/// Returns true if the time in force is valid, false otherwise.
 bool _validTIF(String timeInForce) {
   if (timeInForce == 'GTC') return true;
   if (timeInForce == 'GTT') return true;
@@ -184,6 +262,11 @@ bool _validTIF(String timeInForce) {
   return false;
 }
 
+/// Checks if the given self-trade prevention flag is valid.
+///
+/// [stp] - The self-trade prevention flag to check.
+///
+/// Returns true if the self-trade prevention flag is valid, false otherwise.
 bool _validSTP(String stp) {
   if (stp == 'dc') return true;
   if (stp == 'co') return true;
@@ -192,12 +275,22 @@ bool _validSTP(String stp) {
   return false;
 }
 
+/// Checks if the given stop type is valid.
+///
+/// [stop] - The stop type to check.
+///
+/// Returns true if the stop type is valid, false otherwise.
 bool _validStop(String stop) {
   if (stop == 'loss') return true;
   if (stop == 'entry') return true;
   return false;
 }
 
+/// Checks if the given cancel after time is valid.
+///
+/// [cancelAfter] - The cancel after time to check.
+///
+/// Returns true if the cancel after time is valid, false otherwise.
 bool _validCA(String cancelAfter) {
   if (cancelAfter == 'min') return true;
   if (cancelAfter == 'hour') return true;

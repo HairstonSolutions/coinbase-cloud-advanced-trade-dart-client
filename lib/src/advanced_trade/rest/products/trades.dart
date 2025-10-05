@@ -5,6 +5,17 @@ import 'package:coinbase_cloud_advanced_trade_client/src/advanced_trade/models/t
 import 'package:coinbase_cloud_advanced_trade_client/src/advanced_trade/services/network.dart';
 import 'package:http/http.dart' as http;
 
+/// Gets a list of recent trades for a single product.
+///
+/// This function makes a GET request to the /products/{product_id}/ticker
+/// endpoint of the Coinbase Advanced Trade API.
+///
+/// [productId] - The ID of the product to get trades for.
+/// [limit] - A limit on the number of trades to be returned.
+/// [credential] - The user's API credentials.
+/// [isSandbox] - Whether to use the sandbox environment.
+///
+/// Returns a list of [Trade] objects.
 Future<List<Trade>> getTrades(
     {required String? productId,
     int? limit = 10,

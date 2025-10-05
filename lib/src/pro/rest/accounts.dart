@@ -5,6 +5,15 @@ import 'package:coinbase_cloud_advanced_trade_client/src/pro/models/credential.d
 import 'package:coinbase_cloud_advanced_trade_client/src/pro/services/network.dart';
 import 'package:http/http.dart' as http;
 
+/// Gets a list of accounts for the current user.
+///
+/// This function makes a GET request to the /accounts endpoint of the Coinbase
+/// Pro API.
+///
+/// [credential] - The user's API credentials.
+/// [isSandbox] - Whether to use the sandbox environment.
+///
+/// Returns a list of [Account] objects.
 Future<List<Account>> getAccounts(
     {required Credential credential, bool isSandbox = false}) async {
   List<Account> accounts = [];
@@ -27,6 +36,17 @@ Future<List<Account>> getAccounts(
   return accounts;
 }
 
+/// Gets a single account for the current user by account ID.
+///
+/// This function makes a GET request to the /accounts/{account_id} endpoint of
+/// the Coinbase Pro API.
+///
+/// [accountId] - The ID of the account to be returned.
+/// [credential] - The user's API credentials.
+/// [isSandbox] - Whether to use the sandbox environment.
+///
+/// Returns an [Account] object, or null if no account is found for the given
+/// account ID.
 Future<Account?> getAccount(String accountId,
     {required Credential credential, bool isSandbox = false}) async {
   http.Response response = await getAuthorized('/accounts/$accountId',
@@ -43,6 +63,17 @@ Future<Account?> getAccount(String accountId,
   return null;
 }
 
+/// Gets a single account for the current user by currency.
+///
+/// This function makes a GET request to the /accounts endpoint of the Coinbase
+/// Pro API and filters the results by currency.
+///
+/// [currency] - The currency of the account to be returned.
+/// [credential] - The user's API credentials.
+/// [isSandbox] - Whether to use the sandbox environment.
+///
+/// Returns an [Account] object, or null if no account is found for the given
+/// currency.
 Future<Account?> getAccountByCurrency(String currency,
     {required Credential credential, bool isSandbox = false}) async {
   List<Account> accounts =

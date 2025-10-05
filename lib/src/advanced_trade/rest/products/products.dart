@@ -5,6 +5,18 @@ import 'package:coinbase_cloud_advanced_trade_client/src/advanced_trade/models/p
 import 'package:coinbase_cloud_advanced_trade_client/src/advanced_trade/services/network.dart';
 import 'package:http/http.dart' as http;
 
+/// Gets a list of products.
+///
+/// This function makes a GET request to the /products endpoint of the Coinbase
+/// Advanced Trade API.
+///
+/// [offset] - An optional offset for pagination.
+/// [productType] - An optional product type to filter by.
+/// [contractExpiryType] - An optional contract expiry type to filter by.
+/// [credential] - The user's API credentials.
+/// [isSandbox] - Whether to use the sandbox environment.
+///
+/// Returns a list of [Product] objects.
 Future<List<Product>> getProducts(
     {int? offset,
     String? productType,
@@ -40,6 +52,18 @@ Future<List<Product>> getProducts(
   return products;
 }
 
+/// Gets a single product by product ID.
+///
+/// This function makes a GET request to the /products/{product_id} endpoint of
+/// the Coinbase Advanced Trade API.
+///
+/// [productId] - The ID of the product to be returned.
+/// [getTradabilityStatus] - An optional flag to get the tradability status.
+/// [credential] - The user's API credentials.
+/// [isSandbox] - Whether to use the sandbox environment.
+///
+/// Returns a [Product] object, or null if no product is found for the given
+/// product ID.
 Future<Product?> getProduct(
     {required String? productId,
     bool? getTradabilityStatus,
