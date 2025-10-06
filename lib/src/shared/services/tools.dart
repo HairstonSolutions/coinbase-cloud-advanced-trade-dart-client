@@ -6,7 +6,7 @@
 /// [notNullable] - Whether to return 0.0 if the value is null.
 ///
 /// Returns a double, or null if the value is null or an empty string.
-double? nullableDouble(var jsonObject, String key,
+double? nullableDouble(Map<String, dynamic> jsonObject, String key,
     {bool? notNullable = false}) {
   if (notNullable == true) {
     return (jsonObject[key] == null) ? 0.0 : double.parse(jsonObject[key]);

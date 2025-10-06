@@ -17,7 +17,7 @@ class Ticker {
     return all;
   }
 
-  static Ticker convertJson(var jsonObject) {
+  static Ticker convertJson(Map<String, dynamic> jsonObject) {
     double? ask = double.parse(jsonObject['ask']);
     double? bid = double.parse(jsonObject['bid']);
     double? volume = double.parse(jsonObject['volume']);

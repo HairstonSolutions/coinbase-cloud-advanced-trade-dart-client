@@ -50,7 +50,7 @@ class Product {
     return all;
   }
 
-  static Product convertJson(var jsonObject) {
+  static Product convertJson(Map<String, dynamic> jsonObject) {
     String id = jsonObject['id'];
     String? baseCurrency = jsonObject['base_currency'];
     String? quoteCurrency = jsonObject['quote_currency'];
