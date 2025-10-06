@@ -1,3 +1,7 @@
+## 0.4.0
+
+- Pub.dev preparations
+- First Published pub.dev version
 - Migrate Auth to Coinbase AT API Key Version 2
 - Generate Coinbase JWT Token with key signature
 - Refactor Credential to v2

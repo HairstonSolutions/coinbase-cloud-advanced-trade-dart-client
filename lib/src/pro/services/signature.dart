@@ -3,6 +3,14 @@ import 'dart:convert';
 import 'package:coinbase_cloud_advanced_trade_client/src/shared/models/signature.dart';
 import 'package:crypto/crypto.dart';
 
+/// Generates a signature for authenticating with the Coinbase Pro API.
+///
+/// [secret] - The user's API secret.
+/// [httpMethod] - The HTTP method of the request.
+/// [requestPath] - The path of the request.
+/// [body] - The body of the request.
+///
+/// Returns a [Signature] object.
 Signature signature(
     String secret, String httpMethod, String requestPath, String body) {
   var currentTimestamp = DateTime.now().millisecondsSinceEpoch / 1000; // in ms

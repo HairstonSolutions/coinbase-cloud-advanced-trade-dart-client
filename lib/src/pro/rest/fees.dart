@@ -5,6 +5,15 @@ import 'package:coinbase_cloud_advanced_trade_client/src/pro/models/fee.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/pro/services/network.dart';
 import 'package:http/http.dart' as http;
 
+/// Gets the current fee rates for the user.
+///
+/// This function makes a GET request to the /fees endpoint of the Coinbase Pro
+/// API.
+///
+/// [credential] - The user's API credentials.
+/// [isSandbox] - Whether to use the sandbox environment.
+///
+/// Returns a [Fee] object, or null if the request fails.
 Future<Fee?> getFees(
     {required Credential credential, bool isSandbox = false}) async {
   Fee? fees;

@@ -22,7 +22,7 @@ class Account {
     return all;
   }
 
-  static Account convertJson(var jsonObject) {
+  static Account convertJson(Map<String, dynamic> jsonObject) {
     String? id = jsonObject['id'];
     String? currency = jsonObject['currency'];
     double? balance = nullableDouble(jsonObject, 'balance');

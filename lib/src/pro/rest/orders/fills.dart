@@ -5,6 +5,18 @@ import 'package:coinbase_cloud_advanced_trade_client/src/pro/models/fill.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/pro/services/network.dart';
 import 'package:http/http.dart' as http;
 
+/// Gets a list of recent fills for a given product.
+///
+/// This function makes a GET request to the /fills endpoint of the Coinbase Pro
+/// API.
+///
+/// [productId] - The product ID to get fills for.
+/// [limit] - A limit on the number of fills to be returned.
+/// [profileId] - The profile ID to get fills for.
+/// [credential] - The user's API credentials.
+/// [isSandbox] - Whether to use the sandbox environment.
+///
+/// Returns a list of [Fill] objects.
 Future<List<Fill>> getFills(
     {required String productId,
     int limit = 100,
@@ -39,6 +51,17 @@ Future<List<Fill>> getFills(
   return fills;
 }
 
+/// Gets a list of recent fills for a given order.
+///
+/// This function makes a GET request to the /fills endpoint of the Coinbase Pro
+/// API.
+///
+/// [orderID] - The order ID to get fills for.
+/// [profileId] - The profile ID to get fills for.
+/// [credential] - The user's API credentials.
+/// [isSandbox] - Whether to use the sandbox environment.
+///
+/// Returns a list of [Fill] objects.
 Future<List<Fill>> getFillsByOrderId(String orderID,
     {String profileId = 'default',
     required Credential credential,

@@ -10,6 +10,15 @@ import 'package:http/http.dart' as http;
 const String coinbaseApiProduction = 'api.exchange.coinbase.com';
 const String coinbaseApiSandbox = 'api-public.sandbox.exchange.coinbase.com';
 
+/// Makes a GET request to the Coinbase Pro API.
+///
+/// This function makes a GET request to the specified endpoint.
+///
+/// [endpoint] - The API endpoint to make the request to.
+/// [queryParameters] - Optional query parameters to include in the request.
+/// [isSandbox] - Whether to use the sandbox environment.
+///
+/// Returns an [http.Response] object.
 Future<http.Response> get(String endpoint,
     {Map<String, dynamic>? queryParameters, bool isSandbox = false}) async {
   String coinbaseApi = isSandbox ? coinbaseApiSandbox : coinbaseApiProduction;
@@ -24,6 +33,17 @@ Future<http.Response> get(String endpoint,
   return response;
 }
 
+/// Makes an authorized GET request to the Coinbase Pro API.
+///
+/// This function generates a signature, and then makes a GET request to the
+/// specified endpoint with the signature in the headers.
+///
+/// [endpoint] - The API endpoint to make the request to.
+/// [queryParameters] - Optional query parameters to include in the request.
+/// [credential] - The user's API credentials.
+/// [isSandbox] - Whether to use the sandbox environment.
+///
+/// Returns an [http.Response] object.
 Future<http.Response> getAuthorized(String endpoint,
     {Map<String, dynamic>? queryParameters,
     required Credential credential,
@@ -50,6 +70,18 @@ Future<http.Response> getAuthorized(String endpoint,
   return response;
 }
 
+/// Makes an authorized POST request to the Coinbase Pro API.
+///
+/// This function generates a signature, and then makes a POST request to the
+/// specified endpoint with the signature in the headers.
+///
+/// [endpoint] - The API endpoint to make the request to.
+/// [queryParameters] - Optional query parameters to include in the request.
+/// [body] - The body of the request.
+/// [credential] - The user's API credentials.
+/// [isSandbox] - Whether to use the sandbox environment.
+///
+/// Returns an [http.Response] object.
 Future<http.Response> postAuthorized(String endpoint,
     {Map<String, dynamic>? queryParameters,
     Map<String, dynamic>? body,
@@ -84,6 +116,18 @@ Future<http.Response> postAuthorized(String endpoint,
   return response;
 }
 
+/// Makes an authorized DELETE request to the Coinbase Pro API.
+///
+/// This function generates a signature, and then makes a DELETE request to the
+/// specified endpoint with the signature in the headers.
+///
+/// [endpoint] - The API endpoint to make the request to.
+/// [queryParameters] - Optional query parameters to include in the request.
+/// [body] - The body of the request.
+/// [credential] - The user's API credentials.
+/// [isSandbox] - Whether to use the sandbox environment.
+///
+/// Returns an [http.Response] object.
 Future<http.Response> deleteAuthorized(String endpoint,
     {Map<String, dynamic>? queryParameters,
     Map<String, dynamic>? body,

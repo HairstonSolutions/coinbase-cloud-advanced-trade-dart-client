@@ -14,7 +14,7 @@ class Fee {
     return all;
   }
 
-  static Fee convertJson(var jsonObject) {
+  static Fee convertJson(Map<String, dynamic> jsonObject) {
     double? makerFeeRate = double.parse(jsonObject['maker_fee_rate']);
     double? takerFeeRate = double.parse(jsonObject['taker_fee_rate']);
 

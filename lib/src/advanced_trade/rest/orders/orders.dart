@@ -5,7 +5,17 @@ import 'package:coinbase_cloud_advanced_trade_client/src/advanced_trade/models/o
 import 'package:coinbase_cloud_advanced_trade_client/src/advanced_trade/services/network.dart';
 import 'package:http/http.dart' as http;
 
-// Recursive for Paginated requests
+/// Gets a list of historical orders for the current user.
+///
+/// This function makes a GET request to the /orders/historical/batch endpoint
+/// of the Coinbase Advanced Trade API. It supports pagination using a cursor.
+///
+/// [limit] - A limit on the number of orders to be returned.
+/// [cursor] - A cursor for pagination.
+/// [credential] - The user's API credentials.
+/// [isSandbox] - Whether to use the sandbox environment.
+///
+/// Returns a list of [Order] objects.
 Future<List<Order>> getOrders(
     {int? limit = 1000,
     String? cursor,
@@ -48,6 +58,17 @@ Future<List<Order>> getOrders(
   return orders;
 }
 
+/// Gets a single historical order for the current user by order ID.
+///
+/// This function makes a GET request to the /orders/historical/{order_id}
+/// endpoint of the Coinbase Advanced Trade API.
+///
+/// [orderId] - The ID of the order to be returned.
+/// [credential] - The user's API credentials.
+/// [isSandbox] - Whether to use the sandbox environment.
+///
+/// Returns an [Order] object, or null if no order is found for the given
+/// order ID.
 Future<Order?> getOrder(
     {required String orderId,
     required Credential credential,

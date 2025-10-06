@@ -7,6 +7,17 @@ import 'package:http/http.dart' as http;
 const String coinbaseApiProduction = 'api.coinbase.com';
 const String coinbaseApiSandbox = 'api-sandbox.coinbase.com';
 
+/// Makes an authorized GET request to the Coinbase Advanced Trade API.
+///
+/// This function generates a JWT, and then makes a GET request to the specified
+/// endpoint with the JWT in the Authorization header.
+///
+/// [endpoint] - The API endpoint to make the request to.
+/// [queryParameters] - Optional query parameters to include in the request.
+/// [credential] - The user's API credentials.
+/// [isSandbox] - Whether to use the sandbox environment.
+///
+/// Returns an [http.Response] object.
 Future<http.Response> getAuthorized(String endpoint,
     {Map<String, dynamic>? queryParameters,
     required Credential credential,
