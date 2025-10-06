@@ -27,8 +27,17 @@ Then, run `dart pub get` or `flutter pub get`.
 
 ### API Keys
 
-You will need to generate API keys from your Coinbase account. You can find instructions on how to do this in
+You will need to generate API keys from your Coinbase account.
+You can find instructions on how to do this in
 the [Coinbase documentation](https://docs.cdp.coinbase.com/coinbase-app/authentication-authorization/api-key-authentication).
+
+> Note: Secret Keys are used as provided by Coinbase with the
+> '\n' new line character breaks within the string.
+
+### Credentials Object
+
+All authenticated functions require a Credentials Object Passed in.
+This allows for your code using the client to handle multiple accounts.
 
 ## Usage
 
