@@ -7,6 +7,9 @@ import 'package:http/http.dart' as http;
 
 /// Gets a list of historical orders for the current user.
 ///
+/// GET /v3/brokerage/orders/historical/batch
+/// https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/list-orders
+///
 /// This function makes a GET request to the /orders/historical/batch endpoint
 /// of the Coinbase Advanced Trade API. It supports pagination using a cursor.
 ///
@@ -59,6 +62,9 @@ Future<List<Order>> getOrders(
 }
 
 /// Gets a single historical order for the current user by order ID.
+///
+/// GET /v3/brokerage/orders/historical/{order_id}
+/// https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/get-order
 ///
 /// This function makes a GET request to the /orders/historical/{order_id}
 /// endpoint of the Coinbase Advanced Trade API.
