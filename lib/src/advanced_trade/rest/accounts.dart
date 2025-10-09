@@ -7,6 +7,9 @@ import 'package:http/http.dart' as http;
 
 /// Gets a list of accounts for the current user.
 ///
+/// GET /api/v3/brokerage/accounts
+/// https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/accounts/list-accounts
+///
 /// This function makes a GET request to the /accounts endpoint of the Coinbase
 /// Advanced Trade API. It supports pagination using a cursor.
 ///
@@ -85,6 +88,9 @@ Future<Account?> getAccountByCurrency(String currency,
 }
 
 /// Gets a single account for the current user by UUID.
+///
+/// GET /api/v3/brokerage/accounts/{account_uuid}
+/// https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/accounts/get-account
 ///
 /// This function makes a GET request to the /accounts/{uuid} endpoint of the
 /// Coinbase Advanced Trade API.
