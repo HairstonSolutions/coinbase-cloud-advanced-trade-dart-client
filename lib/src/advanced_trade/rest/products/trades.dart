@@ -5,7 +5,10 @@ import 'package:coinbase_cloud_advanced_trade_client/src/advanced_trade/models/t
 import 'package:coinbase_cloud_advanced_trade_client/src/advanced_trade/services/network.dart';
 import 'package:http/http.dart' as http;
 
-/// Gets a list of recent trades for a single product.
+/// Gets a list of recent market trades for a single product.
+///
+/// GET /v3/brokerage/products/{product_id}/ticker - Get Market Trades
+/// https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/products/get-market-trades
 ///
 /// This function makes a GET request to the /products/{product_id}/ticker
 /// endpoint of the Coinbase Advanced Trade API.

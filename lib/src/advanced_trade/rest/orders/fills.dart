@@ -7,6 +7,9 @@ import 'package:http/http.dart' as http;
 
 /// Gets a list of fills for the current user.
 ///
+/// GET /v3/brokerage/orders/historical/fills
+/// https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/list-fills
+///
 /// This function makes a GET request to the /orders/historical/fills endpoint
 /// of the Coinbase Advanced Trade API. It supports pagination using a cursor.
 /// Paginated requests use recursion.

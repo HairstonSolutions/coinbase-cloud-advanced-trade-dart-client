@@ -7,6 +7,9 @@ import 'package:http/http.dart' as http;
 
 /// Gets a list of products.
 ///
+/// GET /v3/brokerage/products
+/// https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/products/list-products
+///
 /// This function makes a GET request to the /products endpoint of the Coinbase
 /// Advanced Trade API.
 ///
@@ -53,6 +56,9 @@ Future<List<Product>> getProducts(
 }
 
 /// Gets a single product by product ID.
+///
+/// GET /v3/brokerage/products/{product_id}
+/// https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/products/get-product
 ///
 /// This function makes a GET request to the /products/{product_id} endpoint of
 /// the Coinbase Advanced Trade API.
