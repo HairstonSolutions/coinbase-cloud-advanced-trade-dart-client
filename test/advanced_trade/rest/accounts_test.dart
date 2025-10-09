@@ -1,123 +1,211 @@
-import 'dart:io' show Platform;
+import 'dart:convert';
 
 import 'package:coinbase_cloud_advanced_trade_client/src/advanced_trade/models/account.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/advanced_trade/models/credential.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/advanced_trade/rest/accounts.dart';
-import 'package:coinbase_cloud_advanced_trade_client/src/advanced_trade/services/network.dart';
+import 'package:http/http.dart' as http;
+import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
-Map<String, String> envVars = Platform.environment;
-String? apiKeyName = envVars['COINBASE_API_KEY_NAME'];
-String? privateKeyPEM = envVars['COINBASE_PRIVATE_KEY'];
-String? skipTests = envVars['SKIP_TESTS'];
-bool skip = skipTests == 'false' ? false : true;
-Credential credentials =
-    Credential(apiKeyName: apiKeyName!, privateKeyPEM: privateKeyPEM!);
+import '../../mocks.mocks.dart';
 
 void main() {
-  group('Test Get Accounts Requests to Coinbase AT API Endpoints', skip: skip,
-      () {
-    setUp(() {});
+  group('Test Get Accounts using MockClient', () {
+    late MockClient mockClient;
+    final Credential credentials =
+        Credential(apiKeyName: 'test_key', privateKeyPEM: 'test_secret');
 
-    test('Authorized Get Accounts', () async {
-      String requestPath = '/accounts';
-      var response = await getAuthorized(requestPath,
-          credential: credentials, isSandbox: false);
-      var url = response.request?.url.toString();
-      print('Response Code: ${response.statusCode} to URL: $url');
-      print('Response body: ${response.body} to URL: $url');
-
-      expect(response.statusCode == 200, isTrue);
-
-      expect(true, isTrue);
+    setUp(() {
+      mockClient = MockClient();
     });
 
-    test('Authorized Get Accounts', () async {
-      List<Account?> accounts =
-          await getAccounts(credential: credentials, isSandbox: false);
-      print('Accounts: $accounts');
-      expect(accounts.isNotEmpty, true);
+    test('Get a list of accounts', () async {
+      final mockResponse = {
+        "accounts": [
+          {
+            "uuid": "8bfc20d7-f7c6-4422-9181-51268ba51372",
+            "name": "BTC Wallet",
+            "currency": "BTC",
+            "type": "ACCOUNT_TYPE_CRYPTO",
+            "active": true,
+            "created_at": "2021-05-31T09:59:59Z",
+            "updated_at": "2021-05-31T09:59:59Z",
+            "deleted_at": null,
+            "hold": {"value": "0.00000000", "currency": "BTC"},
+            "available_balance": {"value": "100.00", "currency": "BTC"},
+            "default": false
+          },
+          {
+            "uuid": "00f35d2d-0a95-4834-a81c-8245355a293c",
+            "name": "USD Wallet",
+            "currency": "USD",
+            "type": "ACCOUNT_TYPE_FIAT",
+            "active": true,
+            "created_at": "2021-05-31T09:59:59Z",
+            "updated_at": "2021-05-31T09:59:59Z",
+            "deleted_at": null,
+            "hold": {"value": "0.00", "currency": "USD"},
+            "available_balance": {"value": "1000.00", "currency": "USD"},
+            "default": true
+          }
+        ],
+        "has_next": false,
+        "cursor": "",
+        "size": 2
+      };
+
+      when(mockClient.get(any, headers: anyNamed('headers'))).thenAnswer(
+          (_) async => http.Response(jsonEncode(mockResponse), 200));
+
+      List<Account> accounts = await getAccounts(
+          client: mockClient, credential: credentials, isSandbox: false);
+
+      expect(accounts.length, 2);
+      expect(accounts[0].uuid, "8bfc20d7-f7c6-4422-9181-51268ba51372");
+      expect(accounts[0].currency, "BTC");
+      expect(accounts[1].currency, "USD");
     });
 
-    test('Authorized Get Accounts with limit', () async {
-      int limit = 100;
-      List<Account?> accounts = await getAccounts(
-          limit: limit, credential: credentials, isSandbox: false);
-      print('Accounts: $accounts');
-      expect(accounts.isNotEmpty, true);
+    test('Get a single account by UUID', () async {
+      final mockResponse = {
+        "account": {
+          "uuid": "8bfc20d7-f7c6-4422-9181-51268ba51372",
+          "name": "BTC Wallet",
+          "currency": "BTC",
+          "type": "ACCOUNT_TYPE_CRYPTO",
+          "active": true,
+          "created_at": "2021-05-31T09:59:59Z",
+          "updated_at": "2021-05-31T09:59:59Z",
+          "deleted_at": null,
+          "hold": {"value": "0.00000000", "currency": "BTC"},
+          "available_balance": {"value": "100.00", "currency": "BTC"},
+          "default": false
+        }
+      };
+
+      when(mockClient.get(any, headers: anyNamed('headers'))).thenAnswer(
+          (_) async => http.Response(jsonEncode(mockResponse), 200));
+
+      Account? account = await getAccount(
+          uuid: "8bfc20d7-f7c6-4422-9181-51268ba51372",
+          client: mockClient,
+          credential: credentials,
+          isSandbox: false);
+
+      expect(account, isNotNull);
+      expect(account?.uuid, "8bfc20d7-f7c6-4422-9181-51268ba51372");
+      expect(account?.currency, "BTC");
+      expect(account?.availableBalance, 100.00);
     });
 
-    test('Authorized Get Accounts with pagination cursor', () async {
-      int limit = 1; // Forces a cursor value to be returned
-      List<Account?> accounts = await getAccounts(
-          limit: limit, credential: credentials, isSandbox: false);
-      print('Accounts: $accounts');
-      expect(accounts.isNotEmpty, true);
-    });
+    test('Get a single account by currency', () async {
+      final mockResponse = {
+        "accounts": [
+          {
+            "uuid": "8bfc20d7-f7c6-4422-9181-51268ba51372",
+            "name": "BTC Wallet",
+            "currency": "BTC",
+            "type": "ACCOUNT_TYPE_CRYPTO",
+            "active": true,
+            "created_at": "2021-05-31T09:59:59Z",
+            "updated_at": "2021-05-31T09:59:59Z",
+            "deleted_at": null,
+            "hold": {"value": "0.00000000", "currency": "BTC"},
+            "available_balance": {"value": "100.00", "currency": "BTC"},
+            "default": false
+          }
+        ],
+        "has_next": false,
+        "cursor": "",
+        "size": 1
+      };
 
-    test('Get Account by Currency name for an API key', () async {
-      Account? account = await getAccountByCurrency('BTC',
-          credential: credentials, isSandbox: false);
+      when(mockClient.get(any, headers: anyNamed('headers'))).thenAnswer(
+          (_) async => http.Response(jsonEncode(mockResponse), 200));
 
-      print('Account : $account');
+      Account? account = await getAccountByCurrency("BTC",
+          client: mockClient, credential: credentials, isSandbox: false);
+
+      expect(account, isNotNull);
       expect(account?.currency, 'BTC');
     });
 
-    test('Get Account by Account ID for an API key', () async {
-      Account? originAccount = await getAccountByCurrency('BTC',
-          credential: credentials, isSandbox: false);
+    test('Get account balance by currency', () async {
+       final mockResponse = {
+        "accounts": [
+          {
+            "uuid": "8bfc20d7-f7c6-4422-9181-51268ba51372",
+            "name": "BTC Wallet",
+            "currency": "BTC",
+            "type": "ACCOUNT_TYPE_CRYPTO",
+            "active": true,
+            "created_at": "2021-05-31T09:59:59Z",
+            "updated_at": "2021-05-31T09:59:59Z",
+            "deleted_at": null,
+            "hold": {"value": "0.00000000", "currency": "BTC"},
+            "available_balance": {"value": "100.00", "currency": "BTC"},
+            "default": false
+          }
+        ],
+        "has_next": false,
+        "cursor": "",
+        "size": 1
+      };
 
-      String accountId = originAccount!.uuid!;
-      Account? account = await getAccount(
-          uuid: accountId, credential: credentials, isSandbox: false);
+      when(mockClient.get(any, headers: anyNamed('headers'))).thenAnswer(
+          (_) async => http.Response(jsonEncode(mockResponse), 200));
 
-      print('Account : $account');
-      expect(account?.currency, 'BTC');
+      double? balance = await getAccountBalance(currency: 'BTC', client: mockClient, credential: credentials);
+
+      expect(balance, isNotNull);
+      expect(balance, 100.00);
     });
 
-    test('Account NA for given Currency name for an API key', () async {
-      Account? account = await getAccountByCurrency('DOGES',
-          credential: credentials, isSandbox: false);
+     test('Get account balance by UUID', () async {
+      final mockResponse = {
+        "account": {
+          "uuid": "8bfc20d7-f7c6-4422-9181-51268ba51372",
+          "name": "BTC Wallet",
+          "currency": "BTC",
+          "type": "ACCOUNT_TYPE_CRYPTO",
+          "active": true,
+          "created_at": "2021-05-31T09:59:59Z",
+          "updated_at": "2021-05-31T09:59:59Z",
+          "deleted_at": null,
+          "hold": {"value": "0.00000000", "currency": "BTC"},
+          "available_balance": {"value": "100.00", "currency": "BTC"},
+          "default": false
+        }
+      };
 
-      expect(account, null);
+      when(mockClient.get(any, headers: anyNamed('headers'))).thenAnswer(
+          (_) async => http.Response(jsonEncode(mockResponse), 200));
+
+      double? balance = await getAccountBalance(uuid: '8bfc20d7-f7c6-4422-9181-51268ba51372', client: mockClient, credential: credentials);
+
+      expect(balance, isNotNull);
+      expect(balance, 100.00);
     });
 
-    test('Authorized Get Account by Account ID', () async {
-      List<Account?> accounts =
-          await getAccounts(credential: credentials, isSandbox: false);
-      print('Accounts: $accounts');
-
-      String? accountUUID = accounts.first?.uuid;
-
-      Account? account = await getAccount(
-          uuid: accountUUID, credential: credentials, isSandbox: false);
-      print('Accounts: $account');
-      expect(account?.uuid, accountUUID);
+    test('Return null balance when no uuid or currency is provided', () async {
+      double? balance = await getAccountBalance(client: mockClient, credential: credentials);
+      expect(balance, isNull);
     });
 
-    test('Get Account Balance by Account Currency', () async {
-      String currency = 'BTC';
-      double? balance = await getAccountBalance(
-          currency: currency, credential: credentials, isSandbox: false);
-      expect(balance != null, true);
+    test('Return null when account not found by currency', () async {
+      final mockResponse = {
+        "accounts": [],
+        "has_next": false,
+        "cursor": "",
+        "size": 0
+      };
+
+      when(mockClient.get(any, headers: anyNamed('headers'))).thenAnswer(
+          (_) async => http.Response(jsonEncode(mockResponse), 200));
+
+      Account? account = await getAccountByCurrency('DOGE', client: mockClient, credential: credentials);
+      expect(account, isNull);
     });
 
-    test('Get Account Balance by Account UUID', () async {
-      String currency = 'BTC';
-      Account? account = await getAccountByCurrency(currency,
-          credential: credentials, isSandbox: false);
-      String? uuid = account?.uuid;
-      double? balance = await getAccountBalance(
-          uuid: uuid, credential: credentials, isSandbox: false);
-      expect(balance != null, true);
-    });
-
-    test(
-        'Get Account Balance cancels when neither a uuid or currency is provided',
-        () async {
-      double? balance =
-          await getAccountBalance(credential: credentials, isSandbox: false);
-      expect(balance, null);
-    });
   });
 }

@@ -20,20 +20,22 @@ const String coinbaseApiSandbox = 'api-sandbox.coinbase.com';
 /// Returns an [http.Response] object.
 Future<http.Response> getAuthorized(String endpoint,
     {Map<String, dynamic>? queryParameters,
+    http.Client? client,
     required Credential credential,
     bool isSandbox = false}) async {
   String coinbaseApi = isSandbox ? coinbaseApiSandbox : coinbaseApiProduction;
+  client ??= http.Client();
 
   String fullEndpoint = '/api/v3/brokerage$endpoint';
 
   String jwtToken = await generateCoinbaseJwt(credential.apiKeyName,
       credential.privateKeyPEM, "GET $coinbaseApi$fullEndpoint");
 
-  var url = Uri.https(coinbaseApi, fullEndpoint);
+  var url = Uri.https(coinbaseApi, fullEndpoint, queryParameters);
   Map<String, String> requestHeaders = {
     HttpHeaders.acceptHeader: 'application/json',
     "Authorization": "Bearer $jwtToken",
   };
 
-  return await http.get(url, headers: requestHeaders);
+  return await client.get(url, headers: requestHeaders);
 }
