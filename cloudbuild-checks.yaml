@@ -11,22 +11,38 @@ steps:
         echo "Commit SHA: $COMMIT_SHA"
         echo "***********************"
 
-  - id: Download Dependencies
-    name: dart
+  # Generate private key and set it as an environment variable
+  - name: 'gcr.io/cloud-builders/git'
+    id: 'Generate Private Key'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        openssl ecparam -name prime256v1 -genkey -noout | sed -e ':a' -e 'N' -e '$!ba' -e 's/\n/\\n/g' > /workspace/private_key_oneline.txt
+
+  - id: 'Download Dependencies'
+    name: 'dart'
     entrypoint: dart
     args: [ 'pub', 'get' ]
 
-  - id: Check Format of Source
-    name: dart
+  - id: 'Check Format of Source'
+    name: 'dart'
     entrypoint: dart
     args: [ 'format', '--set-exit-if-changed', 'lib/' ]
 
-  - id: Check Format of Tests
-    name: dart
+  - id: 'Check Format of Tests'
+    name: 'dart'
     entrypoint: dart
     args: [ 'format', '--set-exit-if-changed', 'test/' ]
 
-  - id: Run Tests
-    name: dart
-    entrypoint: dart
-    args: [ 'test' ]
+  - id: 'Run Tests'
+    name: 'dart'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |-
+        # Read the single-line key from the workspace file into an environment variable
+        export COINBASE_PRIVATE_KEY=$(cat /workspace/private_key_oneline.txt)
+        export COINBASE_API_KEY_NAME="ci-test-key"
+        # Run the dart tests with the environment variables now set
+        dart test

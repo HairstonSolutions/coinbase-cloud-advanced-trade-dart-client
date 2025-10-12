@@ -22,6 +22,7 @@ import 'package:http/http.dart' as http;
 Future<List<Account>> getAccounts(
     {int? limit = 250,
     String? cursor,
+    http.Client? client,
     required Credential credential,
     bool isSandbox = false}) async {
   List<Account> accounts = [];
@@ -30,6 +31,7 @@ Future<List<Account>> getAccounts(
 
   http.Response response = await getAuthorized('/accounts',
       queryParameters: queryParameters,
+      client: client,
       credential: credential,
       isSandbox: isSandbox);
 
@@ -48,6 +50,7 @@ Future<List<Account>> getAccounts(
       List<Account> paginatedAccounts = await getAccounts(
           limit: limit,
           cursor: jsonCursor,
+          client: client,
           credential: credential,
           isSandbox: isSandbox);
       accounts.addAll(paginatedAccounts);
@@ -73,9 +76,11 @@ Future<List<Account>> getAccounts(
 /// Returns an [Account] object, or null if no account is found for the given
 /// currency.
 Future<Account?> getAccountByCurrency(String currency,
-    {required Credential credential, bool isSandbox = false}) async {
-  List<Account> accounts =
-      await getAccounts(credential: credential, isSandbox: isSandbox);
+    {http.Client? client,
+    required Credential credential,
+    bool isSandbox = false}) async {
+  List<Account> accounts = await getAccounts(
+      client: client, credential: credential, isSandbox: isSandbox);
 
   if (accounts.isNotEmpty) {
     for (Account account in accounts) {
@@ -103,10 +108,11 @@ Future<Account?> getAccountByCurrency(String currency,
 /// UUID.
 Future<Account?> getAccount(
     {required String? uuid,
+    http.Client? client,
     required Credential credential,
     bool isSandbox = false}) async {
   http.Response response = await getAuthorized('/accounts/$uuid',
-      credential: credential, isSandbox: isSandbox);
+      client: client, credential: credential, isSandbox: isSandbox);
 
   if (response.statusCode == 200) {
     var jsonResponse = jsonDecode(response.body);
@@ -135,17 +141,21 @@ Future<Account?> getAccount(
 Future<double?> getAccountBalance(
     {String? uuid,
     String? currency,
+    http.Client? client,
     required Credential credential,
     bool isSandbox = false}) async {
   if (uuid != null) {
     Account? account = await getAccount(
-        uuid: uuid, credential: credential, isSandbox: isSandbox);
+        uuid: uuid,
+        client: client,
+        credential: credential,
+        isSandbox: isSandbox);
     return account?.availableBalance;
   }
 
   if (currency != null) {
     Account? account = await getAccountByCurrency(currency,
-        credential: credential, isSandbox: isSandbox);
+        client: client, credential: credential, isSandbox: isSandbox);
     return account?.availableBalance;
   }
 
