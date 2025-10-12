@@ -37,8 +37,12 @@ steps:
 
   - id: 'Run Tests'
     name: 'dart'
-    entrypoint: dart
-    args: [ 'test' ]
-    env:
-      - 'COINBASE_API_KEY_NAME=your_api_key_name'
-      - 'COINBASE_PRIVATE_KEY=$(cat /workspace/private_key_oneline.txt)'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |-
+        # Read the single-line key from the workspace file into an environment variable
+        export COINBASE_PRIVATE_KEY=$(cat /workspace/private_key_oneline.txt)
+        export COINBASE_API_KEY_NAME="ci-test-key"
+        # Run the dart tests with the environment variables now set
+        dart test
