@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io' show Platform;
 
 import 'package:coinbase_cloud_advanced_trade_client/src/advanced_trade/models/account.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/advanced_trade/models/credential.dart';
@@ -9,11 +10,14 @@ import 'package:test/test.dart';
 
 import '../../mocks.mocks.dart';
 
+Map<String, String> envVars = Platform.environment;
+String? privateKeyPEM = envVars['COINBASE_PRIVATE_KEY'];
+
 void main() {
   group('Test Get Accounts using MockClient', () {
     late MockClient mockClient;
     final Credential credentials =
-        Credential(apiKeyName: 'test_key', privateKeyPEM: 'test_secret');
+        Credential(apiKeyName: 'test_key', privateKeyPEM: '$privateKeyPEM');
 
     setUp(() {
       mockClient = MockClient();
@@ -131,7 +135,7 @@ void main() {
     });
 
     test('Get account balance by currency', () async {
-       final mockResponse = {
+      final mockResponse = {
         "accounts": [
           {
             "uuid": "8bfc20d7-f7c6-4422-9181-51268ba51372",
@@ -155,13 +159,14 @@ void main() {
       when(mockClient.get(any, headers: anyNamed('headers'))).thenAnswer(
           (_) async => http.Response(jsonEncode(mockResponse), 200));
 
-      double? balance = await getAccountBalance(currency: 'BTC', client: mockClient, credential: credentials);
+      double? balance = await getAccountBalance(
+          currency: 'BTC', client: mockClient, credential: credentials);
 
       expect(balance, isNotNull);
       expect(balance, 100.00);
     });
 
-     test('Get account balance by UUID', () async {
+    test('Get account balance by UUID', () async {
       final mockResponse = {
         "account": {
           "uuid": "8bfc20d7-f7c6-4422-9181-51268ba51372",
@@ -181,14 +186,18 @@ void main() {
       when(mockClient.get(any, headers: anyNamed('headers'))).thenAnswer(
           (_) async => http.Response(jsonEncode(mockResponse), 200));
 
-      double? balance = await getAccountBalance(uuid: '8bfc20d7-f7c6-4422-9181-51268ba51372', client: mockClient, credential: credentials);
+      double? balance = await getAccountBalance(
+          uuid: '8bfc20d7-f7c6-4422-9181-51268ba51372',
+          client: mockClient,
+          credential: credentials);
 
       expect(balance, isNotNull);
       expect(balance, 100.00);
     });
 
     test('Return null balance when no uuid or currency is provided', () async {
-      double? balance = await getAccountBalance(client: mockClient, credential: credentials);
+      double? balance =
+          await getAccountBalance(client: mockClient, credential: credentials);
       expect(balance, isNull);
     });
 
@@ -203,9 +212,9 @@ void main() {
       when(mockClient.get(any, headers: anyNamed('headers'))).thenAnswer(
           (_) async => http.Response(jsonEncode(mockResponse), 200));
 
-      Account? account = await getAccountByCurrency('DOGE', client: mockClient, credential: credentials);
+      Account? account = await getAccountByCurrency('DOGE',
+          client: mockClient, credential: credentials);
       expect(account, isNull);
     });
-
   });
 }
