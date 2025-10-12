@@ -11,13 +11,16 @@ import 'package:test/test.dart';
 import '../../mocks.mocks.dart';
 
 Map<String, String> envVars = Platform.environment;
+String apiKeyName = envVars['COINBASE_API_KEY_NAME'] ?? 'api_key_name';
 String? privateKeyPEM = envVars['COINBASE_PRIVATE_KEY'];
+String? skipTests = envVars['SKIP_TESTS'];
+bool skip = skipTests == 'false' ? false : true;
 
 void main() {
   group('Test Get Accounts using MockClient', () {
     late MockClient mockClient;
     final Credential credentials =
-        Credential(apiKeyName: 'test_key', privateKeyPEM: '$privateKeyPEM');
+        Credential(apiKeyName: apiKeyName, privateKeyPEM: privateKeyPEM!);
 
     setUp(() {
       mockClient = MockClient();

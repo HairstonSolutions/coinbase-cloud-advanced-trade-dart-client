@@ -18,7 +18,7 @@ steps:
     args:
       - '-c'
       - |
-        openssl ecparam -name prime256v1 -genkey -noout | paste -sd '\\n' - > /workspace/private_key_oneline.txt
+        openssl ecparam -name prime256v1 -genkey -noout | sed -e ':a' -e 'N' -e '$!ba' -e 's/\n/\\n/g' > /workspace/private_key_oneline.txt
 
   - id: 'Download Dependencies'
     name: 'dart'
