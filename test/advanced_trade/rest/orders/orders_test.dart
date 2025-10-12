@@ -1,17 +1,25 @@
 import 'dart:convert';
+import 'dart:io' show Platform;
 
 import 'package:coinbase_cloud_advanced_trade_client/src/advanced_trade/models/credential.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/advanced_trade/models/order.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/advanced_trade/rest/orders/orders.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/advanced_trade/services/network.dart';
 import 'package:http/http.dart' as http;
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
 import '../../../mocks.mocks.dart';
 
-// Use a dummy credential for mock tests
-final Credential credentials =
-    Credential(apiKeyName: 'api_key_name', privateKeyPEM: 'private_key');
+Map<String, String> envVars = Platform.environment;
+String? apiKeyName = envVars['COINBASE_API_KEY_NAME'];
+String? privateKeyPEM = envVars['COINBASE_PRIVATE_KEY'];
+String? skipTests = envVars['SKIP_TESTS'];
+bool skip = skipTests == 'false' ? false : true;
+Credential credentials =
+    Credential(apiKeyName: apiKeyName!, privateKeyPEM: privateKeyPEM!);
+Credential mockCredentials =
+    Credential(apiKeyName: 'mock-key', privateKeyPEM: 'mock-pem');
 
 void main() {
   group('Test Get Orders using MockClient', () {
@@ -67,7 +75,7 @@ void main() {
           (_) async => http.Response(jsonEncode(mockResponse), 200));
 
       List<Order>? orders =
-          await getOrders(client: mockClient, credential: credentials);
+          await getOrders(client: mockClient, credential: mockCredentials);
 
       expect(orders, isNotNull);
       expect(orders?.length, 1);
@@ -118,7 +126,7 @@ void main() {
       Order? order = await getOrder(
           orderId: "b0313b63-a2a1-4d30-a506-936337b52978",
           client: mockClient,
-          credential: credentials);
+          credential: mockCredentials);
 
       expect(order, isNotNull);
       expect(order?.orderId, "b0313b63-a2a1-4d30-a506-936337b52978");
@@ -133,8 +141,61 @@ void main() {
       Order? order = await getOrder(
           orderId: "non-existent-id",
           client: mockClient,
-          credential: credentials);
+          credential: mockCredentials);
       expect(order, isNull);
+    });
+  });
+
+  group('Test Get Orders Requests to Coinbase AT API Endpoints', skip: skip,
+      () {
+    test('Authorized Get All Orders', () async {
+      String requestPath = '/orders/historical/batch';
+      Map<String, dynamic>? queryParameters = {'limit': '100'};
+      var response = await getAuthorized(requestPath,
+          queryParameters: queryParameters,
+          credential: credentials,
+          isSandbox: false);
+      var url = response.request?.url.toString();
+      print(
+          'Response Code: ${response.statusCode} to URL: $url with query parameters: $queryParameters');
+      print('Response body: ${response.body} to URL: $url');
+
+      expect(response.statusCode == 200, isTrue);
+      expect(true, isTrue);
+    });
+
+    test('Get all Orders as a list of Orders', () async {
+      List<Order>? orders =
+          await getOrders(credential: credentials, isSandbox: false);
+      print('Orders: $orders');
+
+      expect(orders.isNotEmpty, true);
+    });
+  });
+
+  group('Test Individual Orders', skip: skip, () {
+    test('Get Individual Order', () async {
+      List<Order> orders =
+          await getOrders(credential: credentials, isSandbox: false);
+      String? orderId = orders.first.orderId;
+      Order? order = await getOrder(
+        orderId: orderId!,
+        credential: credentials,
+        isSandbox: false,
+      );
+
+      expect(order?.orderId, orderId);
+    });
+
+    test('Individual Order Does Not Exist', () async {
+      String orderId = 'b0313b63ee8d';
+      Order? order = await getOrder(
+        orderId: orderId,
+        credential: credentials,
+        isSandbox: false,
+      );
+
+      expect(order, null);
     });
   });
 }
