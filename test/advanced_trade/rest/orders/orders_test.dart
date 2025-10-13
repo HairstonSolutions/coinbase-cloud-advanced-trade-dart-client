@@ -11,15 +11,14 @@ import 'package:test/test.dart';
 
 import '../../../mocks.mocks.dart';
 
-Map<String, String> envVars = Platform.environment;
-String? apiKeyName = envVars['COINBASE_API_KEY_NAME'];
-String? privateKeyPEM = envVars['COINBASE_PRIVATE_KEY'];
-String? skipTests = envVars['SKIP_TESTS'];
-bool skip = skipTests == 'false' ? false : true;
-Credential credentials =
-    Credential(apiKeyName: apiKeyName!, privateKeyPEM: privateKeyPEM!);
-Credential mockCredentials =
-    Credential(apiKeyName: 'mock-key', privateKeyPEM: 'mock-pem');
+final Map<String, String> envVars = Platform.environment;
+final String apiKeyName = envVars['COINBASE_API_KEY_NAME'] ?? 'api_key_name';
+final String? privateKeyPEM = envVars['COINBASE_PRIVATE_KEY'];
+final String? skipTests = envVars['SKIP_TESTS'];
+final bool skip = skipTests == 'false' ? false : true;
+
+final Credential credentials =
+    Credential(apiKeyName: apiKeyName, privateKeyPEM: privateKeyPEM!);
 
 void main() {
   group('Test Get Orders using MockClient', () {
@@ -75,11 +74,11 @@ void main() {
           (_) async => http.Response(jsonEncode(mockResponse), 200));
 
       List<Order>? orders =
-          await getOrders(client: mockClient, credential: mockCredentials);
+          await getOrders(client: mockClient, credential: credentials);
 
       expect(orders, isNotNull);
-      expect(orders?.length, 1);
-      expect(orders?[0].orderId, "b0313b63-a2a1-4d30-a506-936337b52978");
+      expect(orders.length, 1);
+      expect(orders[0].orderId, "b0313b63-a2a1-4d30-a506-936337b52978");
     });
 
     test('Get a single order by ID', () async {
@@ -126,7 +125,7 @@ void main() {
       Order? order = await getOrder(
           orderId: "b0313b63-a2a1-4d30-a506-936337b52978",
           client: mockClient,
-          credential: mockCredentials);
+          credential: credentials);
 
       expect(order, isNotNull);
       expect(order?.orderId, "b0313b63-a2a1-4d30-a506-936337b52978");
@@ -141,7 +140,7 @@ void main() {
       Order? order = await getOrder(
           orderId: "non-existent-id",
           client: mockClient,
-          credential: mockCredentials);
+          credential: credentials);
       expect(order, isNull);
     });
   });

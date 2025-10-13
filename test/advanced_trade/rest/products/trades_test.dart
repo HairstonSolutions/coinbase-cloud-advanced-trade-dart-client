@@ -13,15 +13,14 @@ import 'package:test/test.dart';
 
 import '../../../mocks.mocks.dart';
 
-Map<String, String> envVars = Platform.environment;
-String? apiKeyName = envVars['COINBASE_API_KEY_NAME'];
-String? privateKeyPEM = envVars['COINBASE_PRIVATE_KEY'];
-String? skipTests = envVars['SKIP_TESTS'];
-bool skip = skipTests == 'false' ? false : true;
-Credential credentials =
-    Credential(apiKeyName: apiKeyName!, privateKeyPEM: privateKeyPEM!);
-Credential mockCredentials =
-    Credential(apiKeyName: 'mock-key', privateKeyPEM: 'mock-pem');
+final Map<String, String> envVars = Platform.environment;
+final String apiKeyName = envVars['COINBASE_API_KEY_NAME'] ?? 'api_key_name';
+final String? privateKeyPEM = envVars['COINBASE_PRIVATE_KEY'];
+final String? skipTests = envVars['SKIP_TESTS'];
+final bool skip = skipTests == 'false' ? false : true;
+
+final Credential credentials =
+    Credential(apiKeyName: apiKeyName, privateKeyPEM: privateKeyPEM!);
 
 void main() {
   group('Test Get Trades using MockClient', () {
@@ -54,9 +53,7 @@ void main() {
           (_) async => http.Response(jsonEncode(mockResponse), 200));
 
       List<Trade?> trades = await getTrades(
-          productId: "BTC-USD",
-          client: mockClient,
-          credential: mockCredentials);
+          productId: "BTC-USD", client: mockClient, credential: credentials);
 
       expect(trades, isNotNull);
       expect(trades.length, 1);

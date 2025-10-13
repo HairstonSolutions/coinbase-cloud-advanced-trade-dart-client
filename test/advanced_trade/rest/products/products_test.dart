@@ -11,15 +11,14 @@ import 'package:test/test.dart';
 
 import '../../../mocks.mocks.dart';
 
-Map<String, String> envVars = Platform.environment;
-String? apiKeyName = envVars['COINBASE_API_KEY_NAME'];
-String? privateKeyPEM = envVars['COINBASE_PRIVATE_KEY'];
-String? skipTests = envVars['SKIP_TESTS'];
-bool skip = skipTests == 'false' ? false : true;
-Credential credentials =
-    Credential(apiKeyName: apiKeyName!, privateKeyPEM: privateKeyPEM!);
-Credential mockCredentials =
-    Credential(apiKeyName: 'mock-key', privateKeyPEM: 'mock-pem');
+final Map<String, String> envVars = Platform.environment;
+final String apiKeyName = envVars['COINBASE_API_KEY_NAME'] ?? 'api_key_name';
+final String? privateKeyPEM = envVars['COINBASE_PRIVATE_KEY'];
+final String? skipTests = envVars['SKIP_TESTS'];
+final bool skip = skipTests == 'false' ? false : true;
+
+final Credential credentials =
+    Credential(apiKeyName: apiKeyName, privateKeyPEM: privateKeyPEM!);
 
 void main() {
   group('Test Get Products using MockClient', () {
@@ -69,7 +68,7 @@ void main() {
           (_) async => http.Response(jsonEncode(mockResponse), 200));
 
       List<Product?> products =
-          await getProducts(client: mockClient, credential: mockCredentials);
+          await getProducts(client: mockClient, credential: credentials);
 
       expect(products, isNotNull);
       expect(products.length, 1);
@@ -111,9 +110,7 @@ void main() {
           (_) async => http.Response(jsonEncode(mockResponse), 200));
 
       Product? product = await getProduct(
-          productId: "BTC-USD",
-          client: mockClient,
-          credential: mockCredentials);
+          productId: "BTC-USD", client: mockClient, credential: credentials);
 
       expect(product, isNotNull);
       expect(product?.productId, "BTC-USD");
