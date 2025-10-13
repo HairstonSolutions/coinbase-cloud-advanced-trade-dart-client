@@ -13,15 +13,14 @@ import 'package:test/test.dart';
 
 import '../../../mocks.mocks.dart';
 
-Map<String, String> envVars = Platform.environment;
-String? apiKeyName = envVars['COINBASE_API_KEY_NAME'];
-String? privateKeyPEM = envVars['COINBASE_PRIVATE_KEY'];
-String? skipTests = envVars['SKIP_TESTS'];
-bool skip = skipTests == 'false' ? false : true;
-Credential credentials =
-    Credential(apiKeyName: apiKeyName!, privateKeyPEM: privateKeyPEM!);
-Credential mockCredentials =
-    Credential(apiKeyName: 'mock-key', privateKeyPEM: 'mock-pem');
+final Map<String, String> envVars = Platform.environment;
+final String apiKeyName = envVars['COINBASE_API_KEY_NAME'] ?? 'api_key_name';
+final String? privateKeyPEM = envVars['COINBASE_PRIVATE_KEY'];
+final String? skipTests = envVars['SKIP_TESTS'];
+final bool skip = skipTests == 'false' ? false : true;
+
+final Credential credentials =
+    Credential(apiKeyName: apiKeyName, privateKeyPEM: privateKeyPEM!);
 
 void main() {
   group('Test Get Fills using MockClient', () {
@@ -35,15 +34,28 @@ void main() {
       final mockResponse = {
         "fills": [
           {
-            "order_id": "b0313b63-a2a1-4d30-a506-936337b52978",
+            "entry_id": "22222-2222222-22222222",
             "trade_id": "123456",
-            "product_id": "BTC-USD",
+            "order_id": "b0313b63-a2a1-4d30-a506-936337b52978",
+            "trade_time": "2021-05-31T09:59:59Z",
+            "trade_type": "FILL",
             "price": "50000.00",
             "size": "0.01",
-            "fee": "0.50",
-            "side": "BUY",
+            "commission": "0.50",
+            "product_id": "BTC-USD",
+            "sequence_timestamp": "2021-05-31T09:58:59.000Z",
             "liquidity_indicator": "TAKER",
-            "trade_time": "2021-05-31T09:59:59Z"
+            "size_in_quote": false,
+            "user_id": "3333-333333-3333333",
+            "side": "BUY",
+            "retail_portfolio_id": "4444-444444-4444444",
+            "fillSource": "FILL_SOURCE_UNKNOWN",
+            "commission_detail_total": {
+              "total_commission": "0.0",
+              "gst_commission": "0.0",
+              "withholding_commission": "0.0",
+              "client_commission": "0.0"
+            }
           }
         ],
         "cursor": "some-cursor-for-next-page"
@@ -53,11 +65,11 @@ void main() {
           (_) async => http.Response(jsonEncode(mockResponse), 200));
 
       List<Fill>? fills =
-          await getFills(client: mockClient, credential: mockCredentials);
+          await getFills(client: mockClient, credential: credentials);
 
       expect(fills, isNotNull);
-      expect(fills?.length, 1);
-      expect(fills?[0].orderId, "b0313b63-a2a1-4d30-a506-936337b52978");
+      expect(fills.length, 1);
+      expect(fills[0].orderId, "b0313b63-a2a1-4d30-a506-936337b52978");
     });
   });
 
