@@ -24,6 +24,7 @@ Future<List<Product>> getProducts(
     {int? offset,
     String? productType,
     String? contractExpiryType,
+    http.Client? client,
     required Credential credential,
     bool isSandbox = false}) async {
   List<Product> products = [];
@@ -35,6 +36,7 @@ Future<List<Product>> getProducts(
 
   http.Response response = await getAuthorized('/products',
       queryParameters: queryParameters,
+      client: client,
       credential: credential,
       isSandbox: isSandbox);
 
@@ -73,6 +75,7 @@ Future<List<Product>> getProducts(
 Future<Product?> getProduct(
     {required String? productId,
     bool? getTradabilityStatus,
+    http.Client? client,
     required Credential credential,
     bool isSandbox = false}) async {
   Map<String, String> queryParameters = {
@@ -82,6 +85,7 @@ Future<Product?> getProduct(
 
   http.Response response = await getAuthorized('/products/$productId',
       queryParameters: queryParameters,
+      client: client,
       credential: credential,
       isSandbox: isSandbox);
 
