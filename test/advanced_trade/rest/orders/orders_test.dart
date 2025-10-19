@@ -261,4 +261,211 @@ void main() {
       expect(order, null);
     });
   });
+
+  group('Test Create Orders using MockClients', () {
+    late MockClient mockClient;
+
+    setUp(() {
+      mockClient = MockClient();
+    });
+
+    test('Create a new market order with quote size', () async {
+      final mockResponse = {
+        "success": true,
+        "failure_reason": "string",
+        "order_id": "string"
+      };
+
+      when(mockClient.post(any,
+          headers: anyNamed('headers'), body: anyNamed('body')))
+          .thenAnswer(
+              (_) async => http.Response(jsonEncode(mockResponse), 200));
+
+      final clientOrderId = DateTime.now().millisecondsSinceEpoch.toString();
+      final result = await createMarketOrder(
+        clientOrderId: clientOrderId,
+        productId: 'BTC-USD',
+        side: 'BUY',
+        quoteSize: '10',
+        credential: credentials,
+        client: mockClient,
+      );
+
+      expect(result, isNotNull);
+      expect(result!['success'], isTrue);
+    });
+
+    test('Create a new market order with base size', () async {
+      final mockResponse = {
+        "success": true,
+        "failure_reason": "string",
+        "order_id": "string"
+      };
+
+      when(mockClient.post(any,
+          headers: anyNamed('headers'), body: anyNamed('body')))
+          .thenAnswer(
+              (_) async => http.Response(jsonEncode(mockResponse), 200));
+
+      final clientOrderId = DateTime.now().millisecondsSinceEpoch.toString();
+      final result = await createMarketOrder(
+        clientOrderId: clientOrderId,
+        productId: 'BTC-USD',
+        side: 'SELL',
+        baseSize: '0.1',
+        credential: credentials,
+        client: mockClient,
+      );
+
+      expect(result, isNotNull);
+      expect(result!['success'], isTrue);
+    });
+
+    test('Create a new market order with both quote and base size', () async {
+      expect(
+              () async => await createMarketOrder(
+            clientOrderId: 'test',
+            productId: 'BTC-USD',
+            side: 'BUY',
+            quoteSize: '10',
+            baseSize: '0.1',
+            credential: credentials,
+          ),
+          throwsArgumentError);
+    });
+
+    test('Create a new limit order', () async {
+      final mockResponse = {
+        "success": true,
+        "failure_reason": "string",
+        "order_id": "string"
+      };
+
+      when(mockClient.post(any,
+          headers: anyNamed('headers'), body: anyNamed('body')))
+          .thenAnswer(
+              (_) async => http.Response(jsonEncode(mockResponse), 200));
+
+      final clientOrderId = DateTime.now().millisecondsSinceEpoch.toString();
+      final result = await createLimitOrder(
+        clientOrderId: clientOrderId,
+        productId: 'BTC-USD',
+        side: 'BUY',
+        baseSize: '0.1',
+        limitPrice: '10000',
+        credential: credentials,
+        client: mockClient,
+      );
+
+      expect(result, isNotNull);
+      expect(result!['success'], isTrue);
+    });
+
+    test('Create a new post-only limit order', () async {
+      final mockResponse = {
+        "success": true,
+        "failure_reason": "string",
+        "order_id": "string"
+      };
+
+      when(mockClient.post(any,
+          headers: anyNamed('headers'), body: anyNamed('body')))
+          .thenAnswer(
+              (_) async => http.Response(jsonEncode(mockResponse), 200));
+
+      final clientOrderId = DateTime.now().millisecondsSinceEpoch.toString();
+      final result = await createLimitOrder(
+        clientOrderId: clientOrderId,
+        productId: 'BTC-USD',
+        side: 'BUY',
+        baseSize: '0.1',
+        limitPrice: '10000',
+        postOnly: true,
+        credential: credentials,
+        client: mockClient,
+      );
+
+      expect(result, isNotNull);
+      expect(result!['success'], isTrue);
+    });
+  });
+
+  group('Test Create Orders to Coinbase AT API Endpoints', skip: skip, () {
+    test('Create a new market order with quote size', () async {
+      final clientOrderId = DateTime.now().millisecondsSinceEpoch.toString();
+      final result = await createMarketOrder(
+        clientOrderId: clientOrderId,
+        productId: 'BTC-USD',
+        side: 'BUY',
+        quoteSize: '10',
+        credential: credentials,
+        isSandbox: true,
+      );
+
+      expect(result, isNotNull);
+      expect(result!['success'], isTrue);
+    });
+
+    test('Create a new market order with base size', () async {
+      final clientOrderId = DateTime.now().millisecondsSinceEpoch.toString();
+      final result = await createMarketOrder(
+        clientOrderId: clientOrderId,
+        productId: 'BTC-USD',
+        side: 'SELL',
+        baseSize: '0.1',
+        credential: credentials,
+        isSandbox: true,
+      );
+
+      expect(result, isNotNull);
+      expect(result!['success'], isTrue);
+    });
+
+    test('Create a new market order with both quote and base size', () async {
+      expect(
+              () async => await createMarketOrder(
+            clientOrderId: 'test',
+            productId: 'BTC-USD',
+            side: 'BUY',
+            quoteSize: '10',
+            baseSize: '0.1',
+            credential: credentials,
+            isSandbox: true,
+          ),
+          throwsArgumentError);
+    });
+
+    test('Create a new limit order', () async {
+      final clientOrderId = DateTime.now().millisecondsSinceEpoch.toString();
+      final result = await createLimitOrder(
+        clientOrderId: clientOrderId,
+        productId: 'BTC-USD',
+        side: 'BUY',
+        baseSize: '0.1',
+        limitPrice: '10000',
+        credential: credentials,
+        isSandbox: true,
+      );
+
+      expect(result, isNotNull);
+      expect(result!['success'], isTrue);
+    });
+
+    test('Create a new post-only limit order', () async {
+      final clientOrderId = DateTime.now().millisecondsSinceEpoch.toString();
+      final result = await createLimitOrder(
+        clientOrderId: clientOrderId,
+        productId: 'BTC-USD',
+        side: 'BUY',
+        baseSize: '0.001',
+        limitPrice: '10000',
+        postOnly: true,
+        credential: credentials,
+        isSandbox: true,
+      );
+
+      expect(result, isNotNull);
+      expect(result!['success'], isTrue);
+    });
+  });
 }
