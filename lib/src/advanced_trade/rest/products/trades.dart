@@ -22,6 +22,7 @@ import 'package:http/http.dart' as http;
 Future<List<Trade>> getTrades(
     {required String? productId,
     int? limit = 10,
+    http.Client? client,
     required Credential credential,
     bool isSandbox = false}) async {
   List<Trade> trades = [];
@@ -29,6 +30,7 @@ Future<List<Trade>> getTrades(
 
   http.Response response = await getAuthorized('/products/$productId/ticker',
       queryParameters: queryParameters,
+      client: client,
       credential: credential,
       isSandbox: isSandbox);
 

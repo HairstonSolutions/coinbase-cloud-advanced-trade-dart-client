@@ -27,6 +27,7 @@ Future<List<Fill>> getFills(
     String? orderId,
     String? productId,
     String? cursor,
+    http.Client? client,
     required Credential credential,
     bool isSandbox = false}) async {
   List<Fill> orders = [];
@@ -39,6 +40,7 @@ Future<List<Fill>> getFills(
 
   http.Response response = await getAuthorized('/orders/historical/fills',
       queryParameters: queryParameters,
+      client: client,
       credential: credential,
       isSandbox: isSandbox);
 
