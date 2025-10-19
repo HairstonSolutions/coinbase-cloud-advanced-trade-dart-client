@@ -1,3 +1,5 @@
+import 'package:coinbase_cloud_advanced_trade_client/src/shared/services/tools.dart';
+
 class Fill {
   final String? entryId;
   final String? tradeId;
@@ -64,20 +66,20 @@ class Fill {
       };
 
   Fill.fromCBJson(Map<String, dynamic> json)
-      : entryId = json['entry_id'],
-        tradeId = json['trade_id'],
-        orderId = json['order_id'],
+      : entryId = json['entry_id'] ?? '',
+        tradeId = json['trade_id'] ?? '',
+        orderId = json['order_id'] ?? '',
         tradeTime = DateTime.parse(json['trade_time']),
-        tradeType = json['trade_type'],
-        price = double.parse(json['price']),
-        size = double.parse(json['size']),
-        commission = double.parse(json['commission']),
-        productId = json['product_id'],
+        tradeType = json['trade_type'] ?? '',
+        price = nullableDouble(json, 'price'),
+        size = nullableDouble(json, 'size'),
+        commission = nullableDouble(json, 'commission'),
+        productId = json['product_id'] ?? '',
         sequenceTimestamp = DateTime.parse(json['sequence_timestamp']),
-        liquidityIndicator = json['liquidity_indicator'],
-        sizeInQuote = json['size_in_quote'],
-        userId = json['user_id'],
-        side = json['side'];
+        liquidityIndicator = json['liquidity_indicator'] ?? '',
+        sizeInQuote = json['size_in_quote'] ?? false,
+        userId = json['user_id'] ?? '',
+        side = json['side'] ?? '';
 
   @override
   String toString() {

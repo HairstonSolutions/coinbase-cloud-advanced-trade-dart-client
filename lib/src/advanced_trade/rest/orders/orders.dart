@@ -76,6 +76,7 @@ Future<Map<String, dynamic>?> createOrder(
 Future<List<Order>> getOrders(
     {int? limit = 1000,
     String? cursor,
+    http.Client? client,
     required Credential credential,
     bool isSandbox = false}) async {
   List<Order> orders = [];
@@ -84,6 +85,7 @@ Future<List<Order>> getOrders(
 
   http.Response response = await getAuthorized('/orders/historical/batch',
       queryParameters: queryParameters,
+      client: client,
       credential: credential,
       isSandbox: isSandbox);
 
@@ -131,12 +133,13 @@ Future<List<Order>> getOrders(
 /// order ID.
 Future<Order?> getOrder(
     {required String orderId,
+    http.Client? client,
     required Credential credential,
     bool isSandbox = false}) async {
   Order? order;
 
   http.Response response = await getAuthorized('/orders/historical/$orderId',
-      credential: credential, isSandbox: isSandbox);
+      client: client, credential: credential, isSandbox: isSandbox);
 
   if (response.statusCode == 200) {
     String data = response.body;
