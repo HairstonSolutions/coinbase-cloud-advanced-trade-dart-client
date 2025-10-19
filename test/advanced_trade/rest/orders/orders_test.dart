@@ -4,7 +4,10 @@ import 'package:coinbase_cloud_advanced_trade_client/src/advanced_trade/models/c
 import 'package:coinbase_cloud_advanced_trade_client/src/advanced_trade/models/order.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/advanced_trade/rest/orders/orders.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/advanced_trade/services/network.dart';
+import 'package:http/http.dart' as http;
+import 'package:http/testing.dart';
 import 'package:test/test.dart';
+import 'dart:convert';
 
 Map<String, String> envVars = Platform.environment;
 String? apiKeyName = envVars['COINBASE_API_KEY_NAME'];
@@ -65,6 +68,36 @@ void main() {
       );
 
       expect(order, null);
+    });
+  });
+
+  group('Test Create Order', () {
+    test('Create a new order', () async {
+      final mockClient = MockClient((request) async {
+        final response = {
+          "success": true,
+          "failure_reason": "string",
+          "order_id": "string"
+        };
+        return http.Response(json.encode(response), 200);
+      });
+
+      final clientOrderId = DateTime.now().millisecondsSinceEpoch.toString();
+      final result = await createOrder(
+        clientOrderId: clientOrderId,
+        productId: 'BTC-USD',
+        side: 'BUY',
+        orderConfiguration: {
+          'market_market_ioc': {
+            'quote_size': '10',
+          }
+        },
+        credential: credentials,
+        client: mockClient,
+      );
+
+      expect(result, isNotNull);
+      expect(result!['success'], isTrue);
     });
   });
 }
