@@ -45,4 +45,4 @@ steps:
         export COINBASE_PRIVATE_KEY=$(cat /workspace/private_key_oneline.txt)
         export COINBASE_API_KEY_NAME="ci-test-key"
         # Run the dart tests with the environment variables now set
-        dart test
+        dart test --reporter=expanded
