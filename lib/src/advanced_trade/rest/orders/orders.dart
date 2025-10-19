@@ -86,7 +86,7 @@ Future<Map<String, dynamic>?> createLimitOrder(
     'limit_limit_gtc': {
       'base_size': baseSize,
       'limit_price': limitPrice,
-      'post_only': postOnly.toString(),
+      'post_only': postOnly,
     }
   };
 
