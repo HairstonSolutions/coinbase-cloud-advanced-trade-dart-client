@@ -129,7 +129,7 @@ Future<Order?> getOrderByClientOid(
 /// [stop] - The stop type for the order.
 /// [stopPrice] - The stop price for the order.
 /// [cancelAfter] - The cancel after time for the order.
-/// [postOnly] - A flag to indicate that the order should only be a maker order.
+/// [postOnly] - A flag to indicate that the order should only be a Limit order.
 /// [clientOid] - A client-supplied order ID.
 /// [credential] - The user's API credentials.
 /// [isSandbox] - Whether to use the sandbox environment.
