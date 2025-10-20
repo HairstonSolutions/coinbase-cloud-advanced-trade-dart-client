@@ -62,7 +62,7 @@ Future<http.Response> postAuthorized(String endpoint,
   String fullEndpoint = '/api/v3/brokerage$endpoint';
 
   String jwtToken = await generateCoinbaseJwt(credential.apiKeyName,
-      credential.privateKeyPEM, "POST $coinbaseApi$fullEndpoint$body");
+      credential.privateKeyPEM, "POST $coinbaseApi$fullEndpoint");
 
   var url = Uri.https(coinbaseApi, fullEndpoint);
   Map<String, String> requestHeaders = {

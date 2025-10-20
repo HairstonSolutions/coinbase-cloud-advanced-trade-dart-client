@@ -207,6 +207,67 @@ void main() {
 
       expect(order, isNull);
     });
+  });
+
+  group('Test Get Orders Requests to Coinbase AT API Endpoints', skip: skip,
+      () {
+    test('Authorized Get All Orders', () async {
+      String requestPath = '/orders/historical/batch';
+      Map<String, dynamic>? queryParameters = {'limit': '100'};
+      var response = await getAuthorized(requestPath,
+          queryParameters: queryParameters,
+          credential: credentials,
+          isSandbox: false);
+      var url = response.request?.url.toString();
+      print(
+          'Response Code: ${response.statusCode} to URL: $url with query parameters: $queryParameters');
+      print('Response body: ${response.body} to URL: $url');
+
+      expect(response.statusCode == 200, isTrue);
+      expect(true, isTrue);
+    });
+
+    test('Get all Orders as a list of Orders', () async {
+      List<Order>? orders =
+          await getOrders(credential: credentials, isSandbox: false);
+      print('Orders: $orders');
+
+      expect(orders.isNotEmpty, true);
+    });
+  });
+
+  group('Test Individual Orders', skip: skip, () {
+    test('Get Individual Order', () async {
+      List<Order> orders =
+          await getOrders(credential: credentials, isSandbox: false);
+      String? orderId = orders.first.orderId;
+      Order? order = await getOrder(
+        orderId: orderId!,
+        credential: credentials,
+        isSandbox: false,
+      );
+
+      expect(order?.orderId, orderId);
+    });
+
+    test('Individual Order Does Not Exist', () async {
+      String orderId = 'b0313b63ee8d';
+      Order? order = await getOrder(
+        orderId: orderId,
+        credential: credentials,
+        isSandbox: false,
+      );
+
+      expect(order, null);
+    });
+  });
+
+  group('Test Create Orders using MockClients', () {
+    late MockClient mockClient;
+
+    setUp(() {
+      mockClient = MockClient();
+    });
 
     test('Create a new market order with quote size', () async {
       final mockResponse = {
@@ -327,59 +388,84 @@ void main() {
       expect(result, isNotNull);
       expect(result!['success'], isTrue);
     });
-
   });
 
-  group('Test Get Orders Requests to Coinbase AT API Endpoints', skip: skip,
-      () {
-    test('Authorized Get All Orders', () async {
-      String requestPath = '/orders/historical/batch';
-      Map<String, dynamic>? queryParameters = {'limit': '100'};
-      var response = await getAuthorized(requestPath,
-          queryParameters: queryParameters,
-          credential: credentials,
-          isSandbox: false);
-      var url = response.request?.url.toString();
-      print(
-          'Response Code: ${response.statusCode} to URL: $url with query parameters: $queryParameters');
-      print('Response body: ${response.body} to URL: $url');
-
-      expect(response.statusCode == 200, isTrue);
-      expect(true, isTrue);
-    });
-
-    test('Get all Orders as a list of Orders', () async {
-      List<Order>? orders =
-          await getOrders(credential: credentials, isSandbox: false);
-      print('Orders: $orders');
-
-      expect(orders.isNotEmpty, true);
-    });
-  });
-
-  group('Test Individual Orders', skip: skip, () {
-    test('Get Individual Order', () async {
-      List<Order> orders =
-          await getOrders(credential: credentials, isSandbox: false);
-      String? orderId = orders.first.orderId;
-      Order? order = await getOrder(
-        orderId: orderId!,
+  group('Test Create Orders to Coinbase AT API Endpoints', skip: skip, () {
+    test('Create a new market order with quote size', () async {
+      final clientOrderId = DateTime.now().millisecondsSinceEpoch.toString();
+      final result = await createMarketOrder(
+        clientOrderId: clientOrderId,
+        productId: 'BTC-USD',
+        side: 'BUY',
+        quoteSize: '10',
         credential: credentials,
-        isSandbox: false,
+        isSandbox: true,
       );
 
-      expect(order?.orderId, orderId);
+      expect(result, isNotNull);
+      expect(result!['success'], isTrue);
     });
 
-    test('Individual Order Does Not Exist', () async {
-      String orderId = 'b0313b63ee8d';
-      Order? order = await getOrder(
-        orderId: orderId,
+    test('Create a new market order with base size', () async {
+      final clientOrderId = DateTime.now().millisecondsSinceEpoch.toString();
+      final result = await createMarketOrder(
+        clientOrderId: clientOrderId,
+        productId: 'BTC-USD',
+        side: 'SELL',
+        baseSize: '0.1',
         credential: credentials,
-        isSandbox: false,
+        isSandbox: true,
       );
 
-      expect(order, null);
+      expect(result, isNotNull);
+      expect(result!['success'], isTrue);
+    });
+
+    test('Create a new market order with both quote and base size', () async {
+      expect(
+          () async => await createMarketOrder(
+                clientOrderId: 'test',
+                productId: 'BTC-USD',
+                side: 'BUY',
+                quoteSize: '10',
+                baseSize: '0.1',
+                credential: credentials,
+                isSandbox: true,
+              ),
+          throwsArgumentError);
+    });
+
+    test('Create a new limit order', () async {
+      final clientOrderId = DateTime.now().millisecondsSinceEpoch.toString();
+      final result = await createLimitOrder(
+        clientOrderId: clientOrderId,
+        productId: 'BTC-USD',
+        side: 'BUY',
+        baseSize: '0.1',
+        limitPrice: '10000',
+        credential: credentials,
+        isSandbox: true,
+      );
+
+      expect(result, isNotNull);
+      expect(result!['success'], isTrue);
+    });
+
+    test('Create a new post-only limit order', () async {
+      final clientOrderId = DateTime.now().millisecondsSinceEpoch.toString();
+      final result = await createLimitOrder(
+        clientOrderId: clientOrderId,
+        productId: 'BTC-USD',
+        side: 'BUY',
+        baseSize: '0.001',
+        limitPrice: '10000',
+        postOnly: true,
+        credential: credentials,
+        isSandbox: true,
+      );
+
+      expect(result, isNotNull);
+      expect(result!['success'], isTrue);
     });
   });
 }
