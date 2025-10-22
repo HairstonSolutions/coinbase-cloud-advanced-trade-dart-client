@@ -1,3 +1,9 @@
+## 0.5.0
+
+- Implement `POST /v3/brokerage/orders` - Create Order
+- Add Mockito testing for Advanced Trade REST services
+- Refactor tests to use mocks instead of live data
+
 ## 0.4.0
 
 - Pub.dev preparations

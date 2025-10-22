@@ -78,6 +78,44 @@ void main() async {
 
 For more detailed examples, please see the `example/` directory.
 
+### Create an Order
+
+Here is an example of how to create a limit order:
+
+```dart
+import 'package:coinbase_cloud_advanced_trade_client/coinbase_cloud_advanced_trade_client.dart';
+import 'package:uuid/uuid.dart';
+
+void main() async {
+  // Create a credential object with your API key and private key.
+  // It is recommended to store these securely, for example, using environment variables.
+  final credential = Credential(
+    apiKeyName: 'YOUR_API_KEY_NAME',
+    privateKeyPEM: 'YOUR_PRIVATE_KEY',
+  );
+
+  // Create a unique client order ID.
+  final clientOrderId = Uuid().v4();
+
+  // Create a limit order.
+  try {
+    Map<String, dynamic>? result = await createLimitOrder(
+      clientOrderId: clientOrderId,
+      productId: 'BTC-USD',
+      side: 'BUY',
+      baseSize: '0.001',
+      limitPrice: '10000.00',
+      credential: credential,
+    );
+    if (result != null) {
+      print('Order created successfully: $result');
+    }
+  } catch (e) {
+    print('Error creating order: $e');
+  }
+}
+```
+
 ## Additional information
 
 ### Coinbase Advanced Trade API Documentation
