@@ -24,9 +24,7 @@ Future<List<Portfolio>> listPortfolios(
   List<Portfolio> portfolios = [];
 
   http.Response response = await getAuthorized('/portfolios',
-      client: client,
-      credential: credential,
-      isSandbox: isSandbox);
+      client: client, credential: credential, isSandbox: isSandbox);
 
   if (response.statusCode == 200) {
     String data = response.body;

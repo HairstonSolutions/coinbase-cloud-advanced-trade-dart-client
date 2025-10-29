@@ -14,8 +14,7 @@ import 'portfolios_test.mocks.dart';
 void main() {
   final mockClient = MockClient();
   final credential = Credential(
-      apiKeyName: 'apiKey',
-      privateKeyPEM: '''-----BEGIN EC PRIVATE KEY-----
+      apiKeyName: 'apiKey', privateKeyPEM: '''-----BEGIN EC PRIVATE KEY-----
 MHcCAQEEIC7MfY+wECbErLMx+7w87cWuAs6tdm505p9yGfEaxqVfoAoGCCqGSM49
 AwEHoUQDQgAEoUiHOzjV7KODS686wHTYwY/gz5dvPKjVS/maWU+VKcuNBUvAc5hj
 hSHpKl+DhF2u09WahshD18zlBVqFGO46Fg==
@@ -45,7 +44,8 @@ hSHpKl+DhF2u09WahshD18zlBVqFGO46Fg==
       when(mockClient.get(any, headers: anyNamed('headers')))
           .thenAnswer((_) async => http.Response(jsonEncode(response), 200));
 
-      final portfolios = await listPortfolios(client: mockClient, credential: credential);
+      final portfolios =
+          await listPortfolios(client: mockClient, credential: credential);
 
       expect(portfolios, isA<List<Portfolio>>());
       expect(portfolios.length, 2);
@@ -62,11 +62,12 @@ hSHpKl+DhF2u09WahshD18zlBVqFGO46Fg==
         }
       };
 
-      when(mockClient.post(any, headers: anyNamed('headers'), body: anyNamed('body')))
+      when(mockClient.post(any,
+              headers: anyNamed('headers'), body: anyNamed('body')))
           .thenAnswer((_) async => http.Response(jsonEncode(response), 200));
 
-      final portfolio =
-          await createPortfolio(name: 'portfolio1', client: mockClient, credential: credential);
+      final portfolio = await createPortfolio(
+          name: 'portfolio1', client: mockClient, credential: credential);
 
       expect(portfolio, isA<Portfolio>());
       expect(portfolio?.name, 'portfolio1');
@@ -86,7 +87,8 @@ hSHpKl+DhF2u09WahshD18zlBVqFGO46Fg==
       when(mockClient.get(any, headers: anyNamed('headers')))
           .thenAnswer((_) async => http.Response(jsonEncode(response), 200));
 
-      final portfolio = await getPortfolio(uuid: 'uuid1', client: mockClient, credential: credential);
+      final portfolio = await getPortfolio(
+          uuid: 'uuid1', client: mockClient, credential: credential);
 
       expect(portfolio, isA<Portfolio>());
       expect(portfolio?.uuid, 'uuid1');
@@ -103,11 +105,15 @@ hSHpKl+DhF2u09WahshD18zlBVqFGO46Fg==
         }
       };
 
-      when(mockClient.put(any, headers: anyNamed('headers'), body: anyNamed('body')))
+      when(mockClient.put(any,
+              headers: anyNamed('headers'), body: anyNamed('body')))
           .thenAnswer((_) async => http.Response(jsonEncode(response), 200));
 
       final portfolio = await editPortfolio(
-          uuid: 'uuid1', name: 'new name', client: mockClient, credential: credential);
+          uuid: 'uuid1',
+          name: 'new name',
+          client: mockClient,
+          credential: credential);
 
       expect(portfolio, isA<Portfolio>());
       expect(portfolio?.name, 'new name');
@@ -117,13 +123,15 @@ hSHpKl+DhF2u09WahshD18zlBVqFGO46Fg==
       when(mockClient.delete(any, headers: anyNamed('headers')))
           .thenAnswer((_) async => http.Response('', 200));
 
-      final result = await deletePortfolio(uuid: 'uuid1', client: mockClient, credential: credential);
+      final result = await deletePortfolio(
+          uuid: 'uuid1', client: mockClient, credential: credential);
 
       expect(result, true);
     });
 
     test('movePortfolioFunds returns true', () async {
-      when(mockClient.post(any, headers: anyNamed('headers'), body: anyNamed('body')))
+      when(mockClient.post(any,
+              headers: anyNamed('headers'), body: anyNamed('body')))
           .thenAnswer((_) async => http.Response('', 200));
 
       final result = await movePortfolioFunds(
