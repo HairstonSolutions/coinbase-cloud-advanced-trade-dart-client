@@ -80,41 +80,6 @@ Future<Portfolio?> createPortfolio(
   return null;
 }
 
-/// Gets a single portfolio for the current user by UUID.
-///
-/// GET /api/v3/brokerage/portfolios/{portfolio_uuid}
-/// https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/portfolios/get-portfolio
-///
-/// This function makes a GET request to the /portfolios/{uuid} endpoint of the
-/// Coinbase Advanced Trade API.
-///
-/// [uuid] - The UUID of the portfolio to be returned.
-/// [credential] - The user's API credentials.
-/// [isSandbox] - Whether to use the sandbox environment.
-///
-/// Returns a [Portfolio] object, or null if no portfolio is found for the given
-/// UUID.
-Future<Portfolio?> getPortfolio(
-    {required String uuid,
-    http.Client? client,
-    required Credential credential,
-    bool isSandbox = false}) async {
-  http.Response response = await getAuthorized('/portfolios/$uuid',
-      client: client, credential: credential, isSandbox: isSandbox);
-
-  if (response.statusCode == 200) {
-    var jsonResponse = jsonDecode(response.body);
-    var jsonPortfolio = jsonResponse['portfolio'];
-
-    return Portfolio.fromCBJson(jsonPortfolio);
-  } else {
-    var url = response.request?.url.toString();
-    print('Request to URL $url failed: Response code ${response.statusCode}');
-    print('Error Response Message: ${response.body}');
-  }
-  return null;
-}
-
 /// Edits a portfolio.
 ///
 /// PUT /api/v3/brokerage/portfolios/{portfolio_uuid}
@@ -188,7 +153,7 @@ Future<bool> deletePortfolio(
 /// Moves funds between portfolios.
 ///
 /// POST /api/v3/brokerage/portfolios/move_funds
-/// https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/portfolios/move-portfolio-funds
+/// https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/portfolios/move-portfolios-funds
 ///
 /// This function makes a POST request to the /portfolios/move_funds endpoint of the
 /// Coinbase Advanced Trade API.

@@ -2,14 +2,12 @@ class Portfolio {
   final String uuid;
   final String name;
   final String type;
-  final DateTime createdAt;
   final bool deleted;
 
   Portfolio({
     required this.uuid,
     required this.name,
     required this.type,
-    required this.createdAt,
     required this.deleted,
   });
 
@@ -18,8 +16,16 @@ class Portfolio {
       uuid: json['uuid'],
       name: json['name'],
       type: json['type'],
-      createdAt: DateTime.parse(json['created_at']),
       deleted: json['deleted'],
     );
+  }
+
+  @override
+  toString() {
+    String all = '{'
+        'uuid=$uuid, name=$name, type=$type, '
+        'deleted=$deleted'
+        '}';
+    return all;
   }
 }
