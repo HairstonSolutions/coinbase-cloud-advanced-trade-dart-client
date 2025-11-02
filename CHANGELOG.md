@@ -1,6 +1,8 @@
-## 0.x.0
+## 0.6.0
 
 - Remove Coinbase Pro Support
+- Implement Portfolios CRUD
+- Implement Get Portfolio Breakdown Endpoint
 
 ## 0.5.0
 
