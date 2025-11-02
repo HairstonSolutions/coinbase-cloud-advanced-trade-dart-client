@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:coinbase_cloud_advanced_trade_client/src/models/credential.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/portfolio.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/models/portfolio_breakdown.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/services/network.dart';
 import 'package:http/http.dart' as http;
 
@@ -148,6 +149,38 @@ Future<bool> deletePortfolio(
     print('Error Response Message: ${response.body}');
     return false;
   }
+}
+
+/// Gets the breakdown of a portfolio.
+///
+/// GET /api/v3/brokerage/portfolios/{portfolio_uuid}
+/// https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/portfolios/get-portfolio-breakdown
+///
+/// This function makes a GET request to the /portfolios/{uuid} endpoint of the
+/// Coinbase Advanced Trade API.
+///
+/// [uuid] - The UUID of the portfolio to be retrieved.
+/// [credential] - The user's API credentials.
+/// [isSandbox] - Whether to use the sandbox environment.
+///
+/// Returns a [PortfolioBreakdown] object.
+Future<PortfolioBreakdown?> getPortfolioBreakdown(
+    {required String uuid,
+    http.Client? client,
+    required Credential credential,
+    bool isSandbox = false}) async {
+  http.Response response = await getAuthorized('/portfolios/$uuid',
+      client: client, credential: credential, isSandbox: isSandbox);
+
+  if (response.statusCode == 200) {
+    var jsonResponse = jsonDecode(response.body);
+    return PortfolioBreakdown.fromCBJson(jsonResponse['breakdown']);
+  } else {
+    var url = response.request?.url.toString();
+    print('Request to URL $url failed: Response code ${response.statusCode}');
+    print('Error Response Message: ${response.body}');
+  }
+  return null;
 }
 
 /// Moves funds between portfolios.
