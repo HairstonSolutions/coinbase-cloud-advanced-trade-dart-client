@@ -2,16 +2,36 @@
 
 The project is a Dart client for the Coinbase Advanced Trade API.
 
+## Environment Startup Scripts:
+
+Installs the Dart SDK into your environment
+
+### Linux:
+
+```shell
+sudo apt-get update && sudo apt-get install apt-transport-https
+wget -qO- https://dl-ssl.google.com/linux/linux_signing_key.pub \
+  | sudo gpg  --dearmor -o /usr/share/keyrings/dart.gpg
+echo 'deb [signed-by=/usr/share/keyrings/dart.gpg arch=amd64] https://storage.googleapis.com/download.dartlang.org/linux/debian stable main' \
+  | sudo tee /etc/apt/sources.list.d/dart_stable.list
+sudo apt-get update && sudo apt-get install dart
+```
+
 ## Do
 
 - When adding new features with REST functionality, create mocks for tests based off of the Coinbase documentation, also
   add skippable tests against the actual Coinbase API Endpoints.
 - Follow the structure of existing functions and endpoints.
 - Check that API documentation links are accurate and work.
+- When a Coinbase API has a nested Object structure, then create a model for it.
+- Use Enums where the API documentation mentions there are only set values for a specific field.
 
 ## Don't
 
-- do not add new heavy dependencies without approval
+- Do not add new heavy dependencies without approval
+- Do not use the provided Authentication Credentials to place new orders or move funds.
+- Do not rename the "default" portfolio
+- Do not Delete the "default" portfolio
 
 ## Commands
 
@@ -66,3 +86,5 @@ Ask first:
   constructor.
 - The getAuthorized function in lib/src/services/network.dart accepts an optional http.Client to allow for mocking
   network requests in tests.
+- Use the Environment Variables `COINBASE_API_KEY_NAME` and `COINBASE_PRIVATE_KEY` for pulling authentication values to
+  authenticate against the Coinbase API.
