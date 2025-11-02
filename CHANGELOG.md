@@ -2,6 +2,7 @@
 ## 1.0.1
 
 - Example: Get Products
+- Example: Get Orders
 
 ## 1.0.0
 
