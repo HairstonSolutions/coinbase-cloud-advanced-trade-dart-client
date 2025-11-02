@@ -1,7 +1,7 @@
 name: coinbase_pro_sdk
 description: Dart Client SDK for building applications that interact with the Coinbase Pro Crypto
   Exchange APIs for automated trading and managing accounts.
-version: 0.6.0
+version: 1.0.0
 repository: https://github.com/HairstonSolutions/coinbase-pro-dart-sdk
 
 environment:

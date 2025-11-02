@@ -1,6 +1,5 @@
-## 0.x.0
+## 1.0.0
 
-- Add Mockito testing for Pro REST services
 - Pub.dev preparations
 
 ## 0.3.0
