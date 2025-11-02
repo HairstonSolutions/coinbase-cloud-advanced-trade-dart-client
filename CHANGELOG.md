@@ -1,3 +1,7 @@
+## 0.x.0
+
+- Remove Coinbase Pro Support
+
 ## 0.5.0
 
 - Implement `POST /v3/brokerage/orders` - Create Order
