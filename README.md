@@ -29,17 +29,23 @@ Then, run `dart pub get` or `flutter pub get`.
 
 ### API Keys
 
-You will need to generate API keys from your Coinbase account.
-You can find instructions on how to do this in
-the [Coinbase documentation](https://docs.cdp.coinbase.com/coinbase-app/authentication-authorization/api-key-authentication).
+This SDK uses the Legacy API Access Key, Secret and Pass Phrase to
+authenticate against the Coinbase Pro API. These keys can no longer be generated.
+This SDK will only work with Existing Legacy Credentials.
 
-> Note: Secret Keys are used as provided by Coinbase with the
-> '\n' new line character breaks within the string.
+If you do not have an existing Key, then we recommend that you use the
+[coinbase_cloud_advanced_trade_client](https://pub.dev/packages/coinbase_cloud_advanced_trade_client)
+dart package instead. Then you can generate a modern API Key following the
+official coinbase documentation:
+[Coinbase documentation](https://docs.cdp.coinbase.com/coinbase-app/authentication-authorization/api-key-authentication).
 
 ### Credentials Object
 
 All authenticated functions require a Credentials Object Passed in.
 This allows for your code using the client to handle multiple accounts.
+
+There are some endpoints that do not require authentication. These
+endpoints do not need the Credentials Object passed into them.
 
 ## Usage
 
@@ -69,7 +75,7 @@ import 'package:coinbase_pro_sdk/coinbase_pro_sdk.dart';
   try {
     Product? product = await getProduct(productId: 'BTC-USD', credential: credential);
     if (product != null) {
-      print('Product: ${product.productId}, Price: ${product.price}');
+      print('Product: ${product}');
     }
   } catch (e) {
     print('Error getting product: $e');

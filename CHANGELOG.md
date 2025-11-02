@@ -1,5 +1,11 @@
+
+## 1.0.1
+
+- Example: Get Products
+
 ## 1.0.0
 
+- First pub.dev Published version
 - Pub.dev preparations
 
 ## 0.3.0
