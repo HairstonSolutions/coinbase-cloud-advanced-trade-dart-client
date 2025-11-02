@@ -1,21 +1,7 @@
-## 0.5.0
+## 0.x.0
 
-- Implement `POST /v3/brokerage/orders` - Create Order
-- Add Mockito testing for Advanced Trade REST services
-- Refactor tests to use mocks instead of live data
-
-## 0.4.0
-
+- Add Mockito testing for Pro REST services
 - Pub.dev preparations
-- First Published pub.dev version
-- Migrate Auth to Coinbase AT API Key Version 2
-- Generate Coinbase JWT Token with key signature
-- Refactor Credential to v2
-- Update Sandbox URL
-- Remove Accepted Environment Variable "COINBASE_API_KEY"
-- Remove Accepted Environment Variable "COINBASE_API_SECRET"
-- Introduce new Environment Variable "COINBASE_API_KEY_NAME"
-- Introduce new Environment Variable "COINBASE_PRIVATE_KEY"
 
 ## 0.3.0
 
@@ -24,25 +10,6 @@
 ## 0.2.2
 
 - Bug Fix: Coinbase Pro Fill Model CB JSON Conversion for USD Volume
-
-## 0.2.1
-
-- Native JSON Serialization / Deserialization of AT model objects
-
-## 0.2.0
-
-- Rename to "coinbase_cloud_advanced_trade_client"
-- Primary Support for Advanced Trade API
-- Pro Exchange is now secondary
-- Get Account Details
-- Get Orders, Order-Fills
-- Get Products
-- Get Product Market Trades
-
-## 0.1.1
-
-- Signature Support for Advanced Trade API.
-- Get All Accounts
 
 ## 0.0.1
 

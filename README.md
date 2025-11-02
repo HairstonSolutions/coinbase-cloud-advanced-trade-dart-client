@@ -1,9 +1,11 @@
 # Coinbase Advanced Trade API Client
 
-[![pub version](https://img.shields.io/pub/v/coinbase_cloud_advanced_trade_client.svg)](https://pub.dev/packages/coinbase_cloud_advanced_trade_client)
+[![pub version](https://img.shields.io/pub/v/coinbase_cloud_advanced_trade_client.svg)](https://pub.dev/packages/coinbase_pro_sdk)
 
-A Dart client for the Coinbase Advanced Trade API. This package provides an easy-to-use interface for interacting with
+An Unofficial Dart client for the Coinbase Advanced Trade API. This package provides an easy-to-use interface for interacting with
 the Coinbase Advanced Trade API, allowing you to manage your account, place orders, and get market data.
+
+This SDK is not supported by Coinbase Inc.
 
 ## Features
 
@@ -20,7 +22,7 @@ To use this package, add `coinbase_cloud_advanced_trade_client` as a dependency 
 
 ```yaml
 dependencies:
-  coinbase_cloud_advanced_trade_client: ^1.0.0 # Replace with the latest version
+  coinbase_pro_sdk: ^1.0.0 # Replace with the latest version
 ```
 
 Then, run `dart pub get` or `flutter pub get`.

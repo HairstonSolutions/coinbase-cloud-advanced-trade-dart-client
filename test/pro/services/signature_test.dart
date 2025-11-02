@@ -1,5 +1,5 @@
-import 'package:coinbase_cloud_advanced_trade_client/src/pro/services/signature.dart';
-import 'package:coinbase_cloud_advanced_trade_client/src/shared/models/signature.dart';
+import 'package:coinbase_pro_sdk/src/services/signature.dart';
+import 'package:coinbase_pro_sdk/src/models/signature.dart';
 import 'package:test/test.dart';
 
 void main() {
