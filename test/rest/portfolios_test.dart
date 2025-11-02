@@ -21,8 +21,8 @@ final bool skipDT = skipTests == 'false' ? false : true;
 
 final String portfolioCreateName =
     envVars['PORTFOLIO_CREATE_NAME'] ?? 'portfolioTDD1';
-final String portfolioGetUUID = envVars['PORTFOLIO_GET_UUID'] ??
-    '88888888-4444-4444-4444-121212121212';
+final String portfolioGetUUID =
+    envVars['PORTFOLIO_GET_UUID'] ?? '88888888-4444-4444-4444-121212121212';
 final String portfolioBreakdownGetUUID =
     envVars['PORTFOLIO_BREAKDOWN_GET_UUID'] ??
         '88888888-4444-4444-4444-121212121212';
@@ -183,14 +183,6 @@ void main() {
 
   group('Portfolios API tests Requests to Coinbase AT API Endpoints',
       skip: skip, () {
-    test('getPortfolioBreakdown returns a portfolio breakdown', () async {
-      final portfolioBreakdown = await getPortfolioBreakdown(
-          uuid: portfolioBreakdownGetUUID, credential: credential);
-
-      print(portfolioBreakdown);
-      expect(portfolioBreakdown, isA<PortfolioBreakdown>());
-    });
-
     test('listPortfolios returns a list of portfolios', () async {
       final portfolios = await listPortfolios(credential: credential);
 
@@ -200,6 +192,14 @@ void main() {
 
       expect(portfolios, isA<List<Portfolio>>());
       expect(portfolios.isNotEmpty, true);
+    });
+
+    test('getPortfolioBreakdown returns a portfolio breakdown', () async {
+      final portfolioBreakdown = await getPortfolioBreakdown(
+          uuid: portfolioBreakdownGetUUID, credential: credential);
+
+      print(portfolioBreakdown);
+      expect(portfolioBreakdown, isA<PortfolioBreakdown>());
     });
 
     test('createPortfolio returns a portfolio', skip: skipDT, () async {

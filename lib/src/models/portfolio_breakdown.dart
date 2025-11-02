@@ -12,6 +12,11 @@ class Money {
       currency: json['currency'],
     );
   }
+
+  @override
+  String toString() {
+    return 'Money{value: $value, currency: $currency}';
+  }
 }
 
 class Vwap {
@@ -26,6 +31,11 @@ class Vwap {
       rawCurrency: Money.fromCBJson(json['rawCurrency']),
     );
   }
+
+  @override
+  String toString() {
+    return 'Vwap{userNativeCurrency: $userNativeCurrency, rawCurrency: $rawCurrency}';
+  }
 }
 
 class CurrencyPair {
@@ -39,6 +49,11 @@ class CurrencyPair {
       userNativeCurrency: Money.fromCBJson(json['userNativeCurrency']),
       rawCurrency: Money.fromCBJson(json['rawCurrency']),
     );
+  }
+
+  @override
+  String toString() {
+    return 'CurrencyPair{userNativeCurrency: $userNativeCurrency, rawCurrency: $rawCurrency}';
   }
 }
 
@@ -109,6 +124,11 @@ class SpotPosition {
       availableToSendFiat: json['available_to_send_fiat'],
       availableToSendCrypto: json['available_to_send_crypto'],
     );
+  }
+
+  @override
+  String toString() {
+    return 'SpotPosition{asset: $asset, accountUuid: $accountUuid, totalBalanceFiat: $totalBalanceFiat, totalBalanceCrypto: $totalBalanceCrypto, availableToTradeFiat: $availableToTradeFiat, allocation: $allocation, costBasis: $costBasis, assetImgUrl: $assetImgUrl, isCash: $isCash, averageEntryPrice: $averageEntryPrice, assetUuid: $assetUuid, availableToTradeCrypto: $availableToTradeCrypto, unrealizedPnl: $unrealizedPnl, availableToTransferFiat: $availableToTransferFiat, availableToTransferCrypto: $availableToTransferCrypto, assetColor: $assetColor, accountType: $accountType, fundingPnl: $fundingPnl, availableToSendFiat: $availableToSendFiat, availableToSendCrypto: $availableToSendCrypto}';
   }
 }
 
@@ -183,6 +203,11 @@ class PerpPosition {
       assetColor: json['asset_color'],
     );
   }
+
+  @override
+  String toString() {
+    return 'PerpPosition{productId: $productId, productUuid: $productUuid, symbol: $symbol, assetImageUrl: $assetImageUrl, vwap: $vwap, positionSide: $positionSide, netSize: $netSize, buyOrderSize: $buyOrderSize, sellOrderSize: $sellOrderSize, imContribution: $imContribution, unrealizedPnl: $unrealizedPnl, markPrice: $markPrice, liquidationPrice: $liquidationPrice, leverage: $leverage, imNotional: $imNotional, mmNotional: $mmNotional, positionNotional: $positionNotional, marginType: $marginType, liquidationBuffer: $liquidationBuffer, liquidationPercentage: $liquidationPercentage, assetColor: $assetColor}';
+  }
 }
 
 class FuturesPosition {
@@ -241,6 +266,11 @@ class FuturesPosition {
       rollDate: json['roll_date'],
     );
   }
+
+  @override
+  String toString() {
+    return 'FuturesPosition{productId: $productId, contractSize: $contractSize, side: $side, amount: $amount, avgEntryPrice: $avgEntryPrice, currentPrice: $currentPrice, unrealizedPnl: $unrealizedPnl, expiry: $expiry, underlyingAsset: $underlyingAsset, assetImgUrl: $assetImgUrl, productName: $productName, venue: $venue, notionalValue: $notionalValue, assetColor: $assetColor, lastTradedAt: $lastTradedAt, rollDate: $rollDate}';
+  }
 }
 
 class PortfolioBalances {
@@ -269,6 +299,11 @@ class PortfolioBalances {
       futuresUnrealizedPnl: Money.fromCBJson(json['futures_unrealized_pnl']),
       perpUnrealizedPnl: Money.fromCBJson(json['perp_unrealized_pnl']),
     );
+  }
+
+  @override
+  String toString() {
+    return 'PortfolioBalances{totalBalance: $totalBalance, totalFuturesBalance: $totalFuturesBalance, totalCashEquivalentBalance: $totalCashEquivalentBalance, totalCryptoBalance: $totalCryptoBalance, futuresUnrealizedPnl: $futuresUnrealizedPnl, perpUnrealizedPnl: $perpUnrealizedPnl}';
   }
 }
 
@@ -316,5 +351,10 @@ class PortfolioBreakdown {
       perpPositions: perpPositions,
       futuresPositions: futuresPositions,
     );
+  }
+
+  @override
+  String toString() {
+    return 'PortfolioBreakdown{portfolio: $portfolio, portfolioBalances: $portfolioBalances, spotPositions: $spotPositions, perpPositions: $perpPositions, futuresPositions: $futuresPositions}';
   }
 }
