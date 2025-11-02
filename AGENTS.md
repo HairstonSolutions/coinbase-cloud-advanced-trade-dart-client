@@ -25,6 +25,8 @@ sudo apt-get update && sudo apt-get install dart
 - Check that API documentation links are accurate and work.
 - When a Coinbase API has a nested Object structure, then create a model for it.
 - Use Enums where the API documentation mentions there are only set values for a specific field.
+- Include ToString() Method Overrides for all new models that include the printing of all attributes. See existing model
+  toString() methods for the format.
 
 ## Don't
 

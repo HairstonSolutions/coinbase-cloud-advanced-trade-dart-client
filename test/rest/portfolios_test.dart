@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:coinbase_cloud_advanced_trade_client/src/models/credential.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/portfolio.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/models/portfolio_breakdown.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/rest/portfolios.dart';
 import 'package:http/http.dart' as http;
 import 'package:mockito/annotations.dart';
@@ -20,8 +21,11 @@ final bool skipDT = skipTests == 'false' ? false : true;
 
 final String portfolioCreateName =
     envVars['PORTFOLIO_CREATE_NAME'] ?? 'portfolioTDD1';
-final String portfolioGetUUID = envVars['PORTFOLIO_BREAKDOWN_GET_UUID'] ??
-    '88888888-4444-4444-4444-121212121212';
+final String portfolioGetUUID =
+    envVars['PORTFOLIO_GET_UUID'] ?? '88888888-4444-4444-4444-121212121212';
+final String portfolioBreakdownGetUUID =
+    envVars['PORTFOLIO_BREAKDOWN_GET_UUID'] ??
+        '88888888-4444-4444-4444-121212121212';
 final String portfolioDeleteUUID =
     envVars['PORTFOLIO_DELETE_UUID'] ?? '88888888-4444-4444-4444-121212121212';
 final String portfolioEditUUID =
@@ -139,6 +143,42 @@ void main() {
 
       expect(result, true);
     });
+
+    test('getPortfolioBreakdown returns a portfolio breakdown', () async {
+      final response = {
+        'breakdown': {
+          'portfolio': {
+            'uuid': 'uuid1',
+            'name': 'portfolio1',
+            'type': 'type1',
+            'deleted': false
+          },
+          'portfolio_balances': {
+            'total_balance': {'value': '100', 'currency': 'USD'},
+            'total_futures_balance': {'value': '100', 'currency': 'USD'},
+            'total_cash_equivalent_balance': {
+              'value': '100',
+              'currency': 'USD'
+            },
+            'total_crypto_balance': {'value': '100', 'currency': 'USD'},
+            'futures_unrealized_pnl': {'value': '100', 'currency': 'USD'},
+            'perp_unrealized_pnl': {'value': '100', 'currency': 'USD'}
+          },
+          'spot_positions': [],
+          'perp_positions': [],
+          'futures_positions': []
+        }
+      };
+
+      when(mockClient.get(any, headers: anyNamed('headers')))
+          .thenAnswer((_) async => http.Response(jsonEncode(response), 200));
+
+      final breakdown = await getPortfolioBreakdown(
+          uuid: 'uuid1', client: mockClient, credential: credential);
+
+      expect(breakdown, isA<PortfolioBreakdown>());
+      expect(breakdown?.portfolio.name, 'portfolio1');
+    });
   });
 
   group('Portfolios API tests Requests to Coinbase AT API Endpoints',
@@ -152,6 +192,14 @@ void main() {
 
       expect(portfolios, isA<List<Portfolio>>());
       expect(portfolios.isNotEmpty, true);
+    });
+
+    test('getPortfolioBreakdown returns a portfolio breakdown', () async {
+      final portfolioBreakdown = await getPortfolioBreakdown(
+          uuid: portfolioBreakdownGetUUID, credential: credential);
+
+      print(portfolioBreakdown);
+      expect(portfolioBreakdown, isA<PortfolioBreakdown>());
     });
 
     test('createPortfolio returns a portfolio', skip: skipDT, () async {

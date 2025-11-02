@@ -11,4 +11,9 @@ class Credential {
     // Replace the literal text '\\n' with the newline character '\n'.
     return pem.replaceAll(r'\n', '\n');
   }
+
+  @override
+  String toString() {
+    return 'Credential{apiKeyName: $apiKeyName}';
+  }
 }
