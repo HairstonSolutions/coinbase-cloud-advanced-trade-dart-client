@@ -1,4 +1,4 @@
-## 0.6.0
+## 0.6.1
 
 - Remove Coinbase Pro Support
 - Implement Portfolios CRUD
