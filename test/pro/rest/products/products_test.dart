@@ -1,7 +1,7 @@
 import 'dart:io' show Platform;
 
-import 'package:coinbase_cloud_advanced_trade_client/src/pro/models/product.dart';
-import 'package:coinbase_cloud_advanced_trade_client/src/pro/rest/products/products.dart';
+import 'package:coinbase_pro_sdk/src/models/product.dart';
+import 'package:coinbase_pro_sdk/src/rest/products/products.dart';
 import 'package:test/test.dart';
 
 Map<String, String> envVars = Platform.environment;
