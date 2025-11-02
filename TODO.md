@@ -24,7 +24,7 @@ https://docs.cdp.coinbase.com/coinbase-app/advanced-trade-apis/rest-api
 - [x] [GET /v3/brokerage/orders/historical/{order_id} - Get Order](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/get-order)
 - [x] [GET /v3/brokerage/orders/historical/batch - List Orders](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/list-orders)
 - [x] [GET /v3/brokerage/orders/historical/fills - List Fills](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/list-fills)
-- [ ] [POST /v3/brokerage/orders - Create Order](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/create-order)
+- [x] [POST /v3/brokerage/orders - Create Order](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/create-order)
 - [ ] [POST /v3/brokerage/orders/batch_cancel - Cancel Orders](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/cancel-order)
 - [ ] [POST /v3/brokerage/orders/preview - Preview Orders](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/preview-orders)
 - [ ] [POST /v3/brokerage/orders/edit - Edit Order](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/edit-order)
@@ -52,12 +52,12 @@ https://docs.cdp.coinbase.com/coinbase-app/advanced-trade-apis/rest-api
 
 ### Portfolios
 
-- [ ] [GET /v3/brokerage/portfolios - List Portfolios](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/portfolios/list-portfolios)
-- [ ] [POST /v3/brokerage/portfolios - Create Portfolio](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/portfolios/create-portfolio)
-- [ ] [POST /v3/brokerage/portfolios/move_funds - Move Portfolio Funds](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/portfolios/move-portfolios-funds)
-- [ ] [GET /v3/brokerage/portfolios/{portfolio_uuid} - Get Portfolio Breakdown](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/portfolios/get-portfolio-breakdown)
-- [ ] [DELETE /v3/brokerage/portfolios/{portfolio_uuid} - Delete Portfolio](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/portfolios/delete-portfolio)
-- [ ] [PUT /v3/brokerage/portfolios/{portfolio_uuid} - Edit Portfolio](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/portfolios/edit-portfolio)
+- [x] [GET /v3/brokerage/portfolios - List Portfolios](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/portfolios/list-portfolios)
+- [x] [POST /v3/brokerage/portfolios - Create Portfolio](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/portfolios/create-portfolio)
+- [x] [POST /v3/brokerage/portfolios/move_funds - Move Portfolio Funds](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/portfolios/move-portfolios-funds)
+- [x] [GET /v3/brokerage/portfolios/{portfolio_uuid} - Get Portfolio Breakdown](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/portfolios/get-portfolio-breakdown)
+- [x] [DELETE /v3/brokerage/portfolios/{portfolio_uuid} - Delete Portfolio](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/portfolios/delete-portfolio)
+- [x] [PUT /v3/brokerage/portfolios/{portfolio_uuid} - Edit Portfolio](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/portfolios/edit-portfolio)
 
 ### Payment Methods
 
