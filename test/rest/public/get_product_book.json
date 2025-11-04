@@ -1,0 +1,22 @@
+{
+  "pricebook": {
+    "product_id": "BTC-USD",
+    "bids": [
+      {
+        "price": "40000.00",
+        "size": "1.00"
+      }
+    ],
+    "asks": [
+      {
+        "price": "40001.00",
+        "size": "1.00"
+      }
+    ],
+    "time": "2024-05-13T09:16:32.118Z"
+  },
+  "last": "40000.50",
+  "mid_market": "40000.50",
+  "spread_bps": "0.0025",
+  "spread_absolute": "1.00"
+}

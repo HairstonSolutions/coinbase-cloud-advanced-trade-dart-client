@@ -1,0 +1,34 @@
+{
+  "total_volume": 10000.0,
+  "total_fees": 100.0,
+  "fee_tier": {
+    "pricing_tier": "string",
+    "aop_from": "string",
+    "aop_to": "string",
+    "taker_fee_rate": "string",
+    "maker_fee_rate": "string",
+    "volume_types_and_range": [
+      {
+        "volume_types": ["string"],
+        "vol_from": "string",
+        "vol_to": "string"
+      }
+    ]
+  },
+  "margin_rate": 1.0,
+  "goods_and_services_tax": {
+    "rate": "string",
+    "type": "string"
+  },
+  "advanced_trade_only_volume": 10000.0,
+  "advanced_trade_only_fees": 100.0,
+  "coinbase_pro_volume": 10000.0,
+  "coinbase_pro_fees": 100.0,
+  "total_balance": "string",
+  "volume_breakdown": [
+    {
+      "volume_type": "string",
+      "volume": 10000.0
+    }
+  ]
+}

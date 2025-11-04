@@ -1,0 +1,17 @@
+{
+  "trades": [
+    {
+      "trade_id": "1",
+      "product_id": "BTC-USD",
+      "price": "40000.00",
+      "size": "1.00",
+      "time": "2024-05-13T09:16:32.118Z",
+      "side": "BUY",
+      "bid": "39999.00",
+      "ask": "40001.00",
+      "exchange": "coinbase"
+    }
+  ],
+  "best_bid": "39999.00",
+  "best_ask": "40001.00"
+}

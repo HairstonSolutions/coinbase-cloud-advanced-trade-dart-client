@@ -152,7 +152,7 @@ class Order {
         'order_id': orderId,
         'product_id': productId,
         'user_id': userId,
-        'order_configuration': orderConfiguration?.toCBJson(),
+        'order_configuration': orderConfiguration?.toJson(),
         'side': side,
         'client_order_id': clientOrderId,
         'status': status,

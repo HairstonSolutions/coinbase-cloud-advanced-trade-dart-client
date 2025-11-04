@@ -1,0 +1,33 @@
+{
+  "portfolio_balances": [
+    {
+      "portfolio_uuid": "string",
+      "balances": [
+        {
+          "asset": {
+            "asset_id": "string",
+            "asset_uuid": "string",
+            "asset_name": "string",
+            "status": "string",
+            "collateral_weight": "string",
+            "account_collateral_limit": "string",
+            "ecosystem_collateral_limit_breached": true,
+            "asset_icon_url": "string",
+            "supported_networks_enabled": true
+          },
+          "quantity": "string",
+          "hold": "string",
+          "transfer_hold": "string",
+          "collateral_value": "string",
+          "collateral_weight": "string",
+          "max_withdraw_amount": "string",
+          "loan": "string",
+          "loan_collateral_requirement_usd": "string",
+          "pledged_quantity": "string",
+          "max_portfolio_transfer_amount": "string"
+        }
+      ],
+      "is_margin_limit_reached": true
+    }
+  ]
+}

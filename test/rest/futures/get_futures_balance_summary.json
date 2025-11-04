@@ -1,0 +1,30 @@
+{
+  "total_usd_balance": {
+    "value": "string",
+    "currency": "string"
+  },
+  "unrealized_pnl": {
+    "value": "string",
+    "currency": "string"
+  },
+  "available_margin": {
+    "value": "string",
+    "currency": "string"
+  },
+  "initial_margin": {
+    "value": "string",
+    "currency": "string"
+  },
+  "maintenance_margin": {
+    "value": "string",
+    "currency": "string"
+  },
+  "position_notional": {
+    "value": "string",
+    "currency": "string"
+  },
+  "pnl_configuration": {
+    "pnl_currency": "string"
+  },
+  "cfm_futures_enabled": true
+}

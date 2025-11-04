@@ -1,0 +1,51 @@
+{
+  "position": {
+    "product_id": "string",
+    "product_uuid": "string",
+    "portfolio_uuid": "string",
+    "symbol": "string",
+    "vwap": {
+      "value": "string",
+      "currency": "string"
+    },
+    "entry_vwap": {
+      "value": "string",
+      "currency": "string"
+    },
+    "position_side": "string",
+    "margin_type": "string",
+    "net_size": "string",
+    "buy_order_size": "string",
+    "sell_order_size": "string",
+    "im_contribution": "string",
+    "unrealized_pnl": {
+      "value": "string",
+      "currency": "string"
+    },
+    "mark_price": {
+      "value": "string",
+      "currency": "string"
+    },
+    "liquidation_price": {
+      "value": "string",
+      "currency": "string"
+    },
+    "leverage": "string",
+    "im_notional": {
+      "value": "string",
+      "currency": "string"
+    },
+    "mm_notional": {
+      "value": "string",
+      "currency": "string"
+    },
+    "position_notional": {
+      "value": "string",
+      "currency": "string"
+    },
+    "aggregated_pnl": {
+      "value": "string",
+      "currency": "string"
+    }
+  }
+}

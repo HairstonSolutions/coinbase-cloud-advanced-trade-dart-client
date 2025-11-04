@@ -1,0 +1,18 @@
+{
+  "positions": [
+    {
+      "symbol": "string",
+      "product_id": "string",
+      "expiration_time": "string",
+      "side": "string",
+      "number_of_contracts": "string",
+      "quantity": "string",
+      "current_price": "string",
+      "avg_entry_price": "string",
+      "unrealized_pnl": "string",
+      "daily_realized_pnl": "string",
+      "im_contribution": "string",
+      "mm_contribution": "string"
+    }
+  ]
+}

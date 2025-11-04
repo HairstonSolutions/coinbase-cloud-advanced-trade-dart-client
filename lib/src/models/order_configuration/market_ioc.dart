@@ -1,10 +1,11 @@
+import 'package:coinbase_cloud_advanced_trade_client/src/models/order_configuration.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/services/tools.dart';
 
-class MarketIOC {
+class MarketIOC extends OrderConfiguration {
   final double? quoteSize;
   final double? baseSize;
 
-  MarketIOC(this.quoteSize, this.baseSize);
+  MarketIOC(this.quoteSize, this.baseSize) : super();
 
   MarketIOC.fromJson(Map<String, dynamic> json)
       : quoteSize = json['quoteSize'],

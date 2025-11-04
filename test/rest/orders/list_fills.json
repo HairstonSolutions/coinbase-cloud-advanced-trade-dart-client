@@ -1,0 +1,21 @@
+{
+  "fills": [
+    {
+      "entry_id": "string",
+      "trade_id": "string",
+      "order_id": "string",
+      "trade_time": "2024-05-13T09:16:32.118Z",
+      "trade_type": "string",
+      "price": "1.0",
+      "size": "1.0",
+      "commission": "1.0",
+      "product_id": "string",
+      "sequence_timestamp": "2024-05-13T09:16:32.118Z",
+      "liquidity_indicator": "string",
+      "size_in_quote": true,
+      "user_id": "string",
+      "side": "string"
+    }
+  ],
+  "cursor": "string"
+}

@@ -1,0 +1,86 @@
+{
+  "trade": {
+    "id": "string",
+    "status": "string",
+    "user": {
+      "id": "string"
+    },
+    "from_account": {
+      "id": "string"
+    },
+    "to_account": {
+      "id": "string"
+    },
+    "user_entered_amount": {
+      "value": "string",
+      "currency": "string"
+    },
+    "amount": {
+      "value": "string",
+      "currency": "string"
+    },
+    "subtotal": {
+      "value": "string",
+      "currency": "string"
+    },
+    "total": {
+      "value": "string",
+      "currency": "string"
+    },
+    "fees": [
+      {
+        "title": "string",
+        "description": "string",
+        "amount": {
+          "value": "string",
+          "currency": "string"
+        },
+        "label": "string",
+        "disclosure": {
+          "title": "string",
+          "description": "string",
+          "link": {
+            "text": "string",
+            "url": "string"
+          }
+        },
+        "waived_details": {
+          "amount": {
+            "value": "string",
+            "currency": "string"
+          },
+          "source": "string"
+        }
+      }
+    ],
+    "total_fee": {
+      "title": "string",
+      "description": "string",
+      "amount": {
+        "value": "string",
+        "currency": "string"
+      },
+      "label": "string",
+      "disclosure": {
+        "title": "string",
+        "description": "string",
+        "link": {
+          "text": "string",
+          "url": "string"
+        }
+      },
+      "waived_details": {
+        "amount": {
+          "value": "string",
+          "currency": "string"
+        },
+        "source": "string"
+      }
+    },
+    "source": {},
+    "target": {},
+    "created_at": "string",
+    "updated_at": "string",
+    "executed_at": "string"
+  }
+}

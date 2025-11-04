@@ -1,0 +1,47 @@
+{
+  "total_account_value": {
+    "value": "string",
+    "currency": "string"
+  },
+  "total_margin": {
+    "value": "string",
+    "currency": "string"
+  },
+  "available_margin": {
+    "value": "string",
+    "currency": "string"
+  },
+  "initial_margin": {
+    "value": "string",
+    "currency": "string"
+  },
+  "maintenance_margin": {
+    "value": "string",
+    "currency": "string"
+  },
+  "total_pnl": {
+    "value": "string",
+    "currency": "string"
+  },
+  "portfolio_im": {
+    "value": "string",
+    "currency": "string"
+  },
+  "portfolio_mm": {
+    "value": "string",
+    "currency": "string"
+  },
+  "portfolio_uuid": "string",
+  "collateral_currency": "string",
+  "collaterals": [
+    {
+      "asset_name": "string",
+      "amount": {
+        "value": "string",
+        "currency": "string"
+      },
+      "haircut": "string",
+      "collateral_value": "string"
+    }
+  ]
+}

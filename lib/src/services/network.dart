@@ -40,6 +40,23 @@ Future<http.Response> getAuthorized(String endpoint,
   return await client.get(url, headers: requestHeaders);
 }
 
+Future<http.Response> getUnauthorized(String endpoint,
+    {Map<String, dynamic>? queryParameters,
+    http.Client? client,
+    bool isSandbox = false}) async {
+  String coinbaseApi = isSandbox ? coinbaseApiSandbox : coinbaseApiProduction;
+  client ??= http.Client();
+
+  String fullEndpoint = '/api/v3/brokerage$endpoint';
+
+  var url = Uri.https(coinbaseApi, fullEndpoint, queryParameters);
+  Map<String, String> requestHeaders = {
+    HttpHeaders.acceptHeader: 'application/json',
+  };
+
+  return await client.get(url, headers: requestHeaders);
+}
+
 /// Makes an authorized POST request to the Coinbase Advanced Trade API.
 ///
 /// This function generates a JWT, and then makes a POST request to the specified

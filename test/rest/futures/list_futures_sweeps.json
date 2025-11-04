@@ -1,0 +1,16 @@
+{
+  "sweeps": [
+    {
+      "id": "string",
+      "status": "string",
+      "requested_amount": {
+        "value": "string",
+        "currency": "string"
+      },
+      "should_sweep_all": true,
+      "submitted_at": "string",
+      "processed_at": "string",
+      "scheduled_time": "string"
+    }
+  ]
+}

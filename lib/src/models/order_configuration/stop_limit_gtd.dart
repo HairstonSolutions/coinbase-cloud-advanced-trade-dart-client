@@ -1,6 +1,7 @@
+import 'package:coinbase_cloud_advanced_trade_client/src/models/order_configuration.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/services/tools.dart';
 
-class StopLimitGTD {
+class StopLimitGTD extends OrderConfiguration {
   final double? quoteSize;
   final double? baseSize;
   final double? limitPrice;
@@ -9,7 +10,8 @@ class StopLimitGTD {
   final String? stopDirection;
 
   StopLimitGTD(this.quoteSize, this.baseSize, this.limitPrice, this.stopPrice,
-      this.endTime, this.stopDirection);
+      this.endTime, this.stopDirection)
+      : super();
 
   StopLimitGTD.fromJson(Map<String, dynamic> json)
       : quoteSize = json['quoteSize'],

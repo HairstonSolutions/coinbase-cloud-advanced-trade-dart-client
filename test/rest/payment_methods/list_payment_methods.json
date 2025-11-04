@@ -1,0 +1,21 @@
+[
+  {
+    "id": "string",
+    "type": "string",
+    "name": "string",
+    "currency": "string",
+    "primary_buy": true,
+    "primary_sell": true,
+    "allow_buy": true,
+    "allow_sell": true,
+    "allow_deposit": true,
+    "allow_withdraw": true,
+    "instant_buy": true,
+    "instant_sale": true,
+    "created_at": "string",
+    "updated_at": "string",
+    "resource": "string",
+    "resource_path": "string",
+    "verified": true
+  }
+]

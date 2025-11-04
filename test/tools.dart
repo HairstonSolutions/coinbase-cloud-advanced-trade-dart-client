@@ -9,7 +9,7 @@ import 'dart:io' show File;
 /// Returns the contents of the file as a string.
 Future<String> getJsonFromFile(String filename) async {
   String exampleJson = '';
-  final file = File('test/$filename');
+  final file = File(filename);
   Stream<String> lines = file
       .openRead()
       .transform(utf8.decoder) // Decode bytes to UTF-8.
