@@ -1,3 +1,7 @@
+## 0.x.0
+
+- Implement Fees / Transaction Summary
+
 ## 0.6.1
 
 - Remove Coinbase Pro Support
