@@ -17,6 +17,27 @@ double? nullableDouble(Map<String, dynamic> jsonObject, String key,
   return (jsonObject[key] == null) ? null : double.parse(jsonObject[key]);
 }
 
+/// Parses a number from a JSON object, returning null if the value is null or an
+/// empty string.
+///
+/// [jsonObject] - The JSON object to parse the number from.
+/// [key] - The key of the number to parse.
+/// [notNullable] - Whether to return 0.0 if the value is null.
+///
+/// Returns a number, or null if the value is null or an empty string.
+num? nullableNumber(Map<String, dynamic> jsonObject, String key,
+    {bool? notNullable = false}) {
+  if (notNullable == true) {
+    return (jsonObject[key] == null) ? 0.0 : num.parse(jsonObject[key]);
+  }
+  if (jsonObject[key] == "") {
+    return null;
+  }
+  return (jsonObject[key] == null)
+      ? null
+      : num.parse(jsonObject[key].toString());
+}
+
 /// Converts a map of query parameters to a string.
 ///
 /// [queryParameters] - The map of query parameters to convert.

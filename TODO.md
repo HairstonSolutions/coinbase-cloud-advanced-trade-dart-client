@@ -42,7 +42,7 @@ https://docs.cdp.coinbase.com/coinbase-app/advanced-trade-apis/rest-api
 
 ### Fees
 
-- [ ] [GET /v3/brokerage/transaction_summary - Get Transactions Summary](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/fees/get-transaction-summary)
+- [x] [GET /v3/brokerage/transaction_summary - Get Transactions Summary](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/fees/get-transaction-summary)
 
 ### Convert
 
