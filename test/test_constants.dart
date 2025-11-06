@@ -2,6 +2,8 @@ import 'dart:io';
 
 final Map<String, String> envVars = Platform.environment;
 final String apiKeyName = envVars['COINBASE_API_KEY_NAME'] ?? 'api_key_name';
+// Not a real private key.
+// Generated with `openssl ecparam -name prime256v1 -genkey -noout | sed -e ':a' -e 'N' -e '$!ba' -e 's/\n/\\n/g'`
 final String privateKeyPEM = envVars['COINBASE_PRIVATE_KEY'] ??
     '''-----BEGIN EC PRIVATE KEY-----
 MHcCAQEEIC7MfY+wECbErLMx+7w87cWuAs6tdm505p9yGfEaxqVfoAoGCCqGSM49

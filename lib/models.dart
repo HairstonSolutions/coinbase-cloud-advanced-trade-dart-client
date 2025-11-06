@@ -1,6 +1,5 @@
 export 'src/models/account.dart';
 export 'src/models/credential.dart';
-export 'src/models/fee.dart';
 export 'src/models/fee_tier.dart';
 export 'src/models/fill.dart';
 export 'src/models/goods_and_services_tax.dart';
@@ -15,6 +14,7 @@ export 'src/models/order_configuration/stop_limit_gtd.dart';
 export 'src/models/portfolio.dart';
 export 'src/models/portfolio_breakdown.dart';
 export 'src/models/product.dart';
+export 'src/models/server_time.dart';
 export 'src/models/signature.dart';
 export 'src/models/trade.dart';
 export 'src/models/transaction_summary.dart';
