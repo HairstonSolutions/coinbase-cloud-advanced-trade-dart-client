@@ -5,7 +5,7 @@ https://docs.cdp.coinbase.com/coinbase-app/advanced-trade-apis/rest-api
 
 ## Public Endpoints
 
-- [ ] [GET /v3/brokerage/time - Get Server Time](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/public/get-server-time)
+- [x] [GET /v3/brokerage/time - Get Server Time](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/public/get-server-time)
 - [ ] [GET /v3/brokerage/market/product_book - Get Public Product Book](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/public/get-public-product-book)
 - [ ] [GET /v3/brokerage/market/products - List Public Products](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/public/list-public-products)
 - [ ] [GET /v3/brokerage/market/products/{product_id} - Get Public Product](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/public/get-public-product)

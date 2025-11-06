@@ -1,7 +1,9 @@
 ## 0.x.0
 
 - Implement Fees / Transaction Summary
-- Implement Data API Get API Key Permissions
+- Implement Data API: Get API Key Permissions
+- Implement Public: Get Server Time
+- Tool: Network Call to Coinbase API for Public endpoints
 
 ## 0.6.1
 
