@@ -1,6 +1,7 @@
 ## 0.x.0
 
 - Implement Fees / Transaction Summary
+- Implement Data API Get API Key Permissions
 
 ## 0.6.1
 

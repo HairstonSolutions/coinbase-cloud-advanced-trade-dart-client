@@ -66,7 +66,7 @@ https://docs.cdp.coinbase.com/coinbase-app/advanced-trade-apis/rest-api
 
 ### Data API
 
-- [ ] [GET /v3/brokerage/key_permissions - Get Api Key Permissions](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/data-api/get-api-key-permissions)
+- [x] [GET /v3/brokerage/key_permissions - Get Api Key Permissions](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/data-api/get-api-key-permissions)
 
 ## US Derivatives (Futures)
 
