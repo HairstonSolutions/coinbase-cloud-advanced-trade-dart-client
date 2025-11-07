@@ -21,10 +21,8 @@ Future<Product?> getProduct(
     {required String productId,
     http.Client? client,
     bool isSandbox = false}) async {
-
   http.Response response = await get('/products/$productId',
-      client: client,
-      isSandbox: isSandbox, isPublic: true);
+      client: client, isSandbox: isSandbox, isPublic: true);
 
   if (response.statusCode == 200) {
     var jsonResponse = jsonDecode(response.body);
