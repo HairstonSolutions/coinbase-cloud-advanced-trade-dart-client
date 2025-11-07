@@ -108,8 +108,8 @@ void main() {
     });
 
     test('Get Trade by Product ID II', () async {
-      List<Product?> originProducts =
-          await getProducts(credential: credentials, isSandbox: false);
+      List<Product?> originProducts = await getProductsAuthorized(
+          credential: credentials, isSandbox: false);
 
       String? productId = originProducts.first?.productId;
       List<Trade?> trades = await getTrades(
