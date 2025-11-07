@@ -132,8 +132,8 @@ void main() {
     });
 
     test('Authorized Get Products', () async {
-      List<Product?> products =
-          await getProductsAuthorized(credential: credentials, isSandbox: false);
+      List<Product?> products = await getProductsAuthorized(
+          credential: credentials, isSandbox: false);
       print('Products: $products');
       expect(products.isNotEmpty, true);
     });
@@ -161,8 +161,8 @@ void main() {
     });
 
     test('Get Product by Product ID II', () async {
-      List<Product?> originProducts =
-          await getProductsAuthorized(credential: credentials, isSandbox: false);
+      List<Product?> originProducts = await getProductsAuthorized(
+          credential: credentials, isSandbox: false);
 
       String? productId = originProducts.first?.productId;
       Product? product = await getProductAuthorized(
