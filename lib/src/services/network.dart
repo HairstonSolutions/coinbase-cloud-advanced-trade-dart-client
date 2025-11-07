@@ -18,13 +18,11 @@ const String coinbaseApiSandbox = 'api-sandbox.coinbase.com';
 Future<http.Response> get(String endpoint,
     {Map<String, dynamic>? queryParameters,
     http.Client? client,
-    bool isSandbox = false,
-    bool isPublic = false}) async {
+    bool isSandbox = false}) async {
   String coinbaseApi = isSandbox ? coinbaseApiSandbox : coinbaseApiProduction;
   client ??= http.Client();
 
-  String fullEndpoint =
-      '/api/v3/brokerage${isPublic ? '/market' : ''}$endpoint';
+  String fullEndpoint = '/api/v3/brokerage$endpoint';
 
   var url = Uri.https(coinbaseApi, fullEndpoint, queryParameters);
   Map<String, String> requestHeaders = {

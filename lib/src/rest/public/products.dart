@@ -21,8 +21,8 @@ Future<Product?> getProduct(
     {required String productId,
     http.Client? client,
     bool isSandbox = false}) async {
-  http.Response response = await get('/products/$productId',
-      client: client, isSandbox: isSandbox, isPublic: true);
+  http.Response response = await get('/market/products/$productId',
+      client: client, isSandbox: isSandbox);
 
   if (response.statusCode == 200) {
     var jsonResponse = jsonDecode(response.body);
@@ -69,11 +69,8 @@ Future<List<Product>> getProducts(
     if (contractExpiryType != null) 'contract_expiry_type': contractExpiryType,
   };
 
-  http.Response response = await get('/products',
-      queryParameters: queryParameters,
-      client: client,
-      isSandbox: isSandbox,
-      isPublic: true);
+  http.Response response = await get('/market/products',
+      queryParameters: queryParameters, client: client, isSandbox: isSandbox);
 
   if (response.statusCode == 200) {
     String data = response.body;
