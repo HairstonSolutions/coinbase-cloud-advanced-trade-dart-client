@@ -20,7 +20,7 @@ import 'package:http/http.dart' as http;
 /// [isSandbox] - Whether to use the sandbox environment.
 ///
 /// Returns a list of [Product] objects.
-Future<List<Product>> getProducts(
+Future<List<Product>> getProductsAuthorized(
     {int? offset,
     String? productType,
     String? contractExpiryType,
@@ -72,7 +72,7 @@ Future<List<Product>> getProducts(
 ///
 /// Returns a [Product] object, or null if no product is found for the given
 /// product ID.
-Future<Product?> getProduct(
+Future<Product?> getProductAuthorized(
     {required String? productId,
     bool? getTradabilityStatus,
     http.Client? client,
