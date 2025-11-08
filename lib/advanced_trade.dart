@@ -27,6 +27,7 @@ export 'src/rest/orders/orders.dart';
 export 'src/rest/portfolios.dart';
 export 'src/rest/products/products.dart';
 export 'src/rest/products/trades.dart';
+export 'src/rest/public/products.dart';
 export 'src/rest/public/server_time.dart';
 export 'src/services/network.dart';
 export 'src/services/signature.dart';
