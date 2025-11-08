@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:coinbase_cloud_advanced_trade_client/src/models/product.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/models/product_book.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/services/network.dart';
 import 'package:http/http.dart' as http;
 
@@ -87,4 +88,43 @@ Future<List<Product>> getProducts(
   }
 
   return products;
+}
+
+/// Gets a public product book.
+///
+/// GET /api/v3/brokerage/market/product_book
+/// https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/public/get-public-product-book
+///
+/// This function makes a GET request to the /market/product_book endpoint of
+/// the Coinbase Advanced Trade API.
+///
+/// [productId] - The ID of the product to be returned.
+/// [limit] - A limit for the number of products to be returned.
+/// [isSandbox] - Whether to use the sandbox environment.
+///
+/// Returns a [ProductBook] object, or null if no product book is found for the
+/// given product ID.
+Future<ProductBook?> getProductBook(
+    {required String productId,
+    int? limit,
+    http.Client? client,
+    bool isSandbox = false}) async {
+  Map<String, String> queryParameters = {
+    'product_id': productId,
+    if (limit != null) 'limit': '$limit',
+  };
+
+  http.Response response = await get('/market/product_book',
+      queryParameters: queryParameters, client: client, isSandbox: isSandbox);
+
+  if (response.statusCode == 200) {
+    var jsonResponse = jsonDecode(response.body);
+
+    return ProductBook.fromJson(jsonResponse);
+  } else {
+    var url = response.request?.url.toString();
+    print('Request to URL $url failed: Response code ${response.statusCode}');
+    print('Error Response Message: ${response.body}');
+  }
+  return null;
 }
