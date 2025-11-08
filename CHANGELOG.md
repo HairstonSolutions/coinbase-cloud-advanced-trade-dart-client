@@ -6,6 +6,7 @@
 - Tool: Network Call to Coinbase API for Public endpoints
 - Implement Public: Get Product
 - Implement Public: Get Products List
+- Implement Get Product Book (Public & Authorized)
 
 ## 0.6.1
 

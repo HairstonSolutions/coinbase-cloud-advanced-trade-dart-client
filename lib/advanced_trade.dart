@@ -14,6 +14,7 @@ export 'src/models/order_configuration/stop_limit_gtd.dart';
 export 'src/models/portfolio.dart';
 export 'src/models/portfolio_breakdown.dart';
 export 'src/models/product.dart';
+export 'src/models/product_book.dart';
 export 'src/models/server_time.dart';
 export 'src/models/signature.dart';
 export 'src/models/trade.dart';
