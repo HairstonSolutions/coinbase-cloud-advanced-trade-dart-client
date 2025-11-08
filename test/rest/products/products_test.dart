@@ -3,7 +3,10 @@ import 'dart:io' show Platform;
 
 import 'package:coinbase_cloud_advanced_trade_client/src/models/credential.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/product.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/models/product_candle.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/rest/products/products.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/rest/public/products.dart'
+    as public;
 import 'package:coinbase_cloud_advanced_trade_client/src/services/network.dart';
 import 'package:http/http.dart' as http;
 import 'package:mockito/mockito.dart';
@@ -115,6 +118,66 @@ void main() {
       expect(product, isNotNull);
       expect(product?.productId, "BTC-USD");
     });
+
+    test('Get product candles', () async {
+      final mockResponse = {
+        "candles": [
+          {
+            "start": "1639508050",
+            "low": "140.21",
+            "high": "140.21",
+            "open": "140.21",
+            "close": "140.21",
+            "volume": "56437345"
+          }
+        ]
+      };
+
+      when(mockClient.get(any, headers: anyNamed('headers'))).thenAnswer(
+          (_) async => http.Response(jsonEncode(mockResponse), 200));
+
+      List<ProductCandle> productCandles = await getProductCandlesAuthorized(
+          productId: "BTC-USD",
+          start: "1639508050",
+          end: "1639508050",
+          granularity: "ONE_MINUTE",
+          client: mockClient,
+          credential: credentials);
+
+      expect(productCandles, isNotNull);
+      expect(productCandles.length, 1);
+      expect(productCandles[0].start, "1639508050");
+    });
+
+    test('Get public product candles', () async {
+      final mockResponse = {
+        "candles": [
+          {
+            "start": "1639508050",
+            "low": "140.21",
+            "high": "140.21",
+            "open": "140.21",
+            "close": "140.21",
+            "volume": "56437345"
+          }
+        ]
+      };
+
+      when(mockClient.get(any, headers: anyNamed('headers'))).thenAnswer(
+          (_) async => http.Response(jsonEncode(mockResponse), 200));
+
+      List<ProductCandle> productCandles = await public.getProductCandles(
+        productId: "BTC-USD",
+        start: "1639508050",
+        end: "1639508050",
+        granularity: "ONE_MINUTE",
+        client: mockClient,
+      );
+
+      expect(productCandles, isNotNull);
+      expect(productCandles.length, 1);
+      expect(productCandles[0].start, "1639508050");
+    });
   });
 
   group('Test Get Products Requests to Coinbase AT API', skip: skip, () {
@@ -158,6 +221,29 @@ void main() {
       print('Product : $product');
       expect(product?.productId, productId);
       expect(product?.viewOnly, isNotNull);
+    });
+
+    test('Get product candles', () async {
+      List<ProductCandle> productCandles = await getProductCandlesAuthorized(
+          productId: "BTC-USD",
+          start: "1639508050",
+          end: "1639508050",
+          granularity: "ONE_MINUTE",
+          credential: credentials,
+          isSandbox: false);
+
+      expect(productCandles, isNotNull);
+    });
+
+    test('Get public product candles', () async {
+      List<ProductCandle> productCandles = await public.getProductCandles(
+        productId: "BTC-USD",
+        start: "1639508050",
+        end: "1639508050",
+        granularity: "ONE_MINUTE",
+      );
+
+      expect(productCandles, isNotNull);
     });
 
     test('Get Product by Product ID II', () async {
