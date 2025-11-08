@@ -7,8 +7,8 @@ https://docs.cdp.coinbase.com/coinbase-app/advanced-trade-apis/rest-api
 
 - [x] [GET /v3/brokerage/time - Get Server Time](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/public/get-server-time)
 - [ ] [GET /v3/brokerage/market/product_book - Get Public Product Book](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/public/get-public-product-book)
-- [ ] [GET /v3/brokerage/market/products - List Public Products](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/public/list-public-products)
-- [ ] [GET /v3/brokerage/market/products/{product_id} - Get Public Product](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/public/get-public-product)
+- [x] [GET /v3/brokerage/market/products - List Public Products](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/public/list-public-products)
+- [x] [GET /v3/brokerage/market/products/{product_id} - Get Public Product](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/public/get-public-product)
 - [ ] [GET /v3/brokerage/market/products/{product_id}/candles - Get Public Product Candles](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/public/get-public-product-candles)
 - [ ] [GET /v3/brokerage/market/products/{product_id}/ticker - Get Public Market Trades](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/public/get-public-market-trades)
 

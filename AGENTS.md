@@ -41,6 +41,9 @@ sudo apt-get update && sudo apt-get install dart
 
 - Tests can be run using the command `dart test --reporter=expanded`.
 - Specific test files can be targeted by appending the file path.
+- Once you have completed tests on the code you created, then run tests on the entire repo to ensure there are no
+  regressions.
+- If your code creates regressions, then fix the regressions as part of you change.
 
 ## Mocking
 

@@ -4,6 +4,8 @@
 - Implement Data API: Get API Key Permissions
 - Implement Public: Get Server Time
 - Tool: Network Call to Coinbase API for Public endpoints
+- Implement Public: Get Product
+- Implement Public: Get Products List
 
 ## 0.6.1
 
