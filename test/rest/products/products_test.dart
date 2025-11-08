@@ -67,8 +67,8 @@ void main() {
       when(mockClient.get(any, headers: anyNamed('headers'))).thenAnswer(
           (_) async => http.Response(jsonEncode(mockResponse), 200));
 
-      List<Product?> products =
-          await getProducts(client: mockClient, credential: credentials);
+      List<Product?> products = await getProductsAuthorized(
+          client: mockClient, credential: credentials);
 
       expect(products, isNotNull);
       expect(products.length, 1);
@@ -109,7 +109,7 @@ void main() {
       when(mockClient.get(any, headers: anyNamed('headers'))).thenAnswer(
           (_) async => http.Response(jsonEncode(mockResponse), 200));
 
-      Product? product = await getProduct(
+      Product? product = await getProductAuthorized(
           productId: "BTC-USD", client: mockClient, credential: credentials);
 
       expect(product, isNotNull);
@@ -132,15 +132,15 @@ void main() {
     });
 
     test('Authorized Get Products', () async {
-      List<Product?> products =
-          await getProducts(credential: credentials, isSandbox: false);
+      List<Product?> products = await getProductsAuthorized(
+          credential: credentials, isSandbox: false);
       print('Products: $products');
       expect(products.isNotEmpty, true);
     });
 
     test('Get Product by Product ID', () async {
       String productId = 'ETH-USD';
-      Product? product = await getProduct(
+      Product? product = await getProductAuthorized(
           productId: productId, credential: credentials, isSandbox: false);
 
       print('Product : $product');
@@ -149,7 +149,7 @@ void main() {
 
     test('Get Product by Product ID with getTradabilityStatus', () async {
       String productId = 'ETH-USD';
-      Product? product = await getProduct(
+      Product? product = await getProductAuthorized(
           productId: productId,
           getTradabilityStatus: true,
           credential: credentials,
@@ -161,11 +161,11 @@ void main() {
     });
 
     test('Get Product by Product ID II', () async {
-      List<Product?> originProducts =
-          await getProducts(credential: credentials, isSandbox: false);
+      List<Product?> originProducts = await getProductsAuthorized(
+          credential: credentials, isSandbox: false);
 
       String? productId = originProducts.first?.productId;
-      Product? product = await getProduct(
+      Product? product = await getProductAuthorized(
           productId: productId, credential: credentials, isSandbox: false);
 
       print('Product : $product');
