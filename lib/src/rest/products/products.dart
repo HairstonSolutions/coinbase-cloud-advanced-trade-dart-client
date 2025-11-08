@@ -128,7 +128,7 @@ Future<ProductBook?> getProductBookAuthorized(
     if (limit != null) 'limit': '$limit',
   };
 
-  http.Response response = await getAuthorized('/products/book',
+  http.Response response = await getAuthorized('/product_book',
       queryParameters: queryParameters,
       client: client,
       credential: credential,

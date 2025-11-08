@@ -67,7 +67,7 @@ void main() {
 
       when(client.get(
         Uri.https('api.coinbase.com',
-            '/api/v3/brokerage/products/book', {'product_id': productId, 'limit': '$limit'}),
+            '/api/v3/brokerage/product_book', {'product_id': productId, 'limit': '$limit'}),
         headers: anyNamed('headers'),
       )).thenAnswer((_) async => http.Response(
           jsonEncode({
