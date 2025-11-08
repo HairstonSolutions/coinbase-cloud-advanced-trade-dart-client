@@ -44,6 +44,13 @@ sudo apt-get update && sudo apt-get install dart
 - Once you have completed tests on the code you created, then run tests on the entire repo to ensure there are no
   regressions.
 - If your code creates regressions, then fix the regressions as part of you change.
+- There are Two Group Types of tests for Rest functions. 1. Tests using Mocks. 2. Integration tests that execute Rest
+  Requests against the live coinbase API.
+- Integration tests of new rest functions should print out the response right before the expect clauses.
+- Integration tests that require authorization should have a ciSkip boolean on the group that allows it to be skipped in
+  CI tests as live authentication is not used there.
+- Integration tests that are against public endpoints do not need a skip boolean on it as they are safe to execute in
+  CI.
 
 ## Mocking
 

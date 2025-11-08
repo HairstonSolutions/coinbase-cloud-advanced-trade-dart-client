@@ -104,10 +104,10 @@ Future<Product?> getProductAuthorized(
 
 /// Gets a product book.
 ///
-/// GET /v3/brokerage/products/book
+/// GET /v3/brokerage/product_book
 /// https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/products/get-product-book
 ///
-/// This function makes a GET request to the /products/book endpoint of
+/// This function makes a GET request to the /product_book endpoint of
 /// the Coinbase Advanced Trade API.
 ///
 /// [productId] - The ID of the product to be returned.

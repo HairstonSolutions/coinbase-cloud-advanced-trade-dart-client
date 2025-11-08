@@ -6,7 +6,7 @@ https://docs.cdp.coinbase.com/coinbase-app/advanced-trade-apis/rest-api
 ## Public Endpoints
 
 - [x] [GET /v3/brokerage/time - Get Server Time](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/public/get-server-time)
-- [ ] [GET /v3/brokerage/market/product_book - Get Public Product Book](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/public/get-public-product-book)
+- [x] [GET /v3/brokerage/market/product_book - Get Public Product Book](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/public/get-public-product-book)
 - [x] [GET /v3/brokerage/market/products - List Public Products](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/public/list-public-products)
 - [x] [GET /v3/brokerage/market/products/{product_id} - Get Public Product](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/public/get-public-product)
 - [ ] [GET /v3/brokerage/market/products/{product_id}/candles - Get Public Product Candles](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/public/get-public-product-candles)
@@ -34,7 +34,7 @@ https://docs.cdp.coinbase.com/coinbase-app/advanced-trade-apis/rest-api
 ### Products
 
 - [ ] [GET /v3/brokerage/best_bid_ask - Get Best Bid/Ask](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/products/get-best-bid-ask)
-- [ ] [GET /v3/brokerage/product_book - Get Product Book](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/public/get-public-product-book)
+- [x] [GET /v3/brokerage/product_book - Get Product Book](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/public/get-public-product-book)
 - [x] [GET /v3/brokerage/products - List Products](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/products/list-products)
 - [x] [GET /v3/brokerage/products/{product_id} - Get Product](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/products/get-product)
 - [ ] [GET /v3/brokerage/products/{product_id}/candles - Get Product Candles](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/products/get-product-candles)

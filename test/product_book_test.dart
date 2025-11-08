@@ -1,19 +1,18 @@
 import 'dart:convert';
 
+import 'package:coinbase_cloud_advanced_trade_client/src/models/credential.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/product_book.dart';
-import 'package:coinbase_cloud_advanced_trade_client/src/rest/public/products.dart'
-    as public;
 import 'package:coinbase_cloud_advanced_trade_client/src/rest/products/products.dart'
     as authorized;
-import 'dart:io' show Platform;
-import 'package:coinbase_cloud_advanced_trade_client/src/models/credential.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/rest/public/products.dart'
+    as public;
 import 'package:http/http.dart' as http;
 import 'package:mockito/annotations.dart';
-import 'package:test/test.dart';
 import 'package:mockito/mockito.dart';
-import 'test_constants.dart' as constants;
+import 'package:test/test.dart';
 
 import 'product_book_test.mocks.dart';
+import 'test_constants.dart' as constants;
 
 @GenerateMocks([http.Client])
 void main() {
@@ -34,8 +33,8 @@ void main() {
       final int limit = 1;
 
       when(client.get(
-        Uri.https('api.coinbase.com',
-            '/api/v3/brokerage/market/product_book', {'product_id': productId, 'limit': '$limit'}),
+        Uri.https('api.coinbase.com', '/api/v3/brokerage/market/product_book',
+            {'product_id': productId, 'limit': '$limit'}),
         headers: anyNamed('headers'),
       )).thenAnswer((_) async => http.Response(
           jsonEncode({
@@ -66,8 +65,8 @@ void main() {
       final int limit = 1;
 
       when(client.get(
-        Uri.https('api.coinbase.com',
-            '/api/v3/brokerage/product_book', {'product_id': productId, 'limit': '$limit'}),
+        Uri.https('api.coinbase.com', '/api/v3/brokerage/product_book',
+            {'product_id': productId, 'limit': '$limit'}),
         headers: anyNamed('headers'),
       )).thenAnswer((_) async => http.Response(
           jsonEncode({
@@ -87,7 +86,8 @@ void main() {
           productId: productId,
           limit: limit,
           client: client,
-          credential: Credential(apiKeyName: 'key', privateKeyPEM: constants.privateKeyPEM));
+          credential: Credential(
+              apiKeyName: 'key', privateKeyPEM: constants.privateKeyPEM));
 
       expect(productBook, isNotNull);
       expect(productBook!.productId, equals('BTC-USD'));

@@ -22,7 +22,8 @@ class ProductBook {
   final List<PriceLevel> bids;
   final List<PriceLevel> asks;
 
-  ProductBook({required this.productId, required this.bids, required this.asks});
+  ProductBook(
+      {required this.productId, required this.bids, required this.asks});
 
   factory ProductBook.fromJson(Map<String, dynamic> json) {
     var pricebook = json['pricebook'];
