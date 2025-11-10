@@ -20,8 +20,8 @@ void main() {
         final mockResponse =
             '{"candles":[{"start":"1672531200","high":"16600","low":"16500","open":"16550","close":"16580","volume":"1234.56"}]}';
 
-        when(client.get(any, headers: anyNamed('headers'))).thenAnswer(
-            (_) async => http.Response(mockResponse, 200));
+        when(client.get(any, headers: anyNamed('headers')))
+            .thenAnswer((_) async => http.Response(mockResponse, 200));
 
         final candles = await public.getProductCandles(
           productId: 'BTC-USD',
@@ -39,10 +39,11 @@ void main() {
         final client = MockClient();
         final mockResponse =
             '{"candles":[{"start":"1672531200","high":"16600","low":"16500","open":"16550","close":"16580","volume":"1234.56"}]}';
-        final credential = Credential(apiKeyName: 'key', privateKeyPEM: privateKeyPEM);
+        final credential =
+            Credential(apiKeyName: 'key', privateKeyPEM: privateKeyPEM);
 
-        when(client.get(any, headers: anyNamed('headers'))).thenAnswer(
-            (_) async => http.Response(mockResponse, 200));
+        when(client.get(any, headers: anyNamed('headers')))
+            .thenAnswer((_) async => http.Response(mockResponse, 200));
 
         final candles = await getProductCandlesAuthorized(
           productId: 'BTC-USD',
@@ -79,7 +80,8 @@ void main() {
           if (!ciSkip) {
             final apiKeyName = Platform.environment['COINBASE_API_KEY_NAME']!;
             final privateKeyPEM = Platform.environment['COINBASE_PRIVATE_KEY']!;
-            credential = Credential(apiKeyName: apiKeyName, privateKeyPEM: privateKeyPEM);
+            credential = Credential(
+                apiKeyName: apiKeyName, privateKeyPEM: privateKeyPEM);
           }
         });
 
