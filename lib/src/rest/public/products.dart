@@ -1,5 +1,8 @@
 import 'dart:convert';
 
+import 'dart:convert';
+
+import 'package:coinbase_cloud_advanced_trade_client/src/models/candle.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/product.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/product_book.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/services/network.dart';
@@ -35,6 +38,53 @@ Future<Product?> getProduct(
     print('Error Response Message: ${response.body}');
   }
   return null;
+}
+
+/// Gets public product candles.
+///
+/// GET /api/v3/brokerage/market/products/{product_id}/candles
+/// https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/public/get-public-product-candles
+///
+/// This function makes a GET request to the /market/products/{product_id}/candles endpoint of
+/// the Coinbase Advanced Trade API.
+///
+/// [productId] - The ID of the product to be returned.
+/// [start] - A start time for the candles.
+/// [end] - A end time for the candles.
+/// [granularity] - The granularity of the candles.
+/// [isSandbox] - Whether to use the sandbox environment.
+///
+/// Returns a list of [Candle] objects.
+Future<List<Candle>> getProductCandles(
+    {required String productId,
+    required String start,
+    required String end,
+    required String granularity,
+    http.Client? client,
+    bool isSandbox = false}) async {
+  List<Candle> candles = [];
+  Map<String, String> queryParameters = {
+    'start': start,
+    'end': end,
+    'granularity': granularity,
+  };
+
+  http.Response response = await get('/market/products/$productId/candles',
+      queryParameters: queryParameters, client: client, isSandbox: isSandbox);
+
+  if (response.statusCode == 200) {
+    var jsonResponse = jsonDecode(response.body);
+    var jsonCandles = jsonResponse['candles'];
+
+    for (var jsonObject in jsonCandles) {
+      candles.add(Candle.fromJson(jsonObject));
+    }
+  } else {
+    var url = response.request?.url.toString();
+    print('Request to URL $url failed: Response code ${response.statusCode}');
+    print('Error Response Message: ${response.body}');
+  }
+  return candles;
 }
 
 /// Gets a list of products.
