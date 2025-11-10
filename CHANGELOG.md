@@ -1,4 +1,4 @@
-## 0.x.0
+## 0.7.0
 
 - Implement Fees / Transaction Summary
 - Implement Data API: Get API Key Permissions
@@ -7,6 +7,7 @@
 - Implement Public: Get Product
 - Implement Public: Get Products List
 - Implement Get Product Book (Public & Authorized)
+- Implement Get Product Candles (Public & Authorized)
 
 ## 0.6.1
 
