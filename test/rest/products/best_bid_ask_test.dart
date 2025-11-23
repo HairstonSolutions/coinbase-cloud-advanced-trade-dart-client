@@ -86,23 +86,16 @@ void main() {
 
       logger.info('Best Bid Ask: $productBooks');
 
-      expect(productBooks, isNotNull);
+      expect(productBooks.length, 2);
 
-      expect(
-          productBooks[0].productId == 'BTC-USD' ||
-              productBooks[0].productId == 'ETH-USD',
-          true);
-      expect(productBooks[0].bids.length, 1);
-      expect(productBooks[0].asks.length, 1);
-      expect(productBooks[0].time, isNotNull);
+      final productIdsFound = productBooks.map((p) => p.productId).toList();
+      expect(productIdsFound, unorderedEquals(['BTC-USD', 'ETH-USD']));
 
-      expect(
-          productBooks[1].productId == 'ETH-USD' ||
-              productBooks[1].productId == 'BTC-USD',
-          true);
-      expect(productBooks[1].bids.length, 1);
-      expect(productBooks[1].asks.length, 1);
-      expect(productBooks[1].time, isNotNull);
+      for (var book in productBooks) {
+        expect(book.bids.length, 1);
+        expect(book.asks.length, 1);
+        expect(book.time, isNotNull);
+      }
     });
   });
 }
