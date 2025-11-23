@@ -12,7 +12,7 @@ import 'package:http/http.dart' as http;
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
-import '../../test_constants.dart';
+import '../../test_constants.dart' as testConstants;
 import 'candles_test.mocks.dart';
 
 @GenerateMocks([http.Client])
@@ -46,7 +46,7 @@ void main() {
         final client = MockClient();
         final mockResponse =
             '{"candles":[{"start":"1672531200","high":"16600","low":"16500","open":"16550","close":"16580","volume":"1234.56"}]}';
-        final credential = credentials;
+        final credential = testConstants.credentials;
 
         when(client.get(any, headers: anyNamed('headers')))
             .thenAnswer((_) async => http.Response(mockResponse, 200));
@@ -83,8 +83,8 @@ void main() {
         late Credential credential;
 
         setUp(() {
-          if (!ciSkip) {
-            credential = credentials;
+          if (!testConstants.ciSkip) {
+            credential = testConstants.credentials;
           }
         });
 
@@ -100,7 +100,7 @@ void main() {
           logger.info(candles);
           expect(candles.length, greaterThan(0));
         });
-      }, skip: ciSkip);
+      }, skip: testConstants.ciSkip);
     });
   });
 }

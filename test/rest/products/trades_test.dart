@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io' show Platform;
 import 'package:logging/logging.dart';
 import '../../test_helpers.dart';
-import '../../test_constants.dart';
+import '../../test_constants.dart' as testConstants;
 
 import 'package:coinbase_cloud_advanced_trade_client/src/models/credential.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/product.dart';
@@ -51,7 +51,7 @@ void main() {
           (_) async => http.Response(jsonEncode(mockResponse), 200));
 
       List<Trade?> trades = await getTrades(
-          productId: "BTC-USD", client: mockClient, credential: credentials);
+          productId: "BTC-USD", client: mockClient, credential: testConstants.credentials);
 
       expect(trades, isNotNull);
       expect(trades.length, 1);
@@ -60,13 +60,13 @@ void main() {
     });
   });
 
-  group('Test Get Trades Requests to Coinbase AT API Endpoints', skip: ciSkip,
+  group('Test Get Trades Requests to Coinbase AT API Endpoints', skip: testConstants.ciSkip,
       () {
     test('Authorized Get Trades', () async {
       String productId = 'BTC-USD';
       String requestPath = '/products/$productId/ticker';
       var response = await getAuthorized(requestPath,
-          credential: credentials, isSandbox: false);
+          credential: testConstants.credentials, isSandbox: false);
       var url = response.request?.url.toString();
       logger.info('Response Code: ${response.statusCode} to URL: $url');
       logger.info('Response body: ${response.body} to URL: $url');
@@ -79,7 +79,7 @@ void main() {
     test('Authorized Get Trades', () async {
       String productId = 'BTC-USD';
       List<Trade?> trades = await getTrades(
-          productId: productId, credential: credentials, isSandbox: false);
+          productId: productId, credential: testConstants.credentials, isSandbox: false);
       logger.info('Products: $trades');
       expect(trades.isNotEmpty, true);
     });
@@ -90,7 +90,7 @@ void main() {
       List<Trade?> trades = await getTrades(
           productId: productId,
           limit: limit,
-          credential: credentials,
+          credential: testConstants.credentials,
           isSandbox: false);
       logger.info('Trades: $trades');
       expect(trades.isNotEmpty, true);
@@ -100,7 +100,7 @@ void main() {
     test('Get Trade by Product ID', () async {
       String productId = 'BTC-USD';
       List<Trade?> trades = await getTrades(
-          productId: productId, credential: credentials, isSandbox: false);
+          productId: productId, credential: testConstants.credentials, isSandbox: false);
 
       logger.info('Trade : $trades');
       expect(trades.first?.productId, productId);
@@ -108,11 +108,11 @@ void main() {
 
     test('Get Trade by Product ID II', () async {
       List<Product?> originProducts = await getProductsAuthorized(
-          credential: credentials, isSandbox: false);
+          credential: testConstants.credentials, isSandbox: false);
 
       String? productId = originProducts.first?.productId;
       List<Trade?> trades = await getTrades(
-          productId: productId, credential: credentials, isSandbox: false);
+          productId: productId, credential: testConstants.credentials, isSandbox: false);
 
       logger.info('Trades : $trades');
       expect(trades.first?.productId!, productId);

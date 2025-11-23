@@ -1,8 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:logging/logging.dart';
-import '../test_helpers.dart';
-import '../test_constants.dart';
 
 import 'package:coinbase_cloud_advanced_trade_client/src/models/credential.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/portfolio.dart';
@@ -14,26 +12,27 @@ import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
 import '../portfolios_test.mocks.dart';
-import '../test_constants.dart';
+import '../test_constants.dart' as testConstants;
+import '../test_helpers.dart';
 
 final String portfolioCreateName =
-    envVars['PORTFOLIO_CREATE_NAME'] ?? 'portfolioTDD1';
-final String portfolioGetUUID =
-    envVars['PORTFOLIO_GET_UUID'] ?? '88888888-4444-4444-4444-121212121212';
+    testConstants.envVars['PORTFOLIO_CREATE_NAME'] ?? 'portfolioTDD1';
+final String portfolioGetUUID = testConstants.envVars['PORTFOLIO_GET_UUID'] ??
+    '88888888-4444-4444-4444-121212121212';
 final String portfolioBreakdownGetUUID =
-    envVars['PORTFOLIO_BREAKDOWN_GET_UUID'] ??
+    testConstants.envVars['PORTFOLIO_BREAKDOWN_GET_UUID'] ??
         '88888888-4444-4444-4444-121212121212';
 final String portfolioDeleteUUID =
-    envVars['PORTFOLIO_DELETE_UUID'] ?? '88888888-4444-4444-4444-121212121212';
+    testConstants.envVars['PORTFOLIO_DELETE_UUID'] ?? '88888888-4444-4444-4444-121212121212';
 final String portfolioEditUUID =
-    envVars['PORTFOLIO_EDIT_UUID'] ?? '88888888-4444-4444-4444-121212121212';
+    testConstants.envVars['PORTFOLIO_EDIT_UUID'] ?? '88888888-4444-4444-4444-121212121212';
 final String portfolioEditNewName =
-    envVars['PORTFOLIO_EDIT_NEW_NAME'] ?? 'portfolioTDD2';
+    testConstants.envVars['PORTFOLIO_EDIT_NEW_NAME'] ?? 'portfolioTDD2';
 final String portfolioMoveFundsSourceUUID =
-    envVars['PORTFOLIO_MOVE_FUNDS_SOURCE_UUID'] ??
+    testConstants.envVars['PORTFOLIO_MOVE_FUNDS_SOURCE_UUID'] ??
         '88888888-4444-4444-4444-121212121212';
 final String portfolioMoveFundsTargetUUID =
-    envVars['PORTFOLIO_MOVE_FUNDS_TARGET_UUID'] ??
+    testConstants.envVars['PORTFOLIO_MOVE_FUNDS_TARGET_UUID'] ??
         '88888888-4444-4444-4444-121212121212';
 
 @GenerateMocks([http.Client])
@@ -41,7 +40,7 @@ void main() {
   final Logger logger = setupLogger('portfolios_test');
 
   final mockClient = MockClient();
-  final credential = credentials;
+  final credential = testConstants.credentials;
 
   group('Portfolios API tests using Mocks', () {
     test('listPortfolios returns a list of portfolios', () async {
@@ -180,7 +179,7 @@ void main() {
   });
 
   group('Portfolios API tests Requests to Coinbase AT API Endpoints',
-      skip: skipDT, () {
+      skip: testConstants.skipDT, () {
     test('listPortfolios returns a list of portfolios', () async {
       final portfolios = await listPortfolios(credential: credential);
 
@@ -200,7 +199,7 @@ void main() {
       expect(portfolioBreakdown, isA<PortfolioBreakdown>());
     });
 
-    test('createPortfolio returns a portfolio', skip: skipDT, () async {
+    test('createPortfolio returns a portfolio', skip: testConstants.skipDT, () async {
       final Portfolio? createdPortfolio = await createPortfolio(
           name: portfolioCreateName, credential: credential);
 
@@ -211,7 +210,7 @@ void main() {
     });
 
     test('editPortfolio returns a portfolio with the changed name',
-        skip: skipDT, () async {
+        skip: testConstants.skipDT, () async {
       final portfolio = await editPortfolio(
           uuid: portfolioEditUUID,
           name: portfolioEditNewName,
@@ -221,7 +220,7 @@ void main() {
       expect(portfolio?.name, portfolioEditNewName);
     });
 
-    test('deletePortfolio returns true', skip: skipDT, () async {
+    test('deletePortfolio returns true', skip: testConstants.skipDT, () async {
       final result = await deletePortfolio(
           uuid: portfolioDeleteUUID, credential: credential);
 
@@ -229,7 +228,7 @@ void main() {
     });
 
     test('movePortfolioFunds returns true when transferring One Dollar of USDC',
-        skip: skipDT, () async {
+        skip: testConstants.skipDT, () async {
       final result = await movePortfolioFunds(
           funds: {'currency': 'USDC', 'value': '1.0'},
           sourcePortfolioUuid: portfolioMoveFundsSourceUUID,

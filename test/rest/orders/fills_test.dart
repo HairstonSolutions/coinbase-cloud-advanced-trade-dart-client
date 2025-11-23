@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io' show Platform;
 import 'package:logging/logging.dart';
 import '../../test_helpers.dart';
-import '../../test_constants.dart';
+import '../../test_constants.dart' as testConstants;
 
 import 'package:coinbase_cloud_advanced_trade_client/src/models/credential.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/fill.dart';
@@ -63,7 +63,7 @@ void main() {
           (_) async => http.Response(jsonEncode(mockResponse), 200));
 
       List<Fill>? fills =
-          await getFills(client: mockClient, credential: credentials);
+          await getFills(client: mockClient, credential: testConstants.credentials);
 
       expect(fills, isNotNull);
       expect(fills.length, 1);
@@ -71,14 +71,14 @@ void main() {
     });
   });
 
-  group('Test Get Fills Requests to Coinbase AT API Endpoints', skip: ciSkip,
+  group('Test Get Fills Requests to Coinbase AT API Endpoints', skip: testConstants.ciSkip,
       () {
     test('Authorized Get All Fills', () async {
       String requestPath = '/orders/historical/fills';
       Map<String, dynamic>? queryParameters = {'limit': '1000'};
       var response = await getAuthorized(requestPath,
           queryParameters: queryParameters,
-          credential: credentials,
+          credential: testConstants.credentials,
           isSandbox: false);
       var url = response.request?.url.toString();
       logger.info('Response Code: ${response.statusCode} to URL: $url');
@@ -90,7 +90,7 @@ void main() {
 
     test('Get all Fills as a list of Fills', () async {
       List<Fill>? fills =
-          await getFills(credential: credentials, isSandbox: false);
+          await getFills(credential: testConstants.credentials, isSandbox: false);
       logger.info('Fills: $fills');
 
       expect(fills.isNotEmpty, true);
@@ -98,10 +98,10 @@ void main() {
 
     test('Get all Fills by order ID', () async {
       List<Order>? orders =
-          await getOrders(credential: credentials, isSandbox: false);
+          await getOrders(credential: testConstants.credentials, isSandbox: false);
       String? orderId = orders.last.orderId;
       List<Fill>? fills = await getFills(
-          orderId: orderId, credential: credentials, isSandbox: false);
+          orderId: orderId, credential: testConstants.credentials, isSandbox: false);
       logger.info('Fills: $fills');
 
       expect(fills.isNotEmpty, true);
@@ -110,10 +110,10 @@ void main() {
 
     test('Get all Fills by product ID', () async {
       List<Order>? orders =
-          await getOrders(credential: credentials, isSandbox: false);
+          await getOrders(credential: testConstants.credentials, isSandbox: false);
       String? productId = orders.last.productId;
       List<Fill>? fills = await getFills(
-          productId: productId, credential: credentials, isSandbox: false);
+          productId: productId, credential: testConstants.credentials, isSandbox: false);
       logger.info('Fills: $fills');
 
       expect(fills.isNotEmpty, true);

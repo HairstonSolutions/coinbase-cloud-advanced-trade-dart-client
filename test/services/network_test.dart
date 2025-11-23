@@ -1,7 +1,7 @@
 import 'dart:io' show Platform;
 import 'package:logging/logging.dart';
 import '../test_helpers.dart';
-import '../test_constants.dart';
+import '../test_constants.dart' as testConstants;
 
 import 'package:coinbase_cloud_advanced_trade_client/src/models/credential.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/services/network.dart';
@@ -10,13 +10,13 @@ import 'package:test/test.dart';
 void main() {
   final Logger logger = setupLogger('network_test');
 
-  group('Test Network Service', skip: ciSkip, () {
+  group('Test Network Service', skip: testConstants.ciSkip, () {
     setUp(() {});
 
     test('Authorized Get with no body (Fees)', () async {
       String requestPath = "/transaction_summary";
       var response = await getAuthorized(requestPath,
-          credential: credentials, isSandbox: false);
+          credential: testConstants.credentials, isSandbox: false);
       var url = response.request?.url.toString();
       logger.info('Response Code: ${response.statusCode} to URL: $url');
       logger.info('Response body: ${response.body} to URL: $url');
@@ -27,7 +27,7 @@ void main() {
     test('Authorized Get to Accounts', () async {
       String requestPath = "/accounts";
       var response = await getAuthorized(requestPath,
-          credential: credentials, isSandbox: true);
+          credential: testConstants.credentials, isSandbox: true);
       var url = response.request?.url.toString();
       logger.info('Response Code: ${response.statusCode} to URL: $url');
       logger.info('Response body: ${response.body} to URL: $url');
@@ -38,7 +38,7 @@ void main() {
     test('Authorized Get to Sandbox Accounts', () async {
       String requestPath = "/accounts";
       var response = await getAuthorized(requestPath,
-          credential: credentials, isSandbox: true);
+          credential: testConstants.credentials, isSandbox: true);
       var url = response.request?.url.toString();
       logger.info('Response Code: ${response.statusCode} to URL: $url');
       logger.info('Response body: ${response.body} to URL: $url');
