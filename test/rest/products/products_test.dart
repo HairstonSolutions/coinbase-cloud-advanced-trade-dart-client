@@ -108,14 +108,17 @@ void main() {
           (_) async => http.Response(jsonEncode(mockResponse), 200));
 
       Product? product = await getProductAuthorized(
-          productId: "BTC-USD", client: mockClient, credential: testConstants.credentials);
+          productId: "BTC-USD",
+          client: mockClient,
+          credential: testConstants.credentials);
 
       expect(product, isNotNull);
       expect(product?.productId, "BTC-USD");
     });
   });
 
-  group('Test Get Products Requests to Coinbase AT API', skip: testConstants.ciSkip, () {
+  group('Test Get Products Requests to Coinbase AT API',
+      skip: testConstants.ciSkip, () {
     test('Authorized Get Products', () async {
       String requestPath = '/products';
       var response = await getAuthorized(requestPath,
@@ -139,7 +142,9 @@ void main() {
     test('Get Product by Product ID', () async {
       String productId = 'ETH-USD';
       Product? product = await getProductAuthorized(
-          productId: productId, credential: testConstants.credentials, isSandbox: false);
+          productId: productId,
+          credential: testConstants.credentials,
+          isSandbox: false);
 
       logger.info('Product : $product');
       expect(product?.productId, productId);
@@ -164,7 +169,9 @@ void main() {
 
       String? productId = originProducts.first?.productId;
       Product? product = await getProductAuthorized(
-          productId: productId, credential: testConstants.credentials, isSandbox: false);
+          productId: productId,
+          credential: testConstants.credentials,
+          isSandbox: false);
 
       logger.info('Product : $product');
       expect(product?.productId, productId);

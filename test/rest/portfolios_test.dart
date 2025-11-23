@@ -23,9 +23,10 @@ final String portfolioBreakdownGetUUID =
     testConstants.envVars['PORTFOLIO_BREAKDOWN_GET_UUID'] ??
         '88888888-4444-4444-4444-121212121212';
 final String portfolioDeleteUUID =
-    testConstants.envVars['PORTFOLIO_DELETE_UUID'] ?? '88888888-4444-4444-4444-121212121212';
-final String portfolioEditUUID =
-    testConstants.envVars['PORTFOLIO_EDIT_UUID'] ?? '88888888-4444-4444-4444-121212121212';
+    testConstants.envVars['PORTFOLIO_DELETE_UUID'] ??
+        '88888888-4444-4444-4444-121212121212';
+final String portfolioEditUUID = testConstants.envVars['PORTFOLIO_EDIT_UUID'] ??
+    '88888888-4444-4444-4444-121212121212';
 final String portfolioEditNewName =
     testConstants.envVars['PORTFOLIO_EDIT_NEW_NAME'] ?? 'portfolioTDD2';
 final String portfolioMoveFundsSourceUUID =
@@ -199,7 +200,8 @@ void main() {
       expect(portfolioBreakdown, isA<PortfolioBreakdown>());
     });
 
-    test('createPortfolio returns a portfolio', skip: testConstants.skipDT, () async {
+    test('createPortfolio returns a portfolio', skip: testConstants.skipDT,
+        () async {
       final Portfolio? createdPortfolio = await createPortfolio(
           name: portfolioCreateName, credential: credential);
 

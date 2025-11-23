@@ -51,7 +51,9 @@ void main() {
           (_) async => http.Response(jsonEncode(mockResponse), 200));
 
       List<Trade?> trades = await getTrades(
-          productId: "BTC-USD", client: mockClient, credential: testConstants.credentials);
+          productId: "BTC-USD",
+          client: mockClient,
+          credential: testConstants.credentials);
 
       expect(trades, isNotNull);
       expect(trades.length, 1);
@@ -60,8 +62,8 @@ void main() {
     });
   });
 
-  group('Test Get Trades Requests to Coinbase AT API Endpoints', skip: testConstants.ciSkip,
-      () {
+  group('Test Get Trades Requests to Coinbase AT API Endpoints',
+      skip: testConstants.ciSkip, () {
     test('Authorized Get Trades', () async {
       String productId = 'BTC-USD';
       String requestPath = '/products/$productId/ticker';
@@ -79,7 +81,9 @@ void main() {
     test('Authorized Get Trades', () async {
       String productId = 'BTC-USD';
       List<Trade?> trades = await getTrades(
-          productId: productId, credential: testConstants.credentials, isSandbox: false);
+          productId: productId,
+          credential: testConstants.credentials,
+          isSandbox: false);
       logger.info('Products: $trades');
       expect(trades.isNotEmpty, true);
     });
@@ -100,7 +104,9 @@ void main() {
     test('Get Trade by Product ID', () async {
       String productId = 'BTC-USD';
       List<Trade?> trades = await getTrades(
-          productId: productId, credential: testConstants.credentials, isSandbox: false);
+          productId: productId,
+          credential: testConstants.credentials,
+          isSandbox: false);
 
       logger.info('Trade : $trades');
       expect(trades.first?.productId, productId);
@@ -112,7 +118,9 @@ void main() {
 
       String? productId = originProducts.first?.productId;
       List<Trade?> trades = await getTrades(
-          productId: productId, credential: testConstants.credentials, isSandbox: false);
+          productId: productId,
+          credential: testConstants.credentials,
+          isSandbox: false);
 
       logger.info('Trades : $trades');
       expect(trades.first?.productId!, productId);

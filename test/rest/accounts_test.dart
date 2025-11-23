@@ -65,7 +65,9 @@ void main() {
           (_) async => http.Response(jsonEncode(mockResponse), 200));
 
       List<Account> accounts = await getAccounts(
-          client: mockClient, credential: testConstants.credentials, isSandbox: false);
+          client: mockClient,
+          credential: testConstants.credentials,
+          isSandbox: false);
 
       expect(accounts.length, 2);
       expect(accounts[0].uuid, "8bfc20d7-f7c6-4422-9181-51268ba51372");
@@ -131,7 +133,9 @@ void main() {
           (_) async => http.Response(jsonEncode(mockResponse), 200));
 
       Account? account = await getAccountByCurrency("BTC",
-          client: mockClient, credential: testConstants.credentials, isSandbox: false);
+          client: mockClient,
+          credential: testConstants.credentials,
+          isSandbox: false);
 
       expect(account, isNotNull);
       expect(account?.currency, 'BTC');
@@ -163,7 +167,9 @@ void main() {
           (_) async => http.Response(jsonEncode(mockResponse), 200));
 
       double? balance = await getAccountBalance(
-          currency: 'BTC', client: mockClient, credential: testConstants.credentials);
+          currency: 'BTC',
+          client: mockClient,
+          credential: testConstants.credentials);
 
       expect(balance, isNotNull);
       expect(balance, 100.00);
@@ -199,8 +205,8 @@ void main() {
     });
 
     test('Return null balance when no uuid or currency is provided', () async {
-      double? balance =
-          await getAccountBalance(client: mockClient, credential: testConstants.credentials);
+      double? balance = await getAccountBalance(
+          client: mockClient, credential: testConstants.credentials);
       expect(balance, isNull);
     });
 
@@ -220,8 +226,8 @@ void main() {
       expect(account, isNull);
     });
   });
-  group('Test Get Accounts Requests to Coinbase AT API Endpoints', skip: testConstants.ciSkip,
-      () {
+  group('Test Get Accounts Requests to Coinbase AT API Endpoints',
+      skip: testConstants.ciSkip, () {
     setUp(() {});
 
     test('Authorized Get Accounts', () async {
@@ -238,8 +244,8 @@ void main() {
     });
 
     test('Authorized Get Accounts', () async {
-      List<Account?> accounts =
-          await getAccounts(credential: testConstants.credentials, isSandbox: false);
+      List<Account?> accounts = await getAccounts(
+          credential: testConstants.credentials, isSandbox: false);
       logger.info('Accounts: $accounts');
       expect(accounts.isNotEmpty, true);
     });
@@ -247,7 +253,9 @@ void main() {
     test('Authorized Get Accounts with limit', () async {
       int limit = 100;
       List<Account?> accounts = await getAccounts(
-          limit: limit, credential: testConstants.credentials, isSandbox: false);
+          limit: limit,
+          credential: testConstants.credentials,
+          isSandbox: false);
       logger.info('Accounts: $accounts');
       expect(accounts.isNotEmpty, true);
     });
@@ -255,7 +263,9 @@ void main() {
     test('Authorized Get Accounts with pagination cursor', () async {
       int limit = 1; // Forces a cursor value to be returned
       List<Account?> accounts = await getAccounts(
-          limit: limit, credential: testConstants.credentials, isSandbox: false);
+          limit: limit,
+          credential: testConstants.credentials,
+          isSandbox: false);
       logger.info('Accounts: $accounts');
       expect(accounts.isNotEmpty, true);
     });
@@ -274,7 +284,9 @@ void main() {
 
       String accountId = originAccount!.uuid!;
       Account? account = await getAccount(
-          uuid: accountId, credential: testConstants.credentials, isSandbox: false);
+          uuid: accountId,
+          credential: testConstants.credentials,
+          isSandbox: false);
 
       logger.info('Account : $account');
       expect(account?.currency, 'BTC');
@@ -288,14 +300,16 @@ void main() {
     });
 
     test('Authorized Get Account by Account ID', () async {
-      List<Account?> accounts =
-          await getAccounts(credential: testConstants.credentials, isSandbox: false);
+      List<Account?> accounts = await getAccounts(
+          credential: testConstants.credentials, isSandbox: false);
       logger.info('Accounts: $accounts');
 
       String? accountUUID = accounts.first?.uuid;
 
       Account? account = await getAccount(
-          uuid: accountUUID, credential: testConstants.credentials, isSandbox: false);
+          uuid: accountUUID,
+          credential: testConstants.credentials,
+          isSandbox: false);
       logger.info('Accounts: $account');
       expect(account?.uuid, accountUUID);
     });
@@ -303,7 +317,9 @@ void main() {
     test('Get Account Balance by Account Currency', () async {
       String currency = 'BTC';
       double? balance = await getAccountBalance(
-          currency: currency, credential: testConstants.credentials, isSandbox: false);
+          currency: currency,
+          credential: testConstants.credentials,
+          isSandbox: false);
       expect(balance != null, true);
     });
 
@@ -320,8 +336,8 @@ void main() {
     test(
         'Get Account Balance cancels when neither a uuid or currency is provided',
         () async {
-      double? balance =
-          await getAccountBalance(credential: testConstants.credentials, isSandbox: false);
+      double? balance = await getAccountBalance(
+          credential: testConstants.credentials, isSandbox: false);
       expect(balance, null);
     });
   });

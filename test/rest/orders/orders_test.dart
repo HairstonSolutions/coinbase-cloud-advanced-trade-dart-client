@@ -72,8 +72,8 @@ void main() {
       when(mockClient.get(any, headers: anyNamed('headers'))).thenAnswer(
           (_) async => http.Response(jsonEncode(mockResponse), 200));
 
-      List<Order>? orders =
-          await getOrders(client: mockClient, credential: testConstants.credentials);
+      List<Order>? orders = await getOrders(
+          client: mockClient, credential: testConstants.credentials);
 
       expect(orders, isNotNull);
       expect(orders.length, 1);
@@ -208,8 +208,8 @@ void main() {
     });
   });
 
-  group('Test Get Orders Requests to Coinbase AT API Endpoints', skip: testConstants.ciSkip,
-      () {
+  group('Test Get Orders Requests to Coinbase AT API Endpoints',
+      skip: testConstants.ciSkip, () {
     test('Authorized Get All Orders', () async {
       String requestPath = '/orders/historical/batch';
       Map<String, dynamic>? queryParameters = {'limit': '100'};
@@ -227,8 +227,8 @@ void main() {
     });
 
     test('Get all Orders as a list of Orders', () async {
-      List<Order>? orders =
-          await getOrders(credential: testConstants.credentials, isSandbox: false);
+      List<Order>? orders = await getOrders(
+          credential: testConstants.credentials, isSandbox: false);
       logger.info('Orders: $orders');
 
       expect(orders.isNotEmpty, true);
@@ -237,8 +237,8 @@ void main() {
 
   group('Test Individual Orders', skip: testConstants.ciSkip, () {
     test('Get Individual Order', () async {
-      List<Order> orders =
-          await getOrders(credential: testConstants.credentials, isSandbox: false);
+      List<Order> orders = await getOrders(
+          credential: testConstants.credentials, isSandbox: false);
       String? orderId = orders.first.orderId;
       Order? order = await getOrder(
         orderId: orderId!,
@@ -389,7 +389,8 @@ void main() {
     });
   });
 
-  group('Test Create Orders to Coinbase AT API Endpoints', skip: testConstants.ciSkip, () {
+  group('Test Create Orders to Coinbase AT API Endpoints',
+      skip: testConstants.ciSkip, () {
     test('Create a new market order with quote size', () async {
       final clientOrderId = DateTime.now().millisecondsSinceEpoch.toString();
       final result = await createMarketOrder(

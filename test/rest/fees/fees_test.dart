@@ -10,7 +10,6 @@ import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
-
 import '../../tools.dart';
 import './fees_test.mocks.dart';
 
@@ -27,18 +26,19 @@ void main() {
       when(client.get(any, headers: anyNamed('headers'))).thenAnswer(
           (_) async => http.Response(getTransactionSummaryJson, 200));
 
-      final result =
-          await getTransactionSummary(client: client, credential: testConstants.credentials);
+      final result = await getTransactionSummary(
+          client: client, credential: testConstants.credentials);
 
       expect(result, isNotNull);
       expect(result!.totalFees, isNotNull);
     });
   });
 
-  group('Fees REST Tests Requests to Coinbase AT API Endpoints', skip: testConstants.ciSkip,
-      () {
+  group('Fees REST Tests Requests to Coinbase AT API Endpoints',
+      skip: testConstants.ciSkip, () {
     test('Get Transaction Summary', () async {
-      final result = await getTransactionSummary(credential: testConstants.credentials);
+      final result =
+          await getTransactionSummary(credential: testConstants.credentials);
 
       logger.info('Fees: $result');
 

@@ -62,8 +62,8 @@ void main() {
       when(mockClient.get(any, headers: anyNamed('headers'))).thenAnswer(
           (_) async => http.Response(jsonEncode(mockResponse), 200));
 
-      List<Fill>? fills =
-          await getFills(client: mockClient, credential: testConstants.credentials);
+      List<Fill>? fills = await getFills(
+          client: mockClient, credential: testConstants.credentials);
 
       expect(fills, isNotNull);
       expect(fills.length, 1);
@@ -71,8 +71,8 @@ void main() {
     });
   });
 
-  group('Test Get Fills Requests to Coinbase AT API Endpoints', skip: testConstants.ciSkip,
-      () {
+  group('Test Get Fills Requests to Coinbase AT API Endpoints',
+      skip: testConstants.ciSkip, () {
     test('Authorized Get All Fills', () async {
       String requestPath = '/orders/historical/fills';
       Map<String, dynamic>? queryParameters = {'limit': '1000'};
@@ -89,19 +89,21 @@ void main() {
     });
 
     test('Get all Fills as a list of Fills', () async {
-      List<Fill>? fills =
-          await getFills(credential: testConstants.credentials, isSandbox: false);
+      List<Fill>? fills = await getFills(
+          credential: testConstants.credentials, isSandbox: false);
       logger.info('Fills: $fills');
 
       expect(fills.isNotEmpty, true);
     });
 
     test('Get all Fills by order ID', () async {
-      List<Order>? orders =
-          await getOrders(credential: testConstants.credentials, isSandbox: false);
+      List<Order>? orders = await getOrders(
+          credential: testConstants.credentials, isSandbox: false);
       String? orderId = orders.last.orderId;
       List<Fill>? fills = await getFills(
-          orderId: orderId, credential: testConstants.credentials, isSandbox: false);
+          orderId: orderId,
+          credential: testConstants.credentials,
+          isSandbox: false);
       logger.info('Fills: $fills');
 
       expect(fills.isNotEmpty, true);
@@ -109,11 +111,13 @@ void main() {
     });
 
     test('Get all Fills by product ID', () async {
-      List<Order>? orders =
-          await getOrders(credential: testConstants.credentials, isSandbox: false);
+      List<Order>? orders = await getOrders(
+          credential: testConstants.credentials, isSandbox: false);
       String? productId = orders.last.productId;
       List<Fill>? fills = await getFills(
-          productId: productId, credential: testConstants.credentials, isSandbox: false);
+          productId: productId,
+          credential: testConstants.credentials,
+          isSandbox: false);
       logger.info('Fills: $fills');
 
       expect(fills.isNotEmpty, true);
