@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:coinbase_cloud_advanced_trade_client/src/models/credential.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/models/error.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/product_book.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/rest/products/products.dart';
 import 'package:http/http.dart' as http;
@@ -71,6 +72,26 @@ void main() {
       expect(productBooks[1].bids.length, 1);
       expect(productBooks[1].asks.length, 1);
       expect(productBooks[1].time, isNotNull);
+    });
+
+    test('Get Best Bid Ask Throws CoinbaseException on Error', () async {
+      final client = MockClient();
+      final List<String> productIds = ['BTC-USD'];
+
+      when(client.get(
+        Uri.https('api.coinbase.com', '/api/v3/brokerage/best_bid_ask', {
+          'product_ids': ['BTC-USD']
+        }),
+        headers: anyNamed('headers'),
+      )).thenAnswer((_) async => http.Response('Internal Server Error', 500));
+
+      expect(
+          () async => await getBestBidAsk(
+              productIds: productIds,
+              client: client,
+              credential: Credential(
+                  apiKeyName: 'key', privateKeyPEM: constants.privateKeyPEM)),
+          throwsA(isA<CoinbaseException>()));
     });
   });
 

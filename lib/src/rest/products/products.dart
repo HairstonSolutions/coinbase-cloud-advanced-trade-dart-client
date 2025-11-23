@@ -6,6 +6,7 @@ import 'package:coinbase_cloud_advanced_trade_client/src/models/candle.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/credential.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/product.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/product_book.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/models/error.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/services/network.dart';
 import 'package:http/http.dart' as http;
 
@@ -53,8 +54,8 @@ Future<List<Product>> getProductsAuthorized(
       products.add(Product.fromCBJson(jsonObject));
     }
   } else {
-    throw Exception(
-        'Failed to get products: ${response.statusCode} ${response.body}');
+    throw CoinbaseException(
+        'Failed to get products', response.statusCode, response.body);
   }
 
   return products;
@@ -97,8 +98,8 @@ Future<Product?> getProductAuthorized(
 
     return Product.fromCBJson(jsonResponse);
   } else {
-    throw Exception(
-        'Failed to get product: ${response.statusCode} ${response.body}');
+    throw CoinbaseException(
+        'Failed to get product', response.statusCode, response.body);
   }
 }
 
@@ -147,8 +148,8 @@ Future<List<Candle>> getProductCandlesAuthorized(
       candles.add(Candle.fromJson(jsonObject));
     }
   } else {
-    throw Exception(
-        'Failed to get product candles: ${response.statusCode} ${response.body}');
+    throw CoinbaseException(
+        'Failed to get product candles', response.statusCode, response.body);
   }
   return candles;
 }
@@ -190,8 +191,8 @@ Future<ProductBook?> getProductBookAuthorized(
 
     return ProductBook.fromJson(jsonResponse);
   } else {
-    throw Exception(
-        'Failed to get product book: ${response.statusCode} ${response.body}');
+    throw CoinbaseException(
+        'Failed to get product book', response.statusCode, response.body);
   }
 }
 
@@ -232,8 +233,8 @@ Future<List<ProductBook>> getBestBidAsk(
         .map((jsonObject) => ProductBook.fromMap(jsonObject))
         .toList();
   } else {
-    throw Exception(
-        'Failed to get best bid/ask: ${response.statusCode} ${response.body}');
+    throw CoinbaseException(
+        'Failed to get best bid/ask', response.statusCode, response.body);
   }
   return productBooks;
 }
