@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io' show Platform;
 
 import 'package:coinbase_cloud_advanced_trade_client/src/models/credential.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/models/error.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/order.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/rest/orders/orders.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/services/network.dart';
@@ -186,12 +187,12 @@ void main() {
       when(mockClient.get(any, headers: anyNamed('headers'))).thenAnswer(
           (_) async => http.Response(jsonEncode(mockResponse), 404));
 
-      Order? order = await getOrder(
-          orderId: specificOrderId,
-          client: mockClient,
-          credential: credentials);
-
-      expect(order, isNull);
+      expect(
+          () async => await getOrder(
+              orderId: specificOrderId,
+              client: mockClient,
+              credential: credentials),
+          throwsA(isA<CoinbaseException>()));
     });
 
     test('Return null when order not found', () async {
@@ -200,12 +201,12 @@ void main() {
       when(mockClient.get(any, headers: anyNamed('headers'))).thenAnswer(
           (_) async => http.Response(jsonEncode(mockResponse), 404));
 
-      Order? order = await getOrder(
-          orderId: "non-existent-id",
-          client: mockClient,
-          credential: credentials);
-
-      expect(order, isNull);
+      expect(
+          () async => await getOrder(
+              orderId: "non-existent-id",
+              client: mockClient,
+              credential: credentials),
+          throwsA(isA<CoinbaseException>()));
     });
   });
 
@@ -252,13 +253,13 @@ void main() {
 
     test('Individual Order Does Not Exist', () async {
       String orderId = 'b0313b63ee8d';
-      Order? order = await getOrder(
-        orderId: orderId,
-        credential: credentials,
-        isSandbox: false,
-      );
-
-      expect(order, null);
+      expect(
+          () async => await getOrder(
+                orderId: orderId,
+                credential: credentials,
+                isSandbox: false,
+              ),
+          throwsA(isA<CoinbaseException>()));
     });
   });
 

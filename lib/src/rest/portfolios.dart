@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:coinbase_cloud_advanced_trade_client/src/models/credential.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/models/error.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/portfolio.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/portfolio_breakdown.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/services/network.dart';
@@ -36,9 +37,8 @@ Future<List<Portfolio>> listPortfolios(
       portfolios.add(Portfolio.fromCBJson(jsonObject));
     }
   } else {
-    var url = response.request?.url.toString();
-    print('Request to URL $url failed: Response code ${response.statusCode}');
-    print('Error Response Message: ${response.body}');
+    throw CoinbaseException(
+        'Failed to list portfolios', response.statusCode, response.body);
   }
 
   return portfolios;
@@ -74,11 +74,9 @@ Future<Portfolio?> createPortfolio(
     var jsonResponse = jsonDecode(response.body);
     return Portfolio.fromCBJson(jsonResponse['portfolio']);
   } else {
-    var url = response.request?.url.toString();
-    print('Request to URL $url failed: Response code ${response.statusCode}');
-    print('Error Response Message: ${response.body}');
+    throw CoinbaseException(
+        'Failed to create portfolio', response.statusCode, response.body);
   }
-  return null;
 }
 
 /// Edits a portfolio.
@@ -113,11 +111,9 @@ Future<Portfolio?> editPortfolio(
     var jsonResponse = jsonDecode(response.body);
     return Portfolio.fromCBJson(jsonResponse['portfolio']);
   } else {
-    var url = response.request?.url.toString();
-    print('Request to URL $url failed: Response code ${response.statusCode}');
-    print('Error Response Message: ${response.body}');
+    throw CoinbaseException(
+        'Failed to edit portfolio', response.statusCode, response.body);
   }
-  return null;
 }
 
 /// Deletes a portfolio.
@@ -144,10 +140,8 @@ Future<bool> deletePortfolio(
   if (response.statusCode == 200) {
     return true;
   } else {
-    var url = response.request?.url.toString();
-    print('Request to URL $url failed: Response code ${response.statusCode}');
-    print('Error Response Message: ${response.body}');
-    return false;
+    throw CoinbaseException(
+        'Failed to delete portfolio', response.statusCode, response.body);
   }
 }
 
@@ -176,11 +170,9 @@ Future<PortfolioBreakdown?> getPortfolioBreakdown(
     var jsonResponse = jsonDecode(response.body);
     return PortfolioBreakdown.fromCBJson(jsonResponse['breakdown']);
   } else {
-    var url = response.request?.url.toString();
-    print('Request to URL $url failed: Response code ${response.statusCode}');
-    print('Error Response Message: ${response.body}');
+    throw CoinbaseException(
+        'Failed to get portfolio breakdown', response.statusCode, response.body);
   }
-  return null;
 }
 
 /// Moves funds between portfolios.
@@ -220,9 +212,7 @@ Future<bool> movePortfolioFunds(
   if (response.statusCode == 200) {
     return true;
   } else {
-    var url = response.request?.url.toString();
-    print('Request to URL $url failed: Response code ${response.statusCode}');
-    print('Error Response Message: ${response.body}');
-    return false;
+    throw CoinbaseException(
+        'Failed to move portfolio funds', response.statusCode, response.body);
   }
 }

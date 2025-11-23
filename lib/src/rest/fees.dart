@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:coinbase_cloud_advanced_trade_client/src/models/credential.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/models/error.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/transaction_summary.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/services/network.dart';
 import 'package:http/http.dart' as http;
@@ -45,9 +46,7 @@ Future<TransactionSummary?> getTransactionSummary(
     var jsonResponse = jsonDecode(response.body);
     return TransactionSummary.fromCBJson(jsonResponse);
   } else {
-    var url = response.request?.url.toString();
-    print('Request to URL $url failed: Response code ${response.statusCode}');
-    print('Error Response Message: ${response.body}');
+    throw CoinbaseException(
+        'Failed to get transaction summary', response.statusCode, response.body);
   }
-  return null;
 }

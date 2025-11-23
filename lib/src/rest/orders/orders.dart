@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:coinbase_cloud_advanced_trade_client/src/models/credential.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/models/error.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/order.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/services/network.dart';
 import 'package:http/http.dart' as http;
@@ -56,9 +57,8 @@ Future<List<Order>> getOrders(
       orders.addAll(paginatedAccounts);
     }
   } else {
-    var url = response.request?.url.toString();
-    print('Request to URL $url failed: Response code ${response.statusCode}');
-    print('Error Response Message: ${response.body}');
+    throw CoinbaseException(
+        'Failed to get orders', response.statusCode, response.body);
   }
 
   return orders;
@@ -94,9 +94,8 @@ Future<Order?> getOrder(
     var jsonOrder = jsonResponse['order'];
     order = Order.fromCBJson(jsonOrder);
   } else {
-    var url = response.request?.url.toString();
-    print('Request to URL $url failed: Response code ${response.statusCode}');
-    print('Error Response Message: ${response.body}');
+    throw CoinbaseException(
+        'Failed to get order', response.statusCode, response.body);
   }
 
   return order;
@@ -233,9 +232,8 @@ Future<Map<String, dynamic>?> _createOrder(
     var jsonResponse = jsonDecode(data);
     result = jsonResponse;
   } else {
-    var url = response.request?.url.toString();
-    print('Request to URL $url failed: Response code ${response.statusCode}');
-    print('Error Response Message: ${response.body}');
+    throw CoinbaseException(
+        'Failed to create order', response.statusCode, response.body);
   }
 
   return result;

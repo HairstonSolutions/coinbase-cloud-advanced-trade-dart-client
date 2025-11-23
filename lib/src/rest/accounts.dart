@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:coinbase_cloud_advanced_trade_client/src/models/account.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/credential.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/models/error.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/services/network.dart';
 import 'package:http/http.dart' as http;
 
@@ -56,9 +57,8 @@ Future<List<Account>> getAccounts(
       accounts.addAll(paginatedAccounts);
     }
   } else {
-    var url = response.request?.url.toString();
-    print('Request to URL $url failed: Response code ${response.statusCode}');
-    print('Error Response Message: ${response.body}');
+    throw CoinbaseException(
+        'Failed to get accounts', response.statusCode, response.body);
   }
 
   return accounts;
@@ -120,11 +120,9 @@ Future<Account?> getAccount(
 
     return Account.fromCBJson(jsonAccount);
   } else {
-    var url = response.request?.url.toString();
-    print('Request to URL $url failed: Response code ${response.statusCode}');
-    print('Error Response Message: ${response.body}');
+    throw CoinbaseException(
+        'Failed to get account', response.statusCode, response.body);
   }
-  return null;
 }
 
 /// Gets the balance of a single account for the current user.
