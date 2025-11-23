@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io' show Platform;
 import 'package:logging/logging.dart';
 import '../../test_helpers.dart';
+import '../../test_constants.dart';
 
 import 'package:coinbase_cloud_advanced_trade_client/src/models/credential.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/error.dart';
@@ -14,14 +15,7 @@ import 'package:test/test.dart';
 
 import '../../mocks.mocks.dart';
 
-final Map<String, String> envVars = Platform.environment;
-final String apiKeyName = envVars['COINBASE_API_KEY_NAME'] ?? 'api_key_name';
-final String? privateKeyPEM = envVars['COINBASE_PRIVATE_KEY'];
-final String? skipTests = envVars['SKIP_TESTS'];
-final bool skip = skipTests == 'false' ? false : true;
 
-final Credential credentials =
-    Credential(apiKeyName: apiKeyName, privateKeyPEM: privateKeyPEM!);
 
 void main() {
   final Logger logger = setupLogger('orders_test');
@@ -214,7 +208,7 @@ void main() {
     });
   });
 
-  group('Test Get Orders Requests to Coinbase AT API Endpoints', skip: skip,
+  group('Test Get Orders Requests to Coinbase AT API Endpoints', skip: ciSkip,
       () {
     test('Authorized Get All Orders', () async {
       String requestPath = '/orders/historical/batch';
@@ -241,7 +235,7 @@ void main() {
     });
   });
 
-  group('Test Individual Orders', skip: skip, () {
+  group('Test Individual Orders', skip: ciSkip, () {
     test('Get Individual Order', () async {
       List<Order> orders =
           await getOrders(credential: credentials, isSandbox: false);
@@ -395,7 +389,7 @@ void main() {
     });
   });
 
-  group('Test Create Orders to Coinbase AT API Endpoints', skip: skip, () {
+  group('Test Create Orders to Coinbase AT API Endpoints', skip: ciSkip, () {
     test('Create a new market order with quote size', () async {
       final clientOrderId = DateTime.now().millisecondsSinceEpoch.toString();
       final result = await createMarketOrder(

@@ -1,23 +1,18 @@
 import 'dart:io' show Platform;
 import 'package:logging/logging.dart';
 import '../test_helpers.dart';
+import '../test_constants.dart';
 
 import 'package:coinbase_cloud_advanced_trade_client/src/models/credential.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/services/network.dart';
 import 'package:test/test.dart';
 
-Map<String, String> envVars = Platform.environment;
-String? apiKeyName = envVars['COINBASE_API_KEY_NAME'];
-String? privateKeyPEM = envVars['COINBASE_PRIVATE_KEY'];
-String? skipTests = envVars['SKIP_TESTS'];
-bool skip = skipTests == 'false' ? false : true;
-Credential credentials =
-    Credential(apiKeyName: apiKeyName!, privateKeyPEM: privateKeyPEM!);
+
 
 void main() {
   final Logger logger = setupLogger('network_test');
 
-  group('Test Network Service', skip: skip, () {
+  group('Test Network Service', skip: ciSkip, () {
     setUp(() {});
 
     test('Authorized Get with no body (Fees)', () async {

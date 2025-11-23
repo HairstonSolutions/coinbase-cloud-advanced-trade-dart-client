@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:logging/logging.dart';
 import '../../test_helpers.dart';
+import '../../test_constants.dart';
 
 import 'package:coinbase_cloud_advanced_trade_client/src/models/credential.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/rest/fees.dart';
@@ -13,12 +14,7 @@ import '../../test_constants.dart';
 import '../../tools.dart';
 import './fees_test.mocks.dart';
 
-final Map<String, String> envVars = Platform.environment;
-final String? skipTests = envVars['SKIP_TESTS'];
-final bool skip = skipTests == 'false' ? false : true;
 
-final Credential credentials =
-    Credential(apiKeyName: apiKeyName, privateKeyPEM: privateKeyPEM);
 
 @GenerateMocks([http.Client])
 void main() {
@@ -41,7 +37,7 @@ void main() {
     });
   });
 
-  group('Fees REST Tests Requests to Coinbase AT API Endpoints', skip: skip,
+  group('Fees REST Tests Requests to Coinbase AT API Endpoints', skip: ciSkip,
       () {
     test('Get Transaction Summary', () async {
       final result = await getTransactionSummary(credential: credentials);

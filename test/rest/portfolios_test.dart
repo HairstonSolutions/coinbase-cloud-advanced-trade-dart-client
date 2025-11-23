@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:logging/logging.dart';
 import '../test_helpers.dart';
+import '../test_constants.dart';
 
 import 'package:coinbase_cloud_advanced_trade_client/src/models/credential.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/portfolio.dart';
@@ -15,9 +16,7 @@ import 'package:test/test.dart';
 import '../portfolios_test.mocks.dart';
 import '../test_constants.dart' as constants;
 
-final Map<String, String> envVars = Platform.environment;
-final String? skipTests = envVars['SKIP_TESTS'];
-final bool skip = skipTests == 'false' ? false : true;
+
 final String? skipDestructiveTests = envVars['SKIP_DESTRUCTIVE_TESTS'];
 final bool skipDT = skipDestructiveTests != 'false';
 
@@ -46,8 +45,7 @@ void main() {
   final Logger logger = setupLogger('portfolios_test');
 
   final mockClient = MockClient();
-  final credential = Credential(
-      apiKeyName: constants.apiKeyName, privateKeyPEM: constants.privateKeyPEM);
+  final credential = credentials;
 
   group('Portfolios API tests using Mocks', () {
     test('listPortfolios returns a list of portfolios', () async {

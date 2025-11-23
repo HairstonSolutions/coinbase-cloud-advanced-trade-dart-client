@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io' show Platform;
 import 'package:logging/logging.dart';
 import '../../test_helpers.dart';
+import '../../test_constants.dart';
 
 import 'package:coinbase_cloud_advanced_trade_client/src/models/credential.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/fill.dart';
@@ -15,14 +16,7 @@ import 'package:test/test.dart';
 
 import '../../mocks.mocks.dart';
 
-final Map<String, String> envVars = Platform.environment;
-final String apiKeyName = envVars['COINBASE_API_KEY_NAME'] ?? 'api_key_name';
-final String? privateKeyPEM = envVars['COINBASE_PRIVATE_KEY'];
-final String? skipTests = envVars['SKIP_TESTS'];
-final bool skip = skipTests == 'false' ? false : true;
 
-final Credential credentials =
-    Credential(apiKeyName: apiKeyName, privateKeyPEM: privateKeyPEM!);
 
 void main() {
   final Logger logger = setupLogger('fills_test');
@@ -77,7 +71,7 @@ void main() {
     });
   });
 
-  group('Test Get Fills Requests to Coinbase AT API Endpoints', skip: skip, () {
+  group('Test Get Fills Requests to Coinbase AT API Endpoints', skip: ciSkip, () {
     test('Authorized Get All Fills', () async {
       String requestPath = '/orders/historical/fills';
       Map<String, dynamic>? queryParameters = {'limit': '1000'};

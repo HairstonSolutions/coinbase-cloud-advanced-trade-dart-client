@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:logging/logging.dart';
 import '../../test_helpers.dart';
+import '../../test_constants.dart';
 
 import 'package:coinbase_cloud_advanced_trade_client/src/models/credential.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/rest/products/products.dart';
@@ -43,8 +44,7 @@ void main() {
         final client = MockClient();
         final mockResponse =
             '{"candles":[{"start":"1672531200","high":"16600","low":"16500","open":"16550","close":"16580","volume":"1234.56"}]}';
-        final credential =
-            Credential(apiKeyName: 'key', privateKeyPEM: privateKeyPEM);
+        final credential = credentials;
 
         when(client.get(any, headers: anyNamed('headers')))
             .thenAnswer((_) async => http.Response(mockResponse, 200));
@@ -82,10 +82,7 @@ void main() {
 
         setUp(() {
           if (!ciSkip) {
-            final apiKeyName = Platform.environment['COINBASE_API_KEY_NAME']!;
-            final privateKeyPEM = Platform.environment['COINBASE_PRIVATE_KEY']!;
-            credential = Credential(
-                apiKeyName: apiKeyName, privateKeyPEM: privateKeyPEM);
+            credential = credentials;
           }
         });
 
