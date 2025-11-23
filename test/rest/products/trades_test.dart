@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'dart:io' show Platform;
+import 'package:logging/logging.dart';
+import '../../test_helpers.dart';
 
 import 'package:coinbase_cloud_advanced_trade_client/src/models/credential.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/product.dart';
@@ -23,6 +25,8 @@ final Credential credentials =
     Credential(apiKeyName: apiKeyName, privateKeyPEM: privateKeyPEM!);
 
 void main() {
+  final Logger logger = setupLogger('trades_test');
+
   group('Test Get Trades using MockClient', () {
     late MockClient mockClient;
 
@@ -69,8 +73,8 @@ void main() {
       var response = await getAuthorized(requestPath,
           credential: credentials, isSandbox: false);
       var url = response.request?.url.toString();
-      print('Response Code: ${response.statusCode} to URL: $url');
-      print('Response body: ${response.body} to URL: $url');
+      logger.info('Response Code: ${response.statusCode} to URL: $url');
+      logger.info('Response body: ${response.body} to URL: $url');
 
       expect(response.statusCode == 200, isTrue);
 
@@ -81,7 +85,7 @@ void main() {
       String productId = 'BTC-USD';
       List<Trade?> trades = await getTrades(
           productId: productId, credential: credentials, isSandbox: false);
-      print('Products: $trades');
+      logger.info('Products: $trades');
       expect(trades.isNotEmpty, true);
     });
 
@@ -93,7 +97,7 @@ void main() {
           limit: limit,
           credential: credentials,
           isSandbox: false);
-      print('Trades: $trades');
+      logger.info('Trades: $trades');
       expect(trades.isNotEmpty, true);
       expect(trades.length, 100);
     });
@@ -103,7 +107,7 @@ void main() {
       List<Trade?> trades = await getTrades(
           productId: productId, credential: credentials, isSandbox: false);
 
-      print('Trade : $trades');
+      logger.info('Trade : $trades');
       expect(trades.first?.productId, productId);
     });
 
@@ -115,7 +119,7 @@ void main() {
       List<Trade?> trades = await getTrades(
           productId: productId, credential: credentials, isSandbox: false);
 
-      print('Trades : $trades');
+      logger.info('Trades : $trades');
       expect(trades.first?.productId!, productId);
     });
   });

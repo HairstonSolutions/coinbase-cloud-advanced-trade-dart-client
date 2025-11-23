@@ -2,10 +2,14 @@ import 'dart:convert';
 
 import 'package:coinbase_cloud_advanced_trade_client/src/models/account.dart';
 import 'package:test/test.dart';
+import 'package:logging/logging.dart';
+import '../test_helpers.dart';
 
 import '../tools.dart';
 
 void main() {
+  final Logger logger = setupLogger('account_test');
+
   group('Account Object Injection', () {
     String exampleAccountJsonFile = 'models/examples/account.json';
     String? exampleAccountJson;
@@ -18,7 +22,7 @@ void main() {
       var jsonAsMap = jsonDecode(exampleAccountJson!);
       Account? exampleAccount = Account.fromCBJson(jsonAsMap);
 
-      print('Account Object: $exampleAccount');
+      logger.info('Account Object: $exampleAccount');
 
       expect(exampleAccount.uuid, '8bfc20d7-f7c6-4422-bf07-8243ca4169fe');
       expect(exampleAccount.name, 'BTC Wallet');
@@ -41,8 +45,8 @@ void main() {
 
       Account? deserializedAccount = Account.fromJson(serializedAccount);
 
-      print('Deserialized Account Object: $deserializedAccount');
-      print(jsonEncode(deserializedAccount));
+      logger.info('Deserialized Account Object: $deserializedAccount');
+      logger.info(jsonEncode(deserializedAccount));
 
       expect(exampleAccount.uuid, '8bfc20d7-f7c6-4422-bf07-8243ca4169fe');
       expect(exampleAccount.name, 'BTC Wallet');

@@ -3,12 +3,16 @@ import 'package:http/http.dart' as http;
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
+import 'package:logging/logging.dart';
+import '../../test_helpers.dart';
 
 import '../../mocks.mocks.dart';
 import '../../tools.dart';
 
 @GenerateMocks([http.Client])
 void main() {
+  final Logger logger = setupLogger('server_time_test');
+
   group('Public REST Tests using Mocks', () {
     test('Get Server Time', () async {
       final client = MockClient();
@@ -31,7 +35,7 @@ void main() {
     test('Get Server Time', () async {
       final serverTime = await getServerTime();
 
-      print('Server Time: $serverTime');
+      logger.info('Server Time: $serverTime');
 
       expect(serverTime, isNotNull);
       expect(serverTime!.iso, isNotNull);

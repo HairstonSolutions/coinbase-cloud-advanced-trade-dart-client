@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'package:logging/logging.dart';
+import '../../test_helpers.dart';
 
 import 'package:coinbase_cloud_advanced_trade_client/src/models/credential.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/rest/products/products.dart';
@@ -12,6 +14,8 @@ import '../../test_constants.dart';
 import '../../mocks.mocks.dart';
 
 void main() {
+  final Logger logger = setupLogger('candles_test');
+
   group('Product Candles', () {
     // Mock Tests
     group('Mocks', () {
@@ -69,7 +73,7 @@ void main() {
           granularity: 'ONE_HOUR',
         );
 
-        print(candles);
+        logger.info(candles);
         expect(candles.length, greaterThan(0));
       });
 
@@ -94,7 +98,7 @@ void main() {
             credential: credential,
           );
 
-          print(candles);
+          logger.info(candles);
           expect(candles.length, greaterThan(0));
         });
       }, skip: ciSkip);

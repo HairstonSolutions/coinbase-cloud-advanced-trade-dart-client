@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'package:logging/logging.dart';
+import '../../test_helpers.dart';
 
 import 'package:coinbase_cloud_advanced_trade_client/src/models/credential.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/rest/fees.dart';
@@ -20,6 +22,8 @@ final Credential credentials =
 
 @GenerateMocks([http.Client])
 void main() {
+  final Logger logger = setupLogger('fees_test');
+
   group('Fees REST Tests using Mocks', () {
     test('Get Transaction Summary', () async {
       final client = MockClient();
@@ -42,7 +46,7 @@ void main() {
     test('Get Transaction Summary', () async {
       final result = await getTransactionSummary(credential: credentials);
 
-      print('Fees: $result');
+      logger.info('Fees: $result');
 
       expect(result, isNotNull);
       expect(result!.totalFees, isNotNull);

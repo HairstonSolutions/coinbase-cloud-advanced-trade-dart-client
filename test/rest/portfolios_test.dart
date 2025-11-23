@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:logging/logging.dart';
+import '../test_helpers.dart';
 
 import 'package:coinbase_cloud_advanced_trade_client/src/models/credential.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/portfolio.dart';
@@ -41,6 +43,8 @@ final String portfolioMoveFundsTargetUUID =
 
 @GenerateMocks([http.Client])
 void main() {
+  final Logger logger = setupLogger('portfolios_test');
+
   final mockClient = MockClient();
   final credential = Credential(
       apiKeyName: constants.apiKeyName, privateKeyPEM: constants.privateKeyPEM);
@@ -187,7 +191,7 @@ void main() {
       final portfolios = await listPortfolios(credential: credential);
 
       for (Portfolio portfolio in portfolios) {
-        print('portfolio: $portfolio');
+        logger.info('portfolio: $portfolio');
       }
 
       expect(portfolios, isA<List<Portfolio>>());
@@ -198,7 +202,7 @@ void main() {
       final portfolioBreakdown = await getPortfolioBreakdown(
           uuid: portfolioBreakdownGetUUID, credential: credential);
 
-      print(portfolioBreakdown);
+      logger.info(portfolioBreakdown);
       expect(portfolioBreakdown, isA<PortfolioBreakdown>());
     });
 
@@ -206,7 +210,7 @@ void main() {
       final Portfolio? createdPortfolio = await createPortfolio(
           name: portfolioCreateName, credential: credential);
 
-      print('portfolio: $createdPortfolio');
+      logger.info('portfolio: $createdPortfolio');
 
       expect(createdPortfolio, isA<Portfolio>());
       expect(createdPortfolio?.name, portfolioCreateName);

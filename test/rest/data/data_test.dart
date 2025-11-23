@@ -4,6 +4,8 @@ import 'package:http/http.dart' as http;
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
+import 'package:logging/logging.dart';
+import '../../test_helpers.dart';
 
 import '../../test_constants.dart' as constants;
 import '../../tools.dart';
@@ -14,6 +16,8 @@ final Credential credentials = Credential(
 
 @GenerateMocks([http.Client])
 void main() {
+  final Logger logger = setupLogger('data_test');
+
   group('Data API REST Tests using Mocks', () {
     test('Get API Key Permissions', () async {
       final client = MockClient();
@@ -36,7 +40,7 @@ void main() {
     test('Get API Key Permissions', () async {
       final result = await getKeyPermissions(credential: credentials);
 
-      print('Key Permissions: $result');
+      logger.info('Key Permissions: $result');
 
       expect(result, isNotNull);
       expect(result!.canView, isNotNull);

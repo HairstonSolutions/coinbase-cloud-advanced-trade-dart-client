@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'dart:io' show Platform;
+import 'package:logging/logging.dart';
+import '../test_helpers.dart';
 
 import 'package:coinbase_cloud_advanced_trade_client/src/models/account.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/credential.dart';
@@ -21,6 +23,8 @@ final Credential credentials =
     Credential(apiKeyName: apiKeyName, privateKeyPEM: privateKeyPEM!);
 
 void main() {
+  final Logger logger = setupLogger('accounts_test');
+
   group('Test Get Accounts using MockClient', () {
     late MockClient mockClient;
 
@@ -231,8 +235,8 @@ void main() {
       var response = await getAuthorized(requestPath,
           credential: credentials, isSandbox: false);
       var url = response.request?.url.toString();
-      print('Response Code: ${response.statusCode} to URL: $url');
-      print('Response body: ${response.body} to URL: $url');
+      logger.info('Response Code: ${response.statusCode} to URL: $url');
+      logger.info('Response body: ${response.body} to URL: $url');
 
       expect(response.statusCode == 200, isTrue);
 
@@ -242,7 +246,7 @@ void main() {
     test('Authorized Get Accounts', () async {
       List<Account?> accounts =
           await getAccounts(credential: credentials, isSandbox: false);
-      print('Accounts: $accounts');
+      logger.info('Accounts: $accounts');
       expect(accounts.isNotEmpty, true);
     });
 
@@ -250,7 +254,7 @@ void main() {
       int limit = 100;
       List<Account?> accounts = await getAccounts(
           limit: limit, credential: credentials, isSandbox: false);
-      print('Accounts: $accounts');
+      logger.info('Accounts: $accounts');
       expect(accounts.isNotEmpty, true);
     });
 
@@ -258,7 +262,7 @@ void main() {
       int limit = 1; // Forces a cursor value to be returned
       List<Account?> accounts = await getAccounts(
           limit: limit, credential: credentials, isSandbox: false);
-      print('Accounts: $accounts');
+      logger.info('Accounts: $accounts');
       expect(accounts.isNotEmpty, true);
     });
 
@@ -266,7 +270,7 @@ void main() {
       Account? account = await getAccountByCurrency('BTC',
           credential: credentials, isSandbox: false);
 
-      print('Account : $account');
+      logger.info('Account : $account');
       expect(account?.currency, 'BTC');
     });
 
@@ -278,7 +282,7 @@ void main() {
       Account? account = await getAccount(
           uuid: accountId, credential: credentials, isSandbox: false);
 
-      print('Account : $account');
+      logger.info('Account : $account');
       expect(account?.currency, 'BTC');
     });
 
@@ -292,13 +296,13 @@ void main() {
     test('Authorized Get Account by Account ID', () async {
       List<Account?> accounts =
           await getAccounts(credential: credentials, isSandbox: false);
-      print('Accounts: $accounts');
+      logger.info('Accounts: $accounts');
 
       String? accountUUID = accounts.first?.uuid;
 
       Account? account = await getAccount(
           uuid: accountUUID, credential: credentials, isSandbox: false);
-      print('Accounts: $account');
+      logger.info('Accounts: $account');
       expect(account?.uuid, accountUUID);
     });
 

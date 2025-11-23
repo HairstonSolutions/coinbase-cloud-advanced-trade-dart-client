@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'dart:io' show Platform;
+import 'package:logging/logging.dart';
+import '../../test_helpers.dart';
 
 import 'package:coinbase_cloud_advanced_trade_client/src/models/credential.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/product.dart';
@@ -21,6 +23,8 @@ final Credential credentials =
     Credential(apiKeyName: apiKeyName, privateKeyPEM: privateKeyPEM!);
 
 void main() {
+  final Logger logger = setupLogger('products_test');
+
   group('Test Get Products using MockClient', () {
     late MockClient mockClient;
 
@@ -123,8 +127,8 @@ void main() {
       var response = await getAuthorized(requestPath,
           credential: credentials, isSandbox: false);
       var url = response.request?.url.toString();
-      print('Response Code: ${response.statusCode} to URL: $url');
-      print('Response body: ${response.body} to URL: $url');
+      logger.info('Response Code: ${response.statusCode} to URL: $url');
+      logger.info('Response body: ${response.body} to URL: $url');
 
       expect(response.statusCode == 200, isTrue);
 
@@ -134,7 +138,7 @@ void main() {
     test('Authorized Get Products', () async {
       List<Product?> products = await getProductsAuthorized(
           credential: credentials, isSandbox: false);
-      print('Products: $products');
+      logger.info('Products: $products');
       expect(products.isNotEmpty, true);
     });
 
@@ -143,7 +147,7 @@ void main() {
       Product? product = await getProductAuthorized(
           productId: productId, credential: credentials, isSandbox: false);
 
-      print('Product : $product');
+      logger.info('Product : $product');
       expect(product?.productId, productId);
     });
 
@@ -155,7 +159,7 @@ void main() {
           credential: credentials,
           isSandbox: false);
 
-      print('Product : $product');
+      logger.info('Product : $product');
       expect(product?.productId, productId);
       expect(product?.viewOnly, isNotNull);
     });
@@ -168,7 +172,7 @@ void main() {
       Product? product = await getProductAuthorized(
           productId: productId, credential: credentials, isSandbox: false);
 
-      print('Product : $product');
+      logger.info('Product : $product');
       expect(product?.productId, productId);
     });
   });

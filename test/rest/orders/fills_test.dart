@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'dart:io' show Platform;
+import 'package:logging/logging.dart';
+import '../../test_helpers.dart';
 
 import 'package:coinbase_cloud_advanced_trade_client/src/models/credential.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/fill.dart';
@@ -23,6 +25,8 @@ final Credential credentials =
     Credential(apiKeyName: apiKeyName, privateKeyPEM: privateKeyPEM!);
 
 void main() {
+  final Logger logger = setupLogger('fills_test');
+
   group('Test Get Fills using MockClient', () {
     late MockClient mockClient;
 
@@ -82,8 +86,8 @@ void main() {
           credential: credentials,
           isSandbox: false);
       var url = response.request?.url.toString();
-      print('Response Code: ${response.statusCode} to URL: $url');
-      print('Response body: ${response.body} to URL: $url');
+      logger.info('Response Code: ${response.statusCode} to URL: $url');
+      logger.info('Response body: ${response.body} to URL: $url');
 
       expect(response.statusCode == 200, isTrue);
       expect(true, isTrue);
@@ -92,7 +96,7 @@ void main() {
     test('Get all Fills as a list of Fills', () async {
       List<Fill>? fills =
           await getFills(credential: credentials, isSandbox: false);
-      print('Fills: $fills');
+      logger.info('Fills: $fills');
 
       expect(fills.isNotEmpty, true);
     });
@@ -103,7 +107,7 @@ void main() {
       String? orderId = orders.last.orderId;
       List<Fill>? fills = await getFills(
           orderId: orderId, credential: credentials, isSandbox: false);
-      print('Fills: $fills');
+      logger.info('Fills: $fills');
 
       expect(fills.isNotEmpty, true);
       expect(fills.first.orderId, orderId);
@@ -115,7 +119,7 @@ void main() {
       String? productId = orders.last.productId;
       List<Fill>? fills = await getFills(
           productId: productId, credential: credentials, isSandbox: false);
-      print('Fills: $fills');
+      logger.info('Fills: $fills');
 
       expect(fills.isNotEmpty, true);
       expect(fills.first.productId, productId);

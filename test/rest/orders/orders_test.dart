@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'dart:io' show Platform;
+import 'package:logging/logging.dart';
+import '../../test_helpers.dart';
 
 import 'package:coinbase_cloud_advanced_trade_client/src/models/credential.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/error.dart';
@@ -22,6 +24,8 @@ final Credential credentials =
     Credential(apiKeyName: apiKeyName, privateKeyPEM: privateKeyPEM!);
 
 void main() {
+  final Logger logger = setupLogger('orders_test');
+
   group('Test Get Orders using MockClient', () {
     late MockClient mockClient;
 
@@ -220,9 +224,9 @@ void main() {
           credential: credentials,
           isSandbox: false);
       var url = response.request?.url.toString();
-      print(
+      logger.info(
           'Response Code: ${response.statusCode} to URL: $url with query parameters: $queryParameters');
-      print('Response body: ${response.body} to URL: $url');
+      logger.info('Response body: ${response.body} to URL: $url');
 
       expect(response.statusCode == 200, isTrue);
       expect(true, isTrue);
@@ -231,7 +235,7 @@ void main() {
     test('Get all Orders as a list of Orders', () async {
       List<Order>? orders =
           await getOrders(credential: credentials, isSandbox: false);
-      print('Orders: $orders');
+      logger.info('Orders: $orders');
 
       expect(orders.isNotEmpty, true);
     });
