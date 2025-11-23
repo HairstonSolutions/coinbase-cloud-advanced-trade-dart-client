@@ -13,61 +13,61 @@ import '../../test_constants.dart' as constants;
 
 @GenerateMocks([http.Client])
 void main() {
-  // group('Best Bid Ask Tests', () {
-  //   test('Get Best Bid Ask Authorized', () async {
-  //     final client = MockClient();
-  //     final List<String> productIds = ['BTC-USD', 'ETH-USD'];
+  group('Best Bid Ask Tests', () {
+    test('Get Best Bid Ask Authorized', () async {
+      final client = MockClient();
+      final List<String> productIds = ['BTC-USD', 'ETH-USD'];
 
-  //     when(client.get(
-  //       Uri.https('api.coinbase.com', '/api/v3/brokerage/best_bid_ask',
-  //           {'product_ids': 'BTC-USD,ETH-USD'}),
-  //       headers: anyNamed('headers'),
-  //     )).thenAnswer((_) async => http.Response(
-  //         jsonEncode({
-  //           "pricebooks": [
-  //             {
-  //               "product_id": "BTC-USD",
-  //               "bids": [
-  //                 {"price": "10000.00", "size": "1"}
-  //               ],
-  //               "asks": [
-  //                 {"price": "10001.00", "size": "1"}
-  //               ],
-  //               "time": "2023-01-01T00:00:00Z"
-  //             },
-  //             {
-  //               "product_id": "ETH-USD",
-  //               "bids": [
-  //                 {"price": "1000.00", "size": "10"}
-  //               ],
-  //               "asks": [
-  //                 {"price": "1001.00", "size": "10"}
-  //               ],
-  //               "time": "2023-01-01T00:00:00Z"
-  //             }
-  //           ]
-  //         }),
-  //         200));
+      when(client.get(
+        Uri.https('api.coinbase.com', '/api/v3/brokerage/best_bid_ask',
+            {'product_ids': ['BTC-USD', 'ETH-USD']}),
+        headers: anyNamed('headers'),
+      )).thenAnswer((_) async => http.Response(
+          jsonEncode({
+            "pricebooks": [
+              {
+                "product_id": "BTC-USD",
+                "bids": [
+                  {"price": "10000.00", "size": "1"}
+                ],
+                "asks": [
+                  {"price": "10001.00", "size": "1"}
+                ],
+                "time": "2023-01-01T00:00:00Z"
+              },
+              {
+                "product_id": "ETH-USD",
+                "bids": [
+                  {"price": "1000.00", "size": "10"}
+                ],
+                "asks": [
+                  {"price": "1001.00", "size": "10"}
+                ],
+                "time": "2023-01-01T00:00:00Z"
+              }
+            ]
+          }),
+          200));
 
-  //     List<ProductBook> productBooks = await getBestBidAsk(
-  //         productIds: productIds,
-  //         client: client,
-  //         credential: Credential(
-  //             apiKeyName: 'key', privateKeyPEM: constants.privateKeyPEM));
+      List<ProductBook> productBooks = await getBestBidAsk(
+          productIds: productIds,
+          client: client,
+          credential: Credential(
+              apiKeyName: 'key', privateKeyPEM: constants.privateKeyPEM));
 
-  //     expect(productBooks.length, 2);
+      expect(productBooks.length, 2);
 
-  //     expect(productBooks[0].productId, equals('BTC-USD'));
-  //     expect(productBooks[0].bids.length, 1);
-  //     expect(productBooks[0].asks.length, 1);
-  //     expect(productBooks[0].time, isNotNull);
+      expect(productBooks[0].productId, equals('BTC-USD'));
+      expect(productBooks[0].bids.length, 1);
+      expect(productBooks[0].asks.length, 1);
+      expect(productBooks[0].time, isNotNull);
 
-  //     expect(productBooks[1].productId, equals('ETH-USD'));
-  //     expect(productBooks[1].bids.length, 1);
-  //     expect(productBooks[1].asks.length, 1);
-  //     expect(productBooks[1].time, isNotNull);
-  //   });
-  // });
+      expect(productBooks[1].productId, equals('ETH-USD'));
+      expect(productBooks[1].bids.length, 1);
+      expect(productBooks[1].asks.length, 1);
+      expect(productBooks[1].time, isNotNull);
+    });
+  });
 
   group('Best Bid Ask Integration Tests', skip: constants.ciSkip, () {
     test('Get Best Bid Ask Authorized', () async {
@@ -81,15 +81,15 @@ void main() {
 
       expect(productBooks, isNotNull);
 
-      // expect(productBooks[0].productId, equals('BTC-USD'));
-      // expect(productBooks[0].bids.length, 1);
-      // expect(productBooks[0].asks.length, 1);
-      // expect(productBooks[0].time, isNotNull);
+      expect(productBooks[0].productId == 'BTC-USD' || productBooks[0].productId == 'ETH-USD', true);
+      expect(productBooks[0].bids.length, 1);
+      expect(productBooks[0].asks.length, 1);
+      expect(productBooks[0].time, isNotNull);
 
-      // expect(productBooks[1].productId, equals('ETH-USD'));
-      // expect(productBooks[1].bids.length, 1);
-      // expect(productBooks[1].asks.length, 1);
-      // expect(productBooks[1].time, isNotNull);
+      expect(productBooks[1].productId == 'ETH-USD' || productBooks[1].productId == 'BTC-USD', true);
+      expect(productBooks[1].bids.length, 1);
+      expect(productBooks[1].asks.length, 1);
+      expect(productBooks[1].time, isNotNull);
     });
   });
 

@@ -220,13 +220,9 @@ Future<List<ProductBook>> getBestBidAsk(
     required Credential credential,
     bool isSandbox = false}) async {
   List<ProductBook> productBooks = [];
-  Map<String, String> multiQueryParameters = {};
-
-  for (var productId in productIds) {
-    multiQueryParameters.addAll({
-      'product_ids': productId,
-    });
-  }
+  Map<String, dynamic> multiQueryParameters = {
+    'product_ids': productIds,
+  };
 
   http.Response response = await getAuthorized('/best_bid_ask',
       queryParameters: multiQueryParameters,
