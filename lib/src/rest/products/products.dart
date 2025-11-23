@@ -228,9 +228,9 @@ Future<List<ProductBook>> getBestBidAsk(
     var jsonResponse = jsonDecode(response.body);
     var jsonPricebooks = jsonResponse['pricebooks'];
 
-    for (var jsonObject in jsonPricebooks) {
-      productBooks.add(ProductBook.fromMap(jsonObject));
-    }
+    productBooks = (jsonPricebooks as List)
+        .map((jsonObject) => ProductBook.fromMap(jsonObject))
+        .toList();
   } else {
     throw Exception(
         'Failed to get best bid/ask: ${response.statusCode} ${response.body}');
