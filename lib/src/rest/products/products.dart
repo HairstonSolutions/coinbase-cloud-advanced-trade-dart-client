@@ -235,34 +235,11 @@ Future<List<ProductBook>> getBestBidAsk(
     var jsonPricebooks = jsonResponse['pricebooks'];
 
     for (var jsonObject in jsonPricebooks) {
-      // The structure of best_bid_ask response items is slightly different or same?
-      // Docs say it returns "pricebooks": [ ... ]
-      // Each item in pricebooks has product_id, bids, asks, time.
-      // Our ProductBook.fromJson expects a wrapper "pricebook" key for single product book response,
-      // but here we might have the direct object.
-      // Let's check ProductBook.fromJson again.
-      // factory ProductBook.fromJson(Map<String, dynamic> json) {
-      //   var pricebook = json['pricebook'];
-      //   ...
-      // }
-      // It expects 'pricebook' key.
-      // The get_best_bid_ask response is:
-      // { "pricebooks": [ { "product_id": "...", "bids": [...], "asks": [...], "time": "..." } ] }
-      // So we need to wrap it or adjust the model.
-      // Adjusting the model might break existing usage if not careful.
-      // Better to wrap it here to match what fromJson expects, or create a named constructor.
-      // Let's wrap it for now to be safe and consistent with existing pattern if possible,
-      // OR better, refactor ProductBook.fromJson to handle both or create a new constructor.
-      // Given the existing code:
-      // var pricebook = json['pricebook'];
-      // It strictly expects 'pricebook'.
-      // So I will wrap the item in a map with 'pricebook' key.
-      productBooks.add(ProductBook.fromJson({'pricebook': jsonObject}));
+      productBooks.add(ProductBook.fromMap(jsonObject));
     }
   } else {
-    var url = response.request?.url.toString();
-    print('Request to URL $url failed: Response code ${response.statusCode}');
-    print('Error Response Message: ${response.body}');
+    throw Exception(
+        'Failed to get best bid/ask: ${response.statusCode} ${response.body}');
   }
   return productBooks;
 }

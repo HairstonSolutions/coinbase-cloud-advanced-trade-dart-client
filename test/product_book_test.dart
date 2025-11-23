@@ -7,6 +7,7 @@ import 'package:coinbase_cloud_advanced_trade_client/src/rest/products/products.
 import 'package:coinbase_cloud_advanced_trade_client/src/rest/public/products.dart'
     as public;
 import 'package:http/http.dart' as http;
+import 'package:logging/logging.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
@@ -16,6 +17,12 @@ import 'test_constants.dart' as constants;
 
 @GenerateMocks([http.Client])
 void main() {
+  final Logger logger = Logger('product_book_test');
+  Logger.root.level = Level.ALL;
+  Logger.root.onRecord.listen((record) {
+    print('${record.level.name}: ${record.time}: ${record.message}');
+  });
+
   late Credential credentials;
 
   setUp(() {
@@ -53,7 +60,7 @@ void main() {
       ProductBook? productBook = await public.getProductBook(
           productId: productId, limit: limit, client: client);
 
-      print('Public Product Book: $productBook');
+      logger.info('Product Book: $productBook');
 
       expect(productBook, isNotNull);
       expect(productBook!.productId, equals('BTC-USD'));
@@ -119,7 +126,7 @@ void main() {
       ProductBook? productBook =
           await public.getProductBook(productId: productId, limit: limit);
 
-      print('Public Product Book: $productBook');
+      logger.info('Product Book: $productBook');
       expect(productBook, isNotNull);
       expect(productBook!.productId, isNotNull);
       expect(productBook.bids, isNotNull);
@@ -133,7 +140,8 @@ void main() {
       ProductBook? productBook = await authorized.getProductBookAuthorized(
           productId: productId, limit: limit, credential: credentials);
 
-      print('Authorized Product Book: $productBook');
+      logger.info('Product Book: $productBook');
+
       expect(productBook, isNotNull);
       expect(productBook!.productId, isNotNull);
       expect(productBook.bids, isNotNull);

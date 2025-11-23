@@ -4,6 +4,7 @@ import 'package:coinbase_cloud_advanced_trade_client/src/models/credential.dart'
 import 'package:coinbase_cloud_advanced_trade_client/src/models/product_book.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/rest/products/products.dart';
 import 'package:http/http.dart' as http;
+import 'package:logging/logging.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
@@ -13,6 +14,12 @@ import '../../test_constants.dart' as constants;
 
 @GenerateMocks([http.Client])
 void main() {
+  final Logger logger = Logger('best_bid_ask_test');
+  Logger.root.level = Level.ALL;
+  Logger.root.onRecord.listen((record) {
+    print('${record.level.name}: ${record.time}: ${record.message}');
+  });
+
   group('Best Bid Ask Tests', () {
     test('Get Best Bid Ask Authorized', () async {
       final client = MockClient();
@@ -77,7 +84,7 @@ void main() {
       List<ProductBook> productBooks = await getBestBidAsk(
           productIds: productIds, credential: constants.credentials);
 
-      print('Best Bid Ask: $productBooks');
+      logger.info('Best Bid Ask: $productBooks');
 
       expect(productBooks, isNotNull);
 
