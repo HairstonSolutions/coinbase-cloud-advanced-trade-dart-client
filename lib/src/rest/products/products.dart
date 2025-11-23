@@ -53,9 +53,8 @@ Future<List<Product>> getProductsAuthorized(
       products.add(Product.fromCBJson(jsonObject));
     }
   } else {
-    var url = response.request?.url.toString();
-    print('Request to URL $url failed: Response code ${response.statusCode}');
-    print('Error Response Message: ${response.body}');
+    throw Exception(
+        'Failed to get products: ${response.statusCode} ${response.body}');
   }
 
   return products;
@@ -98,11 +97,9 @@ Future<Product?> getProductAuthorized(
 
     return Product.fromCBJson(jsonResponse);
   } else {
-    var url = response.request?.url.toString();
-    print('Request to URL $url failed: Response code ${response.statusCode}');
-    print('Error Response Message: ${response.body}');
+    throw Exception(
+        'Failed to get product: ${response.statusCode} ${response.body}');
   }
-  return null;
 }
 
 /// Gets product candles.
@@ -150,9 +147,8 @@ Future<List<Candle>> getProductCandlesAuthorized(
       candles.add(Candle.fromJson(jsonObject));
     }
   } else {
-    var url = response.request?.url.toString();
-    print('Request to URL $url failed: Response code ${response.statusCode}');
-    print('Error Response Message: ${response.body}');
+    throw Exception(
+        'Failed to get product candles: ${response.statusCode} ${response.body}');
   }
   return candles;
 }
@@ -194,11 +190,9 @@ Future<ProductBook?> getProductBookAuthorized(
 
     return ProductBook.fromJson(jsonResponse);
   } else {
-    var url = response.request?.url.toString();
-    print('Request to URL $url failed: Response code ${response.statusCode}');
-    print('Error Response Message: ${response.body}');
+    throw Exception(
+        'Failed to get product book: ${response.statusCode} ${response.body}');
   }
-  return null;
 }
 
 /// Gets the best bid and ask for a list of products.
