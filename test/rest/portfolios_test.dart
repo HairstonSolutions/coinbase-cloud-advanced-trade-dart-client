@@ -17,7 +17,7 @@ final Map<String, String> envVars = Platform.environment;
 final String? skipTests = envVars['SKIP_TESTS'];
 final bool skip = skipTests == 'false' ? false : true;
 final String? skipDestructiveTests = envVars['SKIP_DESTRUCTIVE_TESTS'];
-final bool skipDT = skipDestructiveTests == 'false' ? false : true;
+final bool skipDT = skipDestructiveTests != 'false';
 
 final String portfolioCreateName =
     envVars['PORTFOLIO_CREATE_NAME'] ?? 'portfolioTDD1';
