@@ -17,8 +17,6 @@ import 'package:test/test.dart';
 
 import 'fills_test.mocks.dart';
 
-
-
 @GenerateMocks([http.Client])
 void main() {
   final Logger logger = setupLogger('fills_test');
@@ -73,7 +71,8 @@ void main() {
     });
   });
 
-  group('Test Get Fills Requests to Coinbase AT API Endpoints', skip: ciSkip, () {
+  group('Test Get Fills Requests to Coinbase AT API Endpoints', skip: ciSkip,
+      () {
     test('Authorized Get All Fills', () async {
       String requestPath = '/orders/historical/fills';
       Map<String, dynamic>? queryParameters = {'limit': '1000'};

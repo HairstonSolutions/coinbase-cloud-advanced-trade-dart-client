@@ -170,8 +170,8 @@ Future<PortfolioBreakdown?> getPortfolioBreakdown(
     var jsonResponse = jsonDecode(response.body);
     return PortfolioBreakdown.fromCBJson(jsonResponse['breakdown']);
   } else {
-    throw CoinbaseException(
-        'Failed to get portfolio breakdown', response.statusCode, response.body);
+    throw CoinbaseException('Failed to get portfolio breakdown',
+        response.statusCode, response.body);
   }
 }
 

@@ -16,7 +16,6 @@ import 'package:test/test.dart';
 import '../portfolios_test.mocks.dart';
 import '../test_constants.dart';
 
-
 final String portfolioCreateName =
     envVars['PORTFOLIO_CREATE_NAME'] ?? 'portfolioTDD1';
 final String portfolioGetUUID =

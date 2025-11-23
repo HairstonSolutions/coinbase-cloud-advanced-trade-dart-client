@@ -7,8 +7,6 @@ import 'package:coinbase_cloud_advanced_trade_client/src/models/credential.dart'
 import 'package:coinbase_cloud_advanced_trade_client/src/services/network.dart';
 import 'package:test/test.dart';
 
-
-
 void main() {
   final Logger logger = setupLogger('network_test');
 

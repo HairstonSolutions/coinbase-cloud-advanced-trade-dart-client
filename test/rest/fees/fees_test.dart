@@ -14,8 +14,6 @@ import '../../test_constants.dart';
 import '../../tools.dart';
 import './fees_test.mocks.dart';
 
-
-
 @GenerateMocks([http.Client])
 void main() {
   final Logger logger = setupLogger('fees_test');

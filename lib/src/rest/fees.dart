@@ -46,7 +46,7 @@ Future<TransactionSummary?> getTransactionSummary(
     var jsonResponse = jsonDecode(response.body);
     return TransactionSummary.fromCBJson(jsonResponse);
   } else {
-    throw CoinbaseException(
-        'Failed to get transaction summary', response.statusCode, response.body);
+    throw CoinbaseException('Failed to get transaction summary',
+        response.statusCode, response.body);
   }
 }

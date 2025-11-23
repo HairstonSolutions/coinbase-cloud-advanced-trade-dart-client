@@ -17,8 +17,6 @@ import 'package:test/test.dart';
 
 import 'trades_test.mocks.dart';
 
-
-
 @GenerateMocks([http.Client])
 void main() {
   final Logger logger = setupLogger('trades_test');
@@ -62,7 +60,8 @@ void main() {
     });
   });
 
-  group('Test Get Trades Requests to Coinbase AT API Endpoints', skip: ciSkip, () {
+  group('Test Get Trades Requests to Coinbase AT API Endpoints', skip: ciSkip,
+      () {
     test('Authorized Get Trades', () async {
       String productId = 'BTC-USD';
       String requestPath = '/products/$productId/ticker';

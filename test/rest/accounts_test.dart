@@ -15,8 +15,6 @@ import 'package:test/test.dart';
 
 import 'accounts_test.mocks.dart';
 
-
-
 @GenerateMocks([http.Client])
 void main() {
   final Logger logger = setupLogger('accounts_test');
