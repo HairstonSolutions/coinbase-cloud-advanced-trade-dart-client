@@ -46,7 +46,8 @@ class ProductBook {
       productId: map['product_id'],
       bids: bids,
       asks: asks,
-      time: map['time'] != null ? DateTime.tryParse(map['time'] as String) : null,
+      time:
+          map['time'] != null ? DateTime.tryParse(map['time'] as String) : null,
     );
   }
 

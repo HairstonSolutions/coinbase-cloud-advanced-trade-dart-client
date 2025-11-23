@@ -14,14 +14,11 @@ import 'package:test/test.dart';
 
 import 'product_book_test.mocks.dart';
 import 'test_constants.dart' as constants;
+import 'test_helpers.dart';
 
 @GenerateMocks([http.Client])
 void main() {
-  final Logger logger = Logger('product_book_test');
-  Logger.root.level = Level.ALL;
-  Logger.root.onRecord.listen((record) {
-    print('${record.level.name}: ${record.time}: ${record.message}');
-  });
+  final Logger logger = setupLogger('product_book_test');
 
   late Credential credentials;
 
