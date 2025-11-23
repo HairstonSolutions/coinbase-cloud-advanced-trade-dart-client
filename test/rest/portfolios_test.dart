@@ -14,11 +14,8 @@ import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
 import '../portfolios_test.mocks.dart';
-import '../test_constants.dart' as constants;
+import '../test_constants.dart';
 
-
-final String? skipDestructiveTests = envVars['SKIP_DESTRUCTIVE_TESTS'];
-final bool skipDT = skipDestructiveTests != 'false';
 
 final String portfolioCreateName =
     envVars['PORTFOLIO_CREATE_NAME'] ?? 'portfolioTDD1';
