@@ -19,8 +19,9 @@ void main() {
       final List<String> productIds = ['BTC-USD', 'ETH-USD'];
 
       when(client.get(
-        Uri.https('api.coinbase.com', '/api/v3/brokerage/best_bid_ask',
-            {'product_ids': ['BTC-USD', 'ETH-USD']}),
+        Uri.https('api.coinbase.com', '/api/v3/brokerage/best_bid_ask', {
+          'product_ids': ['BTC-USD', 'ETH-USD']
+        }),
         headers: anyNamed('headers'),
       )).thenAnswer((_) async => http.Response(
           jsonEncode({
@@ -74,23 +75,27 @@ void main() {
       final List<String> productIds = ['BTC-USD', 'ETH-USD'];
 
       List<ProductBook> productBooks = await getBestBidAsk(
-          productIds: productIds,
-          credential: constants.credentials);
+          productIds: productIds, credential: constants.credentials);
 
       print('Best Bid Ask: $productBooks');
 
       expect(productBooks, isNotNull);
 
-      expect(productBooks[0].productId == 'BTC-USD' || productBooks[0].productId == 'ETH-USD', true);
+      expect(
+          productBooks[0].productId == 'BTC-USD' ||
+              productBooks[0].productId == 'ETH-USD',
+          true);
       expect(productBooks[0].bids.length, 1);
       expect(productBooks[0].asks.length, 1);
       expect(productBooks[0].time, isNotNull);
 
-      expect(productBooks[1].productId == 'ETH-USD' || productBooks[1].productId == 'BTC-USD', true);
+      expect(
+          productBooks[1].productId == 'ETH-USD' ||
+              productBooks[1].productId == 'BTC-USD',
+          true);
       expect(productBooks[1].bids.length, 1);
       expect(productBooks[1].asks.length, 1);
       expect(productBooks[1].time, isNotNull);
     });
   });
-
 }

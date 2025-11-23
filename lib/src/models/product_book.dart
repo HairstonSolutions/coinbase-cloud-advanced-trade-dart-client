@@ -43,9 +43,8 @@ class ProductBook {
       productId: pricebook['product_id'],
       bids: bids,
       asks: asks,
-      time: pricebook['time'] != null
-          ? DateTime.parse(pricebook['time'])
-          : null,
+      time:
+          pricebook['time'] != null ? DateTime.parse(pricebook['time']) : null,
     );
   }
 
