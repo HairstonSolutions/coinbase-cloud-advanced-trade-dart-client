@@ -200,3 +200,73 @@ Future<ProductBook?> getProductBookAuthorized(
   }
   return null;
 }
+
+/// Gets the best bid and ask for a list of products.
+///
+/// GET /v3/brokerage/best_bid_ask
+/// https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/products/get-best-bid-ask
+///
+/// This function makes a GET request to the /best_bid_ask endpoint of
+/// the Coinbase Advanced Trade API.
+///
+/// [productIds] - A list of product IDs to return the best bid and ask for.
+/// [credential] - The user's API credentials.
+/// [isSandbox] - Whether to use the sandbox environment.
+///
+/// Returns a list of [ProductBook] objects.
+Future<List<ProductBook>> getBestBidAsk(
+    {required List<String> productIds,
+    http.Client? client,
+    required Credential credential,
+    bool isSandbox = false}) async {
+  List<ProductBook> productBooks = [];
+  Map<String, String> multiQueryParameters = {};
+
+  for (var productId in productIds) {
+    multiQueryParameters.addAll({
+      'product_ids': productId,
+    });
+  }
+
+  http.Response response = await getAuthorized('/best_bid_ask',
+      queryParameters: multiQueryParameters,
+      client: client,
+      credential: credential,
+      isSandbox: isSandbox);
+
+  if (response.statusCode == 200) {
+    var jsonResponse = jsonDecode(response.body);
+    var jsonPricebooks = jsonResponse['pricebooks'];
+
+    for (var jsonObject in jsonPricebooks) {
+      // The structure of best_bid_ask response items is slightly different or same?
+      // Docs say it returns "pricebooks": [ ... ]
+      // Each item in pricebooks has product_id, bids, asks, time.
+      // Our ProductBook.fromJson expects a wrapper "pricebook" key for single product book response,
+      // but here we might have the direct object.
+      // Let's check ProductBook.fromJson again.
+      // factory ProductBook.fromJson(Map<String, dynamic> json) {
+      //   var pricebook = json['pricebook'];
+      //   ...
+      // }
+      // It expects 'pricebook' key.
+      // The get_best_bid_ask response is:
+      // { "pricebooks": [ { "product_id": "...", "bids": [...], "asks": [...], "time": "..." } ] }
+      // So we need to wrap it or adjust the model.
+      // Adjusting the model might break existing usage if not careful.
+      // Better to wrap it here to match what fromJson expects, or create a named constructor.
+      // Let's wrap it for now to be safe and consistent with existing pattern if possible,
+      // OR better, refactor ProductBook.fromJson to handle both or create a new constructor.
+      // Given the existing code:
+      // var pricebook = json['pricebook'];
+      // It strictly expects 'pricebook'.
+      // So I will wrap the item in a map with 'pricebook' key.
+      productBooks.add(ProductBook.fromJson({'pricebook': jsonObject}));
+    }
+  } else {
+    var url = response.request?.url.toString();
+    print('Request to URL $url failed: Response code ${response.statusCode}');
+    print('Error Response Message: ${response.body}');
+  }
+  return productBooks;
+}

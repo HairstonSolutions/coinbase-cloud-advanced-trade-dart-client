@@ -53,6 +53,8 @@ void main() {
       ProductBook? productBook = await public.getProductBook(
           productId: productId, limit: limit, client: client);
 
+      print('Public Product Book: $productBook');
+
       expect(productBook, isNotNull);
       expect(productBook!.productId, equals('BTC-USD'));
       expect(productBook.bids.length, 1);
@@ -103,7 +105,7 @@ void main() {
       );
 
       String expectedString =
-          '{productId: BTC-USD, bids: [{price: 10000.00, size: 1}], asks: [{price: 10001.00, size: 1}]}';
+          '{productId: BTC-USD, bids: [{price: 10000.00, size: 1}], asks: [{price: 10001.00, size: 1}], time: null}';
 
       expect(productBook.toString(), equals(expectedString));
     });

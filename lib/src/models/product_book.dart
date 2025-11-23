@@ -21,9 +21,13 @@ class ProductBook {
   final String productId;
   final List<PriceLevel> bids;
   final List<PriceLevel> asks;
+  final DateTime? time;
 
   ProductBook(
-      {required this.productId, required this.bids, required this.asks});
+      {required this.productId,
+      required this.bids,
+      required this.asks,
+      this.time});
 
   factory ProductBook.fromJson(Map<String, dynamic> json) {
     var pricebook = json['pricebook'];
@@ -39,11 +43,14 @@ class ProductBook {
       productId: pricebook['product_id'],
       bids: bids,
       asks: asks,
+      time: pricebook['time'] != null
+          ? DateTime.parse(pricebook['time'])
+          : null,
     );
   }
 
   @override
   String toString() {
-    return '{productId: $productId, bids: $bids, asks: $asks}';
+    return '{productId: $productId, bids: $bids, asks: $asks, time: $time}';
   }
 }
