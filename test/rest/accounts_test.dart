@@ -9,13 +9,15 @@ import 'package:coinbase_cloud_advanced_trade_client/src/models/credential.dart'
 import 'package:coinbase_cloud_advanced_trade_client/src/rest/accounts.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/services/network.dart';
 import 'package:http/http.dart' as http;
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
-import '../mocks.mocks.dart';
+import 'accounts_test.mocks.dart';
 
 
 
+@GenerateMocks([http.Client])
 void main() {
   final Logger logger = setupLogger('accounts_test');
 
