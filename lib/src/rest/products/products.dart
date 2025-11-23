@@ -6,6 +6,7 @@ import 'package:coinbase_cloud_advanced_trade_client/src/models/candle.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/credential.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/product.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/product_book.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/models/error.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/services/network.dart';
 import 'package:http/http.dart' as http;
 
@@ -53,9 +54,8 @@ Future<List<Product>> getProductsAuthorized(
       products.add(Product.fromCBJson(jsonObject));
     }
   } else {
-    var url = response.request?.url.toString();
-    print('Request to URL $url failed: Response code ${response.statusCode}');
-    print('Error Response Message: ${response.body}');
+    throw CoinbaseException(
+        'Failed to get products', response.statusCode, response.body);
   }
 
   return products;
@@ -98,11 +98,9 @@ Future<Product?> getProductAuthorized(
 
     return Product.fromCBJson(jsonResponse);
   } else {
-    var url = response.request?.url.toString();
-    print('Request to URL $url failed: Response code ${response.statusCode}');
-    print('Error Response Message: ${response.body}');
+    throw CoinbaseException(
+        'Failed to get product', response.statusCode, response.body);
   }
-  return null;
 }
 
 /// Gets product candles.
@@ -150,9 +148,8 @@ Future<List<Candle>> getProductCandlesAuthorized(
       candles.add(Candle.fromJson(jsonObject));
     }
   } else {
-    var url = response.request?.url.toString();
-    print('Request to URL $url failed: Response code ${response.statusCode}');
-    print('Error Response Message: ${response.body}');
+    throw CoinbaseException(
+        'Failed to get product candles', response.statusCode, response.body);
   }
   return candles;
 }
@@ -194,9 +191,50 @@ Future<ProductBook?> getProductBookAuthorized(
 
     return ProductBook.fromJson(jsonResponse);
   } else {
-    var url = response.request?.url.toString();
-    print('Request to URL $url failed: Response code ${response.statusCode}');
-    print('Error Response Message: ${response.body}');
+    throw CoinbaseException(
+        'Failed to get product book', response.statusCode, response.body);
   }
-  return null;
+}
+
+/// Gets the best bid and ask for a list of products.
+///
+/// GET /v3/brokerage/best_bid_ask
+/// https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/products/get-best-bid-ask
+///
+/// This function makes a GET request to the /best_bid_ask endpoint of
+/// the Coinbase Advanced Trade API.
+///
+/// [productIds] - A list of product IDs to return the best bid and ask for.
+/// [credential] - The user's API credentials.
+/// [isSandbox] - Whether to use the sandbox environment.
+///
+/// Returns a list of [ProductBook] objects.
+Future<List<ProductBook>> getBestBidAsk(
+    {required List<String> productIds,
+    http.Client? client,
+    required Credential credential,
+    bool isSandbox = false}) async {
+  List<ProductBook> productBooks = [];
+  Map<String, dynamic> multiQueryParameters = {
+    'product_ids': productIds,
+  };
+
+  http.Response response = await getAuthorized('/best_bid_ask',
+      queryParameters: multiQueryParameters,
+      client: client,
+      credential: credential,
+      isSandbox: isSandbox);
+
+  if (response.statusCode == 200) {
+    var jsonResponse = jsonDecode(response.body);
+    var jsonPricebooks = jsonResponse['pricebooks'];
+
+    productBooks = (jsonPricebooks as List)
+        .map((jsonObject) => ProductBook.fromMap(jsonObject))
+        .toList();
+  } else {
+    throw CoinbaseException(
+        'Failed to get best bid/ask', response.statusCode, response.body);
+  }
+  return productBooks;
 }

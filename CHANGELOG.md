@@ -1,3 +1,7 @@
+# 0.x.x
+
+- Implement Get Best Bid Ask
+
 ## 0.7.0
 
 - Implement Fees / Transaction Summary

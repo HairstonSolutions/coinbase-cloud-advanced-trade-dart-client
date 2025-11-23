@@ -17,7 +17,7 @@ final Map<String, String> envVars = Platform.environment;
 final String? skipTests = envVars['SKIP_TESTS'];
 final bool skip = skipTests == 'false' ? false : true;
 final String? skipDestructiveTests = envVars['SKIP_DESTRUCTIVE_TESTS'];
-final bool skipDT = skipTests == 'false' ? false : true;
+final bool skipDT = skipDestructiveTests != 'false';
 
 final String portfolioCreateName =
     envVars['PORTFOLIO_CREATE_NAME'] ?? 'portfolioTDD1';
@@ -182,7 +182,7 @@ void main() {
   });
 
   group('Portfolios API tests Requests to Coinbase AT API Endpoints',
-      skip: skip, () {
+      skip: skipDT, () {
     test('listPortfolios returns a list of portfolios', () async {
       final portfolios = await listPortfolios(credential: credential);
 
@@ -231,7 +231,7 @@ void main() {
     });
 
     test('movePortfolioFunds returns true when transferring One Dollar of USDC',
-        () async {
+        skip: skipDT, () async {
       final result = await movePortfolioFunds(
           funds: {'currency': 'USDC', 'value': '1.0'},
           sourcePortfolioUuid: portfolioMoveFundsSourceUUID,

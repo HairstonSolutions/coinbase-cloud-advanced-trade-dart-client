@@ -7,15 +7,19 @@ import 'package:coinbase_cloud_advanced_trade_client/src/rest/products/products.
 import 'package:coinbase_cloud_advanced_trade_client/src/rest/public/products.dart'
     as public;
 import 'package:http/http.dart' as http;
+import 'package:logging/logging.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
 import 'product_book_test.mocks.dart';
 import 'test_constants.dart' as constants;
+import 'test_helpers.dart';
 
 @GenerateMocks([http.Client])
 void main() {
+  final Logger logger = setupLogger('product_book_test');
+
   late Credential credentials;
 
   setUp(() {
@@ -52,6 +56,8 @@ void main() {
 
       ProductBook? productBook = await public.getProductBook(
           productId: productId, limit: limit, client: client);
+
+      logger.info('Product Book: $productBook');
 
       expect(productBook, isNotNull);
       expect(productBook!.productId, equals('BTC-USD'));
@@ -103,7 +109,7 @@ void main() {
       );
 
       String expectedString =
-          '{productId: BTC-USD, bids: [{price: 10000.00, size: 1}], asks: [{price: 10001.00, size: 1}]}';
+          '{productId: BTC-USD, bids: [{price: 10000.00, size: 1}], asks: [{price: 10001.00, size: 1}], time: null}';
 
       expect(productBook.toString(), equals(expectedString));
     });
@@ -117,7 +123,7 @@ void main() {
       ProductBook? productBook =
           await public.getProductBook(productId: productId, limit: limit);
 
-      print('Public Product Book: $productBook');
+      logger.info('Product Book: $productBook');
       expect(productBook, isNotNull);
       expect(productBook!.productId, isNotNull);
       expect(productBook.bids, isNotNull);
@@ -131,7 +137,8 @@ void main() {
       ProductBook? productBook = await authorized.getProductBookAuthorized(
           productId: productId, limit: limit, credential: credentials);
 
-      print('Authorized Product Book: $productBook');
+      logger.info('Product Book: $productBook');
+
       expect(productBook, isNotNull);
       expect(productBook!.productId, isNotNull);
       expect(productBook.bids, isNotNull);
