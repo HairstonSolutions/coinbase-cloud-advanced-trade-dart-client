@@ -60,6 +60,7 @@ Future<List<Fill>> getFills(
       List<Fill> paginatedAccounts = await getFills(
           limit: limit,
           cursor: jsonCursor,
+          client: client,
           credential: credential,
           isSandbox: isSandbox);
       orders.addAll(paginatedAccounts);

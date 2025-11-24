@@ -56,7 +56,7 @@ void main() {
             }
           }
         ],
-        "cursor": "some-cursor-for-next-page"
+        "cursor": ""
       };
 
       when(mockClient.get(any, headers: anyNamed('headers'))).thenAnswer(
