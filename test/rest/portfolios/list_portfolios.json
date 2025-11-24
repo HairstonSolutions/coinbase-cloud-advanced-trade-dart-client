@@ -1,16 +1,16 @@
 {
-    "portfolios": [
-        {
-            "uuid": "uuid1",
-            "name": "portfolio1",
-            "type": "type1",
-            "deleted": false
-        },
-        {
-            "uuid": "uuid2",
-            "name": "portfolio2",
-            "type": "type2",
-            "deleted": false
-        }
-    ]
+  "portfolios": [
+    {
+      "uuid": "uuid1",
+      "name": "portfolio1",
+      "type": "type1",
+      "deleted": false
+    },
+    {
+      "uuid": "uuid2",
+      "name": "portfolio2",
+      "type": "type2",
+      "deleted": false
+    }
+  ]
 }
