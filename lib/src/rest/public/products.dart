@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:convert';
 
 import 'package:coinbase_cloud_advanced_trade_client/src/models/candle.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/models/error.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/product.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/product_book.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/services/network.dart';
@@ -33,11 +34,9 @@ Future<Product?> getProduct(
 
     return Product.fromCBJson(jsonResponse);
   } else {
-    var url = response.request?.url.toString();
-    print('Request to URL $url failed: Response code ${response.statusCode}');
-    print('Error Response Message: ${response.body}');
+    throw CoinbaseException(
+        'Failed to get product', response.statusCode, response.body);
   }
-  return null;
 }
 
 /// Gets public product candles.
@@ -80,9 +79,8 @@ Future<List<Candle>> getProductCandles(
       candles.add(Candle.fromJson(jsonObject));
     }
   } else {
-    var url = response.request?.url.toString();
-    print('Request to URL $url failed: Response code ${response.statusCode}');
-    print('Error Response Message: ${response.body}');
+    throw CoinbaseException(
+        'Failed to get product candles', response.statusCode, response.body);
   }
   return candles;
 }
@@ -132,9 +130,8 @@ Future<List<Product>> getProducts(
       products.add(Product.fromCBJson(jsonObject));
     }
   } else {
-    var url = response.request?.url.toString();
-    print('Request to URL $url failed: Response code ${response.statusCode}');
-    print('Error Response Message: ${response.body}');
+    throw CoinbaseException(
+        'Failed to get products', response.statusCode, response.body);
   }
 
   return products;
@@ -172,9 +169,7 @@ Future<ProductBook?> getProductBook(
 
     return ProductBook.fromJson(jsonResponse);
   } else {
-    var url = response.request?.url.toString();
-    print('Request to URL $url failed: Response code ${response.statusCode}');
-    print('Error Response Message: ${response.body}');
+    throw CoinbaseException(
+        'Failed to get product book', response.statusCode, response.body);
   }
-  return null;
 }

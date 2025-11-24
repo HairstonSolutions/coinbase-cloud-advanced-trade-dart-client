@@ -1,0 +1,21 @@
+{
+  "account": {
+    "uuid": "8bfc20d7-f7c6-4422-9181-51268ba51372",
+    "name": "BTC Wallet",
+    "currency": "BTC",
+    "type": "ACCOUNT_TYPE_CRYPTO",
+    "active": true,
+    "created_at": "2021-05-31T09:59:59Z",
+    "updated_at": "2021-05-31T09:59:59Z",
+    "deleted_at": null,
+    "hold": {
+      "value": "0.00000000",
+      "currency": "BTC"
+    },
+    "available_balance": {
+      "value": "100.00",
+      "currency": "BTC"
+    },
+    "default": false
+  }
+}

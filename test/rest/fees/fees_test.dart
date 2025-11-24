@@ -1,25 +1,19 @@
-import 'dart:io';
-
-import 'package:coinbase_cloud_advanced_trade_client/src/models/credential.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/rest/fees.dart';
 import 'package:http/http.dart' as http;
+import 'package:logging/logging.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
-import '../../test_constants.dart';
+import '../../mocks.mocks.dart';
+import '../../test_constants.dart' as constants;
+import '../../test_helpers.dart';
 import '../../tools.dart';
-import './fees_test.mocks.dart';
-
-final Map<String, String> envVars = Platform.environment;
-final String? skipTests = envVars['SKIP_TESTS'];
-final bool skip = skipTests == 'false' ? false : true;
-
-final Credential credentials =
-    Credential(apiKeyName: apiKeyName, privateKeyPEM: privateKeyPEM);
 
 @GenerateMocks([http.Client])
 void main() {
+  final Logger logger = setupLogger('fees_test');
+
   group('Fees REST Tests using Mocks', () {
     test('Get Transaction Summary', () async {
       final client = MockClient();
@@ -29,20 +23,21 @@ void main() {
       when(client.get(any, headers: anyNamed('headers'))).thenAnswer(
           (_) async => http.Response(getTransactionSummaryJson, 200));
 
-      final result =
-          await getTransactionSummary(client: client, credential: credentials);
+      final result = await getTransactionSummary(
+          client: client, credential: constants.credentials);
 
       expect(result, isNotNull);
       expect(result!.totalFees, isNotNull);
     });
   });
 
-  group('Fees REST Tests Requests to Coinbase AT API Endpoints', skip: skip,
-      () {
+  group('Fees REST Tests Requests to Coinbase AT API Endpoints',
+      skip: constants.ciSkip, () {
     test('Get Transaction Summary', () async {
-      final result = await getTransactionSummary(credential: credentials);
+      final result =
+          await getTransactionSummary(credential: constants.credentials);
 
-      print('Fees: $result');
+      logger.info('Fees: $result');
 
       expect(result, isNotNull);
       expect(result!.totalFees, isNotNull);

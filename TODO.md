@@ -33,7 +33,7 @@ https://docs.cdp.coinbase.com/coinbase-app/advanced-trade-apis/rest-api
 
 ### Products
 
-- [ ] [GET /v3/brokerage/best_bid_ask - Get Best Bid/Ask](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/products/get-best-bid-ask)
+- [x] [GET /v3/brokerage/best_bid_ask - Get Best Bid/Ask](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/products/get-best-bid-ask)
 - [x] [GET /v3/brokerage/product_book - Get Product Book](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/public/get-public-product-book)
 - [x] [GET /v3/brokerage/products - List Products](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/products/list-products)
 - [x] [GET /v3/brokerage/products/{product_id} - Get Product](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/products/get-product)

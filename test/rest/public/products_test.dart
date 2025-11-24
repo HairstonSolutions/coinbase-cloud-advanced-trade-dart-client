@@ -1,15 +1,19 @@
 import 'package:coinbase_cloud_advanced_trade_client/src/rest/public/products.dart';
 import 'package:http/http.dart' as http;
+import 'package:logging/logging.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
 import '../../mocks.mocks.dart';
+import '../../test_helpers.dart';
 import '../../tools.dart';
 
 @GenerateMocks([http.Client])
 void main() {
-  group('Public REST Tests using Mocks', () {
+  final Logger logger = setupLogger('public_products_test');
+
+  group('Public Products using Mocks', () {
     test('Get Product', () async {
       final client = MockClient();
       final String productJson =
@@ -43,7 +47,7 @@ void main() {
     test('Get Product', () async {
       final product = await getProduct(productId: 'BTC-USD');
 
-      print('Product: $product');
+      logger.info('Product: $product');
 
       expect(product, isNotNull);
       expect(product!.productId, 'BTC-USD');
@@ -52,7 +56,7 @@ void main() {
     test('Get Products', () async {
       final products = await getProducts();
 
-      print('Products: $products');
+      logger.info('Products: $products');
 
       expect(products, isNotNull);
       expect(products, isNotEmpty);

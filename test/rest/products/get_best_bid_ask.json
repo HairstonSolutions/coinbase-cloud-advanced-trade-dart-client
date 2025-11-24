@@ -1,0 +1,36 @@
+{
+  "pricebooks": [
+    {
+      "product_id": "BTC-USD",
+      "bids": [
+        {
+          "price": "10000.00",
+          "size": "1"
+        }
+      ],
+      "asks": [
+        {
+          "price": "10001.00",
+          "size": "1"
+        }
+      ],
+      "time": "2023-01-01T00:00:00Z"
+    },
+    {
+      "product_id": "ETH-USD",
+      "bids": [
+        {
+          "price": "1000.00",
+          "size": "10"
+        }
+      ],
+      "asks": [
+        {
+          "price": "1001.00",
+          "size": "10"
+        }
+      ],
+      "time": "2023-01-01T00:00:00Z"
+    }
+  ]
+}

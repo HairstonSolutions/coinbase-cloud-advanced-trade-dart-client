@@ -14,4 +14,6 @@ hSHpKl+DhF2u09WahshD18zlBVqFGO46Fg==
 final Credential credentials =
     Credential(apiKeyName: apiKeyName, privateKeyPEM: privateKeyPEM);
 final String? skipTests = envVars['SKIP_TESTS'];
-final bool ciSkip = skipTests == 'false' ? false : true;
+final bool ciSkip = skipTests != 'false';
+final String? skipDestructiveTests = envVars['SKIP_DESTRUCTIVE_TESTS'];
+final bool skipDT = skipDestructiveTests != 'false';

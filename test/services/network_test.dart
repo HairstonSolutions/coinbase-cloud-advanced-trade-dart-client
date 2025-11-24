@@ -1,28 +1,23 @@
-import 'dart:io' show Platform;
-
-import 'package:coinbase_cloud_advanced_trade_client/src/models/credential.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/services/network.dart';
+import 'package:logging/logging.dart';
 import 'package:test/test.dart';
 
-Map<String, String> envVars = Platform.environment;
-String? apiKeyName = envVars['COINBASE_API_KEY_NAME'];
-String? privateKeyPEM = envVars['COINBASE_PRIVATE_KEY'];
-String? skipTests = envVars['SKIP_TESTS'];
-bool skip = skipTests == 'false' ? false : true;
-Credential credentials =
-    Credential(apiKeyName: apiKeyName!, privateKeyPEM: privateKeyPEM!);
+import '../test_constants.dart' as constants;
+import '../test_helpers.dart';
 
 void main() {
-  group('Test Authorized Requests to Coinbase API Endpoints', skip: skip, () {
+  final Logger logger = setupLogger('network_test');
+
+  group('Test Network Service', skip: constants.ciSkip, () {
     setUp(() {});
 
     test('Authorized Get with no body (Fees)', () async {
       String requestPath = "/transaction_summary";
       var response = await getAuthorized(requestPath,
-          credential: credentials, isSandbox: false);
+          credential: constants.credentials, isSandbox: false);
       var url = response.request?.url.toString();
-      print('Response Code: ${response.statusCode} to URL: $url');
-      print('Response body: ${response.body} to URL: $url');
+      logger.info('Response Code: ${response.statusCode} to URL: $url');
+      logger.info('Response body: ${response.body} to URL: $url');
 
       expect(response.statusCode == 200, isTrue);
     });
@@ -30,10 +25,10 @@ void main() {
     test('Authorized Get to Accounts', () async {
       String requestPath = "/accounts";
       var response = await getAuthorized(requestPath,
-          credential: credentials, isSandbox: true);
+          credential: constants.credentials, isSandbox: true);
       var url = response.request?.url.toString();
-      print('Response Code: ${response.statusCode} to URL: $url');
-      print('Response body: ${response.body} to URL: $url');
+      logger.info('Response Code: ${response.statusCode} to URL: $url');
+      logger.info('Response body: ${response.body} to URL: $url');
 
       expect(response.statusCode == 200, isTrue);
     });
@@ -41,10 +36,10 @@ void main() {
     test('Authorized Get to Sandbox Accounts', () async {
       String requestPath = "/accounts";
       var response = await getAuthorized(requestPath,
-          credential: credentials, isSandbox: true);
+          credential: constants.credentials, isSandbox: true);
       var url = response.request?.url.toString();
-      print('Response Code: ${response.statusCode} to URL: $url');
-      print('Response body: ${response.body} to URL: $url');
+      logger.info('Response Code: ${response.statusCode} to URL: $url');
+      logger.info('Response body: ${response.body} to URL: $url');
 
       expect(response.statusCode == 200, isTrue);
     });

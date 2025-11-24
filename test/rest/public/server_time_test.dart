@@ -1,14 +1,18 @@
 import 'package:coinbase_cloud_advanced_trade_client/src/rest/public/server_time.dart';
 import 'package:http/http.dart' as http;
+import 'package:logging/logging.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
 import '../../mocks.mocks.dart';
+import '../../test_helpers.dart';
 import '../../tools.dart';
 
 @GenerateMocks([http.Client])
 void main() {
+  final Logger logger = setupLogger('server_time_test');
+
   group('Public REST Tests using Mocks', () {
     test('Get Server Time', () async {
       final client = MockClient();
@@ -31,7 +35,7 @@ void main() {
     test('Get Server Time', () async {
       final serverTime = await getServerTime();
 
-      print('Server Time: $serverTime');
+      logger.info('Server Time: $serverTime');
 
       expect(serverTime, isNotNull);
       expect(serverTime!.iso, isNotNull);

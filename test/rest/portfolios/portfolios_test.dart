@@ -1,71 +1,51 @@
-import 'dart:convert';
-import 'dart:io';
-
-import 'package:coinbase_cloud_advanced_trade_client/src/models/credential.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/portfolio.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/portfolio_breakdown.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/rest/portfolios.dart';
 import 'package:http/http.dart' as http;
+import 'package:logging/logging.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
-import '../portfolios_test.mocks.dart';
-import '../test_constants.dart' as constants;
-
-final Map<String, String> envVars = Platform.environment;
-final String? skipTests = envVars['SKIP_TESTS'];
-final bool skip = skipTests == 'false' ? false : true;
-final String? skipDestructiveTests = envVars['SKIP_DESTRUCTIVE_TESTS'];
-final bool skipDT = skipDestructiveTests != 'false';
+import '../../mocks.mocks.dart';
+import '../../test_constants.dart' as constants;
+import '../../test_helpers.dart';
+import '../../tools.dart';
 
 final String portfolioCreateName =
-    envVars['PORTFOLIO_CREATE_NAME'] ?? 'portfolioTDD1';
-final String portfolioGetUUID =
-    envVars['PORTFOLIO_GET_UUID'] ?? '88888888-4444-4444-4444-121212121212';
+    constants.envVars['PORTFOLIO_CREATE_NAME'] ?? 'portfolioTDD1';
+final String portfolioGetUUID = constants.envVars['PORTFOLIO_GET_UUID'] ??
+    '88888888-4444-4444-4444-121212121212';
 final String portfolioBreakdownGetUUID =
-    envVars['PORTFOLIO_BREAKDOWN_GET_UUID'] ??
+    constants.envVars['PORTFOLIO_BREAKDOWN_GET_UUID'] ??
         '88888888-4444-4444-4444-121212121212';
-final String portfolioDeleteUUID =
-    envVars['PORTFOLIO_DELETE_UUID'] ?? '88888888-4444-4444-4444-121212121212';
-final String portfolioEditUUID =
-    envVars['PORTFOLIO_EDIT_UUID'] ?? '88888888-4444-4444-4444-121212121212';
+final String portfolioDeleteUUID = constants.envVars['PORTFOLIO_DELETE_UUID'] ??
+    '88888888-4444-4444-4444-121212121212';
+final String portfolioEditUUID = constants.envVars['PORTFOLIO_EDIT_UUID'] ??
+    '88888888-4444-4444-4444-121212121212';
 final String portfolioEditNewName =
-    envVars['PORTFOLIO_EDIT_NEW_NAME'] ?? 'portfolioTDD2';
+    constants.envVars['PORTFOLIO_EDIT_NEW_NAME'] ?? 'portfolioTDD2';
 final String portfolioMoveFundsSourceUUID =
-    envVars['PORTFOLIO_MOVE_FUNDS_SOURCE_UUID'] ??
+    constants.envVars['PORTFOLIO_MOVE_FUNDS_SOURCE_UUID'] ??
         '88888888-4444-4444-4444-121212121212';
 final String portfolioMoveFundsTargetUUID =
-    envVars['PORTFOLIO_MOVE_FUNDS_TARGET_UUID'] ??
+    constants.envVars['PORTFOLIO_MOVE_FUNDS_TARGET_UUID'] ??
         '88888888-4444-4444-4444-121212121212';
 
 @GenerateMocks([http.Client])
 void main() {
+  final Logger logger = setupLogger('portfolios_test');
+
   final mockClient = MockClient();
-  final credential = Credential(
-      apiKeyName: constants.apiKeyName, privateKeyPEM: constants.privateKeyPEM);
+  final credential = constants.credentials;
 
   group('Portfolios API tests using Mocks', () {
     test('listPortfolios returns a list of portfolios', () async {
-      final response = {
-        'portfolios': [
-          {
-            'uuid': 'uuid1',
-            'name': 'portfolio1',
-            'type': 'type1',
-            'deleted': false
-          },
-          {
-            'uuid': 'uuid2',
-            'name': 'portfolio2',
-            'type': 'type2',
-            'deleted': false
-          }
-        ]
-      };
+      final String response =
+          await getJsonFromFile('rest/portfolios/list_portfolios.json');
 
       when(mockClient.get(any, headers: anyNamed('headers')))
-          .thenAnswer((_) async => http.Response(jsonEncode(response), 200));
+          .thenAnswer((_) async => http.Response(response, 200));
 
       final portfolios =
           await listPortfolios(client: mockClient, credential: credential);
@@ -75,18 +55,12 @@ void main() {
     });
 
     test('createPortfolio returns a portfolio', () async {
-      final response = {
-        'portfolio': {
-          'uuid': 'uuid1',
-          'name': 'portfolio1',
-          'type': 'type1',
-          'deleted': false
-        }
-      };
+      final String response =
+          await getJsonFromFile('rest/portfolios/create_portfolio.json');
 
       when(mockClient.post(any,
               headers: anyNamed('headers'), body: anyNamed('body')))
-          .thenAnswer((_) async => http.Response(jsonEncode(response), 200));
+          .thenAnswer((_) async => http.Response(response, 200));
 
       final portfolio = await createPortfolio(
           name: 'portfolio1', client: mockClient, credential: credential);
@@ -96,18 +70,12 @@ void main() {
     });
 
     test('editPortfolio returns a portfolio', () async {
-      final response = {
-        'portfolio': {
-          'uuid': 'uuid1',
-          'name': 'new name',
-          'type': 'type1',
-          'deleted': false
-        }
-      };
+      final String response =
+          await getJsonFromFile('rest/portfolios/edit_portfolio.json');
 
       when(mockClient.put(any,
               headers: anyNamed('headers'), body: anyNamed('body')))
-          .thenAnswer((_) async => http.Response(jsonEncode(response), 200));
+          .thenAnswer((_) async => http.Response(response, 200));
 
       final portfolio = await editPortfolio(
           uuid: 'uuid1',
@@ -145,33 +113,11 @@ void main() {
     });
 
     test('getPortfolioBreakdown returns a portfolio breakdown', () async {
-      final response = {
-        'breakdown': {
-          'portfolio': {
-            'uuid': 'uuid1',
-            'name': 'portfolio1',
-            'type': 'type1',
-            'deleted': false
-          },
-          'portfolio_balances': {
-            'total_balance': {'value': '100', 'currency': 'USD'},
-            'total_futures_balance': {'value': '100', 'currency': 'USD'},
-            'total_cash_equivalent_balance': {
-              'value': '100',
-              'currency': 'USD'
-            },
-            'total_crypto_balance': {'value': '100', 'currency': 'USD'},
-            'futures_unrealized_pnl': {'value': '100', 'currency': 'USD'},
-            'perp_unrealized_pnl': {'value': '100', 'currency': 'USD'}
-          },
-          'spot_positions': [],
-          'perp_positions': [],
-          'futures_positions': []
-        }
-      };
+      final String response =
+          await getJsonFromFile('rest/portfolios/get_portfolio_breakdown.json');
 
       when(mockClient.get(any, headers: anyNamed('headers')))
-          .thenAnswer((_) async => http.Response(jsonEncode(response), 200));
+          .thenAnswer((_) async => http.Response(response, 200));
 
       final breakdown = await getPortfolioBreakdown(
           uuid: 'uuid1', client: mockClient, credential: credential);
@@ -182,12 +128,12 @@ void main() {
   });
 
   group('Portfolios API tests Requests to Coinbase AT API Endpoints',
-      skip: skipDT, () {
+      skip: constants.skipDT, () {
     test('listPortfolios returns a list of portfolios', () async {
       final portfolios = await listPortfolios(credential: credential);
 
       for (Portfolio portfolio in portfolios) {
-        print('portfolio: $portfolio');
+        logger.info('portfolio: $portfolio');
       }
 
       expect(portfolios, isA<List<Portfolio>>());
@@ -198,22 +144,23 @@ void main() {
       final portfolioBreakdown = await getPortfolioBreakdown(
           uuid: portfolioBreakdownGetUUID, credential: credential);
 
-      print(portfolioBreakdown);
+      logger.info(portfolioBreakdown);
       expect(portfolioBreakdown, isA<PortfolioBreakdown>());
     });
 
-    test('createPortfolio returns a portfolio', skip: skipDT, () async {
+    test('createPortfolio returns a portfolio', skip: constants.skipDT,
+        () async {
       final Portfolio? createdPortfolio = await createPortfolio(
           name: portfolioCreateName, credential: credential);
 
-      print('portfolio: $createdPortfolio');
+      logger.info('portfolio: $createdPortfolio');
 
       expect(createdPortfolio, isA<Portfolio>());
       expect(createdPortfolio?.name, portfolioCreateName);
     });
 
     test('editPortfolio returns a portfolio with the changed name',
-        skip: skipDT, () async {
+        skip: constants.skipDT, () async {
       final portfolio = await editPortfolio(
           uuid: portfolioEditUUID,
           name: portfolioEditNewName,
@@ -223,7 +170,7 @@ void main() {
       expect(portfolio?.name, portfolioEditNewName);
     });
 
-    test('deletePortfolio returns true', skip: skipDT, () async {
+    test('deletePortfolio returns true', skip: constants.skipDT, () async {
       final result = await deletePortfolio(
           uuid: portfolioDeleteUUID, credential: credential);
 
@@ -231,7 +178,7 @@ void main() {
     });
 
     test('movePortfolioFunds returns true when transferring One Dollar of USDC',
-        skip: skipDT, () async {
+        skip: constants.skipDT, () async {
       final result = await movePortfolioFunds(
           funds: {'currency': 'USDC', 'value': '1.0'},
           sourcePortfolioUuid: portfolioMoveFundsSourceUUID,

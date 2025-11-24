@@ -12,7 +12,7 @@ import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
-import 'product_book_test.mocks.dart';
+import 'mocks.mocks.dart';
 import 'test_constants.dart' as constants;
 import 'test_helpers.dart';
 

@@ -1,26 +1,22 @@
-import 'dart:convert';
-import 'dart:io' show Platform;
-
-import 'package:coinbase_cloud_advanced_trade_client/src/models/credential.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/models/error.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/order.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/rest/orders/orders.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/services/network.dart';
 import 'package:http/http.dart' as http;
+import 'package:logging/logging.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
 import '../../mocks.mocks.dart';
+import '../../test_constants.dart' as constants;
+import '../../test_helpers.dart';
+import '../../tools.dart';
 
-final Map<String, String> envVars = Platform.environment;
-final String apiKeyName = envVars['COINBASE_API_KEY_NAME'] ?? 'api_key_name';
-final String? privateKeyPEM = envVars['COINBASE_PRIVATE_KEY'];
-final String? skipTests = envVars['SKIP_TESTS'];
-final bool skip = skipTests == 'false' ? false : true;
-
-final Credential credentials =
-    Credential(apiKeyName: apiKeyName, privateKeyPEM: privateKeyPEM!);
-
+@GenerateMocks([http.Client])
 void main() {
+  final Logger logger = setupLogger('orders_test');
+
   group('Test Get Orders using MockClient', () {
     late MockClient mockClient;
 
@@ -29,52 +25,14 @@ void main() {
     });
 
     test('Get a list of orders', () async {
-      final mockResponse = {
-        "orders": [
-          {
-            "order_id": "b0313b63-a2a1-4d30-a506-936337b52978",
-            "client_order_id": "292f7b0c-ca72-421b-bfce-a46ce5a76118",
-            "product_id": "BTC-USD",
-            "user_id": "584421a7-05c2-473d-9d48-9724f7e22137",
-            "order_configuration": {
-              "market_market_ioc": {
-                "quote_size": "1000",
-                "base_size": null,
-              }
-            },
-            "side": "BUY",
-            "status": "FILLED",
-            "time_in_force": "IMMEDIATE_OR_CANCEL",
-            "created_time": "2021-05-31T09:59:59Z",
-            "completion_percentage": "100",
-            "filled_size": "0.01",
-            "average_filled_price": "50000",
-            "fee": "0.50",
-            "number_of_fills": "1",
-            "filled_value": "500",
-            "pending_cancel": false,
-            "size_in_quote": false,
-            "total_fees": "0.50",
-            "size_inclusive_of_fees": false,
-            "total_value_after_fees": "500.50",
-            "trigger_status": "INVALID_ORDER_TYPE",
-            "order_type": "MARKET",
-            "reject_reason": "REJECT_REASON_UNSPECIFIED",
-            "settled": true,
-            "product_type": "SPOT",
-            "reject_message": "",
-            "cancel_message": ""
-          }
-        ],
-        "has_next": false,
-        "cursor": ""
-      };
+      final String mockResponse =
+          await getJsonFromFile('rest/orders/get_orders.json');
 
-      when(mockClient.get(any, headers: anyNamed('headers'))).thenAnswer(
-          (_) async => http.Response(jsonEncode(mockResponse), 200));
+      when(mockClient.get(any, headers: anyNamed('headers')))
+          .thenAnswer((_) async => http.Response(mockResponse, 200));
 
-      List<Order>? orders =
-          await getOrders(client: mockClient, credential: credentials);
+      List<Order>? orders = await getOrders(
+          client: mockClient, credential: constants.credentials);
 
       expect(orders, isNotNull);
       expect(orders.length, 1);
@@ -82,50 +40,16 @@ void main() {
     });
 
     test('Get a single order by ID', () async {
-      final mockResponse = {
-        "order": {
-          "order_id": "b0313b63-a2a1-4d30-a506-936337b52978",
-          "client_order_id": "292f7b0c-ca72-421b-bfce-a46ce5a76118",
-          "product_id": "BTC-USD",
-          "user_id": "584421a7-05c2-473d-9d48-9724f7e22137",
-          "order_configuration": {
-            "market_market_ioc": {
-              "quote_size": "1000",
-              "base_size": null,
-            }
-          },
-          "side": "BUY",
-          "status": "FILLED",
-          "time_in_force": "IMMEDIATE_OR_CANCEL",
-          "created_time": "2021-05-31T09:59:59Z",
-          "completion_percentage": "100",
-          "filled_size": "0.01",
-          "average_filled_price": "50000",
-          "fee": "0.50",
-          "number_of_fills": "1",
-          "filled_value": "500",
-          "pending_cancel": false,
-          "size_in_quote": false,
-          "total_fees": "0.50",
-          "size_inclusive_of_fees": false,
-          "total_value_after_fees": "500.50",
-          "trigger_status": "INVALID_ORDER_TYPE",
-          "order_type": "MARKET",
-          "reject_reason": "REJECT_REASON_UNSPECIFIED",
-          "settled": true,
-          "product_type": "SPOT",
-          "reject_message": "",
-          "cancel_message": ""
-        }
-      };
+      final String mockResponse =
+          await getJsonFromFile('rest/orders/get_order.json');
 
-      when(mockClient.get(any, headers: anyNamed('headers'))).thenAnswer(
-          (_) async => http.Response(jsonEncode(mockResponse), 200));
+      when(mockClient.get(any, headers: anyNamed('headers')))
+          .thenAnswer((_) async => http.Response(mockResponse, 200));
 
       Order? order = await getOrder(
           orderId: "b0313b63-a2a1-4d30-a506-936337b52978",
           client: mockClient,
-          credential: credentials);
+          credential: constants.credentials);
 
       expect(order, isNotNull);
       expect(order?.orderId, "b0313b63-a2a1-4d30-a506-936337b52978");
@@ -133,47 +57,16 @@ void main() {
 
     test('Get a single order by a specific ID', () async {
       final specificOrderId = 'b0313b63-a2a1-4d30-a506-936337b52978';
-      final mockResponse = {
-        "order": {
-          "order_id": specificOrderId,
-          "client_order_id": "292f7b0c-ca72-421b-bfce-a46ce5a76118",
-          "product_id": "ETH-USD",
-          "user_id": "584421a7-05c2-473d-9d48-9724f7e22137",
-          "order_configuration": {
-            "market_market_ioc": {"quote_size": "1000", "base_size": null}
-          },
-          "side": "BUY",
-          "status": "FILLED",
-          "time_in_force": "IMMEDIATE_OR_CANCEL",
-          "created_time": "2021-05-31T09:59:59Z",
-          "completion_percentage": "100",
-          "filled_size": "0.01",
-          "average_filled_price": "50000",
-          "fee": "0.50",
-          "number_of_fills": "1",
-          "filled_value": "500",
-          "pending_cancel": false,
-          "size_in_quote": false,
-          "total_fees": "0.50",
-          "size_inclusive_of_fees": false,
-          "total_value_after_fees": "500.50",
-          "trigger_status": "INVALID_ORDER_TYPE",
-          "order_type": "MARKET",
-          "reject_reason": "REJECT_REASON_UNSPECIFIED",
-          "settled": true,
-          "product_type": "SPOT",
-          "reject_message": "",
-          "cancel_message": ""
-        }
-      };
+      final String mockResponse =
+          await getJsonFromFile('rest/orders/get_order.json');
 
-      when(mockClient.get(any, headers: anyNamed('headers'))).thenAnswer(
-          (_) async => http.Response(jsonEncode(mockResponse), 200));
+      when(mockClient.get(any, headers: anyNamed('headers')))
+          .thenAnswer((_) async => http.Response(mockResponse, 200));
 
       Order? order = await getOrder(
           orderId: specificOrderId,
           client: mockClient,
-          credential: credentials);
+          credential: constants.credentials);
 
       expect(order, isNotNull);
       expect(order?.orderId, specificOrderId);
@@ -181,47 +74,49 @@ void main() {
 
     test('Get a single order by a specific ID and Its not found', () async {
       final specificOrderId = 'a-specific-order';
-      final mockResponse = {"order": null};
+      final String mockResponse =
+          await getJsonFromFile('rest/orders/get_order_not_found.json');
 
-      when(mockClient.get(any, headers: anyNamed('headers'))).thenAnswer(
-          (_) async => http.Response(jsonEncode(mockResponse), 404));
+      when(mockClient.get(any, headers: anyNamed('headers')))
+          .thenAnswer((_) async => http.Response(mockResponse, 404));
 
-      Order? order = await getOrder(
-          orderId: specificOrderId,
-          client: mockClient,
-          credential: credentials);
-
-      expect(order, isNull);
+      expect(
+          () async => await getOrder(
+              orderId: specificOrderId,
+              client: mockClient,
+              credential: constants.credentials),
+          throwsA(isA<CoinbaseException>()));
     });
 
     test('Return null when order not found', () async {
-      final mockResponse = {"order": null};
+      final String mockResponse =
+          await getJsonFromFile('rest/orders/get_order_null.json');
 
-      when(mockClient.get(any, headers: anyNamed('headers'))).thenAnswer(
-          (_) async => http.Response(jsonEncode(mockResponse), 404));
+      when(mockClient.get(any, headers: anyNamed('headers')))
+          .thenAnswer((_) async => http.Response(mockResponse, 404));
 
-      Order? order = await getOrder(
-          orderId: "non-existent-id",
-          client: mockClient,
-          credential: credentials);
-
-      expect(order, isNull);
+      expect(
+          () async => await getOrder(
+              orderId: "non-existent-id",
+              client: mockClient,
+              credential: constants.credentials),
+          throwsA(isA<CoinbaseException>()));
     });
   });
 
-  group('Test Get Orders Requests to Coinbase AT API Endpoints', skip: skip,
-      () {
+  group('Test Get Orders Requests to Coinbase AT API Endpoints',
+      skip: constants.ciSkip, () {
     test('Authorized Get All Orders', () async {
       String requestPath = '/orders/historical/batch';
       Map<String, dynamic>? queryParameters = {'limit': '100'};
       var response = await getAuthorized(requestPath,
           queryParameters: queryParameters,
-          credential: credentials,
+          credential: constants.credentials,
           isSandbox: false);
       var url = response.request?.url.toString();
-      print(
+      logger.info(
           'Response Code: ${response.statusCode} to URL: $url with query parameters: $queryParameters');
-      print('Response body: ${response.body} to URL: $url');
+      logger.info('Response body: ${response.body} to URL: $url');
 
       expect(response.statusCode == 200, isTrue);
       expect(true, isTrue);
@@ -229,21 +124,21 @@ void main() {
 
     test('Get all Orders as a list of Orders', () async {
       List<Order>? orders =
-          await getOrders(credential: credentials, isSandbox: false);
-      print('Orders: $orders');
+          await getOrders(credential: constants.credentials, isSandbox: false);
+      logger.info('Orders: $orders');
 
       expect(orders.isNotEmpty, true);
     });
   });
 
-  group('Test Individual Orders', skip: skip, () {
+  group('Test Individual Orders', skip: constants.ciSkip, () {
     test('Get Individual Order', () async {
       List<Order> orders =
-          await getOrders(credential: credentials, isSandbox: false);
+          await getOrders(credential: constants.credentials, isSandbox: false);
       String? orderId = orders.first.orderId;
       Order? order = await getOrder(
         orderId: orderId!,
-        credential: credentials,
+        credential: constants.credentials,
         isSandbox: false,
       );
 
@@ -252,13 +147,13 @@ void main() {
 
     test('Individual Order Does Not Exist', () async {
       String orderId = 'b0313b63ee8d';
-      Order? order = await getOrder(
-        orderId: orderId,
-        credential: credentials,
-        isSandbox: false,
-      );
-
-      expect(order, null);
+      expect(
+          () async => await getOrder(
+                orderId: orderId,
+                credential: constants.credentials,
+                isSandbox: false,
+              ),
+          throwsA(isA<CoinbaseException>()));
     });
   });
 
@@ -270,16 +165,12 @@ void main() {
     });
 
     test('Create a new market order with quote size', () async {
-      final mockResponse = {
-        "success": true,
-        "failure_reason": "string",
-        "order_id": "string"
-      };
+      final String mockResponse =
+          await getJsonFromFile('rest/orders/create_order_success.json');
 
       when(mockClient.post(any,
               headers: anyNamed('headers'), body: anyNamed('body')))
-          .thenAnswer(
-              (_) async => http.Response(jsonEncode(mockResponse), 200));
+          .thenAnswer((_) async => http.Response(mockResponse, 200));
 
       final clientOrderId = DateTime.now().millisecondsSinceEpoch.toString();
       final result = await createMarketOrder(
@@ -287,7 +178,7 @@ void main() {
         productId: 'BTC-USD',
         side: 'BUY',
         quoteSize: '10',
-        credential: credentials,
+        credential: constants.credentials,
         client: mockClient,
       );
 
@@ -296,16 +187,12 @@ void main() {
     });
 
     test('Create a new market order with base size', () async {
-      final mockResponse = {
-        "success": true,
-        "failure_reason": "string",
-        "order_id": "string"
-      };
+      final String mockResponse =
+          await getJsonFromFile('rest/orders/create_order_success.json');
 
       when(mockClient.post(any,
               headers: anyNamed('headers'), body: anyNamed('body')))
-          .thenAnswer(
-              (_) async => http.Response(jsonEncode(mockResponse), 200));
+          .thenAnswer((_) async => http.Response(mockResponse, 200));
 
       final clientOrderId = DateTime.now().millisecondsSinceEpoch.toString();
       final result = await createMarketOrder(
@@ -313,7 +200,7 @@ void main() {
         productId: 'BTC-USD',
         side: 'SELL',
         baseSize: '0.1',
-        credential: credentials,
+        credential: constants.credentials,
         client: mockClient,
       );
 
@@ -329,22 +216,18 @@ void main() {
                 side: 'BUY',
                 quoteSize: '10',
                 baseSize: '0.1',
-                credential: credentials,
+                credential: constants.credentials,
               ),
           throwsArgumentError);
     });
 
     test('Create a new limit order', () async {
-      final mockResponse = {
-        "success": true,
-        "failure_reason": "string",
-        "order_id": "string"
-      };
+      final String mockResponse =
+          await getJsonFromFile('rest/orders/create_order_success.json');
 
       when(mockClient.post(any,
               headers: anyNamed('headers'), body: anyNamed('body')))
-          .thenAnswer(
-              (_) async => http.Response(jsonEncode(mockResponse), 200));
+          .thenAnswer((_) async => http.Response(mockResponse, 200));
 
       final clientOrderId = DateTime.now().millisecondsSinceEpoch.toString();
       final result = await createLimitOrder(
@@ -353,7 +236,7 @@ void main() {
         side: 'BUY',
         baseSize: '0.1',
         limitPrice: '10000',
-        credential: credentials,
+        credential: constants.credentials,
         client: mockClient,
       );
 
@@ -362,16 +245,12 @@ void main() {
     });
 
     test('Create a new post-only limit order', () async {
-      final mockResponse = {
-        "success": true,
-        "failure_reason": "string",
-        "order_id": "string"
-      };
+      final String mockResponse =
+          await getJsonFromFile('rest/orders/create_order_success.json');
 
       when(mockClient.post(any,
               headers: anyNamed('headers'), body: anyNamed('body')))
-          .thenAnswer(
-              (_) async => http.Response(jsonEncode(mockResponse), 200));
+          .thenAnswer((_) async => http.Response(mockResponse, 200));
 
       final clientOrderId = DateTime.now().millisecondsSinceEpoch.toString();
       final result = await createLimitOrder(
@@ -381,7 +260,7 @@ void main() {
         baseSize: '0.1',
         limitPrice: '10000',
         postOnly: true,
-        credential: credentials,
+        credential: constants.credentials,
         client: mockClient,
       );
 
@@ -390,7 +269,8 @@ void main() {
     });
   });
 
-  group('Test Create Orders to Coinbase AT API Endpoints', skip: skip, () {
+  group('Test Create Orders to Coinbase AT API Endpoints',
+      skip: constants.ciSkip, () {
     test('Create a new market order with quote size', () async {
       final clientOrderId = DateTime.now().millisecondsSinceEpoch.toString();
       final result = await createMarketOrder(
@@ -398,7 +278,7 @@ void main() {
         productId: 'BTC-USD',
         side: 'BUY',
         quoteSize: '10',
-        credential: credentials,
+        credential: constants.credentials,
         isSandbox: true,
       );
 
@@ -413,7 +293,7 @@ void main() {
         productId: 'BTC-USD',
         side: 'SELL',
         baseSize: '0.1',
-        credential: credentials,
+        credential: constants.credentials,
         isSandbox: true,
       );
 
@@ -429,7 +309,7 @@ void main() {
                 side: 'BUY',
                 quoteSize: '10',
                 baseSize: '0.1',
-                credential: credentials,
+                credential: constants.credentials,
                 isSandbox: true,
               ),
           throwsArgumentError);
@@ -443,7 +323,7 @@ void main() {
         side: 'BUY',
         baseSize: '0.1',
         limitPrice: '10000',
-        credential: credentials,
+        credential: constants.credentials,
         isSandbox: true,
       );
 
@@ -460,7 +340,7 @@ void main() {
         baseSize: '0.001',
         limitPrice: '10000',
         postOnly: true,
-        credential: credentials,
+        credential: constants.credentials,
         isSandbox: true,
       );
 
