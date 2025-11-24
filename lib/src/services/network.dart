@@ -50,7 +50,7 @@ Future<http.Response> getAuthorized(String endpoint,
     required Credential credential,
     bool isSandbox = false}) async {
   return await _makeAuthorizedRequest(
-      method: 'GET',
+      method: _HttpMethod.GET,
       endpoint: endpoint,
       queryParameters: queryParameters,
       client: client,
@@ -76,7 +76,7 @@ Future<http.Response> postAuthorized(String endpoint,
     required Credential credential,
     bool isSandbox = false}) async {
   return await _makeAuthorizedRequest(
-      method: 'POST',
+      method: _HttpMethod.POST,
       endpoint: endpoint,
       body: body,
       client: client,
@@ -102,7 +102,7 @@ Future<http.Response> putAuthorized(String endpoint,
     required Credential credential,
     bool isSandbox = false}) async {
   return await _makeAuthorizedRequest(
-      method: 'PUT',
+      method: _HttpMethod.PUT,
       endpoint: endpoint,
       body: body,
       client: client,
@@ -126,15 +126,17 @@ Future<http.Response> deleteAuthorized(String endpoint,
     required Credential credential,
     bool isSandbox = false}) async {
   return await _makeAuthorizedRequest(
-      method: 'DELETE',
+      method: _HttpMethod.DELETE,
       endpoint: endpoint,
       client: client,
       credential: credential,
       isSandbox: isSandbox);
 }
 
+enum _HttpMethod { GET, POST, PUT, DELETE }
+
 Future<http.Response> _makeAuthorizedRequest(
-    {required String method,
+    {required _HttpMethod method,
     required String endpoint,
     Map<String, dynamic>? queryParameters,
     String? body,
@@ -147,7 +149,7 @@ Future<http.Response> _makeAuthorizedRequest(
   String fullEndpoint = '/api/v3/brokerage$endpoint';
 
   String jwtToken = await generateCoinbaseJwt(credential.apiKeyName,
-      credential.privateKeyPEM, "$method $coinbaseApi$fullEndpoint");
+      credential.privateKeyPEM, "${method.name} $coinbaseApi$fullEndpoint");
 
   var url = Uri.https(coinbaseApi, fullEndpoint, queryParameters);
   Map<String, String> requestHeaders = {
@@ -155,20 +157,18 @@ Future<http.Response> _makeAuthorizedRequest(
     "Authorization": "Bearer $jwtToken",
   };
 
-  if (method == 'POST' || method == 'PUT') {
+  if (method == _HttpMethod.POST || method == _HttpMethod.PUT) {
     requestHeaders[HttpHeaders.contentTypeHeader] = 'application/json';
   }
 
   switch (method) {
-    case 'GET':
+    case _HttpMethod.GET:
       return await client.get(url, headers: requestHeaders);
-    case 'POST':
+    case _HttpMethod.POST:
       return await client.post(url, headers: requestHeaders, body: body);
-    case 'PUT':
+    case _HttpMethod.PUT:
       return await client.put(url, headers: requestHeaders, body: body);
-    case 'DELETE':
+    case _HttpMethod.DELETE:
       return await client.delete(url, headers: requestHeaders);
-    default:
-      throw ArgumentError('Invalid HTTP method: $method');
   }
 }
