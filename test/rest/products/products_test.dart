@@ -13,6 +13,7 @@ import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
+import '../../tools.dart';
 import 'products_test.mocks.dart';
 
 @GenerateMocks([http.Client])
@@ -27,43 +28,11 @@ void main() {
     });
 
     test('Get a list of products', () async {
-      final mockResponse = {
-        "products": [
-          {
-            "product_id": "BTC-USD",
-            "price": "50000.00",
-            "price_percentage_change_24h": "1.23",
-            "volume_24h": "1000",
-            "volume_percentage_change_24h": "4.56",
-            "base_increment": "0.00000001",
-            "quote_increment": "0.01",
-            "quote_min_size": "1.00",
-            "quote_max_size": "1000000.00",
-            "base_min_size": "0.0001",
-            "base_max_size": "1000",
-            "base_name": "Bitcoin",
-            "quote_name": "US Dollar",
-            "watched": true,
-            "is_disabled": false,
-            "new": false,
-            "status": "online",
-            "cancel_only": false,
-            "limit_only": false,
-            "post_only": false,
-            "trading_disabled": false,
-            "auction_mode": false,
-            "product_type": "SPOT",
-            "quote_currency_id": "USD",
-            "base_currency_id": "BTC",
-            "fcm_trading_session_details": null,
-            "mid_market_price": "50000.00"
-          }
-        ],
-        "num_products": 1
-      };
+      final String mockResponse =
+          await getJsonFromFile('rest/products/get_products_authorized.json');
 
-      when(mockClient.get(any, headers: anyNamed('headers'))).thenAnswer(
-          (_) async => http.Response(jsonEncode(mockResponse), 200));
+      when(mockClient.get(any, headers: anyNamed('headers')))
+          .thenAnswer((_) async => http.Response(mockResponse, 200));
 
       List<Product?> products = await getProductsAuthorized(
           client: mockClient, credential: testConstants.credentials);
@@ -74,38 +43,11 @@ void main() {
     });
 
     test('Get a single product by ID', () async {
-      final mockResponse = {
-        "product_id": "BTC-USD",
-        "price": "50000.00",
-        "price_percentage_change_24h": "1.23",
-        "volume_24h": "1000",
-        "volume_percentage_change_24h": "4.56",
-        "base_increment": "0.00000001",
-        "quote_increment": "0.01",
-        "quote_min_size": "1.00",
-        "quote_max_size": "1000000.00",
-        "base_min_size": "0.0001",
-        "base_max_size": "1000",
-        "base_name": "Bitcoin",
-        "quote_name": "US Dollar",
-        "watched": true,
-        "is_disabled": false,
-        "new": false,
-        "status": "online",
-        "cancel_only": false,
-        "limit_only": false,
-        "post_only": false,
-        "trading_disabled": false,
-        "auction_mode": false,
-        "product_type": "SPOT",
-        "quote_currency_id": "USD",
-        "base_currency_id": "BTC",
-        "fcm_trading_session_details": null,
-        "mid_market_price": "50000.00"
-      };
+      final String mockResponse =
+          await getJsonFromFile('rest/products/get_product_authorized.json');
 
-      when(mockClient.get(any, headers: anyNamed('headers'))).thenAnswer(
-          (_) async => http.Response(jsonEncode(mockResponse), 200));
+      when(mockClient.get(any, headers: anyNamed('headers')))
+          .thenAnswer((_) async => http.Response(mockResponse, 200));
 
       Product? product = await getProductAuthorized(
           productId: "BTC-USD",

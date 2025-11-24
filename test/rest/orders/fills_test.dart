@@ -3,6 +3,7 @@ import 'dart:io' show Platform;
 import 'package:logging/logging.dart';
 import '../../test_helpers.dart';
 import '../../test_constants.dart' as testConstants;
+import '../../tools.dart';
 
 import 'package:coinbase_cloud_advanced_trade_client/src/models/credential.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/fill.dart';
@@ -29,38 +30,11 @@ void main() {
     });
 
     test('Get a list of fills', () async {
-      final mockResponse = {
-        "fills": [
-          {
-            "entry_id": "22222-2222222-22222222",
-            "trade_id": "123456",
-            "order_id": "b0313b63-a2a1-4d30-a506-936337b52978",
-            "trade_time": "2021-05-31T09:59:59Z",
-            "trade_type": "FILL",
-            "price": "50000.00",
-            "size": "0.01",
-            "commission": "0.50",
-            "product_id": "BTC-USD",
-            "sequence_timestamp": "2021-05-31T09:58:59.000Z",
-            "liquidity_indicator": "TAKER",
-            "size_in_quote": false,
-            "user_id": "3333-333333-3333333",
-            "side": "BUY",
-            "retail_portfolio_id": "4444-444444-4444444",
-            "fillSource": "FILL_SOURCE_UNKNOWN",
-            "commission_detail_total": {
-              "total_commission": "0.0",
-              "gst_commission": "0.0",
-              "withholding_commission": "0.0",
-              "client_commission": "0.0"
-            }
-          }
-        ],
-        "cursor": ""
-      };
+      final String mockResponse =
+          await getJsonFromFile('rest/orders/get_fills.json');
 
-      when(mockClient.get(any, headers: anyNamed('headers'))).thenAnswer(
-          (_) async => http.Response(jsonEncode(mockResponse), 200));
+      when(mockClient.get(any, headers: anyNamed('headers')))
+          .thenAnswer((_) async => http.Response(mockResponse, 200));
 
       List<Fill>? fills = await getFills(
           client: mockClient, credential: testConstants.credentials);

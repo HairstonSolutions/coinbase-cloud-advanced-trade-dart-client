@@ -13,6 +13,7 @@ import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
 import '../../test_constants.dart' as testConstants;
+import '../../tools.dart';
 import 'candles_test.mocks.dart';
 
 @GenerateMocks([http.Client])
@@ -24,8 +25,8 @@ void main() {
     group('Mocks', () {
       test('Get Product Candles (Public)', () async {
         final client = MockClient();
-        final mockResponse =
-            '{"candles":[{"start":"1672531200","high":"16600","low":"16500","open":"16550","close":"16580","volume":"1234.56"}]}';
+        final String mockResponse =
+            await getJsonFromFile('rest/products/get_product_candles.json');
 
         when(client.get(any, headers: anyNamed('headers')))
             .thenAnswer((_) async => http.Response(mockResponse, 200));
@@ -44,8 +45,8 @@ void main() {
 
       test('Get Product Candles (Private)', () async {
         final client = MockClient();
-        final mockResponse =
-            '{"candles":[{"start":"1672531200","high":"16600","low":"16500","open":"16550","close":"16580","volume":"1234.56"}]}';
+        final String mockResponse =
+            await getJsonFromFile('rest/products/get_product_candles.json');
         final credential = testConstants.credentials;
 
         when(client.get(any, headers: anyNamed('headers')))

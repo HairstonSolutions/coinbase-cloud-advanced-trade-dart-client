@@ -3,6 +3,7 @@ import 'dart:io' show Platform;
 import 'package:logging/logging.dart';
 import '../../test_helpers.dart';
 import '../../test_constants.dart' as testConstants;
+import '../../tools.dart';
 
 import 'package:coinbase_cloud_advanced_trade_client/src/models/credential.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/error.dart';
@@ -28,49 +29,11 @@ void main() {
     });
 
     test('Get a list of orders', () async {
-      final mockResponse = {
-        "orders": [
-          {
-            "order_id": "b0313b63-a2a1-4d30-a506-936337b52978",
-            "client_order_id": "292f7b0c-ca72-421b-bfce-a46ce5a76118",
-            "product_id": "BTC-USD",
-            "user_id": "584421a7-05c2-473d-9d48-9724f7e22137",
-            "order_configuration": {
-              "market_market_ioc": {
-                "quote_size": "1000",
-                "base_size": null,
-              }
-            },
-            "side": "BUY",
-            "status": "FILLED",
-            "time_in_force": "IMMEDIATE_OR_CANCEL",
-            "created_time": "2021-05-31T09:59:59Z",
-            "completion_percentage": "100",
-            "filled_size": "0.01",
-            "average_filled_price": "50000",
-            "fee": "0.50",
-            "number_of_fills": "1",
-            "filled_value": "500",
-            "pending_cancel": false,
-            "size_in_quote": false,
-            "total_fees": "0.50",
-            "size_inclusive_of_fees": false,
-            "total_value_after_fees": "500.50",
-            "trigger_status": "INVALID_ORDER_TYPE",
-            "order_type": "MARKET",
-            "reject_reason": "REJECT_REASON_UNSPECIFIED",
-            "settled": true,
-            "product_type": "SPOT",
-            "reject_message": "",
-            "cancel_message": ""
-          }
-        ],
-        "has_next": false,
-        "cursor": ""
-      };
+      final String mockResponse =
+          await getJsonFromFile('rest/orders/get_orders.json');
 
-      when(mockClient.get(any, headers: anyNamed('headers'))).thenAnswer(
-          (_) async => http.Response(jsonEncode(mockResponse), 200));
+      when(mockClient.get(any, headers: anyNamed('headers')))
+          .thenAnswer((_) async => http.Response(mockResponse, 200));
 
       List<Order>? orders = await getOrders(
           client: mockClient, credential: testConstants.credentials);
@@ -81,45 +44,11 @@ void main() {
     });
 
     test('Get a single order by ID', () async {
-      final mockResponse = {
-        "order": {
-          "order_id": "b0313b63-a2a1-4d30-a506-936337b52978",
-          "client_order_id": "292f7b0c-ca72-421b-bfce-a46ce5a76118",
-          "product_id": "BTC-USD",
-          "user_id": "584421a7-05c2-473d-9d48-9724f7e22137",
-          "order_configuration": {
-            "market_market_ioc": {
-              "quote_size": "1000",
-              "base_size": null,
-            }
-          },
-          "side": "BUY",
-          "status": "FILLED",
-          "time_in_force": "IMMEDIATE_OR_CANCEL",
-          "created_time": "2021-05-31T09:59:59Z",
-          "completion_percentage": "100",
-          "filled_size": "0.01",
-          "average_filled_price": "50000",
-          "fee": "0.50",
-          "number_of_fills": "1",
-          "filled_value": "500",
-          "pending_cancel": false,
-          "size_in_quote": false,
-          "total_fees": "0.50",
-          "size_inclusive_of_fees": false,
-          "total_value_after_fees": "500.50",
-          "trigger_status": "INVALID_ORDER_TYPE",
-          "order_type": "MARKET",
-          "reject_reason": "REJECT_REASON_UNSPECIFIED",
-          "settled": true,
-          "product_type": "SPOT",
-          "reject_message": "",
-          "cancel_message": ""
-        }
-      };
+      final String mockResponse =
+          await getJsonFromFile('rest/orders/get_order.json');
 
-      when(mockClient.get(any, headers: anyNamed('headers'))).thenAnswer(
-          (_) async => http.Response(jsonEncode(mockResponse), 200));
+      when(mockClient.get(any, headers: anyNamed('headers')))
+          .thenAnswer((_) async => http.Response(mockResponse, 200));
 
       Order? order = await getOrder(
           orderId: "b0313b63-a2a1-4d30-a506-936337b52978",
@@ -132,42 +61,11 @@ void main() {
 
     test('Get a single order by a specific ID', () async {
       final specificOrderId = 'b0313b63-a2a1-4d30-a506-936337b52978';
-      final mockResponse = {
-        "order": {
-          "order_id": specificOrderId,
-          "client_order_id": "292f7b0c-ca72-421b-bfce-a46ce5a76118",
-          "product_id": "ETH-USD",
-          "user_id": "584421a7-05c2-473d-9d48-9724f7e22137",
-          "order_configuration": {
-            "market_market_ioc": {"quote_size": "1000", "base_size": null}
-          },
-          "side": "BUY",
-          "status": "FILLED",
-          "time_in_force": "IMMEDIATE_OR_CANCEL",
-          "created_time": "2021-05-31T09:59:59Z",
-          "completion_percentage": "100",
-          "filled_size": "0.01",
-          "average_filled_price": "50000",
-          "fee": "0.50",
-          "number_of_fills": "1",
-          "filled_value": "500",
-          "pending_cancel": false,
-          "size_in_quote": false,
-          "total_fees": "0.50",
-          "size_inclusive_of_fees": false,
-          "total_value_after_fees": "500.50",
-          "trigger_status": "INVALID_ORDER_TYPE",
-          "order_type": "MARKET",
-          "reject_reason": "REJECT_REASON_UNSPECIFIED",
-          "settled": true,
-          "product_type": "SPOT",
-          "reject_message": "",
-          "cancel_message": ""
-        }
-      };
+      final String mockResponse =
+          await getJsonFromFile('rest/orders/get_order.json');
 
-      when(mockClient.get(any, headers: anyNamed('headers'))).thenAnswer(
-          (_) async => http.Response(jsonEncode(mockResponse), 200));
+      when(mockClient.get(any, headers: anyNamed('headers')))
+          .thenAnswer((_) async => http.Response(mockResponse, 200));
 
       Order? order = await getOrder(
           orderId: specificOrderId,
@@ -180,10 +78,11 @@ void main() {
 
     test('Get a single order by a specific ID and Its not found', () async {
       final specificOrderId = 'a-specific-order';
-      final mockResponse = {"order": null};
+      final String mockResponse =
+          await getJsonFromFile('rest/orders/get_order_not_found.json');
 
-      when(mockClient.get(any, headers: anyNamed('headers'))).thenAnswer(
-          (_) async => http.Response(jsonEncode(mockResponse), 404));
+      when(mockClient.get(any, headers: anyNamed('headers')))
+          .thenAnswer((_) async => http.Response(mockResponse, 404));
 
       expect(
           () async => await getOrder(
@@ -194,10 +93,11 @@ void main() {
     });
 
     test('Return null when order not found', () async {
-      final mockResponse = {"order": null};
+      final String mockResponse =
+          await getJsonFromFile('rest/orders/get_order_null.json');
 
-      when(mockClient.get(any, headers: anyNamed('headers'))).thenAnswer(
-          (_) async => http.Response(jsonEncode(mockResponse), 404));
+      when(mockClient.get(any, headers: anyNamed('headers')))
+          .thenAnswer((_) async => http.Response(mockResponse, 404));
 
       expect(
           () async => await getOrder(
@@ -269,16 +169,12 @@ void main() {
     });
 
     test('Create a new market order with quote size', () async {
-      final mockResponse = {
-        "success": true,
-        "failure_reason": "string",
-        "order_id": "string"
-      };
+      final String mockResponse =
+          await getJsonFromFile('rest/orders/create_order_success.json');
 
       when(mockClient.post(any,
               headers: anyNamed('headers'), body: anyNamed('body')))
-          .thenAnswer(
-              (_) async => http.Response(jsonEncode(mockResponse), 200));
+          .thenAnswer((_) async => http.Response(mockResponse, 200));
 
       final clientOrderId = DateTime.now().millisecondsSinceEpoch.toString();
       final result = await createMarketOrder(
@@ -295,16 +191,12 @@ void main() {
     });
 
     test('Create a new market order with base size', () async {
-      final mockResponse = {
-        "success": true,
-        "failure_reason": "string",
-        "order_id": "string"
-      };
+      final String mockResponse =
+          await getJsonFromFile('rest/orders/create_order_success.json');
 
       when(mockClient.post(any,
               headers: anyNamed('headers'), body: anyNamed('body')))
-          .thenAnswer(
-              (_) async => http.Response(jsonEncode(mockResponse), 200));
+          .thenAnswer((_) async => http.Response(mockResponse, 200));
 
       final clientOrderId = DateTime.now().millisecondsSinceEpoch.toString();
       final result = await createMarketOrder(
@@ -334,16 +226,12 @@ void main() {
     });
 
     test('Create a new limit order', () async {
-      final mockResponse = {
-        "success": true,
-        "failure_reason": "string",
-        "order_id": "string"
-      };
+      final String mockResponse =
+          await getJsonFromFile('rest/orders/create_order_success.json');
 
       when(mockClient.post(any,
               headers: anyNamed('headers'), body: anyNamed('body')))
-          .thenAnswer(
-              (_) async => http.Response(jsonEncode(mockResponse), 200));
+          .thenAnswer((_) async => http.Response(mockResponse, 200));
 
       final clientOrderId = DateTime.now().millisecondsSinceEpoch.toString();
       final result = await createLimitOrder(
@@ -361,16 +249,12 @@ void main() {
     });
 
     test('Create a new post-only limit order', () async {
-      final mockResponse = {
-        "success": true,
-        "failure_reason": "string",
-        "order_id": "string"
-      };
+      final String mockResponse =
+          await getJsonFromFile('rest/orders/create_order_success.json');
 
       when(mockClient.post(any,
               headers: anyNamed('headers'), body: anyNamed('body')))
-          .thenAnswer(
-              (_) async => http.Response(jsonEncode(mockResponse), 200));
+          .thenAnswer((_) async => http.Response(mockResponse, 200));
 
       final clientOrderId = DateTime.now().millisecondsSinceEpoch.toString();
       final result = await createLimitOrder(

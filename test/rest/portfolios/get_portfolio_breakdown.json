@@ -1,0 +1,39 @@
+{
+    "breakdown": {
+        "portfolio": {
+            "uuid": "uuid1",
+            "name": "portfolio1",
+            "type": "type1",
+            "deleted": false
+        },
+        "portfolio_balances": {
+            "total_balance": {
+                "value": "100",
+                "currency": "USD"
+            },
+            "total_futures_balance": {
+                "value": "100",
+                "currency": "USD"
+            },
+            "total_cash_equivalent_balance": {
+                "value": "100",
+                "currency": "USD"
+            },
+            "total_crypto_balance": {
+                "value": "100",
+                "currency": "USD"
+            },
+            "futures_unrealized_pnl": {
+                "value": "100",
+                "currency": "USD"
+            },
+            "perp_unrealized_pnl": {
+                "value": "100",
+                "currency": "USD"
+            }
+        },
+        "spot_positions": [],
+        "perp_positions": [],
+        "futures_positions": []
+    }
+}

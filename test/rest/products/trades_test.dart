@@ -15,6 +15,7 @@ import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
+import '../../tools.dart';
 import 'trades_test.mocks.dart';
 
 @GenerateMocks([http.Client])
@@ -29,26 +30,11 @@ void main() {
     });
 
     test('Get trades for a product', () async {
-      final mockResponse = {
-        "trades": [
-          {
-            "trade_id": "123456",
-            "product_id": "BTC-USD",
-            "price": "50000.00",
-            "size": "0.01",
-            "time": "2021-05-31T09:59:59Z",
-            "side": "BUY",
-            "bid": "49999.00",
-            "ask": "50001.00",
-            "volume": "1000",
-          }
-        ],
-        "best_bid": "49999.00",
-        "best_ask": "50001.00"
-      };
+      final String mockResponse =
+          await getJsonFromFile('rest/products/get_trades.json');
 
-      when(mockClient.get(any, headers: anyNamed('headers'))).thenAnswer(
-          (_) async => http.Response(jsonEncode(mockResponse), 200));
+      when(mockClient.get(any, headers: anyNamed('headers')))
+          .thenAnswer((_) async => http.Response(mockResponse, 200));
 
       List<Trade?> trades = await getTrades(
           productId: "BTC-USD",

@@ -3,6 +3,7 @@ import 'dart:io' show Platform;
 import 'package:logging/logging.dart';
 import '../test_helpers.dart';
 import '../test_constants.dart' as testConstants;
+import '../tools.dart';
 
 import 'package:coinbase_cloud_advanced_trade_client/src/models/account.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/credential.dart';
@@ -27,42 +28,11 @@ void main() {
     });
 
     test('Get a list of accounts', () async {
-      final mockResponse = {
-        "accounts": [
-          {
-            "uuid": "8bfc20d7-f7c6-4422-9181-51268ba51372",
-            "name": "BTC Wallet",
-            "currency": "BTC",
-            "type": "ACCOUNT_TYPE_CRYPTO",
-            "active": true,
-            "created_at": "2021-05-31T09:59:59Z",
-            "updated_at": "2021-05-31T09:59:59Z",
-            "deleted_at": null,
-            "hold": {"value": "0.00000000", "currency": "BTC"},
-            "available_balance": {"value": "100.00", "currency": "BTC"},
-            "default": false
-          },
-          {
-            "uuid": "00f35d2d-0a95-4834-a81c-8245355a293c",
-            "name": "USD Wallet",
-            "currency": "USD",
-            "type": "ACCOUNT_TYPE_FIAT",
-            "active": true,
-            "created_at": "2021-05-31T09:59:59Z",
-            "updated_at": "2021-05-31T09:59:59Z",
-            "deleted_at": null,
-            "hold": {"value": "0.00", "currency": "USD"},
-            "available_balance": {"value": "1000.00", "currency": "USD"},
-            "default": true
-          }
-        ],
-        "has_next": false,
-        "cursor": "",
-        "size": 2
-      };
+      final String mockResponse =
+          await getJsonFromFile('rest/accounts/get_accounts.json');
 
-      when(mockClient.get(any, headers: anyNamed('headers'))).thenAnswer(
-          (_) async => http.Response(jsonEncode(mockResponse), 200));
+      when(mockClient.get(any, headers: anyNamed('headers')))
+          .thenAnswer((_) async => http.Response(mockResponse, 200));
 
       List<Account> accounts = await getAccounts(
           client: mockClient,
@@ -76,24 +46,11 @@ void main() {
     });
 
     test('Get a single account by UUID', () async {
-      final mockResponse = {
-        "account": {
-          "uuid": "8bfc20d7-f7c6-4422-9181-51268ba51372",
-          "name": "BTC Wallet",
-          "currency": "BTC",
-          "type": "ACCOUNT_TYPE_CRYPTO",
-          "active": true,
-          "created_at": "2021-05-31T09:59:59Z",
-          "updated_at": "2021-05-31T09:59:59Z",
-          "deleted_at": null,
-          "hold": {"value": "0.00000000", "currency": "BTC"},
-          "available_balance": {"value": "100.00", "currency": "BTC"},
-          "default": false
-        }
-      };
+      final String mockResponse =
+          await getJsonFromFile('rest/accounts/get_account.json');
 
-      when(mockClient.get(any, headers: anyNamed('headers'))).thenAnswer(
-          (_) async => http.Response(jsonEncode(mockResponse), 200));
+      when(mockClient.get(any, headers: anyNamed('headers')))
+          .thenAnswer((_) async => http.Response(mockResponse, 200));
 
       Account? account = await getAccount(
           uuid: "8bfc20d7-f7c6-4422-9181-51268ba51372",
@@ -108,29 +65,11 @@ void main() {
     });
 
     test('Get a single account by currency', () async {
-      final mockResponse = {
-        "accounts": [
-          {
-            "uuid": "8bfc20d7-f7c6-4422-9181-51268ba51372",
-            "name": "BTC Wallet",
-            "currency": "BTC",
-            "type": "ACCOUNT_TYPE_CRYPTO",
-            "active": true,
-            "created_at": "2021-05-31T09:59:59Z",
-            "updated_at": "2021-05-31T09:59:59Z",
-            "deleted_at": null,
-            "hold": {"value": "0.00000000", "currency": "BTC"},
-            "available_balance": {"value": "100.00", "currency": "BTC"},
-            "default": false
-          }
-        ],
-        "has_next": false,
-        "cursor": "",
-        "size": 1
-      };
+      final String mockResponse = await getJsonFromFile(
+          'rest/accounts/get_accounts.json'); // Reusing get_accounts.json as it contains the needed account
 
-      when(mockClient.get(any, headers: anyNamed('headers'))).thenAnswer(
-          (_) async => http.Response(jsonEncode(mockResponse), 200));
+      when(mockClient.get(any, headers: anyNamed('headers')))
+          .thenAnswer((_) async => http.Response(mockResponse, 200));
 
       Account? account = await getAccountByCurrency("BTC",
           client: mockClient,
@@ -142,29 +81,11 @@ void main() {
     });
 
     test('Get account balance by currency', () async {
-      final mockResponse = {
-        "accounts": [
-          {
-            "uuid": "8bfc20d7-f7c6-4422-9181-51268ba51372",
-            "name": "BTC Wallet",
-            "currency": "BTC",
-            "type": "ACCOUNT_TYPE_CRYPTO",
-            "active": true,
-            "created_at": "2021-05-31T09:59:59Z",
-            "updated_at": "2021-05-31T09:59:59Z",
-            "deleted_at": null,
-            "hold": {"value": "0.00000000", "currency": "BTC"},
-            "available_balance": {"value": "100.00", "currency": "BTC"},
-            "default": false
-          }
-        ],
-        "has_next": false,
-        "cursor": "",
-        "size": 1
-      };
+      final String mockResponse =
+          await getJsonFromFile('rest/accounts/get_accounts.json');
 
-      when(mockClient.get(any, headers: anyNamed('headers'))).thenAnswer(
-          (_) async => http.Response(jsonEncode(mockResponse), 200));
+      when(mockClient.get(any, headers: anyNamed('headers')))
+          .thenAnswer((_) async => http.Response(mockResponse, 200));
 
       double? balance = await getAccountBalance(
           currency: 'BTC',
@@ -176,24 +97,11 @@ void main() {
     });
 
     test('Get account balance by UUID', () async {
-      final mockResponse = {
-        "account": {
-          "uuid": "8bfc20d7-f7c6-4422-9181-51268ba51372",
-          "name": "BTC Wallet",
-          "currency": "BTC",
-          "type": "ACCOUNT_TYPE_CRYPTO",
-          "active": true,
-          "created_at": "2021-05-31T09:59:59Z",
-          "updated_at": "2021-05-31T09:59:59Z",
-          "deleted_at": null,
-          "hold": {"value": "0.00000000", "currency": "BTC"},
-          "available_balance": {"value": "100.00", "currency": "BTC"},
-          "default": false
-        }
-      };
+      final String mockResponse =
+          await getJsonFromFile('rest/accounts/get_account.json');
 
-      when(mockClient.get(any, headers: anyNamed('headers'))).thenAnswer(
-          (_) async => http.Response(jsonEncode(mockResponse), 200));
+      when(mockClient.get(any, headers: anyNamed('headers')))
+          .thenAnswer((_) async => http.Response(mockResponse, 200));
 
       double? balance = await getAccountBalance(
           uuid: '8bfc20d7-f7c6-4422-9181-51268ba51372',
@@ -211,15 +119,11 @@ void main() {
     });
 
     test('Return null when account not found by currency', () async {
-      final mockResponse = {
-        "accounts": [],
-        "has_next": false,
-        "cursor": "",
-        "size": 0
-      };
+      final String mockResponse =
+          await getJsonFromFile('rest/accounts/get_accounts_empty.json');
 
-      when(mockClient.get(any, headers: anyNamed('headers'))).thenAnswer(
-          (_) async => http.Response(jsonEncode(mockResponse), 200));
+      when(mockClient.get(any, headers: anyNamed('headers')))
+          .thenAnswer((_) async => http.Response(mockResponse, 200));
 
       Account? account = await getAccountByCurrency('DOGE',
           client: mockClient, credential: testConstants.credentials);

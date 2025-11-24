@@ -13,6 +13,7 @@ import 'package:test/test.dart';
 import '../../product_book_test.mocks.dart';
 import '../../test_constants.dart' as constants;
 import '../../test_helpers.dart';
+import '../../tools.dart';
 
 @GenerateMocks([http.Client])
 void main() {
@@ -23,37 +24,15 @@ void main() {
       final client = MockClient();
       final List<String> productIds = ['BTC-USD', 'ETH-USD'];
 
+      final String mockResponse =
+          await getJsonFromFile('rest/products/get_best_bid_ask.json');
+
       when(client.get(
         Uri.https('api.coinbase.com', '/api/v3/brokerage/best_bid_ask', {
           'product_ids': ['BTC-USD', 'ETH-USD']
         }),
         headers: anyNamed('headers'),
-      )).thenAnswer((_) async => http.Response(
-          jsonEncode({
-            "pricebooks": [
-              {
-                "product_id": "BTC-USD",
-                "bids": [
-                  {"price": "10000.00", "size": "1"}
-                ],
-                "asks": [
-                  {"price": "10001.00", "size": "1"}
-                ],
-                "time": "2023-01-01T00:00:00Z"
-              },
-              {
-                "product_id": "ETH-USD",
-                "bids": [
-                  {"price": "1000.00", "size": "10"}
-                ],
-                "asks": [
-                  {"price": "1001.00", "size": "10"}
-                ],
-                "time": "2023-01-01T00:00:00Z"
-              }
-            ]
-          }),
-          200));
+      )).thenAnswer((_) async => http.Response(mockResponse, 200));
 
       List<ProductBook> productBooks = await getBestBidAsk(
           productIds: productIds,

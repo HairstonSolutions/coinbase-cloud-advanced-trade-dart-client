@@ -14,6 +14,7 @@ import 'package:test/test.dart';
 import '../portfolios_test.mocks.dart';
 import '../test_constants.dart' as testConstants;
 import '../test_helpers.dart';
+import '../tools.dart';
 
 final String portfolioCreateName =
     testConstants.envVars['PORTFOLIO_CREATE_NAME'] ?? 'portfolioTDD1';
@@ -45,25 +46,11 @@ void main() {
 
   group('Portfolios API tests using Mocks', () {
     test('listPortfolios returns a list of portfolios', () async {
-      final response = {
-        'portfolios': [
-          {
-            'uuid': 'uuid1',
-            'name': 'portfolio1',
-            'type': 'type1',
-            'deleted': false
-          },
-          {
-            'uuid': 'uuid2',
-            'name': 'portfolio2',
-            'type': 'type2',
-            'deleted': false
-          }
-        ]
-      };
+      final String response =
+          await getJsonFromFile('rest/portfolios/list_portfolios.json');
 
       when(mockClient.get(any, headers: anyNamed('headers')))
-          .thenAnswer((_) async => http.Response(jsonEncode(response), 200));
+          .thenAnswer((_) async => http.Response(response, 200));
 
       final portfolios =
           await listPortfolios(client: mockClient, credential: credential);
@@ -73,18 +60,12 @@ void main() {
     });
 
     test('createPortfolio returns a portfolio', () async {
-      final response = {
-        'portfolio': {
-          'uuid': 'uuid1',
-          'name': 'portfolio1',
-          'type': 'type1',
-          'deleted': false
-        }
-      };
+      final String response =
+          await getJsonFromFile('rest/portfolios/create_portfolio.json');
 
       when(mockClient.post(any,
               headers: anyNamed('headers'), body: anyNamed('body')))
-          .thenAnswer((_) async => http.Response(jsonEncode(response), 200));
+          .thenAnswer((_) async => http.Response(response, 200));
 
       final portfolio = await createPortfolio(
           name: 'portfolio1', client: mockClient, credential: credential);
@@ -94,18 +75,12 @@ void main() {
     });
 
     test('editPortfolio returns a portfolio', () async {
-      final response = {
-        'portfolio': {
-          'uuid': 'uuid1',
-          'name': 'new name',
-          'type': 'type1',
-          'deleted': false
-        }
-      };
+      final String response =
+          await getJsonFromFile('rest/portfolios/edit_portfolio.json');
 
       when(mockClient.put(any,
               headers: anyNamed('headers'), body: anyNamed('body')))
-          .thenAnswer((_) async => http.Response(jsonEncode(response), 200));
+          .thenAnswer((_) async => http.Response(response, 200));
 
       final portfolio = await editPortfolio(
           uuid: 'uuid1',
@@ -143,33 +118,11 @@ void main() {
     });
 
     test('getPortfolioBreakdown returns a portfolio breakdown', () async {
-      final response = {
-        'breakdown': {
-          'portfolio': {
-            'uuid': 'uuid1',
-            'name': 'portfolio1',
-            'type': 'type1',
-            'deleted': false
-          },
-          'portfolio_balances': {
-            'total_balance': {'value': '100', 'currency': 'USD'},
-            'total_futures_balance': {'value': '100', 'currency': 'USD'},
-            'total_cash_equivalent_balance': {
-              'value': '100',
-              'currency': 'USD'
-            },
-            'total_crypto_balance': {'value': '100', 'currency': 'USD'},
-            'futures_unrealized_pnl': {'value': '100', 'currency': 'USD'},
-            'perp_unrealized_pnl': {'value': '100', 'currency': 'USD'}
-          },
-          'spot_positions': [],
-          'perp_positions': [],
-          'futures_positions': []
-        }
-      };
+      final String response =
+          await getJsonFromFile('rest/portfolios/get_portfolio_breakdown.json');
 
       when(mockClient.get(any, headers: anyNamed('headers')))
-          .thenAnswer((_) async => http.Response(jsonEncode(response), 200));
+          .thenAnswer((_) async => http.Response(response, 200));
 
       final breakdown = await getPortfolioBreakdown(
           uuid: 'uuid1', client: mockClient, credential: credential);
