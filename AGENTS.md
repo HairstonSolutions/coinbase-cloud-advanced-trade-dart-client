@@ -55,8 +55,6 @@ sudo apt-get update && sudo apt-get install dart
 ## Mocking
 
 - The project uses the mockito package for mocking in tests.
-- The project uses build_runner to generate mock files. The command dart run build_runner build must be run before
-  executing tests that use mocks.
 
 ## Safety and permissions
 
