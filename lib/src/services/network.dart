@@ -49,21 +49,13 @@ Future<http.Response> getAuthorized(String endpoint,
     http.Client? client,
     required Credential credential,
     bool isSandbox = false}) async {
-  String coinbaseApi = isSandbox ? coinbaseApiSandbox : coinbaseApiProduction;
-  client ??= http.Client();
-
-  String fullEndpoint = '/api/v3/brokerage$endpoint';
-
-  String jwtToken = await generateCoinbaseJwt(credential.apiKeyName,
-      credential.privateKeyPEM, "GET $coinbaseApi$fullEndpoint");
-
-  var url = Uri.https(coinbaseApi, fullEndpoint, queryParameters);
-  Map<String, String> requestHeaders = {
-    HttpHeaders.acceptHeader: 'application/json',
-    "Authorization": "Bearer $jwtToken",
-  };
-
-  return await client.get(url, headers: requestHeaders);
+  return await _makeAuthorizedRequest(
+      method: 'GET',
+      endpoint: endpoint,
+      queryParameters: queryParameters,
+      client: client,
+      credential: credential,
+      isSandbox: isSandbox);
 }
 
 /// Makes an authorized POST request to the Coinbase Advanced Trade API.
@@ -83,22 +75,13 @@ Future<http.Response> postAuthorized(String endpoint,
     http.Client? client,
     required Credential credential,
     bool isSandbox = false}) async {
-  String coinbaseApi = isSandbox ? coinbaseApiSandbox : coinbaseApiProduction;
-  client ??= http.Client();
-
-  String fullEndpoint = '/api/v3/brokerage$endpoint';
-
-  String jwtToken = await generateCoinbaseJwt(credential.apiKeyName,
-      credential.privateKeyPEM, "POST $coinbaseApi$fullEndpoint");
-
-  var url = Uri.https(coinbaseApi, fullEndpoint);
-  Map<String, String> requestHeaders = {
-    HttpHeaders.contentTypeHeader: 'application/json',
-    HttpHeaders.acceptHeader: 'application/json',
-    "Authorization": "Bearer $jwtToken",
-  };
-
-  return await client.post(url, headers: requestHeaders, body: body);
+  return await _makeAuthorizedRequest(
+      method: 'POST',
+      endpoint: endpoint,
+      body: body,
+      client: client,
+      credential: credential,
+      isSandbox: isSandbox);
 }
 
 /// Makes an authorized PUT request to the Coinbase Advanced Trade API.
@@ -118,22 +101,13 @@ Future<http.Response> putAuthorized(String endpoint,
     http.Client? client,
     required Credential credential,
     bool isSandbox = false}) async {
-  String coinbaseApi = isSandbox ? coinbaseApiSandbox : coinbaseApiProduction;
-  client ??= http.Client();
-
-  String fullEndpoint = '/api/v3/brokerage$endpoint';
-
-  String jwtToken = await generateCoinbaseJwt(credential.apiKeyName,
-      credential.privateKeyPEM, "PUT $coinbaseApi$fullEndpoint");
-
-  var url = Uri.https(coinbaseApi, fullEndpoint);
-  Map<String, String> requestHeaders = {
-    HttpHeaders.contentTypeHeader: 'application/json',
-    HttpHeaders.acceptHeader: 'application/json',
-    "Authorization": "Bearer $jwtToken",
-  };
-
-  return await client.put(url, headers: requestHeaders, body: body);
+  return await _makeAuthorizedRequest(
+      method: 'PUT',
+      endpoint: endpoint,
+      body: body,
+      client: client,
+      credential: credential,
+      isSandbox: isSandbox);
 }
 
 /// Makes an authorized DELETE request to the Coinbase Advanced Trade API.
@@ -151,19 +125,50 @@ Future<http.Response> deleteAuthorized(String endpoint,
     {http.Client? client,
     required Credential credential,
     bool isSandbox = false}) async {
+  return await _makeAuthorizedRequest(
+      method: 'DELETE',
+      endpoint: endpoint,
+      client: client,
+      credential: credential,
+      isSandbox: isSandbox);
+}
+
+Future<http.Response> _makeAuthorizedRequest(
+    {required String method,
+    required String endpoint,
+    Map<String, dynamic>? queryParameters,
+    String? body,
+    http.Client? client,
+    required Credential credential,
+    bool isSandbox = false}) async {
   String coinbaseApi = isSandbox ? coinbaseApiSandbox : coinbaseApiProduction;
   client ??= http.Client();
 
   String fullEndpoint = '/api/v3/brokerage$endpoint';
 
   String jwtToken = await generateCoinbaseJwt(credential.apiKeyName,
-      credential.privateKeyPEM, "DELETE $coinbaseApi$fullEndpoint");
+      credential.privateKeyPEM, "$method $coinbaseApi$fullEndpoint");
 
-  var url = Uri.https(coinbaseApi, fullEndpoint);
+  var url = Uri.https(coinbaseApi, fullEndpoint, queryParameters);
   Map<String, String> requestHeaders = {
     HttpHeaders.acceptHeader: 'application/json',
     "Authorization": "Bearer $jwtToken",
   };
 
-  return await client.delete(url, headers: requestHeaders);
+  if (method == 'POST' || method == 'PUT') {
+    requestHeaders[HttpHeaders.contentTypeHeader] = 'application/json';
+  }
+
+  switch (method) {
+    case 'GET':
+      return await client.get(url, headers: requestHeaders);
+    case 'POST':
+      return await client.post(url, headers: requestHeaders, body: body);
+    case 'PUT':
+      return await client.put(url, headers: requestHeaders, body: body);
+    case 'DELETE':
+      return await client.delete(url, headers: requestHeaders);
+    default:
+      throw ArgumentError('Invalid HTTP method: $method');
+  }
 }
