@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'dart:io';
 import 'package:coinbase_cloud_advanced_trade_client/src/rest/fees.dart';
 import 'package:http/http.dart' as http;
 import 'package:logging/logging.dart';
@@ -20,8 +22,9 @@ void main() {
       final String getTransactionSummaryJson =
           await getJsonFromFile('rest/fees/get_transaction_summary.json');
 
-      when(client.get(any, headers: anyNamed('headers'))).thenAnswer(
-          (_) async => http.Response(getTransactionSummaryJson, 200));
+      when(client.send(any)).thenAnswer((_) async => http.StreamedResponse(
+          Stream.value(utf8.encode(getTransactionSummaryJson)), 200,
+          headers: {HttpHeaders.contentTypeHeader: 'application/json'}));
 
       final result = await getTransactionSummary(
           client: client, credential: constants.credentials);

@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'dart:io';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/credential.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/error.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/product_book.dart';
@@ -25,12 +27,9 @@ void main() {
       final String mockResponse =
           await getJsonFromFile('rest/products/get_best_bid_ask.json');
 
-      when(client.get(
-        Uri.https('api.coinbase.com', '/api/v3/brokerage/best_bid_ask', {
-          'product_ids': ['BTC-USD', 'ETH-USD']
-        }),
-        headers: anyNamed('headers'),
-      )).thenAnswer((_) async => http.Response(mockResponse, 200));
+      when(client.send(any)).thenAnswer((_) async => http.StreamedResponse(
+          Stream.value(utf8.encode(mockResponse)), 200,
+          headers: {HttpHeaders.contentTypeHeader: 'application/json'}));
 
       List<ProductBook> productBooks = await getBestBidAsk(
           productIds: productIds,
@@ -55,12 +54,9 @@ void main() {
       final client = MockClient();
       final List<String> productIds = ['BTC-USD'];
 
-      when(client.get(
-        Uri.https('api.coinbase.com', '/api/v3/brokerage/best_bid_ask', {
-          'product_ids': ['BTC-USD']
-        }),
-        headers: anyNamed('headers'),
-      )).thenAnswer((_) async => http.Response('Internal Server Error', 500));
+      when(client.send(any)).thenAnswer((_) async => http.StreamedResponse(
+          Stream.value(utf8.encode('Internal Server Error')), 500,
+          headers: {HttpHeaders.contentTypeHeader: 'application/json'}));
 
       expect(
           () async => await getBestBidAsk(

@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'dart:io';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/product.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/trade.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/rest/products/products.dart';
@@ -29,8 +31,9 @@ void main() {
       final String mockResponse =
           await getJsonFromFile('rest/products/get_trades.json');
 
-      when(mockClient.get(any, headers: anyNamed('headers')))
-          .thenAnswer((_) async => http.Response(mockResponse, 200));
+      when(mockClient.send(any)).thenAnswer((_) async => http.StreamedResponse(
+          Stream.value(utf8.encode(mockResponse)), 200,
+          headers: {HttpHeaders.contentTypeHeader: 'application/json'}));
 
       List<Trade?> trades = await getTrades(
           productId: "BTC-USD",

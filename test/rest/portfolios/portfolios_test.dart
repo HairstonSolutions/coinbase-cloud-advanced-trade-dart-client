@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'dart:io';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/portfolio.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/portfolio_breakdown.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/rest/portfolios.dart';
@@ -44,8 +46,9 @@ void main() {
       final String response =
           await getJsonFromFile('rest/portfolios/list_portfolios.json');
 
-      when(mockClient.get(any, headers: anyNamed('headers')))
-          .thenAnswer((_) async => http.Response(response, 200));
+      when(mockClient.send(any)).thenAnswer((_) async => http.StreamedResponse(
+          Stream.value(utf8.encode(response)), 200,
+          headers: {HttpHeaders.contentTypeHeader: 'application/json'}));
 
       final portfolios =
           await listPortfolios(client: mockClient, credential: credential);
@@ -58,9 +61,9 @@ void main() {
       final String response =
           await getJsonFromFile('rest/portfolios/create_portfolio.json');
 
-      when(mockClient.post(any,
-              headers: anyNamed('headers'), body: anyNamed('body')))
-          .thenAnswer((_) async => http.Response(response, 200));
+      when(mockClient.send(any)).thenAnswer((_) async => http.StreamedResponse(
+          Stream.value(utf8.encode(response)), 200,
+          headers: {HttpHeaders.contentTypeHeader: 'application/json'}));
 
       final portfolio = await createPortfolio(
           name: 'portfolio1', client: mockClient, credential: credential);
@@ -73,9 +76,9 @@ void main() {
       final String response =
           await getJsonFromFile('rest/portfolios/edit_portfolio.json');
 
-      when(mockClient.put(any,
-              headers: anyNamed('headers'), body: anyNamed('body')))
-          .thenAnswer((_) async => http.Response(response, 200));
+      when(mockClient.send(any)).thenAnswer((_) async => http.StreamedResponse(
+          Stream.value(utf8.encode(response)), 200,
+          headers: {HttpHeaders.contentTypeHeader: 'application/json'}));
 
       final portfolio = await editPortfolio(
           uuid: 'uuid1',
@@ -88,8 +91,9 @@ void main() {
     });
 
     test('deletePortfolio returns true', () async {
-      when(mockClient.delete(any, headers: anyNamed('headers')))
-          .thenAnswer((_) async => http.Response('', 200));
+      when(mockClient.send(any)).thenAnswer((_) async => http.StreamedResponse(
+          Stream.value(utf8.encode('')), 200,
+          headers: {HttpHeaders.contentTypeHeader: 'application/json'}));
 
       final result = await deletePortfolio(
           uuid: 'uuid1', client: mockClient, credential: credential);
@@ -98,9 +102,9 @@ void main() {
     });
 
     test('movePortfolioFunds returns true', () async {
-      when(mockClient.post(any,
-              headers: anyNamed('headers'), body: anyNamed('body')))
-          .thenAnswer((_) async => http.Response('', 200));
+      when(mockClient.send(any)).thenAnswer((_) async => http.StreamedResponse(
+          Stream.value(utf8.encode('')), 200,
+          headers: {HttpHeaders.contentTypeHeader: 'application/json'}));
 
       final result = await movePortfolioFunds(
           funds: {'currency': 'USD', 'value': '100'},
@@ -116,8 +120,9 @@ void main() {
       final String response =
           await getJsonFromFile('rest/portfolios/get_portfolio_breakdown.json');
 
-      when(mockClient.get(any, headers: anyNamed('headers')))
-          .thenAnswer((_) async => http.Response(response, 200));
+      when(mockClient.send(any)).thenAnswer((_) async => http.StreamedResponse(
+          Stream.value(utf8.encode(response)), 200,
+          headers: {HttpHeaders.contentTypeHeader: 'application/json'}));
 
       final breakdown = await getPortfolioBreakdown(
           uuid: 'uuid1', client: mockClient, credential: credential);

@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'dart:io';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/credential.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/rest/products/products.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/rest/public/products.dart'
@@ -46,8 +48,9 @@ void main() {
             await getJsonFromFile('rest/products/get_product_candles.json');
         final credential = constants.credentials;
 
-        when(client.get(any, headers: anyNamed('headers')))
-            .thenAnswer((_) async => http.Response(mockResponse, 200));
+        when(client.send(any)).thenAnswer((_) async => http.StreamedResponse(
+            Stream.value(utf8.encode(mockResponse)), 200,
+            headers: {HttpHeaders.contentTypeHeader: 'application/json'}));
 
         final candles = await getProductCandlesAuthorized(
           productId: 'BTC-USD',

@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'dart:io';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/error.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/order.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/rest/orders/orders.dart';
@@ -28,8 +30,9 @@ void main() {
       final String mockResponse =
           await getJsonFromFile('rest/orders/get_orders.json');
 
-      when(mockClient.get(any, headers: anyNamed('headers')))
-          .thenAnswer((_) async => http.Response(mockResponse, 200));
+      when(mockClient.send(any)).thenAnswer((_) async => http.StreamedResponse(
+          Stream.value(utf8.encode(mockResponse)), 200,
+          headers: {HttpHeaders.contentTypeHeader: 'application/json'}));
 
       List<Order>? orders = await getOrders(
           client: mockClient, credential: constants.credentials);
@@ -43,8 +46,9 @@ void main() {
       final String mockResponse =
           await getJsonFromFile('rest/orders/get_order.json');
 
-      when(mockClient.get(any, headers: anyNamed('headers')))
-          .thenAnswer((_) async => http.Response(mockResponse, 200));
+      when(mockClient.send(any)).thenAnswer((_) async => http.StreamedResponse(
+          Stream.value(utf8.encode(mockResponse)), 200,
+          headers: {HttpHeaders.contentTypeHeader: 'application/json'}));
 
       Order? order = await getOrder(
           orderId: "b0313b63-a2a1-4d30-a506-936337b52978",
@@ -60,8 +64,9 @@ void main() {
       final String mockResponse =
           await getJsonFromFile('rest/orders/get_order.json');
 
-      when(mockClient.get(any, headers: anyNamed('headers')))
-          .thenAnswer((_) async => http.Response(mockResponse, 200));
+      when(mockClient.send(any)).thenAnswer((_) async => http.StreamedResponse(
+          Stream.value(utf8.encode(mockResponse)), 200,
+          headers: {HttpHeaders.contentTypeHeader: 'application/json'}));
 
       Order? order = await getOrder(
           orderId: specificOrderId,
@@ -77,8 +82,9 @@ void main() {
       final String mockResponse =
           await getJsonFromFile('rest/orders/get_order_not_found.json');
 
-      when(mockClient.get(any, headers: anyNamed('headers')))
-          .thenAnswer((_) async => http.Response(mockResponse, 404));
+      when(mockClient.send(any)).thenAnswer((_) async => http.StreamedResponse(
+          Stream.value(utf8.encode(mockResponse)), 404,
+          headers: {HttpHeaders.contentTypeHeader: 'application/json'}));
 
       expect(
           () async => await getOrder(
@@ -92,8 +98,9 @@ void main() {
       final String mockResponse =
           await getJsonFromFile('rest/orders/get_order_null.json');
 
-      when(mockClient.get(any, headers: anyNamed('headers')))
-          .thenAnswer((_) async => http.Response(mockResponse, 404));
+      when(mockClient.send(any)).thenAnswer((_) async => http.StreamedResponse(
+          Stream.value(utf8.encode(mockResponse)), 404,
+          headers: {HttpHeaders.contentTypeHeader: 'application/json'}));
 
       expect(
           () async => await getOrder(
@@ -168,9 +175,9 @@ void main() {
       final String mockResponse =
           await getJsonFromFile('rest/orders/create_order_success.json');
 
-      when(mockClient.post(any,
-              headers: anyNamed('headers'), body: anyNamed('body')))
-          .thenAnswer((_) async => http.Response(mockResponse, 200));
+      when(mockClient.send(any)).thenAnswer((_) async => http.StreamedResponse(
+          Stream.value(utf8.encode(mockResponse)), 200,
+          headers: {HttpHeaders.contentTypeHeader: 'application/json'}));
 
       final clientOrderId = DateTime.now().millisecondsSinceEpoch.toString();
       final result = await createMarketOrder(
@@ -190,9 +197,9 @@ void main() {
       final String mockResponse =
           await getJsonFromFile('rest/orders/create_order_success.json');
 
-      when(mockClient.post(any,
-              headers: anyNamed('headers'), body: anyNamed('body')))
-          .thenAnswer((_) async => http.Response(mockResponse, 200));
+      when(mockClient.send(any)).thenAnswer((_) async => http.StreamedResponse(
+          Stream.value(utf8.encode(mockResponse)), 200,
+          headers: {HttpHeaders.contentTypeHeader: 'application/json'}));
 
       final clientOrderId = DateTime.now().millisecondsSinceEpoch.toString();
       final result = await createMarketOrder(
@@ -225,9 +232,9 @@ void main() {
       final String mockResponse =
           await getJsonFromFile('rest/orders/create_order_success.json');
 
-      when(mockClient.post(any,
-              headers: anyNamed('headers'), body: anyNamed('body')))
-          .thenAnswer((_) async => http.Response(mockResponse, 200));
+      when(mockClient.send(any)).thenAnswer((_) async => http.StreamedResponse(
+          Stream.value(utf8.encode(mockResponse)), 200,
+          headers: {HttpHeaders.contentTypeHeader: 'application/json'}));
 
       final clientOrderId = DateTime.now().millisecondsSinceEpoch.toString();
       final result = await createLimitOrder(
@@ -248,9 +255,9 @@ void main() {
       final String mockResponse =
           await getJsonFromFile('rest/orders/create_order_success.json');
 
-      when(mockClient.post(any,
-              headers: anyNamed('headers'), body: anyNamed('body')))
-          .thenAnswer((_) async => http.Response(mockResponse, 200));
+      when(mockClient.send(any)).thenAnswer((_) async => http.StreamedResponse(
+          Stream.value(utf8.encode(mockResponse)), 200,
+          headers: {HttpHeaders.contentTypeHeader: 'application/json'}));
 
       final clientOrderId = DateTime.now().millisecondsSinceEpoch.toString();
       final result = await createLimitOrder(

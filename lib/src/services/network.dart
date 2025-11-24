@@ -161,14 +161,12 @@ Future<http.Response> _makeAuthorizedRequest(
     requestHeaders[HttpHeaders.contentTypeHeader] = 'application/json';
   }
 
-  switch (method) {
-    case _HttpMethod.GET:
-      return await client.get(url, headers: requestHeaders);
-    case _HttpMethod.POST:
-      return await client.post(url, headers: requestHeaders, body: body);
-    case _HttpMethod.PUT:
-      return await client.put(url, headers: requestHeaders, body: body);
-    case _HttpMethod.DELETE:
-      return await client.delete(url, headers: requestHeaders);
+  final request = http.Request(method.name, url);
+  request.headers.addAll(requestHeaders);
+  if (body != null) {
+    request.body = body;
   }
+
+  final streamedResponse = await client.send(request);
+  return http.Response.fromStream(streamedResponse);
 }

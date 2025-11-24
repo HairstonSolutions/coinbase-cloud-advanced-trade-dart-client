@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'dart:io';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/account.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/rest/accounts.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/services/network.dart';
@@ -27,8 +29,9 @@ void main() {
       final String mockResponse =
           await getJsonFromFile('rest/accounts/get_accounts.json');
 
-      when(mockClient.get(any, headers: anyNamed('headers')))
-          .thenAnswer((_) async => http.Response(mockResponse, 200));
+      when(mockClient.send(any)).thenAnswer((_) async => http.StreamedResponse(
+          Stream.value(utf8.encode(mockResponse)), 200,
+          headers: {HttpHeaders.contentTypeHeader: 'application/json'}));
 
       List<Account> accounts = await getAccounts(
           client: mockClient,
@@ -45,8 +48,9 @@ void main() {
       final String mockResponse =
           await getJsonFromFile('rest/accounts/get_account.json');
 
-      when(mockClient.get(any, headers: anyNamed('headers')))
-          .thenAnswer((_) async => http.Response(mockResponse, 200));
+      when(mockClient.send(any)).thenAnswer((_) async => http.StreamedResponse(
+          Stream.value(utf8.encode(mockResponse)), 200,
+          headers: {HttpHeaders.contentTypeHeader: 'application/json'}));
 
       Account? account = await getAccount(
           uuid: "8bfc20d7-f7c6-4422-9181-51268ba51372",
@@ -64,8 +68,9 @@ void main() {
       final String mockResponse = await getJsonFromFile(
           'rest/accounts/get_accounts.json'); // Reusing get_accounts.json as it contains the needed account
 
-      when(mockClient.get(any, headers: anyNamed('headers')))
-          .thenAnswer((_) async => http.Response(mockResponse, 200));
+      when(mockClient.send(any)).thenAnswer((_) async => http.StreamedResponse(
+          Stream.value(utf8.encode(mockResponse)), 200,
+          headers: {HttpHeaders.contentTypeHeader: 'application/json'}));
 
       Account? account = await getAccountByCurrency("BTC",
           client: mockClient,
@@ -80,8 +85,9 @@ void main() {
       final String mockResponse =
           await getJsonFromFile('rest/accounts/get_accounts.json');
 
-      when(mockClient.get(any, headers: anyNamed('headers')))
-          .thenAnswer((_) async => http.Response(mockResponse, 200));
+      when(mockClient.send(any)).thenAnswer((_) async => http.StreamedResponse(
+          Stream.value(utf8.encode(mockResponse)), 200,
+          headers: {HttpHeaders.contentTypeHeader: 'application/json'}));
 
       double? balance = await getAccountBalance(
           currency: 'BTC',
@@ -96,8 +102,9 @@ void main() {
       final String mockResponse =
           await getJsonFromFile('rest/accounts/get_account.json');
 
-      when(mockClient.get(any, headers: anyNamed('headers')))
-          .thenAnswer((_) async => http.Response(mockResponse, 200));
+      when(mockClient.send(any)).thenAnswer((_) async => http.StreamedResponse(
+          Stream.value(utf8.encode(mockResponse)), 200,
+          headers: {HttpHeaders.contentTypeHeader: 'application/json'}));
 
       double? balance = await getAccountBalance(
           uuid: '8bfc20d7-f7c6-4422-9181-51268ba51372',
@@ -118,8 +125,9 @@ void main() {
       final String mockResponse =
           await getJsonFromFile('rest/accounts/get_accounts_empty.json');
 
-      when(mockClient.get(any, headers: anyNamed('headers')))
-          .thenAnswer((_) async => http.Response(mockResponse, 200));
+      when(mockClient.send(any)).thenAnswer((_) async => http.StreamedResponse(
+          Stream.value(utf8.encode(mockResponse)), 200,
+          headers: {HttpHeaders.contentTypeHeader: 'application/json'}));
 
       Account? account = await getAccountByCurrency('DOGE',
           client: mockClient, credential: constants.credentials);

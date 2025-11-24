@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:coinbase_cloud_advanced_trade_client/src/models/credential.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/product_book.dart';
@@ -70,12 +71,8 @@ void main() {
       final String productId = 'BTC-USD';
       final int limit = 1;
 
-      when(client.get(
-        Uri.https('api.coinbase.com', '/api/v3/brokerage/product_book',
-            {'product_id': productId, 'limit': '$limit'}),
-        headers: anyNamed('headers'),
-      )).thenAnswer((_) async => http.Response(
-          jsonEncode({
+      when(client.send(any)).thenAnswer((_) async => http.StreamedResponse(
+          Stream.value(utf8.encode(jsonEncode({
             "pricebook": {
               "product_id": "BTC-USD",
               "bids": [
@@ -85,8 +82,9 @@ void main() {
                 {"price": "10001.00", "size": "1"}
               ]
             }
-          }),
-          200));
+          }))),
+          200,
+          headers: {HttpHeaders.contentTypeHeader: 'application/json'}));
 
       ProductBook? productBook = await authorized.getProductBookAuthorized(
           productId: productId,
