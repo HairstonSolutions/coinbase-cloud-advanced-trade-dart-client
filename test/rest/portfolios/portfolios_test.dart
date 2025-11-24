@@ -3,7 +3,6 @@ import 'package:coinbase_cloud_advanced_trade_client/src/models/portfolio_breakd
 import 'package:coinbase_cloud_advanced_trade_client/src/rest/portfolios.dart';
 import 'package:http/http.dart' as http;
 import 'package:logging/logging.dart';
-import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
@@ -32,7 +31,6 @@ final String portfolioMoveFundsTargetUUID =
     constants.envVars['PORTFOLIO_MOVE_FUNDS_TARGET_UUID'] ??
         '88888888-4444-4444-4444-121212121212';
 
-@GenerateMocks([http.Client])
 void main() {
   final Logger logger = setupLogger('portfolios_test');
 
