@@ -1,17 +1,14 @@
-import 'dart:io';
-import 'package:logging/logging.dart';
-import '../../test_helpers.dart';
-import '../../test_constants.dart' as testConstants;
-
-import 'package:coinbase_cloud_advanced_trade_client/src/models/credential.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/rest/fees.dart';
 import 'package:http/http.dart' as http;
+import 'package:logging/logging.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
+import '../../mocks.mocks.dart';
+import '../../test_constants.dart' as constants;
+import '../../test_helpers.dart';
 import '../../tools.dart';
-import './fees_test.mocks.dart';
 
 @GenerateMocks([http.Client])
 void main() {
@@ -27,7 +24,7 @@ void main() {
           (_) async => http.Response(getTransactionSummaryJson, 200));
 
       final result = await getTransactionSummary(
-          client: client, credential: testConstants.credentials);
+          client: client, credential: constants.credentials);
 
       expect(result, isNotNull);
       expect(result!.totalFees, isNotNull);
@@ -35,10 +32,10 @@ void main() {
   });
 
   group('Fees REST Tests Requests to Coinbase AT API Endpoints',
-      skip: testConstants.ciSkip, () {
+      skip: constants.ciSkip, () {
     test('Get Transaction Summary', () async {
       final result =
-          await getTransactionSummary(credential: testConstants.credentials);
+          await getTransactionSummary(credential: constants.credentials);
 
       logger.info('Fees: $result');
 

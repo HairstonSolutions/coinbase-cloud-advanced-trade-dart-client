@@ -1,22 +1,18 @@
-import 'dart:convert';
-import 'dart:io' show Platform;
-import 'package:logging/logging.dart';
-import '../../test_helpers.dart';
-import '../../test_constants.dart' as testConstants;
-import '../../tools.dart';
-
-import 'package:coinbase_cloud_advanced_trade_client/src/models/credential.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/fill.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/order.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/rest/orders/fills.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/rest/orders/orders.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/services/network.dart';
 import 'package:http/http.dart' as http;
+import 'package:logging/logging.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
-import 'fills_test.mocks.dart';
+import '../../mocks.mocks.dart';
+import '../../test_constants.dart' as constants;
+import '../../test_helpers.dart';
+import '../../tools.dart';
 
 @GenerateMocks([http.Client])
 void main() {
@@ -36,8 +32,8 @@ void main() {
       when(mockClient.get(any, headers: anyNamed('headers')))
           .thenAnswer((_) async => http.Response(mockResponse, 200));
 
-      List<Fill>? fills = await getFills(
-          client: mockClient, credential: testConstants.credentials);
+      List<Fill>? fills =
+          await getFills(client: mockClient, credential: constants.credentials);
 
       expect(fills, isNotNull);
       expect(fills.length, 1);
@@ -46,13 +42,13 @@ void main() {
   });
 
   group('Test Get Fills Requests to Coinbase AT API Endpoints',
-      skip: testConstants.ciSkip, () {
+      skip: constants.ciSkip, () {
     test('Authorized Get All Fills', () async {
       String requestPath = '/orders/historical/fills';
       Map<String, dynamic>? queryParameters = {'limit': '1000'};
       var response = await getAuthorized(requestPath,
           queryParameters: queryParameters,
-          credential: testConstants.credentials,
+          credential: constants.credentials,
           isSandbox: false);
       var url = response.request?.url.toString();
       logger.info('Response Code: ${response.statusCode} to URL: $url');
@@ -63,20 +59,20 @@ void main() {
     });
 
     test('Get all Fills as a list of Fills', () async {
-      List<Fill>? fills = await getFills(
-          credential: testConstants.credentials, isSandbox: false);
+      List<Fill>? fills =
+          await getFills(credential: constants.credentials, isSandbox: false);
       logger.info('Fills: $fills');
 
       expect(fills.isNotEmpty, true);
     });
 
     test('Get all Fills by order ID', () async {
-      List<Order>? orders = await getOrders(
-          credential: testConstants.credentials, isSandbox: false);
+      List<Order>? orders =
+          await getOrders(credential: constants.credentials, isSandbox: false);
       String? orderId = orders.last.orderId;
       List<Fill>? fills = await getFills(
           orderId: orderId,
-          credential: testConstants.credentials,
+          credential: constants.credentials,
           isSandbox: false);
       logger.info('Fills: $fills');
 
@@ -85,12 +81,12 @@ void main() {
     });
 
     test('Get all Fills by product ID', () async {
-      List<Order>? orders = await getOrders(
-          credential: testConstants.credentials, isSandbox: false);
+      List<Order>? orders =
+          await getOrders(credential: constants.credentials, isSandbox: false);
       String? productId = orders.last.productId;
       List<Fill>? fills = await getFills(
           productId: productId,
-          credential: testConstants.credentials,
+          credential: constants.credentials,
           isSandbox: false);
       logger.info('Fills: $fills');
 

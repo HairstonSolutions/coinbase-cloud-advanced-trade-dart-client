@@ -1,21 +1,17 @@
-import 'dart:convert';
-import 'dart:io' show Platform;
-import 'package:logging/logging.dart';
-import '../../test_helpers.dart';
-import '../../test_constants.dart' as testConstants;
-import '../../tools.dart';
-
-import 'package:coinbase_cloud_advanced_trade_client/src/models/credential.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/error.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/order.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/rest/orders/orders.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/services/network.dart';
 import 'package:http/http.dart' as http;
+import 'package:logging/logging.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
-import 'orders_test.mocks.dart';
+import '../../mocks.mocks.dart';
+import '../../test_constants.dart' as constants;
+import '../../test_helpers.dart';
+import '../../tools.dart';
 
 @GenerateMocks([http.Client])
 void main() {
@@ -36,7 +32,7 @@ void main() {
           .thenAnswer((_) async => http.Response(mockResponse, 200));
 
       List<Order>? orders = await getOrders(
-          client: mockClient, credential: testConstants.credentials);
+          client: mockClient, credential: constants.credentials);
 
       expect(orders, isNotNull);
       expect(orders.length, 1);
@@ -53,7 +49,7 @@ void main() {
       Order? order = await getOrder(
           orderId: "b0313b63-a2a1-4d30-a506-936337b52978",
           client: mockClient,
-          credential: testConstants.credentials);
+          credential: constants.credentials);
 
       expect(order, isNotNull);
       expect(order?.orderId, "b0313b63-a2a1-4d30-a506-936337b52978");
@@ -70,7 +66,7 @@ void main() {
       Order? order = await getOrder(
           orderId: specificOrderId,
           client: mockClient,
-          credential: testConstants.credentials);
+          credential: constants.credentials);
 
       expect(order, isNotNull);
       expect(order?.orderId, specificOrderId);
@@ -88,7 +84,7 @@ void main() {
           () async => await getOrder(
               orderId: specificOrderId,
               client: mockClient,
-              credential: testConstants.credentials),
+              credential: constants.credentials),
           throwsA(isA<CoinbaseException>()));
     });
 
@@ -103,19 +99,19 @@ void main() {
           () async => await getOrder(
               orderId: "non-existent-id",
               client: mockClient,
-              credential: testConstants.credentials),
+              credential: constants.credentials),
           throwsA(isA<CoinbaseException>()));
     });
   });
 
   group('Test Get Orders Requests to Coinbase AT API Endpoints',
-      skip: testConstants.ciSkip, () {
+      skip: constants.ciSkip, () {
     test('Authorized Get All Orders', () async {
       String requestPath = '/orders/historical/batch';
       Map<String, dynamic>? queryParameters = {'limit': '100'};
       var response = await getAuthorized(requestPath,
           queryParameters: queryParameters,
-          credential: testConstants.credentials,
+          credential: constants.credentials,
           isSandbox: false);
       var url = response.request?.url.toString();
       logger.info(
@@ -127,22 +123,22 @@ void main() {
     });
 
     test('Get all Orders as a list of Orders', () async {
-      List<Order>? orders = await getOrders(
-          credential: testConstants.credentials, isSandbox: false);
+      List<Order>? orders =
+          await getOrders(credential: constants.credentials, isSandbox: false);
       logger.info('Orders: $orders');
 
       expect(orders.isNotEmpty, true);
     });
   });
 
-  group('Test Individual Orders', skip: testConstants.ciSkip, () {
+  group('Test Individual Orders', skip: constants.ciSkip, () {
     test('Get Individual Order', () async {
-      List<Order> orders = await getOrders(
-          credential: testConstants.credentials, isSandbox: false);
+      List<Order> orders =
+          await getOrders(credential: constants.credentials, isSandbox: false);
       String? orderId = orders.first.orderId;
       Order? order = await getOrder(
         orderId: orderId!,
-        credential: testConstants.credentials,
+        credential: constants.credentials,
         isSandbox: false,
       );
 
@@ -154,7 +150,7 @@ void main() {
       expect(
           () async => await getOrder(
                 orderId: orderId,
-                credential: testConstants.credentials,
+                credential: constants.credentials,
                 isSandbox: false,
               ),
           throwsA(isA<CoinbaseException>()));
@@ -182,7 +178,7 @@ void main() {
         productId: 'BTC-USD',
         side: 'BUY',
         quoteSize: '10',
-        credential: testConstants.credentials,
+        credential: constants.credentials,
         client: mockClient,
       );
 
@@ -204,7 +200,7 @@ void main() {
         productId: 'BTC-USD',
         side: 'SELL',
         baseSize: '0.1',
-        credential: testConstants.credentials,
+        credential: constants.credentials,
         client: mockClient,
       );
 
@@ -220,7 +216,7 @@ void main() {
                 side: 'BUY',
                 quoteSize: '10',
                 baseSize: '0.1',
-                credential: testConstants.credentials,
+                credential: constants.credentials,
               ),
           throwsArgumentError);
     });
@@ -240,7 +236,7 @@ void main() {
         side: 'BUY',
         baseSize: '0.1',
         limitPrice: '10000',
-        credential: testConstants.credentials,
+        credential: constants.credentials,
         client: mockClient,
       );
 
@@ -264,7 +260,7 @@ void main() {
         baseSize: '0.1',
         limitPrice: '10000',
         postOnly: true,
-        credential: testConstants.credentials,
+        credential: constants.credentials,
         client: mockClient,
       );
 
@@ -274,7 +270,7 @@ void main() {
   });
 
   group('Test Create Orders to Coinbase AT API Endpoints',
-      skip: testConstants.ciSkip, () {
+      skip: constants.ciSkip, () {
     test('Create a new market order with quote size', () async {
       final clientOrderId = DateTime.now().millisecondsSinceEpoch.toString();
       final result = await createMarketOrder(
@@ -282,7 +278,7 @@ void main() {
         productId: 'BTC-USD',
         side: 'BUY',
         quoteSize: '10',
-        credential: testConstants.credentials,
+        credential: constants.credentials,
         isSandbox: true,
       );
 
@@ -297,7 +293,7 @@ void main() {
         productId: 'BTC-USD',
         side: 'SELL',
         baseSize: '0.1',
-        credential: testConstants.credentials,
+        credential: constants.credentials,
         isSandbox: true,
       );
 
@@ -313,7 +309,7 @@ void main() {
                 side: 'BUY',
                 quoteSize: '10',
                 baseSize: '0.1',
-                credential: testConstants.credentials,
+                credential: constants.credentials,
                 isSandbox: true,
               ),
           throwsArgumentError);
@@ -327,7 +323,7 @@ void main() {
         side: 'BUY',
         baseSize: '0.1',
         limitPrice: '10000',
-        credential: testConstants.credentials,
+        credential: constants.credentials,
         isSandbox: true,
       );
 
@@ -344,7 +340,7 @@ void main() {
         baseSize: '0.001',
         limitPrice: '10000',
         postOnly: true,
-        credential: testConstants.credentials,
+        credential: constants.credentials,
         isSandbox: true,
       );
 

@@ -1,18 +1,14 @@
-import 'package:coinbase_cloud_advanced_trade_client/src/models/credential.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/rest/data.dart';
 import 'package:http/http.dart' as http;
+import 'package:logging/logging.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
-import 'package:logging/logging.dart';
-import '../../test_helpers.dart';
 
+import '../../mocks.mocks.dart';
 import '../../test_constants.dart' as constants;
+import '../../test_helpers.dart';
 import '../../tools.dart';
-import './data_test.mocks.dart';
-
-final Credential credentials = Credential(
-    apiKeyName: constants.apiKeyName, privateKeyPEM: constants.privateKeyPEM);
 
 @GenerateMocks([http.Client])
 void main() {
@@ -27,8 +23,8 @@ void main() {
       when(client.get(any, headers: anyNamed('headers'))).thenAnswer(
           (_) async => http.Response(getAPIKeyPermissionsJson, 200));
 
-      final result =
-          await getKeyPermissions(client: client, credential: credentials);
+      final result = await getKeyPermissions(
+          client: client, credential: constants.credentials);
 
       expect(result, isNotNull);
       expect(result!.canView, isNotNull);
@@ -38,7 +34,7 @@ void main() {
   group('Data API REST Tests Coinbase Requests to Coinbase AT API Endpoints',
       skip: constants.ciSkip, () {
     test('Get API Key Permissions', () async {
-      final result = await getKeyPermissions(credential: credentials);
+      final result = await getKeyPermissions(credential: constants.credentials);
 
       logger.info('Key Permissions: $result');
 

@@ -1,20 +1,17 @@
-import 'dart:io';
-import 'package:logging/logging.dart';
-import '../../test_helpers.dart';
-import '../../test_constants.dart';
-
 import 'package:coinbase_cloud_advanced_trade_client/src/models/credential.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/rest/products/products.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/rest/public/products.dart'
     as public;
-import 'package:test/test.dart';
 import 'package:http/http.dart' as http;
+import 'package:logging/logging.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
+import 'package:test/test.dart';
 
-import '../../test_constants.dart' as testConstants;
+import '../../mocks.mocks.dart';
+import '../../test_constants.dart' as constants;
+import '../../test_helpers.dart';
 import '../../tools.dart';
-import 'candles_test.mocks.dart';
 
 @GenerateMocks([http.Client])
 void main() {
@@ -47,7 +44,7 @@ void main() {
         final client = MockClient();
         final String mockResponse =
             await getJsonFromFile('rest/products/get_product_candles.json');
-        final credential = testConstants.credentials;
+        final credential = constants.credentials;
 
         when(client.get(any, headers: anyNamed('headers')))
             .thenAnswer((_) async => http.Response(mockResponse, 200));
@@ -84,8 +81,8 @@ void main() {
         late Credential credential;
 
         setUp(() {
-          if (!testConstants.ciSkip) {
-            credential = testConstants.credentials;
+          if (!constants.ciSkip) {
+            credential = constants.credentials;
           }
         });
 
@@ -101,7 +98,7 @@ void main() {
           logger.info(candles);
           expect(candles.length, greaterThan(0));
         });
-      }, skip: testConstants.ciSkip);
+      }, skip: constants.ciSkip);
     });
   });
 }
