@@ -15,5 +15,6 @@ class Ticker {
         bestAsk = double.tryParse(json['best_ask'] ?? '');
 
   @override
-  String toString() => 'Ticker{trades: $trades, bestBid: $bestBid, bestAsk: $bestAsk}';
+  String toString() =>
+      'Ticker{trades: $trades, bestBid: $bestBid, bestAsk: $bestAsk}';
 }

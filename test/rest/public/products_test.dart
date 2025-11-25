@@ -17,7 +17,6 @@ const String testTicker =
     '{"trades":[{"trade_id":"testId","product_id":"BTC-USD","price":"100.00","size":"1","time":"2021-01-01T00:00:00Z","side":"BUY","bid":"99.99","ask":"100.01"}],"best_bid":"100.00","best_ask":"101.00"}';
 const String testError = '{"error":"test error"}';
 const Map<String, String> testHeader = {'Content-Type': 'application/json'};
-const String skipMessage = 'Skipping integration tests';
 
 void main() {
   final Logger logger = setupLogger('public_products_test');
@@ -105,16 +104,10 @@ void main() {
     });
 
     test('Get Market Trades', () async {
-      if (ciSkip) {
-        print(skipMessage);
-        return;
-      }
+      Ticker? ticker = await getMarketTrades(productId: 'BTC-USD', limit: 1);
 
-      Ticker? ticker =
-          await getMarketTrades(productId: 'BTC-USD', limit: 1, isSandbox: true);
-
+      logger.info('Ticker: $ticker');
       expect(ticker, isNot(null));
-      logger.info(ticker.toString());
-    }, skip: ciSkip);
+    });
   });
 }
