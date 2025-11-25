@@ -6,6 +6,7 @@ import 'package:coinbase_cloud_advanced_trade_client/src/models/candle.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/error.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/product.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/product_book.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/models/ticker.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/services/network.dart';
 import 'package:http/http.dart' as http;
 
@@ -171,5 +172,40 @@ Future<ProductBook?> getProductBook(
   } else {
     throw CoinbaseException(
         'Failed to get product book', response.statusCode, response.body);
+  }
+}
+
+/// Gets public market trades for a given product ID.
+///
+/// GET /api/v3/brokerage/market/products/{product_id}/ticker
+/// https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/public/get-public-market-trades
+///
+/// This function makes a GET request to the /market/products/{product_id}/ticker endpoint of
+/// the Coinbase Advanced Trade API.
+///
+/// [productId] - The ID of the product to be returned.
+/// [limit] - A limit for the number of trades to be returned.
+/// [isSandbox] - Whether to use the sandbox environment.
+///
+/// Returns a [Ticker] object.
+Future<Ticker?> getMarketTrades(
+    {required String productId,
+    int? limit,
+    http.Client? client,
+    bool isSandbox = false}) async {
+  Map<String, String> queryParameters = {
+    if (limit != null) 'limit': '$limit',
+  };
+
+  http.Response response = await get('/market/products/$productId/ticker',
+      queryParameters: queryParameters, client: client, isSandbox: isSandbox);
+
+  if (response.statusCode == 200) {
+    var jsonResponse = jsonDecode(response.body);
+
+    return Ticker.fromCBJson(jsonResponse);
+  } else {
+    throw CoinbaseException(
+        'Failed to get market trades', response.statusCode, response.body);
   }
 }
