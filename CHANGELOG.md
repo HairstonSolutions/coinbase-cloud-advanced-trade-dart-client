@@ -1,6 +1,7 @@
 # 0.x.x
 
 - Implement Get Best Bid Ask
+- Implement Get Market Trades Public Endpoint
 
 ## 0.7.0
 
