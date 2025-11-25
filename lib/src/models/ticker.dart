@@ -1,4 +1,5 @@
 import 'package:coinbase_cloud_advanced_trade_client/src/models/trade.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/services/tools.dart';
 
 class Ticker {
   final List<Trade>? trades;
