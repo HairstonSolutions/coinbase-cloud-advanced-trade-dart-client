@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:coinbase_cloud_advanced_trade_client/src/models/cancel_orders.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/credential.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/error.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/order.dart';
@@ -231,6 +232,45 @@ Future<Map<String, dynamic>?> _createOrder(
   } else {
     throw CoinbaseException(
         'Failed to create order', response.statusCode, response.body);
+  }
+
+  return result;
+}
+
+/// Cancels a list of orders.
+///
+/// POST /v3/brokerage/orders/batch_cancel
+/// https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/cancel-order
+///
+/// [orderIds] - A list of order IDs to cancel.
+/// [credential] - The user's API credentials.
+/// [isSandbox] - Whether to use the sandbox environment.
+///
+/// Returns a [CancelOrders] object.
+Future<CancelOrders?> cancelOrders(
+    {required List<String> orderIds,
+    required Credential credential,
+    bool isSandbox = false,
+    Client? client}) async {
+  CancelOrders? result;
+
+  final body = {
+    'order_ids': orderIds,
+  };
+
+  http.Response response = await postAuthorized('/orders/batch_cancel',
+      body: jsonEncode(body),
+      credential: credential,
+      isSandbox: isSandbox,
+      client: client);
+
+  if (response.statusCode == 200) {
+    String data = response.body;
+    var jsonResponse = jsonDecode(data);
+    result = CancelOrders.fromCBJson(jsonResponse);
+  } else {
+    throw CoinbaseException(
+        'Failed to cancel orders', response.statusCode, response.body);
   }
 
   return result;

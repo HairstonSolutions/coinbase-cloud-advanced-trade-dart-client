@@ -1,3 +1,4 @@
+import 'package:coinbase_cloud_advanced_trade_client/src/models/cancel_orders.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/error.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/order.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/rest/orders/orders.dart';
@@ -384,6 +385,62 @@ void main() {
 
       expect(result, isNotNull);
       expect(result!['success'], isTrue);
+    });
+  });
+
+  group('Test Cancel Orders using MockClients', () {
+    late MockClient mockClient;
+
+    setUp(() {
+      mockClient = MockClient();
+    });
+
+    test('Cancel orders', () async {
+      final String mockResponse =
+          await getJsonFromFile('mocks/rest/orders/cancel_orders_success.json');
+
+      when(mockClient.post(any,
+              headers: anyNamed('headers'), body: anyNamed('body')))
+          .thenAnswer((_) async => http.Response(mockResponse, 200));
+
+      final result = await cancelOrders(
+        orderIds: ['8b9b69b3-5779-4673-8022-446777176512'],
+        credential: constants.credentials,
+        client: mockClient,
+      );
+
+      expect(result, isNotNull);
+      expect(result!.results![0].success, isTrue);
+    });
+  });
+
+  group('Test Cancel Orders to Coinbase AT API Endpoints',
+      skip: constants.ciSkip, () {
+    test('Cancel orders', () async {
+      final clientOrderId = DateTime.now().millisecondsSinceEpoch.toString();
+      final result = await createLimitOrder(
+        clientOrderId: clientOrderId,
+        productId: 'BTC-USD',
+        side: 'BUY',
+        baseSize: '0.001',
+        limitPrice: '10000',
+        postOnly: true,
+        credential: constants.credentials,
+        isSandbox: true,
+      );
+
+      expect(result, isNotNull);
+      expect(result!['success'], isTrue);
+
+      final orderId = result['order_id'];
+      final cancelResult = await cancelOrders(
+        orderIds: [orderId],
+        credential: constants.credentials,
+        isSandbox: true,
+      );
+
+      expect(cancelResult, isNotNull);
+      expect(cancelResult!.results![0].success, isTrue);
     });
   });
 }
