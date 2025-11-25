@@ -283,6 +283,46 @@ void main() {
       expect(result, isNotNull);
       expect(result!['success'], isTrue);
     });
+  });
+
+  group('Test Close Position using MockClients', () {
+    late MockClient mockClient;
+
+    setUp(() {
+      mockClient = MockClient();
+    });
+
+    test('Close a position', () async {
+      final String mockResponse = await getJsonFromFile(
+          'mocks/rest/orders/close_position_success.json');
+
+      when(mockClient.post(any,
+              headers: anyNamed('headers'), body: anyNamed('body')))
+          .thenAnswer((_) async => http.Response(mockResponse, 200));
+
+      final result = await closePosition(
+        productId: 'BTC-USD',
+        credential: constants.credentials,
+        client: mockClient,
+      );
+
+      expect(result, isNotNull);
+      expect(result!['success'], isTrue);
+    });
+  });
+
+  group('Test Close Position to Coinbase AT API Endpoints',
+      skip: constants.ciSkip, () {
+    test('Close a position', () async {
+      final result = await closePosition(
+        productId: 'BTC-USD',
+        credential: constants.credentials,
+        isSandbox: true,
+      );
+
+      expect(result, isNotNull);
+      expect(result!['success'], isTrue);
+    });
 
     test('Create a new market order with base size', () async {
       final clientOrderId = DateTime.now().millisecondsSinceEpoch.toString();

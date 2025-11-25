@@ -225,6 +225,45 @@ Future<Map<String, dynamic>?> _createOrder(
       client: client);
 
   if (response.statusCode == 200) {
+    String data = response.body;
+    var jsonResponse = jsonDecode(data);
+    result = jsonResponse;
+  } else {
+    throw CoinbaseException(
+        'Failed to create order', response.statusCode, response.body);
+  }
+
+  return result;
+}
+
+/// Closes a position for a given product ID.
+///
+/// POST /v3/brokerage/orders/close_position
+/// https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/close-position
+///
+/// [productId] - The ID of the product to close the position for.
+/// [credential] - The user's API credentials.
+/// [isSandbox] - Whether to use the sandbox environment.
+///
+/// Returns a map containing the result of the close position request.
+Future<Map<String, dynamic>?> closePosition(
+    {required String productId,
+    required Credential credential,
+    bool isSandbox = false,
+    Client? client}) async {
+  Map<String, dynamic>? result;
+
+  final body = {
+    'product_id': productId,
+  };
+
+  http.Response response = await postAuthorized('/orders/close_position',
+      body: jsonEncode(body),
+      credential: credential,
+      isSandbox: isSandbox,
+      client: client);
+
+  if (response.statusCode == 200) {
     var url = response.request?.url.toString();
     print('Request to URL $url Success: Response code ${response.statusCode}');
     print('Success Response Message: ${response.body}');
@@ -233,7 +272,7 @@ Future<Map<String, dynamic>?> _createOrder(
     result = jsonResponse;
   } else {
     throw CoinbaseException(
-        'Failed to create order', response.statusCode, response.body);
+        'Failed to close position', response.statusCode, response.body);
   }
 
   return result;
