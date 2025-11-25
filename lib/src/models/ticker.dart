@@ -12,8 +12,8 @@ class Ticker {
       : trades = (json['trades'] as List<dynamic>?)
             ?.map((trade) => Trade.fromCBJson(trade as Map<String, dynamic>))
             .toList(),
-        bestBid = double.tryParse(json['best_bid'] ?? ''),
-        bestAsk = double.tryParse(json['best_ask'] ?? '');
+        bestBid = nullableDouble(json, 'best_bid'),
+        bestAsk = nullableDouble(json, 'best_ask');
 
   @override
   String toString() =>
