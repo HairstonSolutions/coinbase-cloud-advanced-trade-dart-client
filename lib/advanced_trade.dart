@@ -18,6 +18,7 @@ export 'src/models/product.dart';
 export 'src/models/product_book.dart';
 export 'src/models/server_time.dart';
 export 'src/models/signature.dart';
+export 'src/models/ticker.dart';
 export 'src/models/trade.dart';
 export 'src/models/transaction_summary.dart';
 export 'src/models/volume_breakdown.dart';
