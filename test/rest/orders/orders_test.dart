@@ -182,6 +182,94 @@ void main() {
       expect(result!['success'], isTrue);
     });
 
+    test('Create a new stop limit GTC order (integration)', () async {
+      final clientOrderId = DateTime.now().millisecondsSinceEpoch.toString();
+      final result = await createStopLimitOrderGTC(
+        clientOrderId: clientOrderId,
+        productId: 'BTC-USD',
+        side: 'BUY',
+        baseSize: '0.001',
+        limitPrice: '10000',
+        stopPrice: '10001',
+        stopDirection: 'STOP_DIRECTION_STOP_UP',
+        credential: constants.credentials,
+        isSandbox: true,
+      );
+
+      expect(result, isNotNull);
+      expect(result!['success'], isTrue);
+    });
+
+    test('Create a new stop limit GTD order (integration)', () async {
+      final clientOrderId = DateTime.now().millisecondsSinceEpoch.toString();
+      final result = await createStopLimitOrderGTD(
+        clientOrderId: clientOrderId,
+        productId: 'BTC-USD',
+        side: 'BUY',
+        baseSize: '0.001',
+        limitPrice: '10000',
+        stopPrice: '10001',
+        stopDirection: 'STOP_DIRECTION_STOP_UP',
+        endTime: DateTime.now().add(const Duration(days: 1)),
+        credential: constants.credentials,
+        isSandbox: true,
+      );
+
+      expect(result, isNotNull);
+      expect(result!['success'], isTrue);
+    });
+
+    test('Create a new stop limit GTC order (mocked)', () async {
+      final String mockResponse =
+          await getJsonFromFile('rest/orders/create_order_success.json');
+
+      when(mockClient.post(any,
+              headers: anyNamed('headers'), body: anyNamed('body')))
+          .thenAnswer((_) async => http.Response(mockResponse, 200));
+
+      final clientOrderId = DateTime.now().millisecondsSinceEpoch.toString();
+      final result = await createStopLimitOrderGTC(
+        clientOrderId: clientOrderId,
+        productId: 'BTC-USD',
+        side: 'BUY',
+        baseSize: '0.1',
+        limitPrice: '10000',
+        stopPrice: '10001',
+        stopDirection: 'STOP_DIRECTION_STOP_UP',
+        credential: constants.credentials,
+        client: mockClient,
+      );
+
+      expect(result, isNotNull);
+      expect(result!['success'], isTrue);
+    });
+
+    test('Create a new stop limit GTD order (mocked)', () async {
+      final String mockResponse =
+          await getJsonFromFile('rest/orders/create_order_success.json');
+
+      when(mockClient.post(any,
+              headers: anyNamed('headers'), body: anyNamed('body')))
+          .thenAnswer((_) async => http.Response(mockResponse, 200));
+
+      final clientOrderId = DateTime.now().millisecondsSinceEpoch.toString();
+      final result = await createStopLimitOrderGTD(
+        clientOrderId: clientOrderId,
+        productId: 'BTC-USD',
+        side: 'BUY',
+        baseSize: '0.1',
+        limitPrice: '10000',
+        stopPrice: '10001',
+        stopDirection: 'STOP_DIRECTION_STOP_UP',
+        endTime: DateTime.now().add(const Duration(days: 1)),
+        credential: constants.credentials,
+        client: mockClient,
+      );
+
+      expect(result, isNotNull);
+      expect(result!['success'], isTrue);
+    });
+
     test('Create a new market order with base size', () async {
       final String mockResponse =
           await getJsonFromFile('rest/orders/create_order_success.json');
