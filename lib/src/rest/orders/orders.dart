@@ -289,8 +289,7 @@ Future<Map<String, dynamic>?> createStopLimitOrderGTD(
       'limit_price': limitPrice,
       'stop_price': stopPrice,
       'stop_direction': stopDirection.toCB(),
-      'end_time':
-          '${endTime.toUtc().toIso8601String().split('.').first}.${endTime.millisecond.toString().padLeft(3, '0')}Z',
+      'end_time': endTime.toUtc().toIso8601String(),
     }
   };
 
