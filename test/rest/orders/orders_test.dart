@@ -442,7 +442,7 @@ void main() {
       expect(cancelResult!.canceledOrderResults![0].success, isTrue);
     });
 
-    test('Cancel multiple orders', () async {
+    test('Cancel multiple orders', skip: constants.skipDT, () async {
       // Get current price og bitcoin in USD
       Ticker? bitcoinTicker =
           await getMarketTrades(productId: 'BTC-USD', limit: 1);
