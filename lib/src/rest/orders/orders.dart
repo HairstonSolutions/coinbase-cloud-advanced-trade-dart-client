@@ -4,6 +4,7 @@ import 'package:coinbase_cloud_advanced_trade_client/src/models/cancel_orders.da
 import 'package:coinbase_cloud_advanced_trade_client/src/models/credential.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/error.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/order.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/models/order_configuration.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/services/network.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
@@ -222,21 +223,21 @@ Future<Map<String, dynamic>?> createLimitOrder(
 /// request fails.
 Future<Map<String, dynamic>?> createStopLimitOrderGTC(
     {required String clientOrderId,
-      required String productId,
-      required String side,
-      required String baseSize,
-      required String limitPrice,
-      required String stopPrice,
-      required String stopDirection,
-      required Credential credential,
-      bool isSandbox = false,
-      Client? client}) async {
+    required String productId,
+    required String side,
+    required String baseSize,
+    required String limitPrice,
+    required String stopPrice,
+    required StopDirection stopDirection,
+    required Credential credential,
+    bool isSandbox = false,
+    Client? client}) async {
   final orderConfiguration = {
     'stop_limit_stop_limit_gtc': {
       'base_size': baseSize,
       'limit_price': limitPrice,
       'stop_price': stopPrice,
-      'stop_direction': stopDirection,
+      'stop_direction': stopDirection.toCB(),
     }
   };
 
@@ -272,26 +273,24 @@ Future<Map<String, dynamic>?> createStopLimitOrderGTC(
 /// request fails.
 Future<Map<String, dynamic>?> createStopLimitOrderGTD(
     {required String clientOrderId,
-      required String productId,
-      required String side,
-      required String baseSize,
-      required String limitPrice,
-      required String stopPrice,
-      required String stopDirection,
-      required DateTime endTime,
-      required Credential credential,
-      bool isSandbox = false,
-      Client? client}) async {
+    required String productId,
+    required String side,
+    required String baseSize,
+    required String limitPrice,
+    required String stopPrice,
+    required StopDirection stopDirection,
+    required DateTime endTime,
+    required Credential credential,
+    bool isSandbox = false,
+    Client? client}) async {
   final orderConfiguration = {
     'stop_limit_stop_limit_gtd': {
       'base_size': baseSize,
       'limit_price': limitPrice,
       'stop_price': stopPrice,
-      'stop_direction': stopDirection,
-      'end_time': (endTime.toUtc().toIso8601String().split('.').first +
-          '.' +
-          endTime.millisecond.toString().padLeft(3, '0') +
-          'Z'),
+      'stop_direction': stopDirection.toCB(),
+      'end_time':
+          '${endTime.toUtc().toIso8601String().split('.').first}.${endTime.millisecond.toString().padLeft(3, '0')}Z',
     }
   };
 

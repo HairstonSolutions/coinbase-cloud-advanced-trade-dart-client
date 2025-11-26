@@ -1,3 +1,4 @@
+import 'package:coinbase_cloud_advanced_trade_client/src/models/order_configuration.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/services/tools.dart';
 
 class StopLimitGTD {
@@ -6,7 +7,7 @@ class StopLimitGTD {
   final double? limitPrice;
   final double? stopPrice;
   final DateTime? endTime;
-  final String? stopDirection;
+  final StopDirection? stopDirection;
 
   StopLimitGTD(this.quoteSize, this.baseSize, this.limitPrice, this.stopPrice,
       this.endTime, this.stopDirection);
@@ -15,9 +16,11 @@ class StopLimitGTD {
       : quoteSize = json['quoteSize'],
         baseSize = json['baseSize'],
         limitPrice = json['limitPrice'],
-        stopPrice = json['endTime'],
+        stopPrice = json['stopPrice'],
         endTime = json['endTime'],
-        stopDirection = json['stopDirection'];
+        stopDirection = json['stopDirection'] != null
+            ? StopDirection.fromCB(json['stopDirection'])
+            : null;
 
   Map<String, dynamic> toJson() => {
         'quoteSize': quoteSize,
@@ -25,7 +28,7 @@ class StopLimitGTD {
         'limitPrice': limitPrice,
         'stopPrice': stopPrice,
         'endTime': endTime?.toIso8601String(),
-        'stopDirection': stopDirection
+        'stopDirection': stopDirection?.toCB()
       };
 
   StopLimitGTD.fromCBJson(Map<String, dynamic> json)
@@ -34,7 +37,9 @@ class StopLimitGTD {
         limitPrice = nullableDouble(json, 'limit_price'),
         stopPrice = nullableDouble(json, 'stop_price'),
         endTime = DateTime.parse(json['end_time']),
-        stopDirection = json['stop_direction'];
+        stopDirection = json['stop_direction'] != null
+            ? StopDirection.fromCB(json['stop_direction'])
+            : null;
 
   Map<String, dynamic> toCBJson() => {
         'quote_size': quoteSize,
@@ -42,7 +47,7 @@ class StopLimitGTD {
         'limit_price': limitPrice,
         'stop_price': stopPrice,
         'end_time': endTime?.toIso8601String(),
-        'stop_direction': stopDirection,
+        'stop_direction': stopDirection?.toCB(),
       };
 
   @override
