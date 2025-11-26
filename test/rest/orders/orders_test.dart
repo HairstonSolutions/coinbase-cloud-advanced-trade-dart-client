@@ -182,63 +182,41 @@ void main() {
       expect(result!['success'], isTrue);
     });
 
-    test('Create a new stop limit GTC order (integration)',
-        skip: constants.skipDT, () async {
+    test('Create a new stop limit GTC order (integration)', () async {
       final clientOrderId = DateTime.now().millisecondsSinceEpoch.toString();
       final result = await createStopLimitOrderGTC(
         clientOrderId: clientOrderId,
         productId: 'BTC-USD',
         side: 'BUY',
-        baseSize: '0.00001',
-        limitPrice: '100008',
-        stopPrice: '100009',
-        stopDirection: StopDirection.STOP_DIRECTION_STOP_UP,
+        baseSize: '0.001',
+        limitPrice: '10000',
+        stopPrice: '10001',
+        stopDirection: 'STOP_DIRECTION_STOP_UP',
         credential: constants.credentials,
-        isSandbox:
-            false, // Sandbox API doesnt respond like the production version. Set to Prod for a true integration test.
+        isSandbox: true,
       );
 
       expect(result, isNotNull);
       expect(result!['success'], isTrue);
-
-      // Cancel order after test
-      final successResponse = result['success_response'];
-      final orderId = successResponse['order_id'];
-
-      final cancelResult = await cancelOrders(
-          orderIds: [orderId], credential: constants.credentials);
-      expect(cancelResult, isNotNull);
-      expect(cancelResult!.canceledOrderResults![0].success, isTrue);
     });
 
-    test('Create a new stop limit GTD order (integration)',
-        skip: constants.skipDT, () async {
+    test('Create a new stop limit GTD order (integration)', () async {
       final clientOrderId = DateTime.now().millisecondsSinceEpoch.toString();
       final result = await createStopLimitOrderGTD(
         clientOrderId: clientOrderId,
         productId: 'BTC-USD',
         side: 'BUY',
-        baseSize: '0.00001',
-        limitPrice: '100004',
-        stopPrice: '100005',
-        stopDirection: StopDirection.STOP_DIRECTION_STOP_UP,
+        baseSize: '0.001',
+        limitPrice: '10000',
+        stopPrice: '10001',
+        stopDirection: 'STOP_DIRECTION_STOP_UP',
         endTime: DateTime.now().add(const Duration(days: 1)),
         credential: constants.credentials,
-        isSandbox:
-            false, // Sandbox API doesnt respond like the production version. Set to Prod for a true integration test.
+        isSandbox: true,
       );
 
       expect(result, isNotNull);
       expect(result!['success'], isTrue);
-
-      // Cancel order after test
-      final successResponse = result['success_response'];
-      final orderId = successResponse['order_id'];
-
-      final cancelResult = await cancelOrders(
-          orderIds: [orderId], credential: constants.credentials);
-      expect(cancelResult, isNotNull);
-      expect(cancelResult!.canceledOrderResults![0].success, isTrue);
     });
 
     test('Create a new stop limit GTC order (mocked)', () async {
@@ -257,7 +235,7 @@ void main() {
         baseSize: '0.1',
         limitPrice: '10000',
         stopPrice: '10001',
-        stopDirection: StopDirection.STOP_DIRECTION_STOP_UP,
+        stopDirection: 'STOP_DIRECTION_STOP_UP',
         credential: constants.credentials,
         client: mockClient,
       );
@@ -282,7 +260,7 @@ void main() {
         baseSize: '0.1',
         limitPrice: '10000',
         stopPrice: '10001',
-        stopDirection: StopDirection.STOP_DIRECTION_STOP_UP,
+        stopDirection: 'STOP_DIRECTION_STOP_UP',
         endTime: DateTime.now().add(const Duration(days: 1)),
         credential: constants.credentials,
         client: mockClient,

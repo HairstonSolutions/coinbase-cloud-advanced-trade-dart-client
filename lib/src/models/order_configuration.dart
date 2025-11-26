@@ -4,19 +4,6 @@ import 'package:coinbase_cloud_advanced_trade_client/src/models/order_configurat
 import 'package:coinbase_cloud_advanced_trade_client/src/models/order_configuration/stop_limit_gtc.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/order_configuration/stop_limit_gtd.dart';
 
-enum StopDirection {
-  STOP_DIRECTION_STOP_DOWN,
-  STOP_DIRECTION_STOP_UP;
-
-  String toCB() {
-    return name;
-  }
-
-  static StopDirection fromCB(String cb) {
-    return StopDirection.values.firstWhere((e) => e.name == cb);
-  }
-}
-
 class OrderConfiguration {
   final LimitGTC? limitGTC;
   final MarketIOC? marketIOC;

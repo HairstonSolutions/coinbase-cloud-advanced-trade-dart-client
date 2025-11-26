@@ -1,4 +1,3 @@
-import 'package:coinbase_cloud_advanced_trade_client/src/models/order_configuration.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/services/tools.dart';
 
 class StopLimitGTC {
@@ -6,7 +5,7 @@ class StopLimitGTC {
   final double? baseSize;
   final double? limitPrice;
   final double? stopPrice;
-  final StopDirection? stopDirection;
+  final String? stopDirection;
 
   StopLimitGTC(this.quoteSize, this.baseSize, this.limitPrice, this.stopPrice,
       this.stopDirection);
@@ -16,16 +15,14 @@ class StopLimitGTC {
         baseSize = json['baseSize'],
         limitPrice = json['limitPrice'],
         stopPrice = json['stopPrice'],
-        stopDirection = json['stopDirection'] != null
-            ? StopDirection.fromCB(json['stopDirection'])
-            : null;
+        stopDirection = json['stopDirection'];
 
   Map<String, dynamic> toJson() => {
         'quoteSize': quoteSize,
         'baseSize': baseSize,
         'limitPrice': limitPrice,
         'stopPrice': stopPrice,
-        'stopDirection': stopDirection?.toCB()
+        'stopDirection': stopDirection
       };
 
   StopLimitGTC.fromCBJson(Map<String, dynamic> json)
@@ -33,16 +30,14 @@ class StopLimitGTC {
         baseSize = nullableDouble(json, 'base_size'),
         limitPrice = nullableDouble(json, 'limit_price'),
         stopPrice = nullableDouble(json, 'stop_price'),
-        stopDirection = json['stop_direction'] != null
-            ? StopDirection.fromCB(json['stop_direction'])
-            : null;
+        stopDirection = json['stop_direction'];
 
   Map<String, dynamic> toCBJson() => {
         'quote_size': quoteSize,
         'base_size': baseSize,
         'limit_price': limitPrice,
         'stop_price': stopPrice,
-        'stop_direction': stopDirection?.toCB(),
+        'stop_direction': stopDirection,
       };
 
   @override
