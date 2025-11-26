@@ -14,7 +14,8 @@ enum StopDirection {
 
   static StopDirection fromCB(String cb) {
     return StopDirection.values.firstWhere((e) => e.name == cb,
-        orElse: () => throw FormatException('Unknown StopDirection value: $cb'));
+        orElse: () =>
+            throw FormatException('Unknown StopDirection value: $cb'));
   }
 }
 
