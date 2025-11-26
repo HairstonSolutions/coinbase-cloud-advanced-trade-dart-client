@@ -1,6 +1,10 @@
 import 'dart:convert';
 
-import 'package:coinbase_cloud_advanced_trade_client/src/models/order.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/order.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/order_configuration.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/order_status.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/order_type.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/time_in_force.dart';
 import 'package:test/test.dart';
 
 import '../tools.dart';
@@ -30,7 +34,7 @@ void main() {
       print('Order Object: $exampleOrder');
 
       expect(exampleOrder.orderId, '0000-000000-000000');
-      expect(exampleOrder.status, 'PENDING');
+      expect(exampleOrder.status, OrderStatus.PENDING);
       expect(exampleOrder.settled, true);
     });
 
@@ -43,7 +47,7 @@ void main() {
       expect(
           exampleOrder.orderConfiguration?.stopLimitGTC?.stopPrice, 20000.00);
       expect(exampleOrder.orderConfiguration?.stopLimitGTD?.stopDirection,
-          'UNKNOWN_STOP_DIRECTION');
+          StopDirection.UNKNOWN_STOP_DIRECTION);
     });
 
     test('Example Open Order JSON Import Object conversion', () {
@@ -53,9 +57,9 @@ void main() {
       print('Open Order Object: $openOrder');
 
       expect(openOrder.orderId, '111111111-1111-1111-1111-11111');
-      expect(openOrder.status, 'OPEN');
-      expect(openOrder.orderType, 'LIMIT');
-      expect(openOrder.timeInForce, 'GOOD_UNTIL_CANCELLED');
+      expect(openOrder.status, OrderStatus.OPEN);
+      expect(openOrder.orderType, OrderType.LIMIT);
+      expect(openOrder.timeInForce, TimeInForce.GOOD_UNTIL_CANCELLED);
       expect(openOrder.settled, false);
       expect(openOrder.orderConfiguration?.limitGTC?.postOnly, false);
     });
@@ -67,9 +71,9 @@ void main() {
       print('Market Order Object: $marketOrder');
 
       expect(marketOrder.orderId, '22222222-2222-2222-2222-222222222');
-      expect(marketOrder.orderType, 'MARKET');
-      expect(marketOrder.status, 'FILLED');
-      expect(marketOrder.timeInForce, 'IMMEDIATE_OR_CANCEL');
+      expect(marketOrder.orderType, OrderType.MARKET);
+      expect(marketOrder.status, OrderStatus.FILLED);
+      expect(marketOrder.timeInForce, TimeInForce.IMMEDIATE_OR_CANCEL);
       expect(marketOrder.settled, true);
       expect(marketOrder.orderConfiguration?.marketIOC?.quoteSize, 25);
     });
@@ -91,7 +95,7 @@ void main() {
       expect(deserializedOrder.orderConfiguration?.stopLimitGTC?.stopPrice,
           20000.00);
       expect(deserializedOrder.orderConfiguration?.stopLimitGTD?.stopDirection,
-          'UNKNOWN_STOP_DIRECTION');
+          StopDirection.UNKNOWN_STOP_DIRECTION);
 
       print(deserializedOrder.orderConfiguration);
       print(deserializedOrder.orderConfiguration?.toJson());
@@ -113,12 +117,10 @@ void main() {
       print(jsonEncode(deserializedOrder.orderConfiguration?.toCBJson()));
 
       expect(deserializedOrder.orderConfiguration?.marketIOC?.quoteSize, 10.00);
-      expect(deserializedOrder.orderConfiguration?.limitGTC?.limitPrice, null);
-      expect(deserializedOrder.orderConfiguration?.limitGTD?.quoteSize, null);
-      expect(
-          deserializedOrder.orderConfiguration?.stopLimitGTC?.stopPrice, null);
-      expect(deserializedOrder.orderConfiguration?.stopLimitGTD?.stopDirection,
-          null);
+      expect(deserializedOrder.orderConfiguration?.limitGTC, null);
+      expect(deserializedOrder.orderConfiguration?.limitGTD, null);
+      expect(deserializedOrder.orderConfiguration?.stopLimitGTC, null);
+      expect(deserializedOrder.orderConfiguration?.stopLimitGTD, null);
     });
   });
 }

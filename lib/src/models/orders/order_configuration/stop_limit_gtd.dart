@@ -1,4 +1,4 @@
-import 'package:coinbase_cloud_advanced_trade_client/src/models/order_configuration.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/order_configuration.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/services/tools.dart';
 
 class StopLimitGTD {

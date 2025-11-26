@@ -1,4 +1,11 @@
-import 'package:coinbase_cloud_advanced_trade_client/src/models/order_configuration.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/order_configuration.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/order_side.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/order_status.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/order_type.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/product_type.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/reject_reason.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/time_in_force.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/trigger_status.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/services/tools.dart';
 
 class Order {
@@ -6,10 +13,10 @@ class Order {
   final String? productId;
   final String? userId;
   final OrderConfiguration? orderConfiguration;
-  final String? side;
+  final OrderSide? side;
   final String? clientOrderId;
-  final String? status;
-  final String? timeInForce;
+  final OrderStatus? status;
+  final TimeInForce? timeInForce;
   final DateTime? createdTime;
   final double? completionPercentage;
   final double? filledSize;
@@ -22,11 +29,11 @@ class Order {
   final double? totalFees;
   final bool? sizeInclusiveOfFees;
   final double? totalValueAfterFees;
-  final String? triggerStatus;
-  final String? orderType;
-  final String? rejectReason;
+  final TriggerStatus? triggerStatus;
+  final OrderType? orderType;
+  final RejectReason? rejectReason;
   final bool? settled;
-  final String? productType;
+  final ProductType? productType;
   final String? rejectMessage;
   final String? cancelMessage;
 
@@ -64,10 +71,10 @@ class Order {
         productId = json['productId'],
         userId = json['userId'],
         orderConfiguration = json['orderConfiguration'],
-        side = json['side'],
+        side = OrderSide.fromCB(json['side']),
         clientOrderId = json['clientOrderId'],
-        status = json['status'],
-        timeInForce = json['timeInForce'],
+        status = OrderStatus.fromCB(json['status']),
+        timeInForce = TimeInForce.fromCB(json['timeInForce']),
         createdTime = DateTime.parse(json['createdTime']),
         completionPercentage = json['completionPercentage'],
         filledSize = json['filledSize'],
@@ -80,11 +87,11 @@ class Order {
         totalFees = json['totalFees'],
         sizeInclusiveOfFees = json['sizeInclusiveOfFees'],
         totalValueAfterFees = json['totalValueAfterFees'],
-        triggerStatus = json['triggerStatus'],
-        orderType = json['orderType'],
-        rejectReason = json['rejectReason'],
+        triggerStatus = TriggerStatus.fromCB(json['triggerStatus']),
+        orderType = OrderType.fromCB(json['orderType']),
+        rejectReason = RejectReason.fromCB(json['rejectReason']),
         settled = json['settled'],
-        productType = json['productType'],
+        productType = ProductType.fromCB(json['productType']),
         rejectMessage = json['rejectMessage'],
         cancelMessage = json['cancelMessage'];
 
@@ -93,10 +100,10 @@ class Order {
         'productId': productId,
         'userId': userId,
         'orderConfiguration': orderConfiguration,
-        'side': side,
+        'side': side?.toCB(),
         'clientOrderId': clientOrderId,
-        'status': status,
-        'timeInForce': timeInForce,
+        'status': status?.toCB(),
+        'timeInForce': timeInForce?.toCB(),
         'createdTime': createdTime?.toIso8601String(),
         'completionPercentage': completionPercentage,
         'filledSize': filledSize,
@@ -109,11 +116,11 @@ class Order {
         'totalFees': totalFees,
         'sizeInclusiveOfFees': sizeInclusiveOfFees,
         'totalValueAfterFees': totalValueAfterFees,
-        'triggerStatus': triggerStatus,
-        'orderType': orderType,
-        'rejectReason': rejectReason,
+        'triggerStatus': triggerStatus?.toCB(),
+        'orderType': orderType?.toCB(),
+        'rejectReason': rejectReason?.toCB(),
         'settled': settled,
-        'productType': productType,
+        'productType': productType?.toCB(),
         'rejectMessage': rejectMessage,
         'cancelMessage': cancelMessage
       };
@@ -124,10 +131,10 @@ class Order {
         userId = json['user_id'],
         orderConfiguration =
             OrderConfiguration.fromCBJson(json['order_configuration']),
-        side = json['side'],
+        side = OrderSide.fromCB(json['side']),
         clientOrderId = json['client_order_id'],
-        status = json['status'],
-        timeInForce = json['time_in_force'],
+        status = OrderStatus.fromCB(json['status']),
+        timeInForce = TimeInForce.fromCB(json['time_in_force']),
         createdTime = DateTime.parse(json['created_time']),
         completionPercentage = nullableDouble(json, 'completion_percentage'),
         filledSize = nullableDouble(json, 'filled_size'),
@@ -140,11 +147,11 @@ class Order {
         totalFees = nullableDouble(json, 'total_fees'),
         sizeInclusiveOfFees = json['size_inclusive_of_fees'],
         totalValueAfterFees = nullableDouble(json, 'total_value_after_fees'),
-        triggerStatus = json['trigger_status'],
-        orderType = json['order_type'],
-        rejectReason = json['reject_reason'],
+        triggerStatus = TriggerStatus.fromCB(json['trigger_status']),
+        orderType = OrderType.fromCB(json['order_type']),
+        rejectReason = RejectReason.fromCB(json['reject_reason']),
         settled = json['settled'],
-        productType = json['product_type'],
+        productType = ProductType.fromCB(json['product_type']),
         rejectMessage = json['reject_message'],
         cancelMessage = json['cancel_message'];
 
@@ -153,10 +160,10 @@ class Order {
         'product_id': productId,
         'user_id': userId,
         'order_configuration': orderConfiguration?.toCBJson(),
-        'side': side,
+        'side': side?.toCB(),
         'client_order_id': clientOrderId,
-        'status': status,
-        'time_in_force': timeInForce,
+        'status': status?.toCB(),
+        'time_in_force': timeInForce?.toCB(),
         'created_time': createdTime?.toIso8601String(),
         'completion_percentage': completionPercentage,
         'filled_size': filledSize,
@@ -169,11 +176,11 @@ class Order {
         'total_fees': totalFees,
         'size_inclusive_of_fees': sizeInclusiveOfFees,
         'total_value_after_fees': totalValueAfterFees,
-        'trigger_status': triggerStatus,
-        'order_type': orderType,
-        'reject_reason': rejectReason,
+        'trigger_status': triggerStatus?.toCB(),
+        'order_type': orderType?.toCB(),
+        'reject_reason': rejectReason?.toCB(),
         'settled': settled,
-        'product_type': productType,
+        'product_type': productType?.toCB(),
         'reject_message': rejectMessage,
         'cancel_message': cancelMessage
       };
