@@ -1,8 +1,5 @@
-import 'package:coinbase_cloud_advanced_trade_client/src/models/cancel_orders.dart';
+import 'package:coinbase_cloud_advanced_trade_client/advanced_trade.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/error.dart';
-import 'package:coinbase_cloud_advanced_trade_client/src/models/order.dart';
-import 'package:coinbase_cloud_advanced_trade_client/src/rest/orders/orders.dart';
-import 'package:coinbase_cloud_advanced_trade_client/src/services/network.dart';
 import 'package:http/http.dart' as http;
 import 'package:logging/logging.dart';
 import 'package:mockito/mockito.dart';
@@ -410,7 +407,7 @@ void main() {
       );
 
       expect(result, isNotNull);
-      expect(result!.results![0].success, isTrue);
+      expect(result!.canceledOrderResults![0].success, isTrue);
     });
   });
 
@@ -432,7 +429,9 @@ void main() {
       expect(result, isNotNull);
       expect(result!['success'], isTrue);
 
-      final orderId = result['order_id'];
+      final successResponse = result['success_response'];
+      final orderId = successResponse['order_id'];
+
       final cancelResult = await cancelOrders(
         orderIds: [orderId],
         credential: constants.credentials,
@@ -440,7 +439,67 @@ void main() {
       );
 
       expect(cancelResult, isNotNull);
-      expect(cancelResult!.results![0].success, isTrue);
+      expect(cancelResult!.canceledOrderResults![0].success, isTrue);
+    });
+
+    test('Cancel multiple orders', () async {
+      // Get current price og bitcoin in USD
+      Ticker? bitcoinTicker =
+          await getMarketTrades(productId: 'BTC-USD', limit: 1);
+      final bitcoinPrice = bitcoinTicker?.trades?.first.price;
+
+      // Set Prices of both Orders
+      final orderPrice = bitcoinPrice! * 0.5;
+      final secondOrderPrice = orderPrice - 1.0;
+
+      final clientOrderId = DateTime.now().millisecondsSinceEpoch.toString();
+      final result = await createLimitOrder(
+        clientOrderId: clientOrderId,
+        productId: 'BTC-USD',
+        side: 'BUY',
+        baseSize: '0.0001',
+        limitPrice: orderPrice.toString(),
+        postOnly: true,
+        credential: constants.credentials,
+      );
+
+      expect(result, isNotNull);
+      if (result!['success'] == false) {
+        var errorResponse = result['error_response'];
+        var failureReason = errorResponse['preview_failure_reason'];
+        logger.info('failure Reason: $failureReason');
+      }
+
+      expect(result['success'], isTrue);
+
+      final successResponse = result['success_response'];
+      final orderId1 = successResponse['order_id'];
+
+      final clientOrderId2 = DateTime.now().millisecondsSinceEpoch.toString();
+      final result2 = await createLimitOrder(
+        clientOrderId: clientOrderId2,
+        productId: 'BTC-USD',
+        side: 'BUY',
+        baseSize: '0.0001',
+        limitPrice: secondOrderPrice.toString(),
+        postOnly: true,
+        credential: constants.credentials,
+      );
+
+      expect(result2, isNotNull);
+      expect(result2!['success'], isTrue);
+
+      final successResponse2 = result2['success_response'];
+      final orderId2 = successResponse2['order_id'];
+
+      final cancelResult = await cancelOrders(
+        orderIds: [orderId1, orderId2],
+        credential: constants.credentials,
+      );
+
+      expect(cancelResult, isNotNull);
+      expect(cancelResult!.canceledOrderResults![0].success, isTrue);
+      expect(cancelResult.canceledOrderResults![1].success, isTrue);
     });
   });
 }

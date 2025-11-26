@@ -246,13 +246,13 @@ Future<Map<String, dynamic>?> _createOrder(
 /// [credential] - The user's API credentials.
 /// [isSandbox] - Whether to use the sandbox environment.
 ///
-/// Returns a [CancelOrders] object.
-Future<CancelOrders?> cancelOrders(
+/// Returns a [CanceledOrders] object.
+Future<CanceledOrders?> cancelOrders(
     {required List<String> orderIds,
     required Credential credential,
     bool isSandbox = false,
     Client? client}) async {
-  CancelOrders? result;
+  CanceledOrders? result;
 
   final body = {
     'order_ids': orderIds,
@@ -267,7 +267,7 @@ Future<CancelOrders?> cancelOrders(
   if (response.statusCode == 200) {
     String data = response.body;
     var jsonResponse = jsonDecode(data);
-    result = CancelOrders.fromCBJson(jsonResponse);
+    result = CanceledOrders.fromCBJson(jsonResponse);
   } else {
     throw CoinbaseException(
         'Failed to cancel orders', response.statusCode, response.body);

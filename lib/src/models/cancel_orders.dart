@@ -1,12 +1,12 @@
-class CancelOrdersResult {
+class CanceledOrderResult {
   final bool? success;
   final String? failureReason;
   final String? orderId;
 
-  CancelOrdersResult({this.success, this.failureReason, this.orderId});
+  CanceledOrderResult({this.success, this.failureReason, this.orderId});
 
-  factory CancelOrdersResult.fromCBJson(Map<String, dynamic> json) {
-    return CancelOrdersResult(
+  factory CanceledOrderResult.fromCBJson(Map<String, dynamic> json) {
+    return CanceledOrderResult(
       success: json['success'],
       failureReason: json['failure_reason'],
       orderId: json['order_id'],
@@ -15,20 +15,20 @@ class CancelOrdersResult {
 
   @override
   String toString() {
-    return 'CancelOrdersResult{success: $success, failureReason: $failureReason, orderId: $orderId}';
+    return 'CanceledOrderResult{success: $success, failureReason: $failureReason, orderId: $orderId}';
   }
 }
 
-class CancelOrders {
-  final List<CancelOrdersResult>? results;
+class CanceledOrders {
+  final List<CanceledOrderResult>? canceledOrderResults;
 
-  CancelOrders({this.results});
+  CanceledOrders({this.canceledOrderResults});
 
-  factory CancelOrders.fromCBJson(Map<String, dynamic> json) {
+  factory CanceledOrders.fromCBJson(Map<String, dynamic> json) {
     var resultsList = json['results'] as List;
-    List<CancelOrdersResult> results = resultsList.isNotEmpty
-        ? resultsList.map((i) => CancelOrdersResult.fromCBJson(i)).toList()
+    List<CanceledOrderResult> results = resultsList.isNotEmpty
+        ? resultsList.map((i) => CanceledOrderResult.fromCBJson(i)).toList()
         : [];
-    return CancelOrders(results: results);
+    return CanceledOrders(canceledOrderResults: results);
   }
 }
