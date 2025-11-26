@@ -188,7 +188,7 @@ void main() {
       final result = await createStopLimitOrderGTC(
         clientOrderId: clientOrderId,
         productId: 'BTC-USD',
-        side: 'BUY',
+        side: OrderSide.BUY,
         baseSize: '0.00001',
         limitPrice: '100008',
         stopPrice: '100009',
