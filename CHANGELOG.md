@@ -5,7 +5,7 @@
 - Implement Orders Close Position for given Product ID (Futures)
 - Implement Batch Cancel Orders
 - Implement Orders Stop Limit GTC(Good Till Cancelled)
-- Implement Orders Stop Limit GTC(Good Till Date)
+- Implement Orders Stop Limit GTD(Good Till Date)
 - Static Order Enums for constructing Order configurations
 
 ## 0.7.0
