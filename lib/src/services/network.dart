@@ -4,7 +4,10 @@ import 'package:coinbase_cloud_advanced_trade_client/src/models/credential.dart'
 import 'package:coinbase_cloud_advanced_trade_client/src/services/signature.dart';
 import 'package:http/http.dart' as http;
 
+/// The production API host for Coinbase.
 const String coinbaseApiProduction = 'api.coinbase.com';
+
+/// The sandbox API host for Coinbase.
 const String coinbaseApiSandbox = 'api-sandbox.coinbase.com';
 
 /// Makes a GET request to the Coinbase Advanced Trade API.

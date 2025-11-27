@@ -1,47 +1,128 @@
 import 'package:coinbase_cloud_advanced_trade_client/src/services/tools.dart';
 
+/// A representation of a product.
 class Product {
+  /// The product ID.
   final String? productId;
+
+  /// The price of the product.
   final double? price;
+
+  /// The percentage change in price over the last 24 hours.
   final String? pricePercentageChange24h;
+
+  /// The volume over the last 24 hours.
   final double? volume24h;
+
+  /// The percentage change in volume over the last 24 hours.
   final String? volumePercentageChange24h;
+
+  /// The base increment.
   final double? baseIncrement;
+
+  /// The quote increment.
   final double? quoteIncrement;
+
+  /// The minimum quote size.
   final double? quoteMinSize;
+
+  /// The maximum quote size.
   final double? quoteMaxSize;
+
+  /// The minimum base size.
   final double? baseMinSize;
+
+  /// The maximum base size.
   final double? baseMaxSize;
+
+  /// The base name.
   final String? baseName;
+
+  /// The quote name.
   final String? quoteName;
+
+  /// Whether the product is watched.
   final bool? watched;
+
+  /// Whether the product is disabled.
   final bool? isDisabled;
+
+  /// Whether the product is new.
   final bool? isNew;
+
+  /// The status of the product.
   final String? status;
+
+  /// Whether the product is cancel-only.
   final bool? cancelOnly;
+
+  /// Whether the product is limit-only.
   final bool? limitOnly;
+
+  /// Whether the product is post-only.
   final bool? postOnly;
+
+  /// Whether trading is disabled for the product.
   final bool? tradingDisabled;
+
+  /// Whether the product is in auction mode.
   final bool? auctionMode;
+
+  /// The type of the product.
   final String? productType;
+
+  /// The quote currency ID.
   final String? quoteCurrencyId;
+
+  /// The base currency ID.
   final String? baseCurrencyId;
+
+  /// The FCM trading session details.
   final Map<String, dynamic>? fcmTradingSessionDetails;
+
+  /// The mid-market price.
   final double? midMarketPrice;
+
+  /// The alias for the product.
   final String? alias;
+
+  /// The aliases for the product.
   final List<String>? aliasTo;
+
+  /// The base display symbol.
   final String? baseDisplaySymbol;
+
+  /// The quote display symbol.
   final String? quoteDisplaySymbol;
+
+  /// Whether the product is view-only.
   final bool? viewOnly;
+
+  /// The price increment.
   final double? priceIncrement;
+
+  /// The display name.
   final String? displayName;
+
+  /// The product venue.
   final String? productVenue;
+
+  /// The approximate quote volume over the last 24 hours.
   final double? approximateQuote24hVolume;
+
+  /// The time the product was created.
   final DateTime? newAt;
+
+  /// The market cap.
   final double? marketCap;
+
+  /// The future product details.
   final Map<String, dynamic>? futureProductDetails;
+
+  /// The prediction market product details.
   final Map<String, dynamic>? predictionMarketProductDetails;
 
+  /// Product constructor
   Product({
     this.productId,
     this.price,
@@ -85,6 +166,7 @@ class Product {
     this.predictionMarketProductDetails,
   });
 
+  /// Creates a Product from a Coinbase JSON object.
   Product.fromCBJson(Map<String, dynamic> json)
       : productId = json['product_id'],
         price = double.tryParse(json['price'] ?? ''),
@@ -129,6 +211,7 @@ class Product {
         predictionMarketProductDetails =
             json['prediction_market_product_details'];
 
+  /// Creates a Product from a JSON object.
   Product.fromJson(Map<String, dynamic> json)
       : productId = json['productId'],
         price = json['price'],
@@ -171,6 +254,7 @@ class Product {
         futureProductDetails = json['futureProductDetails'],
         predictionMarketProductDetails = json['predictionMarketProductDetails'];
 
+  /// Converts a Product to a JSON object.
   Map<String, dynamic> toJson() => {
         'productId': productId,
         'price': price,

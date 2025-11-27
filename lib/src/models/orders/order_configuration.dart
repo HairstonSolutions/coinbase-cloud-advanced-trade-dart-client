@@ -4,16 +4,28 @@ import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/order_con
 import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/order_configuration/stop_limit_gtc.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/order_configuration/stop_limit_gtd.dart';
 
+/// The configuration for an order.
 class OrderConfiguration {
+  /// A limit order that is good until canceled.
   final LimitGTC? limitGTC;
+
+  /// A market order that is immediate or cancel.
   final MarketIOC? marketIOC;
+
+  /// A limit order that is good until a specific time.
   final LimitGTD? limitGTD;
+
+  /// A stop limit order that is good until canceled.
   final StopLimitGTC? stopLimitGTC;
+
+  /// A stop limit order that is good until a specific time.
   final StopLimitGTD? stopLimitGTD;
 
+  /// OrderConfiguration constructor
   OrderConfiguration(this.limitGTC, this.marketIOC, this.limitGTD,
       this.stopLimitGTC, this.stopLimitGTD);
 
+  /// Creates an OrderConfiguration from a JSON object.
   OrderConfiguration.fromJson(Map<String, dynamic> json)
       : limitGTC = (json['limitGTC'] != null) ? json['limitGTC'] : null,
         marketIOC = (json['marketIOC'] != null) ? json['marketIOC'] : null,
@@ -23,6 +35,7 @@ class OrderConfiguration {
         stopLimitGTD =
             (json['stopLimitGTD'] != null) ? json['stopLimitGTD'] : null;
 
+  /// Converts an OrderConfiguration to a JSON object.
   Map<String, dynamic> toJson() => {
         'marketIOC': marketIOC?.toJson(),
         'limitGTC': limitGTC?.toJson(),
@@ -31,6 +44,7 @@ class OrderConfiguration {
         'stopLimitGTD': stopLimitGTD?.toJson(),
       };
 
+  /// Creates an OrderConfiguration from a Coinbase JSON object.
   OrderConfiguration.fromCBJson(Map<String, dynamic> json)
       : limitGTC = (json['limit_limit_gtc'] != null)
             ? LimitGTC.fromCBJson(json['limit_limit_gtc'])
@@ -48,6 +62,7 @@ class OrderConfiguration {
             ? StopLimitGTD.fromCBJson(json['stop_limit_stop_limit_gtd'])
             : null;
 
+  /// Converts an OrderConfiguration to a Coinbase JSON object.
   Map<String, dynamic> toCBJson() {
     Map<String, dynamic> config = {};
 

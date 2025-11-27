@@ -1,11 +1,24 @@
+/// A fee tier for a user.
 class FeeTier {
+  /// The pricing tier.
   final String pricingTier;
+
+  /// The taker fee rate.
   final String takerFeeRate;
+
+  /// The maker fee rate.
   final String makerFeeRate;
+
+  /// The start of the average order price range.
   final String aopFrom;
+
+  /// The end of the average order price range.
   final String aopTo;
+
+  /// The volume types and ranges.
   final List<VolumeTypesAndRange> volumeTypesAndRange;
 
+  /// FeeTier constructor
   FeeTier(
       {required this.pricingTier,
       required this.takerFeeRate,
@@ -14,6 +27,7 @@ class FeeTier {
       required this.aopTo,
       required this.volumeTypesAndRange});
 
+  /// Creates a FeeTier from a Coinbase JSON object.
   factory FeeTier.fromCBJson(Map<String, dynamic> json) {
     var volumeTypesAndRange = <VolumeTypesAndRange>[];
     for (var volume in json['volume_types_and_range']) {
@@ -36,14 +50,22 @@ class FeeTier {
   }
 }
 
+/// A volume type and range.
 class VolumeTypesAndRange {
+  /// The volume types.
   final List<String> volumeTypes;
+
+  /// The start of the volume range.
   final String volFrom;
+
+  /// The end of the volume range.
   final String volTo;
 
+  /// VolumeTypesAndRange constructor
   VolumeTypesAndRange(
       {required this.volumeTypes, required this.volFrom, required this.volTo});
 
+  /// Creates a VolumeTypesAndRange from a Coinbase JSON object.
   factory VolumeTypesAndRange.fromCBJson(Map<String, dynamic> json) {
     return VolumeTypesAndRange(
       volumeTypes: List<String>.from(json['volume_types']),

@@ -1,21 +1,50 @@
 import 'package:coinbase_cloud_advanced_trade_client/src/services/tools.dart';
 
+/// A fill for an order.
 class Fill {
+  /// The entry ID.
   final String? entryId;
+
+  /// The trade ID.
   final String? tradeId;
+
+  /// The order ID.
   final String? orderId;
+
+  /// The time of the trade.
   final DateTime? tradeTime;
+
+  /// The type of the trade.
   final String? tradeType;
+
+  /// The price of the trade.
   final double? price;
+
+  /// The size of the trade.
   final double? size;
+
+  /// The commission for the trade.
   final double? commission;
+
+  /// The product ID.
   final String? productId;
+
+  /// The sequence timestamp.
   final DateTime? sequenceTimestamp;
+
+  /// The liquidity indicator.
   final String? liquidityIndicator;
+
+  /// Whether the size is in the quote currency.
   final bool? sizeInQuote;
+
+  /// The user ID.
   final String? userId;
+
+  /// The side of the order.
   final String? side;
 
+  /// Fill constructor
   Fill(
       this.entryId,
       this.tradeId,
@@ -32,6 +61,7 @@ class Fill {
       this.userId,
       this.side);
 
+  /// Creates a Fill from a JSON object.
   Fill.fromJson(Map<String, dynamic> json)
       : entryId = json['entryId'],
         tradeId = json['tradeId'],
@@ -48,6 +78,7 @@ class Fill {
         userId = json['userId'],
         side = json['side'];
 
+  /// Converts a Fill to a JSON object.
   Map<String, dynamic> toJson() => {
         'entryId': entryId,
         'tradeId': tradeId,
@@ -65,6 +96,7 @@ class Fill {
         'side': side
       };
 
+  /// Creates a Fill from a Coinbase JSON object.
   Fill.fromCBJson(Map<String, dynamic> json)
       : entryId = json['entry_id'] ?? '',
         tradeId = json['trade_id'] ?? '',

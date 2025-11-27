@@ -1,10 +1,21 @@
+/// The permissions for an API key.
 class KeyPermissions {
+  /// Whether the key can view.
   final bool canView;
+
+  /// Whether the key can trade.
   final bool canTrade;
+
+  /// Whether the key can transfer.
   final bool canTransfer;
+
+  /// The UUID of the portfolio.
   final String portfolioUuid;
+
+  /// The type of the portfolio.
   final String portfolioType;
 
+  /// KeyPermissions constructor
   KeyPermissions(
       {required this.canView,
       required this.canTrade,
@@ -12,6 +23,7 @@ class KeyPermissions {
       required this.portfolioUuid,
       required this.portfolioType});
 
+  /// Creates a KeyPermissions from a Coinbase JSON object.
   factory KeyPermissions.fromCBJson(Map<String, dynamic> json) {
     return KeyPermissions(
       canView: json['can_view'],
