@@ -1,4 +1,4 @@
-import 'dart:io' show Platform;
+import 'dart:io' show Platform, exit, stderr;
 
 import 'package:coinbase_cloud_advanced_trade_client/advanced_trade.dart';
 
@@ -21,9 +21,9 @@ final String? privateKeyPEM = envVars['COINBASE_PRIVATE_KEY'];
 void main() async {
   // Check that the API key and secret are set.
   if (apiKeyName == null || privateKeyPEM == null) {
-    print('Please set the COINBASE_API_KEY_NAME and COINBASE_PRIVATE_KEY '
+    stderr.writeln('Please set the COINBASE_API_KEY_NAME and COINBASE_PRIVATE_KEY '
         'environment variables.');
-    return;
+    exit(1);
   }
 
   // Create a Credential object with your API key and secret.
@@ -34,7 +34,7 @@ void main() async {
 
   // Create a market order.
   final result = await createMarketOrder(
-    clientOrderId: 'test-order-123',
+    clientOrderId: 'test-order-${DateTime.now().millisecondsSinceEpoch}',
     productId: 'BTC-USD',
     side: OrderSide.buy,
     quoteSize: '10',
