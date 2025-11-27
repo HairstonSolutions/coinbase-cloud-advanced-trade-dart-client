@@ -28,8 +28,8 @@ void main() async {
 
   // Create a Credential object with your API key and secret.
   final credential = Credential(
-    apiKeyName: apiKeyName,
-    privateKeyPEM: privateKeyPEM,
+    apiKeyName: apiKeyName!,
+    privateKeyPEM: privateKeyPEM!,
   );
 
   // Create a market order.
