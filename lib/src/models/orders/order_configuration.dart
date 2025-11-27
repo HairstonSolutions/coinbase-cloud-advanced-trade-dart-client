@@ -1,8 +1,8 @@
-import 'package:coinbase_cloud_advanced_trade_client/src/models/order_configuration/limit_gtc.dart';
-import 'package:coinbase_cloud_advanced_trade_client/src/models/order_configuration/limit_gtd.dart';
-import 'package:coinbase_cloud_advanced_trade_client/src/models/order_configuration/market_ioc.dart';
-import 'package:coinbase_cloud_advanced_trade_client/src/models/order_configuration/stop_limit_gtc.dart';
-import 'package:coinbase_cloud_advanced_trade_client/src/models/order_configuration/stop_limit_gtd.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/order_configuration/limit_gtc.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/order_configuration/limit_gtd.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/order_configuration/market_ioc.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/order_configuration/stop_limit_gtc.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/order_configuration/stop_limit_gtd.dart';
 
 class OrderConfiguration {
   final LimitGTC? limitGTC;
@@ -52,28 +52,19 @@ class OrderConfiguration {
     Map<String, dynamic> config = {};
 
     if (marketIOC != null &&
-        marketIOC?.quoteSize != null &&
-        marketIOC?.baseSize != null) {
+        (marketIOC?.quoteSize != null || marketIOC?.baseSize != null)) {
       config.addAll({'market_market_ioc': marketIOC?.toCBJson()});
     }
-    if (limitGTC != null &&
-        limitGTC?.quoteSize != null &&
-        limitGTC?.baseSize != null) {
+    if (limitGTC != null && (limitGTC?.baseSize != null)) {
       config.addAll({'limit_limit_gtc': limitGTC?.toCBJson()});
     }
-    if (limitGTD != null &&
-        limitGTD?.quoteSize != null &&
-        limitGTD?.baseSize != null) {
+    if (limitGTD != null && (limitGTD?.baseSize != null)) {
       config.addAll({'limit_limit_gtd': limitGTD?.toCBJson()});
     }
-    if (stopLimitGTC != null &&
-        stopLimitGTC?.quoteSize != null &&
-        stopLimitGTC?.baseSize != null) {
+    if (stopLimitGTC != null && (stopLimitGTC?.baseSize != null)) {
       config.addAll({'stop_limit_stop_limit_gtc': stopLimitGTC?.toCBJson()});
     }
-    if (stopLimitGTD != null &&
-        stopLimitGTD?.quoteSize != null &&
-        stopLimitGTD?.baseSize != null) {
+    if (stopLimitGTD != null && (stopLimitGTD?.baseSize != null)) {
       config.addAll({'stop_limit_stop_limit_gtd': stopLimitGTD?.toCBJson()});
     }
 

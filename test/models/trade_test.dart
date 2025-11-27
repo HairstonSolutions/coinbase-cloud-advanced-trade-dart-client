@@ -1,11 +1,15 @@
 import 'dart:convert';
 
 import 'package:coinbase_cloud_advanced_trade_client/src/models/trade.dart';
+import 'package:logging/logging.dart';
 import 'package:test/test.dart';
 
+import '../test_helpers.dart';
 import '../tools.dart';
 
 void main() {
+  final Logger logger = setupLogger('trade_test');
+
   group('Test Trade Object Injection', () {
     String exampleTradeJsonFile = 'models/examples/trade.json';
     String? exampleTradeJson;
@@ -18,9 +22,9 @@ void main() {
       var jsonAsMap = jsonDecode(exampleTradeJson!);
       Trade? exampleTrade = Trade.fromCBJson(jsonAsMap);
 
-      print('Trade Object: $exampleTrade');
-      print('Trade jsonEncoded Map: ${exampleTrade.toJson()}');
-      print('Trade CB jsonEncoded: ${exampleTrade.toCBJson()}');
+      logger.info('Trade Object: $exampleTrade');
+      logger.info('Trade jsonEncoded Map: ${exampleTrade.toJson()}');
+      logger.info('Trade CB jsonEncoded: ${exampleTrade.toCBJson()}');
 
       expect(exampleTrade.tradeId, '34b080bf-fcfd-445a-832b-46b5ddc65601');
       expect(exampleTrade.productId, 'BTC-USD');
@@ -38,8 +42,8 @@ void main() {
       var serializedTrade = exampleTrade.toJson();
 
       Trade? deserializedTrade = Trade.fromJson(serializedTrade);
-      print('Deserialized Trade Object: $deserializedTrade');
-      print('Json Encoded: ${jsonEncode(deserializedTrade)}');
+      logger.info('Deserialized Trade Object: $deserializedTrade');
+      logger.info('Json Encoded: ${jsonEncode(deserializedTrade)}');
 
       expect(deserializedTrade.tradeId, '34b080bf-fcfd-445a-832b-46b5ddc65601');
       expect(deserializedTrade.productId, 'BTC-USD');

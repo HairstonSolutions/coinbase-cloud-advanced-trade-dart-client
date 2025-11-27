@@ -1,11 +1,15 @@
 import 'dart:convert';
 
 import 'package:coinbase_cloud_advanced_trade_client/src/models/fill.dart';
+import 'package:logging/logging.dart';
 import 'package:test/test.dart';
 
+import '../test_helpers.dart';
 import '../tools.dart';
 
 void main() {
+  final Logger logger = setupLogger('fill_test');
+
   group('Test Fill Object Injection', () {
     String exampleFillJsonFile = 'models/examples/fill.json';
     String? exampleFillJson;
@@ -21,7 +25,7 @@ void main() {
       var jsonAsMap = jsonDecode(exampleFillJson!);
       Fill? exampleFill = Fill.fromCBJson(jsonAsMap);
 
-      print('Fill Object: $exampleFill');
+      logger.info('Fill Object: $exampleFill');
 
       expect(exampleFill.entryId, '22222-2222222-22222222');
       expect(exampleFill.orderId, '0000-000000-000000');
@@ -38,7 +42,7 @@ void main() {
       var jsonAsMap = jsonDecode(microFillJson!);
       Fill? exampleFill = Fill.fromCBJson(jsonAsMap);
 
-      print('Fill Object: $exampleFill');
+      logger.info('Fill Object: $exampleFill');
 
       expect(exampleFill.entryId, '22222-2222222-22222222');
       expect(exampleFill.orderId, '0000-000000-000000');
@@ -57,8 +61,8 @@ void main() {
       var serializedFill = exampleFill.toJson();
 
       Fill? deserializedFill = Fill.fromJson(serializedFill);
-      print('Deserialized Fill Object: $deserializedFill');
-      print(jsonEncode(deserializedFill));
+      logger.info('Deserialized Fill Object: $deserializedFill');
+      logger.info(jsonEncode(deserializedFill));
     });
   });
 }

@@ -1,6 +1,12 @@
 import 'dart:convert';
 import 'dart:io' show File;
 
+import 'package:logging/logging.dart';
+
+import 'test_helpers.dart';
+
+final Logger logger = setupLogger('tools');
+
 /// Reads a JSON file from the test directory and returns its contents as a
 /// string.
 ///
@@ -20,7 +26,7 @@ Future<String> getJsonFromFile(String filename) async {
       exampleJson += line;
     }
   } catch (e) {
-    print('Error: $e');
+    logger.severe('Error: $e');
   }
 
   return exampleJson;

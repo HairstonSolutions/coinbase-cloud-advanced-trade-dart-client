@@ -1,5 +1,5 @@
 import 'package:coinbase_cloud_advanced_trade_client/src/models/fill.dart';
-import 'package:coinbase_cloud_advanced_trade_client/src/models/order.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/order.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/rest/orders/fills.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/rest/orders/orders.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/services/network.dart';

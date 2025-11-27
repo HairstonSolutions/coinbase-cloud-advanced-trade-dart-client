@@ -1,11 +1,18 @@
 import 'dart:convert';
 
-import 'package:coinbase_cloud_advanced_trade_client/src/models/order.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/order.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/order_status.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/order_type.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/stop_direction.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/time_in_force.dart';
+import 'package:logging/logging.dart';
 import 'package:test/test.dart';
 
+import '../test_helpers.dart';
 import '../tools.dart';
 
 void main() {
+  final Logger logger = setupLogger('order_test');
   group('Order Object Injection', () {
     String exampleOrderJsonFile = 'models/examples/order.json';
     String? exampleOrderJson;
@@ -27,10 +34,10 @@ void main() {
       var jsonAsMap = jsonDecode(exampleOrderJson!);
       Order? exampleOrder = Order.fromCBJson(jsonAsMap);
 
-      print('Order Object: $exampleOrder');
+      logger.info('Order Object: $exampleOrder');
 
       expect(exampleOrder.orderId, '0000-000000-000000');
-      expect(exampleOrder.status, 'PENDING');
+      expect(exampleOrder.status, OrderStatus.PENDING);
       expect(exampleOrder.settled, true);
     });
 
@@ -43,19 +50,19 @@ void main() {
       expect(
           exampleOrder.orderConfiguration?.stopLimitGTC?.stopPrice, 20000.00);
       expect(exampleOrder.orderConfiguration?.stopLimitGTD?.stopDirection,
-          'UNKNOWN_STOP_DIRECTION');
+          StopDirection.UNKNOWN_STOP_DIRECTION);
     });
 
     test('Example Open Order JSON Import Object conversion', () {
       var jsonAsMap = jsonDecode(openOrderJson!);
       Order? openOrder = Order.fromCBJson(jsonAsMap);
 
-      print('Open Order Object: $openOrder');
+      logger.info('Open Order Object: $openOrder');
 
       expect(openOrder.orderId, '111111111-1111-1111-1111-11111');
-      expect(openOrder.status, 'OPEN');
-      expect(openOrder.orderType, 'LIMIT');
-      expect(openOrder.timeInForce, 'GOOD_UNTIL_CANCELLED');
+      expect(openOrder.status, OrderStatus.OPEN);
+      expect(openOrder.orderType, OrderType.LIMIT);
+      expect(openOrder.timeInForce, TimeInForce.GOOD_UNTIL_CANCELLED);
       expect(openOrder.settled, false);
       expect(openOrder.orderConfiguration?.limitGTC?.postOnly, false);
     });
@@ -64,12 +71,12 @@ void main() {
       var jsonAsMap = jsonDecode(marketOrderJson!);
       Order? marketOrder = Order.fromCBJson(jsonAsMap);
 
-      print('Market Order Object: $marketOrder');
+      logger.info('Market Order Object: $marketOrder');
 
       expect(marketOrder.orderId, '22222222-2222-2222-2222-222222222');
-      expect(marketOrder.orderType, 'MARKET');
-      expect(marketOrder.status, 'FILLED');
-      expect(marketOrder.timeInForce, 'IMMEDIATE_OR_CANCEL');
+      expect(marketOrder.orderType, OrderType.MARKET);
+      expect(marketOrder.status, OrderStatus.FILLED);
+      expect(marketOrder.timeInForce, TimeInForce.IMMEDIATE_OR_CANCEL);
       expect(marketOrder.settled, true);
       expect(marketOrder.orderConfiguration?.marketIOC?.quoteSize, 25);
     });
@@ -81,8 +88,8 @@ void main() {
 
       Order? deserializedOrder = Order.fromJson(serializedOrder);
 
-      print('Deserialized Order Object: $deserializedOrder');
-      print(jsonEncode(deserializedOrder));
+      logger.info('Deserialized Order Object: $deserializedOrder');
+      logger.info(jsonEncode(deserializedOrder));
 
       expect(deserializedOrder.orderConfiguration?.marketIOC?.quoteSize, 10.00);
       expect(
@@ -91,12 +98,12 @@ void main() {
       expect(deserializedOrder.orderConfiguration?.stopLimitGTC?.stopPrice,
           20000.00);
       expect(deserializedOrder.orderConfiguration?.stopLimitGTD?.stopDirection,
-          'UNKNOWN_STOP_DIRECTION');
+          StopDirection.UNKNOWN_STOP_DIRECTION);
 
-      print(deserializedOrder.orderConfiguration);
-      print(deserializedOrder.orderConfiguration?.toJson());
-      print(deserializedOrder.orderConfiguration?.toCBJson());
-      print(jsonEncode(deserializedOrder.orderConfiguration?.toCBJson()));
+      logger.info(deserializedOrder.orderConfiguration);
+      logger.info(deserializedOrder.orderConfiguration?.toJson());
+      logger.info(deserializedOrder.orderConfiguration?.toCBJson());
+      logger.info(jsonEncode(deserializedOrder.orderConfiguration?.toCBJson()));
     });
 
     test('Example Order JSON Import, Serialize, II', () {
@@ -106,19 +113,18 @@ void main() {
 
       Order? deserializedOrder = Order.fromJson(serializedOrder);
 
-      print('Deserialized Order as CB Map: ${deserializedOrder.toCBJson()}');
-      print(
+      logger.info(
+          'Deserialized Order as CB Map: ${deserializedOrder.toCBJson()}');
+      logger.info(
           'Deserialized Order as CB JSON: ${jsonEncode(deserializedOrder.toCBJson())}');
-      print(deserializedOrder.orderConfiguration);
-      print(jsonEncode(deserializedOrder.orderConfiguration?.toCBJson()));
+      logger.info(deserializedOrder.orderConfiguration);
+      logger.info(jsonEncode(deserializedOrder.orderConfiguration?.toCBJson()));
 
       expect(deserializedOrder.orderConfiguration?.marketIOC?.quoteSize, 10.00);
-      expect(deserializedOrder.orderConfiguration?.limitGTC?.limitPrice, null);
-      expect(deserializedOrder.orderConfiguration?.limitGTD?.quoteSize, null);
-      expect(
-          deserializedOrder.orderConfiguration?.stopLimitGTC?.stopPrice, null);
-      expect(deserializedOrder.orderConfiguration?.stopLimitGTD?.stopDirection,
-          null);
+      expect(deserializedOrder.orderConfiguration?.limitGTC, null);
+      expect(deserializedOrder.orderConfiguration?.limitGTD, null);
+      expect(deserializedOrder.orderConfiguration?.stopLimitGTC, null);
+      expect(deserializedOrder.orderConfiguration?.stopLimitGTD, null);
     });
   });
 }
