@@ -46,3 +46,8 @@ steps:
         export COINBASE_API_KEY_NAME="ci-test-key"
         # Run the dart tests with the environment variables now set
         dart test --reporter=expanded
+
+  - id: 'Linting Check'
+    name: 'dart'
+    entrypoint: dart
+    args: [ 'analyze', '--fatal-infos' ]
