@@ -1,0 +1,21 @@
+{
+  "order_total": "10.00",
+  "commission_total": "0.05",
+  "errs": [],
+  "warning": [],
+  "quote_size": "10.00",
+  "base_size": "0.001",
+  "best_bid": "9999.00",
+  "best_ask": "10001.00",
+  "is_max": false,
+  "order_margin_total": "0.00",
+  "leverage": "1.0",
+  "long_leverage": "1.0",
+  "short_leverage": "1.0",
+  "slippage": "0.01",
+  "preview_id": "PREVIEW-ID-12345",
+  "current_liquidation_buffer": "1000.00",
+  "projected_liquidation_buffer": "990.00",
+  "max_leverage": "5.0",
+  "est_average_filled_price": "10000.00"
+}

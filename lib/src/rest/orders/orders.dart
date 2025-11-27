@@ -5,6 +5,7 @@ import 'package:coinbase_cloud_advanced_trade_client/src/models/credential.dart'
 import 'package:coinbase_cloud_advanced_trade_client/src/models/error.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/order.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/order_side.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/preview_order.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/stop_direction.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/services/logger.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/services/network.dart';
@@ -338,6 +339,51 @@ Future<Map<String, dynamic>?> _createOrder(
   } else {
     throw CoinbaseException(
         'Failed to create order', response.statusCode, response.body);
+  }
+
+  return result;
+}
+
+/// Previews an order.
+///
+/// POST /v3/brokerage/orders/preview
+/// https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/preview-orders
+///
+/// [productId] - The ID of the product to trade.
+/// [side] - The side of the order (BUY or SELL).
+/// [orderConfiguration] - The configuration of the order.
+/// [credential] - The user's API credentials.
+/// [isSandbox] - Whether to use the sandbox environment.
+///
+/// Returns a [PreviewOrderResponse] object.
+Future<PreviewOrderResponse?> previewOrder(
+    {required String productId,
+    required OrderSide side,
+    required Map<String, dynamic> orderConfiguration,
+    required Credential credential,
+    bool isSandbox = false,
+    Client? client}) async {
+  PreviewOrderResponse? result;
+
+  final body = {
+    'product_id': productId,
+    'side': side.toCB(),
+    'order_configuration': orderConfiguration,
+  };
+
+  http.Response response = await postAuthorized('/orders/preview',
+      body: jsonEncode(body),
+      credential: credential,
+      isSandbox: isSandbox,
+      client: client);
+
+  if (response.statusCode == 200) {
+    String data = response.body;
+    var jsonResponse = jsonDecode(data);
+    result = PreviewOrderResponse.fromCBJson(jsonResponse);
+  } else {
+    throw CoinbaseException(
+        'Failed to preview order', response.statusCode, response.body);
   }
 
   return result;
