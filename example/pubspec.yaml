@@ -6,5 +6,4 @@ environment:
   sdk: '>=3.3.0 <4.0.0'
 
 dependencies:
-  coinbase_cloud_advanced_trade_client:
-    path: ../
+  coinbase_cloud_advanced_trade_client: ^0.8.0
