@@ -8,35 +8,90 @@ import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/time_in_f
 import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/trigger_status.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/services/tools.dart';
 
+/// An order.
 class Order {
+  /// The order ID.
   final String? orderId;
+
+  /// The product ID.
   final String? productId;
+
+  /// The user ID.
   final String? userId;
+
+  /// The order configuration.
   final OrderConfiguration? orderConfiguration;
+
+  /// The side of the order.
   final OrderSide? side;
+
+  /// The client order ID.
   final String? clientOrderId;
+
+  /// The status of the order.
   final OrderStatus? status;
+
+  /// The time in force for the order.
   final TimeInForce? timeInForce;
+
+  /// The time the order was created.
   final DateTime? createdTime;
+
+  /// The completion percentage of the order.
   final double? completionPercentage;
+
+  /// The filled size of the order.
   final double? filledSize;
+
+  /// The average filled price of the order.
   final double? averageFilledPrice;
+
+  /// The fee for the order.
   final String? fee;
+
+  /// The number of fills for the order.
   final double? numberOfFills;
+
+  /// The filled value of the order.
   final double? filledValue;
+
+  /// Whether the order is pending cancellation.
   final bool? pendingCancel;
+
+  /// Whether the size is in the quote currency.
   final bool? sizeInQuote;
+
+  /// The total fees for the order.
   final double? totalFees;
+
+  /// Whether the size is inclusive of fees.
   final bool? sizeInclusiveOfFees;
+
+  /// The total value after fees.
   final double? totalValueAfterFees;
+
+  /// The trigger status of the order.
   final TriggerStatus? triggerStatus;
+
+  /// The type of the order.
   final OrderType? orderType;
+
+  /// The reason the order was rejected.
   final RejectReason? rejectReason;
+
+  /// Whether the order is settled.
   final bool? settled;
+
+  /// The product type.
   final ProductType? productType;
+
+  /// The reject message.
   final String? rejectMessage;
+
+  /// The cancel message.
   final String? cancelMessage;
 
+  /// Order constructor
   Order(
       this.orderId,
       this.productId,
@@ -66,6 +121,7 @@ class Order {
       this.rejectMessage,
       this.cancelMessage);
 
+  /// Creates an Order from a JSON object.
   Order.fromJson(Map<String, dynamic> json)
       : orderId = json['orderId'],
         productId = json['productId'],
@@ -95,6 +151,7 @@ class Order {
         rejectMessage = json['rejectMessage'],
         cancelMessage = json['cancelMessage'];
 
+  /// Converts an Order to a JSON object.
   Map<String, dynamic> toJson() => {
         'orderId': orderId,
         'productId': productId,
@@ -125,6 +182,7 @@ class Order {
         'cancelMessage': cancelMessage
       };
 
+  /// Creates an Order from a Coinbase JSON object.
   Order.fromCBJson(Map<String, dynamic> json)
       : orderId = json['order_id'],
         productId = json['product_id'],
@@ -155,6 +213,7 @@ class Order {
         rejectMessage = json['reject_message'],
         cancelMessage = json['cancel_message'];
 
+  /// Converts an Order to a Coinbase JSON object.
   Map<String, dynamic> toCBJson() => {
         'order_id': orderId,
         'product_id': productId,

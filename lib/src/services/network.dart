@@ -4,7 +4,10 @@ import 'package:coinbase_cloud_advanced_trade_client/src/models/credential.dart'
 import 'package:coinbase_cloud_advanced_trade_client/src/services/signature.dart';
 import 'package:http/http.dart' as http;
 
+/// The production API host for Coinbase.
 const String coinbaseApiProduction = 'api.coinbase.com';
+
+/// The sandbox API host for Coinbase.
 const String coinbaseApiSandbox = 'api-sandbox.coinbase.com';
 
 /// Makes a GET request to the Coinbase Advanced Trade API.
@@ -50,7 +53,7 @@ Future<http.Response> getAuthorized(String endpoint,
     required Credential credential,
     bool isSandbox = false}) async {
   return await _makeAuthorizedRequest(
-      method: _HttpMethod.GET,
+      method: _HttpMethod.get,
       endpoint: endpoint,
       queryParameters: queryParameters,
       client: client,
@@ -76,7 +79,7 @@ Future<http.Response> postAuthorized(String endpoint,
     required Credential credential,
     bool isSandbox = false}) async {
   return await _makeAuthorizedRequest(
-      method: _HttpMethod.POST,
+      method: _HttpMethod.post,
       endpoint: endpoint,
       body: body,
       client: client,
@@ -102,7 +105,7 @@ Future<http.Response> putAuthorized(String endpoint,
     required Credential credential,
     bool isSandbox = false}) async {
   return await _makeAuthorizedRequest(
-      method: _HttpMethod.PUT,
+      method: _HttpMethod.put,
       endpoint: endpoint,
       body: body,
       client: client,
@@ -126,14 +129,14 @@ Future<http.Response> deleteAuthorized(String endpoint,
     required Credential credential,
     bool isSandbox = false}) async {
   return await _makeAuthorizedRequest(
-      method: _HttpMethod.DELETE,
+      method: _HttpMethod.delete,
       endpoint: endpoint,
       client: client,
       credential: credential,
       isSandbox: isSandbox);
 }
 
-enum _HttpMethod { GET, POST, PUT, DELETE }
+enum _HttpMethod { get, post, put, delete }
 
 Future<http.Response> _makeAuthorizedRequest(
     {required _HttpMethod method,
@@ -148,8 +151,10 @@ Future<http.Response> _makeAuthorizedRequest(
 
   String fullEndpoint = '/api/v3/brokerage$endpoint';
 
-  String jwtToken = await generateCoinbaseJwt(credential.apiKeyName,
-      credential.privateKeyPEM, "${method.name} $coinbaseApi$fullEndpoint");
+  String jwtToken = await generateCoinbaseJwt(
+      credential.apiKeyName,
+      credential.privateKeyPEM,
+      "${method.name.toUpperCase()} $coinbaseApi$fullEndpoint");
 
   var url = Uri.https(coinbaseApi, fullEndpoint, queryParameters);
   Map<String, String> requestHeaders = {
@@ -157,22 +162,22 @@ Future<http.Response> _makeAuthorizedRequest(
     "Authorization": "Bearer $jwtToken",
   };
 
-  if (method == _HttpMethod.POST || method == _HttpMethod.PUT) {
+  if (method == _HttpMethod.post || method == _HttpMethod.put) {
     requestHeaders[HttpHeaders.contentTypeHeader] = 'application/json';
   }
 
   late final http.Response response;
   switch (method) {
-    case _HttpMethod.GET:
+    case _HttpMethod.get:
       response = await client.get(url, headers: requestHeaders);
       break;
-    case _HttpMethod.POST:
+    case _HttpMethod.post:
       response = await client.post(url, headers: requestHeaders, body: body);
       break;
-    case _HttpMethod.PUT:
+    case _HttpMethod.put:
       response = await client.put(url, headers: requestHeaders, body: body);
       break;
-    case _HttpMethod.DELETE:
+    case _HttpMethod.delete:
       response = await client.delete(url, headers: requestHeaders);
       break;
   }

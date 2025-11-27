@@ -3,19 +3,42 @@ import 'package:coinbase_cloud_advanced_trade_client/src/models/goods_and_servic
 import 'package:coinbase_cloud_advanced_trade_client/src/models/volume_breakdown.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/services/tools.dart';
 
+/// A representation of a transaction summary.
 class TransactionSummary {
+  /// The total volume.
   final num totalVolume;
+
+  /// The total fees.
   final num totalFees;
+
+  /// The fee tier.
   final FeeTier feeTier;
+
+  /// The margin rate.
   final num? marginRate;
+
+  /// The goods and services tax.
   final GoodsAndServicesTax? goodsAndServicesTax;
+
+  /// The advanced trade only volume.
   final num advancedTradeOnlyVolume;
+
+  /// The advanced trade only fees.
   final num advancedTradeOnlyFees;
+
+  /// The Coinbase Pro volume.
   final num coinbaseProVolume;
+
+  /// The Coinbase Pro fees.
   final num coinbaseProFees;
+
+  /// The total balance.
   final String totalBalance;
+
+  /// The volume breakdown.
   final List<VolumeBreakdown> volumeBreakdown;
 
+  /// TransactionSummary constructor
   TransactionSummary(
       {required this.totalVolume,
       required this.totalFees,
@@ -29,6 +52,7 @@ class TransactionSummary {
       required this.totalBalance,
       required this.volumeBreakdown});
 
+  /// Creates a TransactionSummary from a Coinbase JSON object.
   factory TransactionSummary.fromCBJson(Map<String, dynamic> json) {
     var volumeBreakdown = <VolumeBreakdown>[];
     for (var volume in json['volume_breakdown']) {

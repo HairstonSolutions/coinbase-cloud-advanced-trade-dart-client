@@ -1,15 +1,30 @@
+/// The status of a trigger.
 enum TriggerStatus {
-  UNKNOWN_TRIGGER_STATUS,
-  INVALID_ORDER_TYPE,
-  STOP_PENDING,
-  STOP_TRIGGERED;
+  /// An unknown trigger status.
+  unknownTriggerStatus('UNKNOWN_TRIGGER_STATUS'),
 
+  /// An invalid order type.
+  invalidOrderType('INVALID_ORDER_TYPE'),
+
+  /// A stop order is pending.
+  stopPending('STOP_PENDING'),
+
+  /// A stop order has been triggered.
+  stopTriggered('STOP_TRIGGERED');
+
+  const TriggerStatus(this.value);
+
+  /// The String value of the enum.
+  final String value;
+
+  /// Converts a TriggerStatus to a Coinbase string.
   String toCB() {
-    return name;
+    return value;
   }
 
+  /// Creates a TriggerStatus from a Coinbase string.
   static TriggerStatus fromCB(String cb) {
-    return TriggerStatus.values.firstWhere((e) => e.name == cb,
-        orElse: () => TriggerStatus.UNKNOWN_TRIGGER_STATUS);
+    return TriggerStatus.values.firstWhere((e) => e.value == cb,
+        orElse: () => TriggerStatus.unknownTriggerStatus);
   }
 }

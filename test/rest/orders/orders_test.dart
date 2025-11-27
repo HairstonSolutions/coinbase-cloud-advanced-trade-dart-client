@@ -173,7 +173,7 @@ void main() {
       final result = await createMarketOrder(
         clientOrderId: clientOrderId,
         productId: 'BTC-USD',
-        side: OrderSide.BUY,
+        side: OrderSide.buy,
         quoteSize: '10',
         credential: constants.credentials,
         client: mockClient,
@@ -189,11 +189,11 @@ void main() {
       final result = await createStopLimitOrderGTC(
         clientOrderId: clientOrderId,
         productId: 'BTC-USD',
-        side: OrderSide.BUY,
+        side: OrderSide.buy,
         baseSize: '0.00001',
         limitPrice: '100008',
         stopPrice: '100009',
-        stopDirection: StopDirection.STOP_DIRECTION_STOP_UP,
+        stopDirection: StopDirection.stopDirectionStopUp,
         credential: constants.credentials,
         isSandbox:
             false, // Sandbox API doesnt respond like the production version. Set to Prod for a true integration test.
@@ -218,11 +218,11 @@ void main() {
       final result = await createStopLimitOrderGTD(
         clientOrderId: clientOrderId,
         productId: 'BTC-USD',
-        side: OrderSide.BUY,
+        side: OrderSide.buy,
         baseSize: '0.00001',
         limitPrice: '100004',
         stopPrice: '100005',
-        stopDirection: StopDirection.STOP_DIRECTION_STOP_UP,
+        stopDirection: StopDirection.stopDirectionStopUp,
         endTime: DateTime.now().add(const Duration(days: 1)),
         credential: constants.credentials,
         isSandbox:
@@ -254,11 +254,11 @@ void main() {
       final result = await createStopLimitOrderGTC(
         clientOrderId: clientOrderId,
         productId: 'BTC-USD',
-        side: OrderSide.BUY,
+        side: OrderSide.buy,
         baseSize: '0.1',
         limitPrice: '10000',
         stopPrice: '10001',
-        stopDirection: StopDirection.STOP_DIRECTION_STOP_UP,
+        stopDirection: StopDirection.stopDirectionStopUp,
         credential: constants.credentials,
         client: mockClient,
       );
@@ -279,11 +279,11 @@ void main() {
       final result = await createStopLimitOrderGTD(
         clientOrderId: clientOrderId,
         productId: 'BTC-USD',
-        side: OrderSide.BUY,
+        side: OrderSide.buy,
         baseSize: '0.1',
         limitPrice: '10000',
         stopPrice: '10001',
-        stopDirection: StopDirection.STOP_DIRECTION_STOP_UP,
+        stopDirection: StopDirection.stopDirectionStopUp,
         endTime: DateTime.now().add(const Duration(days: 1)),
         credential: constants.credentials,
         client: mockClient,
@@ -305,7 +305,7 @@ void main() {
       final result = await createMarketOrder(
         clientOrderId: clientOrderId,
         productId: 'BTC-USD',
-        side: OrderSide.SELL,
+        side: OrderSide.sell,
         baseSize: '0.1',
         credential: constants.credentials,
         client: mockClient,
@@ -320,7 +320,7 @@ void main() {
           () async => await createMarketOrder(
                 clientOrderId: 'test',
                 productId: 'BTC-USD',
-                side: OrderSide.BUY,
+                side: OrderSide.buy,
                 quoteSize: '10',
                 baseSize: '0.1',
                 credential: constants.credentials,
@@ -340,7 +340,7 @@ void main() {
       final result = await createLimitOrder(
         clientOrderId: clientOrderId,
         productId: 'BTC-USD',
-        side: OrderSide.BUY,
+        side: OrderSide.buy,
         baseSize: '0.1',
         limitPrice: '10000',
         credential: constants.credentials,
@@ -363,7 +363,7 @@ void main() {
       final result = await createLimitOrder(
         clientOrderId: clientOrderId,
         productId: 'BTC-USD',
-        side: OrderSide.BUY,
+        side: OrderSide.buy,
         baseSize: '0.1',
         limitPrice: '10000',
         postOnly: true,
@@ -383,7 +383,7 @@ void main() {
       final result = await createMarketOrder(
         clientOrderId: clientOrderId,
         productId: 'BTC-USD',
-        side: OrderSide.BUY,
+        side: OrderSide.buy,
         quoteSize: '10',
         credential: constants.credentials,
         isSandbox: true,
@@ -438,7 +438,7 @@ void main() {
       final result = await createMarketOrder(
         clientOrderId: clientOrderId,
         productId: 'BTC-USD',
-        side: OrderSide.SELL,
+        side: OrderSide.sell,
         baseSize: '0.1',
         credential: constants.credentials,
         isSandbox: true,
@@ -453,7 +453,7 @@ void main() {
           () async => await createMarketOrder(
                 clientOrderId: 'test',
                 productId: 'BTC-USD',
-                side: OrderSide.BUY,
+                side: OrderSide.buy,
                 quoteSize: '10',
                 baseSize: '0.1',
                 credential: constants.credentials,
@@ -467,7 +467,7 @@ void main() {
       final result = await createLimitOrder(
         clientOrderId: clientOrderId,
         productId: 'BTC-USD',
-        side: OrderSide.BUY,
+        side: OrderSide.buy,
         baseSize: '0.1',
         limitPrice: '10000',
         credential: constants.credentials,
@@ -483,7 +483,7 @@ void main() {
       final result = await createLimitOrder(
         clientOrderId: clientOrderId,
         productId: 'BTC-USD',
-        side: OrderSide.BUY,
+        side: OrderSide.buy,
         baseSize: '0.001',
         limitPrice: '10000',
         postOnly: true,
@@ -529,7 +529,7 @@ void main() {
       final result = await createLimitOrder(
         clientOrderId: clientOrderId,
         productId: 'BTC-USD',
-        side: OrderSide.BUY,
+        side: OrderSide.buy,
         baseSize: '0.001',
         limitPrice: '10000',
         postOnly: true,
@@ -567,7 +567,7 @@ void main() {
       final result = await createLimitOrder(
         clientOrderId: clientOrderId,
         productId: 'BTC-USD',
-        side: OrderSide.BUY,
+        side: OrderSide.buy,
         baseSize: '0.0001',
         limitPrice: orderPrice.toString(),
         postOnly: true,
@@ -590,7 +590,7 @@ void main() {
       final result2 = await createLimitOrder(
         clientOrderId: clientOrderId2,
         productId: 'BTC-USD',
-        side: OrderSide.BUY,
+        side: OrderSide.buy,
         baseSize: '0.0001',
         limitPrice: secondOrderPrice.toString(),
         postOnly: true,

@@ -1,7 +1,12 @@
+/// A credential for accessing the Coinbase API.
 class Credential {
+  /// The name of the API key.
   final String apiKeyName;
+
+  /// The private key in PEM format.
   final String privateKeyPEM;
 
+  /// Credential constructor
   Credential({
     required this.apiKeyName,
     required String privateKeyPEM,
