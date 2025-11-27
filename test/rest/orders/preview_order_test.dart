@@ -1,6 +1,3 @@
-import 'dart:io';
-
-import 'package:coinbase_cloud_advanced_trade_client/src/models/credential.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/order_side.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/preview_order.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/rest/orders/orders.dart';

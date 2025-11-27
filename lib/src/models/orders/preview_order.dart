@@ -1,24 +1,63 @@
+/// The response from a preview order request.
 class PreviewOrderResponse {
+  /// The total cost of the order.
   final String? orderTotal;
+
+  /// The total commission for the order.
   final String? commissionTotal;
+
+  /// A list of errors, if any.
   final List<String>? errs;
+
+  /// A list of warnings, if any.
   final List<String>? warning;
+
+  /// The size of the quote currency.
   final double? quoteSize;
+
+  /// The size of the base currency.
   final double? baseSize;
+
+  /// The best bid price.
   final String? bestBid;
+
+  /// The best ask price.
   final String? bestAsk;
+
+  /// Whether the order is a max order.
   final bool? isMax;
+
+  /// The total margin for the order.
   final String? orderMarginTotal;
+
+  /// The leverage for the order.
   final String? leverage;
+
+  /// The long leverage for the order.
   final String? longLeverage;
+
+  /// The short leverage for the order.
   final String? shortLeverage;
+
+  /// The slippage for the order.
   final String? slippage;
+
+  /// The ID of the preview.
   final String? previewId;
+
+  /// The current liquidation buffer.
   final String? currentLiquidationBuffer;
+
+  /// The projected liquidation buffer.
   final String? projectedLiquidationBuffer;
+
+  /// The maximum leverage for the order.
   final String? maxLeverage;
+
+  /// The estimated average filled price.
   final String? estAverageFilledPrice;
 
+  /// The constructor for the [PreviewOrderResponse] class.
   PreviewOrderResponse({
     this.orderTotal,
     this.commissionTotal,
@@ -41,6 +80,7 @@ class PreviewOrderResponse {
     this.estAverageFilledPrice,
   });
 
+  /// Creates a [PreviewOrderResponse] from a JSON object.
   factory PreviewOrderResponse.fromCBJson(Map<String, dynamic> json) {
     return PreviewOrderResponse(
       orderTotal: json['order_total'],
