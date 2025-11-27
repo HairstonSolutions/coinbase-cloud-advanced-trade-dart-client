@@ -2,9 +2,9 @@ import 'dart:convert';
 
 import 'package:coinbase_cloud_advanced_trade_client/src/models/candle.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/credential.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/models/error.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/product.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/product_book.dart';
-import 'package:coinbase_cloud_advanced_trade_client/src/models/error.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/services/network.dart';
 import 'package:http/http.dart' as http;
 

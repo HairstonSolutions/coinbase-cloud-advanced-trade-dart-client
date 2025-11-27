@@ -1,7 +1,12 @@
-# 0.x.x
+# 0.8.0
 
 - Implement Get Best Bid Ask
 - Implement Get Market Trades Public Endpoint
+- Implement Orders Close Position for given Product ID (Futures)
+- Implement Batch Cancel Orders
+- Implement Orders Stop Limit GTC(Good Till Cancelled)
+- Implement Orders Stop Limit GTD(Good Till Date)
+- Static Order Enums for constructing Order configurations
 
 ## 0.7.0
 
