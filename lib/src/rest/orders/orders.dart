@@ -6,9 +6,13 @@ import 'package:coinbase_cloud_advanced_trade_client/src/models/error.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/order.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/order_side.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/stop_direction.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/services/logger.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/services/network.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
+import 'package:logging/logging.dart';
+
+final Logger _logger = setupLogger('OrdersRest');
 
 /// Gets a list of historical orders for the current user.
 ///
@@ -407,8 +411,9 @@ Future<Map<String, dynamic>?> closePosition(
 
   if (response.statusCode == 200) {
     var url = response.request?.url.toString();
-    print('Request to URL $url Success: Response code ${response.statusCode}');
-    print('Success Response Message: ${response.body}');
+    _logger.info(
+        'Request to URL $url Success: Response code ${response.statusCode}');
+    _logger.info('Success Response Message: ${response.body}');
     String data = response.body;
     var jsonResponse = jsonDecode(data);
     result = jsonResponse;
