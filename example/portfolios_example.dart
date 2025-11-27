@@ -1,8 +1,6 @@
 import 'dart:io' show Platform;
 
-import 'package:coinbase_cloud_advanced_trade_client/src/models/credential.dart';
-import 'package:coinbase_cloud_advanced_trade_client/src/models/portfolio.dart';
-import 'package:coinbase_cloud_advanced_trade_client/src/rest/portfolios.dart';
+import 'package:coinbase_cloud_advanced_trade_client/coinbase_cloud_advanced_trade_client.dart';
 
 final Map<String, String> envVars = Platform.environment;
 final String apiKeyName = envVars['COINBASE_API_KEY_NAME'] ?? 'api_key_name';

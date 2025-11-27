@@ -1,4 +1,4 @@
-name: example
+name: coinbase_cloud_advanced_trade_client_examples
 description: An example of how to use the coinbase_cloud_advanced_trade_client library.
 publish_to: none
 
