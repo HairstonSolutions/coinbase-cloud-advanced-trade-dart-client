@@ -1,9 +1,9 @@
 import 'dart:convert';
 
 import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/order.dart';
-import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/order_configuration.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/order_status.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/order_type.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/stop_direction.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/time_in_force.dart';
 import 'package:test/test.dart';
 

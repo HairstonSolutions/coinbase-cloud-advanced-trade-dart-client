@@ -4,7 +4,8 @@ import 'package:coinbase_cloud_advanced_trade_client/src/models/cancel_orders.da
 import 'package:coinbase_cloud_advanced_trade_client/src/models/credential.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/error.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/order.dart';
-import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/order_configuration.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/order_side.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/stop_direction.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/services/network.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
@@ -124,7 +125,7 @@ Future<Order?> getOrder(
 Future<Map<String, dynamic>?> createMarketOrder(
     {required String clientOrderId,
     required String productId,
-    required String side,
+    required OrderSide side,
     String? quoteSize,
     String? baseSize,
     required Credential credential,
@@ -178,7 +179,7 @@ Future<Map<String, dynamic>?> createMarketOrder(
 Future<Map<String, dynamic>?> createLimitOrder(
     {required String clientOrderId,
     required String productId,
-    required String side,
+    required OrderSide side,
     required String baseSize,
     required String limitPrice,
     bool postOnly = false,
@@ -224,7 +225,7 @@ Future<Map<String, dynamic>?> createLimitOrder(
 Future<Map<String, dynamic>?> createStopLimitOrderGTC(
     {required String clientOrderId,
     required String productId,
-    required String side,
+    required OrderSide side,
     required String baseSize,
     required String limitPrice,
     required String stopPrice,
@@ -274,7 +275,7 @@ Future<Map<String, dynamic>?> createStopLimitOrderGTC(
 Future<Map<String, dynamic>?> createStopLimitOrderGTD(
     {required String clientOrderId,
     required String productId,
-    required String side,
+    required OrderSide side,
     required String baseSize,
     required String limitPrice,
     required String stopPrice,
@@ -306,7 +307,7 @@ Future<Map<String, dynamic>?> createStopLimitOrderGTD(
 Future<Map<String, dynamic>?> _createOrder(
     {required String clientOrderId,
     required String productId,
-    required String side,
+    required OrderSide side,
     required Map<String, dynamic> orderConfiguration,
     required Credential credential,
     bool isSandbox = false,
@@ -316,7 +317,7 @@ Future<Map<String, dynamic>?> _createOrder(
   final body = {
     'client_order_id': clientOrderId,
     'product_id': productId,
-    'side': side,
+    'side': side.toCB(),
     'order_configuration': orderConfiguration,
   };
 

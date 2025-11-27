@@ -1,5 +1,6 @@
 import 'package:coinbase_cloud_advanced_trade_client/advanced_trade.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/error.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/stop_direction.dart';
 import 'package:http/http.dart' as http;
 import 'package:logging/logging.dart';
 import 'package:mockito/mockito.dart';
@@ -172,7 +173,7 @@ void main() {
       final result = await createMarketOrder(
         clientOrderId: clientOrderId,
         productId: 'BTC-USD',
-        side: 'BUY',
+        side: OrderSide.BUY,
         quoteSize: '10',
         credential: constants.credentials,
         client: mockClient,
@@ -217,7 +218,7 @@ void main() {
       final result = await createStopLimitOrderGTD(
         clientOrderId: clientOrderId,
         productId: 'BTC-USD',
-        side: 'BUY',
+        side: OrderSide.BUY,
         baseSize: '0.00001',
         limitPrice: '100004',
         stopPrice: '100005',
@@ -253,7 +254,7 @@ void main() {
       final result = await createStopLimitOrderGTC(
         clientOrderId: clientOrderId,
         productId: 'BTC-USD',
-        side: 'BUY',
+        side: OrderSide.BUY,
         baseSize: '0.1',
         limitPrice: '10000',
         stopPrice: '10001',
@@ -278,7 +279,7 @@ void main() {
       final result = await createStopLimitOrderGTD(
         clientOrderId: clientOrderId,
         productId: 'BTC-USD',
-        side: 'BUY',
+        side: OrderSide.BUY,
         baseSize: '0.1',
         limitPrice: '10000',
         stopPrice: '10001',
@@ -304,7 +305,7 @@ void main() {
       final result = await createMarketOrder(
         clientOrderId: clientOrderId,
         productId: 'BTC-USD',
-        side: 'SELL',
+        side: OrderSide.SELL,
         baseSize: '0.1',
         credential: constants.credentials,
         client: mockClient,
@@ -319,7 +320,7 @@ void main() {
           () async => await createMarketOrder(
                 clientOrderId: 'test',
                 productId: 'BTC-USD',
-                side: 'BUY',
+                side: OrderSide.BUY,
                 quoteSize: '10',
                 baseSize: '0.1',
                 credential: constants.credentials,
@@ -339,7 +340,7 @@ void main() {
       final result = await createLimitOrder(
         clientOrderId: clientOrderId,
         productId: 'BTC-USD',
-        side: 'BUY',
+        side: OrderSide.BUY,
         baseSize: '0.1',
         limitPrice: '10000',
         credential: constants.credentials,
@@ -362,7 +363,7 @@ void main() {
       final result = await createLimitOrder(
         clientOrderId: clientOrderId,
         productId: 'BTC-USD',
-        side: 'BUY',
+        side: OrderSide.BUY,
         baseSize: '0.1',
         limitPrice: '10000',
         postOnly: true,
@@ -382,7 +383,7 @@ void main() {
       final result = await createMarketOrder(
         clientOrderId: clientOrderId,
         productId: 'BTC-USD',
-        side: 'BUY',
+        side: OrderSide.BUY,
         quoteSize: '10',
         credential: constants.credentials,
         isSandbox: true,
@@ -437,7 +438,7 @@ void main() {
       final result = await createMarketOrder(
         clientOrderId: clientOrderId,
         productId: 'BTC-USD',
-        side: 'SELL',
+        side: OrderSide.SELL,
         baseSize: '0.1',
         credential: constants.credentials,
         isSandbox: true,
@@ -452,7 +453,7 @@ void main() {
           () async => await createMarketOrder(
                 clientOrderId: 'test',
                 productId: 'BTC-USD',
-                side: 'BUY',
+                side: OrderSide.BUY,
                 quoteSize: '10',
                 baseSize: '0.1',
                 credential: constants.credentials,
@@ -466,7 +467,7 @@ void main() {
       final result = await createLimitOrder(
         clientOrderId: clientOrderId,
         productId: 'BTC-USD',
-        side: 'BUY',
+        side: OrderSide.BUY,
         baseSize: '0.1',
         limitPrice: '10000',
         credential: constants.credentials,
@@ -482,7 +483,7 @@ void main() {
       final result = await createLimitOrder(
         clientOrderId: clientOrderId,
         productId: 'BTC-USD',
-        side: 'BUY',
+        side: OrderSide.BUY,
         baseSize: '0.001',
         limitPrice: '10000',
         postOnly: true,
@@ -528,7 +529,7 @@ void main() {
       final result = await createLimitOrder(
         clientOrderId: clientOrderId,
         productId: 'BTC-USD',
-        side: 'BUY',
+        side: OrderSide.BUY,
         baseSize: '0.001',
         limitPrice: '10000',
         postOnly: true,
@@ -566,7 +567,7 @@ void main() {
       final result = await createLimitOrder(
         clientOrderId: clientOrderId,
         productId: 'BTC-USD',
-        side: 'BUY',
+        side: OrderSide.BUY,
         baseSize: '0.0001',
         limitPrice: orderPrice.toString(),
         postOnly: true,
@@ -589,7 +590,7 @@ void main() {
       final result2 = await createLimitOrder(
         clientOrderId: clientOrderId2,
         productId: 'BTC-USD',
-        side: 'BUY',
+        side: OrderSide.BUY,
         baseSize: '0.0001',
         limitPrice: secondOrderPrice.toString(),
         postOnly: true,
