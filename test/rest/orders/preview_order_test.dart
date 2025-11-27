@@ -24,8 +24,8 @@ void main() {
   group('Preview Order', () {
     test('previews a market order', () async {
       final mockClient = MockClient();
-      final successResponse = await getJsonFromFile(
-          'mocks/rest/orders/preview_order_success.json');
+      final successResponse =
+          await getJsonFromFile('mocks/rest/orders/preview_order_success.json');
 
       when(mockClient.post(any,
               headers: anyNamed('headers'), body: anyNamed('body')))
