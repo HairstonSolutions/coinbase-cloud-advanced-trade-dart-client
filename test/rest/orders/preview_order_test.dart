@@ -12,6 +12,8 @@ import 'package:logging/logging.dart';
 
 import '../../test_constants.dart';
 
+final Logger _logger = Logger('PreviewOrderTest');
+
 @GenerateMocks([http.Client])
 void main() {
   Logger.root.level = Level.ALL;
@@ -28,7 +30,7 @@ void main() {
               headers: anyNamed('headers'), body: anyNamed('body')))
           .thenAnswer((_) async => http.Response(successResponse, 200));
 
-      final PreviewOrderResponse? previewOrderResponse = await previewOrder(
+      final PreviewOrderResponse previewOrderResponse = await previewOrder(
           client: mockClient,
           credential: credentials,
           productId: 'BTC-USD',
@@ -38,7 +40,7 @@ void main() {
           });
 
       expect(previewOrderResponse, isNotNull);
-      expect(previewOrderResponse!.orderTotal, '10.00');
+      expect(previewOrderResponse.orderTotal, '10.00');
       expect(previewOrderResponse.commissionTotal, '0.05');
       expect(previewOrderResponse.quoteSize, 10.00);
       expect(previewOrderResponse.baseSize, 0.001);
@@ -50,7 +52,7 @@ void main() {
 
   group('Preview Order Integration', () {
     test('previews a market order', () async {
-      final PreviewOrderResponse? previewOrderResponse = await previewOrder(
+      final PreviewOrderResponse previewOrderResponse = await previewOrder(
           credential: credentials,
           productId: 'BTC-USD',
           side: OrderSide.buy,
@@ -58,9 +60,9 @@ void main() {
             'market_market_ioc': {'quote_size': '10'}
           });
 
-      print(previewOrderResponse.toString());
+      _logger.info(previewOrderResponse.toString());
       expect(previewOrderResponse, isNotNull);
-      expect(previewOrderResponse!.orderTotal, isNotNull);
+      expect(previewOrderResponse.orderTotal, isNotNull);
     }, skip: ciSkip);
   });
 }

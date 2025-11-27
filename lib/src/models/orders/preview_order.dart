@@ -1,3 +1,5 @@
+import 'package:coinbase_cloud_advanced_trade_client/src/services/tools.dart';
+
 /// The response from a preview order request.
 class PreviewOrderResponse {
   /// The total cost of the order.
@@ -87,8 +89,8 @@ class PreviewOrderResponse {
       commissionTotal: json['commission_total'],
       errs: json['errs']?.cast<String>(),
       warning: json['warning']?.cast<String>(),
-      quoteSize: double.tryParse(json['quote_size'] ?? ''),
-      baseSize: double.tryParse(json['base_size'] ?? ''),
+      quoteSize: nullableDouble(json['quote_size']),
+      baseSize: nullableDouble(json['base_size']),
       bestBid: json['best_bid'],
       bestAsk: json['best_ask'],
       isMax: json['is_max'],
@@ -107,6 +109,26 @@ class PreviewOrderResponse {
 
   @override
   String toString() {
-    return 'PreviewOrderResponse{orderTotal: $orderTotal, commissionTotal: $commissionTotal, errs: $errs, warning: $warning, quoteSize: $quoteSize, baseSize: $baseSize, bestBid: $bestBid, bestAsk: $bestAsk, isMax: $isMax, orderMarginTotal: $orderMarginTotal, leverage: $leverage, longLeverage: $longLeverage, shortLeverage: $shortLeverage, slippage: $slippage, previewId: $previewId, currentLiquidationBuffer: $currentLiquidationBuffer, projectedLiquidationBuffer: $projectedLiquidationBuffer, maxLeverage: $maxLeverage, estAverageFilledPrice: $estAverageFilledPrice}';
+    return '''PreviewOrderResponse{
+      orderTotal: $orderTotal,
+      commissionTotal: $commissionTotal,
+      errs: $errs,
+      warning: $warning,
+      quoteSize: $quoteSize,
+      baseSize: $baseSize,
+      bestBid: $bestBid,
+      bestAsk: $bestAsk,
+      isMax: $isMax,
+      orderMarginTotal: $orderMarginTotal,
+      leverage: $leverage,
+      longLeverage: $longLeverage,
+      shortLeverage: $shortLeverage,
+      slippage: $slippage,
+      previewId: $previewId,
+      currentLiquidationBuffer: $currentLiquidationBuffer,
+      projectedLiquidationBuffer: $projectedLiquidationBuffer,
+      maxLeverage: $maxLeverage,
+      estAverageFilledPrice: $estAverageFilledPrice
+    }''';
   }
 }

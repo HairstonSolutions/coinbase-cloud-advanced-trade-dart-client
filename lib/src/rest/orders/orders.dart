@@ -356,15 +356,13 @@ Future<Map<String, dynamic>?> _createOrder(
 /// [isSandbox] - Whether to use the sandbox environment.
 ///
 /// Returns a [PreviewOrderResponse] object.
-Future<PreviewOrderResponse?> previewOrder(
+Future<PreviewOrderResponse> previewOrder(
     {required String productId,
     required OrderSide side,
     required Map<String, dynamic> orderConfiguration,
     required Credential credential,
     bool isSandbox = false,
     Client? client}) async {
-  PreviewOrderResponse? result;
-
   final body = {
     'product_id': productId,
     'side': side.toCB(),
@@ -378,15 +376,12 @@ Future<PreviewOrderResponse?> previewOrder(
       client: client);
 
   if (response.statusCode == 200) {
-    String data = response.body;
-    var jsonResponse = jsonDecode(data);
-    result = PreviewOrderResponse.fromCBJson(jsonResponse);
+    var jsonResponse = jsonDecode(response.body);
+    return PreviewOrderResponse.fromCBJson(jsonResponse);
   } else {
     throw CoinbaseException(
         'Failed to preview order', response.statusCode, response.body);
   }
-
-  return result;
 }
 
 /// Cancels a list of orders.
