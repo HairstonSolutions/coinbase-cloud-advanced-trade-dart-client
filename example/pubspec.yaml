@@ -1,0 +1,10 @@
+name: example
+description: An example of how to use the coinbase_cloud_advanced_trade_client library.
+publish_to: none
+
+environment:
+  sdk: '>=3.3.0 <4.0.0'
+
+dependencies:
+  coinbase_cloud_advanced_trade_client:
+    path: ../
