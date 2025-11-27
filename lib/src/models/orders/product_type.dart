@@ -1,19 +1,24 @@
 /// The type of a product.
 enum ProductType {
   /// An unknown product type.
-  UNKNOWN_PRODUCT_TYPE,
+  unknownProductType('UNKNOWN_PRODUCT_TYPE'),
 
   /// A spot product.
-  SPOT;
+  spot('SPOT');
+
+  const ProductType(this.value);
+
+  /// The String value of the enum.
+  final String value;
 
   /// Converts a ProductType to a Coinbase string.
   String toCB() {
-    return name;
+    return value;
   }
 
   /// Creates a ProductType from a Coinbase string.
   static ProductType fromCB(String cb) {
-    return ProductType.values.firstWhere((e) => e.name == cb,
-        orElse: () => ProductType.UNKNOWN_PRODUCT_TYPE);
+    return ProductType.values.firstWhere((e) => e.value == cb,
+        orElse: () => ProductType.unknownProductType);
   }
 }

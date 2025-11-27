@@ -37,7 +37,7 @@ void main() {
       logger.info('Order Object: $exampleOrder');
 
       expect(exampleOrder.orderId, '0000-000000-000000');
-      expect(exampleOrder.status, OrderStatus.PENDING);
+      expect(exampleOrder.status, OrderStatus.pending);
       expect(exampleOrder.settled, true);
     });
 
@@ -50,7 +50,7 @@ void main() {
       expect(
           exampleOrder.orderConfiguration?.stopLimitGTC?.stopPrice, 20000.00);
       expect(exampleOrder.orderConfiguration?.stopLimitGTD?.stopDirection,
-          StopDirection.UNKNOWN_STOP_DIRECTION);
+          StopDirection.unknownStopDirection);
     });
 
     test('Example Open Order JSON Import Object conversion', () {
@@ -60,9 +60,9 @@ void main() {
       logger.info('Open Order Object: $openOrder');
 
       expect(openOrder.orderId, '111111111-1111-1111-1111-11111');
-      expect(openOrder.status, OrderStatus.OPEN);
-      expect(openOrder.orderType, OrderType.LIMIT);
-      expect(openOrder.timeInForce, TimeInForce.GOOD_UNTIL_CANCELLED);
+      expect(openOrder.status, OrderStatus.open);
+      expect(openOrder.orderType, OrderType.limit);
+      expect(openOrder.timeInForce, TimeInForce.goodUntilCancelled);
       expect(openOrder.settled, false);
       expect(openOrder.orderConfiguration?.limitGTC?.postOnly, false);
     });
@@ -74,9 +74,9 @@ void main() {
       logger.info('Market Order Object: $marketOrder');
 
       expect(marketOrder.orderId, '22222222-2222-2222-2222-222222222');
-      expect(marketOrder.orderType, OrderType.MARKET);
-      expect(marketOrder.status, OrderStatus.FILLED);
-      expect(marketOrder.timeInForce, TimeInForce.IMMEDIATE_OR_CANCEL);
+      expect(marketOrder.orderType, OrderType.market);
+      expect(marketOrder.status, OrderStatus.filled);
+      expect(marketOrder.timeInForce, TimeInForce.immediateOrCancel);
       expect(marketOrder.settled, true);
       expect(marketOrder.orderConfiguration?.marketIOC?.quoteSize, 25);
     });
@@ -98,7 +98,7 @@ void main() {
       expect(deserializedOrder.orderConfiguration?.stopLimitGTC?.stopPrice,
           20000.00);
       expect(deserializedOrder.orderConfiguration?.stopLimitGTD?.stopDirection,
-          StopDirection.UNKNOWN_STOP_DIRECTION);
+          StopDirection.unknownStopDirection);
 
       logger.info(deserializedOrder.orderConfiguration);
       logger.info(deserializedOrder.orderConfiguration?.toJson());

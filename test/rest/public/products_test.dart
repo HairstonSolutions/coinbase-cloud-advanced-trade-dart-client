@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:coinbase_cloud_advanced_trade_client/src/models/error.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/ticker.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/rest/public/products.dart';
@@ -9,7 +7,6 @@ import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
 import '../../mocks.mocks.dart';
-import '../../test_constants.dart';
 import '../../test_helpers.dart';
 import '../../tools.dart';
 

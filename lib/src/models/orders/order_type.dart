@@ -1,28 +1,33 @@
 /// The type of an order.
 enum OrderType {
   /// An unknown order type.
-  UNKNOWN_ORDER_TYPE,
+  unknownOrderType('UNKNOWN_ORDER_TYPE'),
 
   /// A limit order.
-  LIMIT,
+  limit('LIMIT'),
 
   /// A market order.
-  MARKET,
+  market('MARKET'),
 
   /// A stop order.
-  STOP,
+  stop('STOP'),
 
   /// A stop-limit order.
-  STOP_LIMIT;
+  stopLimit('STOP_LIMIT');
+
+  const OrderType(this.value);
+
+  /// The String value of the enum.
+  final String value;
 
   /// Converts an OrderType to a Coinbase string.
   String toCB() {
-    return name;
+    return value;
   }
 
   /// Creates an OrderType from a Coinbase string.
   static OrderType fromCB(String cb) {
-    return OrderType.values.firstWhere((e) => e.name == cb,
-        orElse: () => OrderType.UNKNOWN_ORDER_TYPE);
+    return OrderType.values.firstWhere((e) => e.value == cb,
+        orElse: () => OrderType.unknownOrderType);
   }
 }
