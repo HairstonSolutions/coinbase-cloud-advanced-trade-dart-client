@@ -2,8 +2,12 @@ import 'dart:convert';
 
 import 'package:coinbase_cloud_advanced_trade_client/src/models/credential.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/trade.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/services/logger.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/services/network.dart';
 import 'package:http/http.dart' as http;
+import 'package:logging/logging.dart';
+
+final Logger _logger = setupLogger('TradesRest');
 
 /// Gets a list of recent market trades for a single product.
 ///
@@ -44,8 +48,9 @@ Future<List<Trade>> getTrades(
     }
   } else {
     var url = response.request?.url.toString();
-    print('Request to URL $url failed: Response code ${response.statusCode}');
-    print('Error Response Message: ${response.body}');
+    _logger.severe(
+        'Request to URL $url failed: Response code ${response.statusCode}');
+    _logger.severe('Error Response Message: ${response.body}');
   }
 
   return trades;
