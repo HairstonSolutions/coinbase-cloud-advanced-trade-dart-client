@@ -5,11 +5,14 @@ import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/order_sta
 import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/order_type.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/stop_direction.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/time_in_force.dart';
+import 'package:logging/logging.dart';
 import 'package:test/test.dart';
 
+import '../test_helpers.dart';
 import '../tools.dart';
 
 void main() {
+  final Logger logger = setupLogger('order_test');
   group('Order Object Injection', () {
     String exampleOrderJsonFile = 'models/examples/order.json';
     String? exampleOrderJson;
@@ -31,7 +34,7 @@ void main() {
       var jsonAsMap = jsonDecode(exampleOrderJson!);
       Order? exampleOrder = Order.fromCBJson(jsonAsMap);
 
-      print('Order Object: $exampleOrder');
+      logger.info('Order Object: $exampleOrder');
 
       expect(exampleOrder.orderId, '0000-000000-000000');
       expect(exampleOrder.status, OrderStatus.PENDING);
@@ -54,7 +57,7 @@ void main() {
       var jsonAsMap = jsonDecode(openOrderJson!);
       Order? openOrder = Order.fromCBJson(jsonAsMap);
 
-      print('Open Order Object: $openOrder');
+      logger.info('Open Order Object: $openOrder');
 
       expect(openOrder.orderId, '111111111-1111-1111-1111-11111');
       expect(openOrder.status, OrderStatus.OPEN);
@@ -68,7 +71,7 @@ void main() {
       var jsonAsMap = jsonDecode(marketOrderJson!);
       Order? marketOrder = Order.fromCBJson(jsonAsMap);
 
-      print('Market Order Object: $marketOrder');
+      logger.info('Market Order Object: $marketOrder');
 
       expect(marketOrder.orderId, '22222222-2222-2222-2222-222222222');
       expect(marketOrder.orderType, OrderType.MARKET);
@@ -85,8 +88,8 @@ void main() {
 
       Order? deserializedOrder = Order.fromJson(serializedOrder);
 
-      print('Deserialized Order Object: $deserializedOrder');
-      print(jsonEncode(deserializedOrder));
+      logger.info('Deserialized Order Object: $deserializedOrder');
+      logger.info(jsonEncode(deserializedOrder));
 
       expect(deserializedOrder.orderConfiguration?.marketIOC?.quoteSize, 10.00);
       expect(
@@ -97,10 +100,10 @@ void main() {
       expect(deserializedOrder.orderConfiguration?.stopLimitGTD?.stopDirection,
           StopDirection.UNKNOWN_STOP_DIRECTION);
 
-      print(deserializedOrder.orderConfiguration);
-      print(deserializedOrder.orderConfiguration?.toJson());
-      print(deserializedOrder.orderConfiguration?.toCBJson());
-      print(jsonEncode(deserializedOrder.orderConfiguration?.toCBJson()));
+      logger.info(deserializedOrder.orderConfiguration);
+      logger.info(deserializedOrder.orderConfiguration?.toJson());
+      logger.info(deserializedOrder.orderConfiguration?.toCBJson());
+      logger.info(jsonEncode(deserializedOrder.orderConfiguration?.toCBJson()));
     });
 
     test('Example Order JSON Import, Serialize, II', () {
@@ -110,11 +113,12 @@ void main() {
 
       Order? deserializedOrder = Order.fromJson(serializedOrder);
 
-      print('Deserialized Order as CB Map: ${deserializedOrder.toCBJson()}');
-      print(
+      logger.info(
+          'Deserialized Order as CB Map: ${deserializedOrder.toCBJson()}');
+      logger.info(
           'Deserialized Order as CB JSON: ${jsonEncode(deserializedOrder.toCBJson())}');
-      print(deserializedOrder.orderConfiguration);
-      print(jsonEncode(deserializedOrder.orderConfiguration?.toCBJson()));
+      logger.info(deserializedOrder.orderConfiguration);
+      logger.info(jsonEncode(deserializedOrder.orderConfiguration?.toCBJson()));
 
       expect(deserializedOrder.orderConfiguration?.marketIOC?.quoteSize, 10.00);
       expect(deserializedOrder.orderConfiguration?.limitGTC, null);

@@ -1,11 +1,15 @@
 import 'dart:convert';
 
 import 'package:coinbase_cloud_advanced_trade_client/src/models/product.dart';
+import 'package:logging/logging.dart';
 import 'package:test/test.dart';
 
+import '../test_helpers.dart';
 import '../tools.dart';
 
 void main() {
+  final Logger logger = setupLogger('product_test');
+
   group('Test Product Object Injection', () {
     String exampleProductJsonFile = 'models/examples/product.json';
     String? exampleProductCBJson;
@@ -18,7 +22,7 @@ void main() {
       var cbJsonAsMap = jsonDecode(exampleProductCBJson!);
       Product? exampleProduct = Product.fromCBJson(cbJsonAsMap);
 
-      print('Product Object: $exampleProduct');
+      logger.info('Product Object: $exampleProduct');
 
       expect(exampleProduct.productId, 'BTC-USD');
       expect(exampleProduct.price, 43423.01);
@@ -66,7 +70,7 @@ void main() {
 
       Product deserializedProduct = Product.fromJson(serializedProduct);
 
-      print('Deserialized Product Object: $deserializedProduct');
+      logger.info('Deserialized Product Object: $deserializedProduct');
 
       expect(deserializedProduct.productId, 'BTC-USD');
       expect(deserializedProduct.price, 43423.01);
@@ -106,7 +110,7 @@ void main() {
       expect(deserializedProduct.newAt, DateTime.parse('2023-01-01T00:00:00Z'));
       expect(deserializedProduct.marketCap, 850000000000);
 
-      print('Serialized Product: ${jsonEncode(deserializedProduct)}');
+      logger.info('Serialized Product: ${jsonEncode(deserializedProduct)}');
     });
   });
 }
