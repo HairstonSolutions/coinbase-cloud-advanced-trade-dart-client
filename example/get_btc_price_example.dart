@@ -14,8 +14,8 @@ void main() async {
 
   // Print the price to the console.
   if (ticker != null) {
-    if (ticker.trades case final trades? when trades.isNotEmpty) {
-      print('The latest trade price of BTC-USD is: 	${trades.first.price}');
+    if (ticker.trades != null && ticker.trades!.isNotEmpty) {
+      print('The latest trade price of BTC-USD is: ${ticker.trades!.first.price}');
     } else {
       print('No recent trades found for BTC-USD.');
     }
