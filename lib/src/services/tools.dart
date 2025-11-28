@@ -7,14 +7,19 @@
 ///
 /// Returns a double, or null if the value is null or an empty string.
 double? nullableDouble(Map<String, dynamic> jsonObject, String key,
-    {bool? notNullable = false}) {
-  if (notNullable == true) {
-    return (jsonObject[key] == null) ? 0.0 : double.parse(jsonObject[key]);
+    {bool notNullable = false}) {
+  final value = jsonObject[key];
+
+  if (value == null || value == '') {
+    return notNullable ? 0.0 : null;
   }
-  if (jsonObject[key] == "") {
-    return null;
+
+  final parsedValue = double.tryParse(value.toString());
+  if (parsedValue == null && notNullable) {
+    return 0.0;
   }
-  return (jsonObject[key] == null) ? null : double.parse(jsonObject[key]);
+
+  return parsedValue;
 }
 
 /// Parses a number from a JSON object, returning null if the value is null or an
