@@ -21,7 +21,8 @@ final String? privateKeyPEM = envVars['COINBASE_PRIVATE_KEY'];
 void main() async {
   // Check that the API key and secret are set.
   if (apiKeyName == null || privateKeyPEM == null) {
-    stderr.writeln('Please set the COINBASE_API_KEY_NAME and COINBASE_PRIVATE_KEY '
+    stderr.writeln(
+        'Please set the COINBASE_API_KEY_NAME and COINBASE_PRIVATE_KEY '
         'environment variables.');
     exit(1);
   }
@@ -37,7 +38,7 @@ void main() async {
     clientOrderId: 'test-order-${DateTime.now().millisecondsSinceEpoch}',
     productId: 'BTC-USD',
     side: OrderSide.buy,
-    quoteSize: '10',
+    quoteSize: '1.0',
     credential: credential,
   );
 
