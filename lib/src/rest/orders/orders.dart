@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/cancel_orders.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/credential.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/error.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/edit_order_preview_response.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/edit_order_response.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/order.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/order_side.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/preview_order.dart';
@@ -342,6 +344,86 @@ Future<Map<String, dynamic>?> _createOrder(
   }
 
   return result;
+}
+
+/// Edit an order.
+///
+/// POST /v3/brokerage/orders/edit
+/// https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/edit-order
+///
+/// [orderId] - The ID of the order to edit.
+/// [price] - The new price for the order.
+/// [size] - The new size for the order.
+/// [credential] - The user's API credentials.
+/// [isSandbox] - Whether to use the sandbox environment.
+///
+/// Returns an [EditOrderResponse] object.
+Future<EditOrderResponse> editOrder(
+    {required String orderId,
+    required String price,
+    required String size,
+    required Credential credential,
+    bool isSandbox = false,
+    Client? client}) async {
+  final body = {
+    'order_id': orderId,
+    'price': price,
+    'size': size,
+  };
+
+  http.Response response = await postAuthorized('/orders/edit',
+      body: jsonEncode(body),
+      credential: credential,
+      isSandbox: isSandbox,
+      client: client);
+
+  if (response.statusCode == 200) {
+    var jsonResponse = jsonDecode(response.body);
+    return EditOrderResponse.fromCBJson(jsonResponse);
+  } else {
+    throw CoinbaseException(
+        'Failed to edit order', response.statusCode, response.body);
+  }
+}
+
+/// Edit an order preview.
+///
+/// POST /v3/brokerage/orders/edit_preview
+/// https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/edit-order-preview
+///
+/// [orderId] - The ID of the order to edit.
+/// [price] - The new price for the order.
+/// [size] - The new size for the order.
+/// [credential] - The user's API credentials.
+/// [isSandbox] - Whether to use the sandbox environment.
+///
+/// Returns an [EditOrderPreviewResponse] object.
+Future<EditOrderPreviewResponse> editOrderPreview(
+    {required String orderId,
+    required String price,
+    required String size,
+    required Credential credential,
+    bool isSandbox = false,
+    Client? client}) async {
+  final body = {
+    'order_id': orderId,
+    'price': price,
+    'size': size,
+  };
+
+  http.Response response = await postAuthorized('/orders/edit_preview',
+      body: jsonEncode(body),
+      credential: credential,
+      isSandbox: isSandbox,
+      client: client);
+
+  if (response.statusCode == 200) {
+    var jsonResponse = jsonDecode(response.body);
+    return EditOrderPreviewResponse.fromCBJson(jsonResponse);
+  } else {
+    throw CoinbaseException(
+        'Failed to preview edit order', response.statusCode, response.body);
+  }
 }
 
 /// Previews an order.
