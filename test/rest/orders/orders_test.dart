@@ -659,6 +659,9 @@ void main() {
 
       expect(previewOrderResponse, isNotNull);
       expect(previewOrderResponse.orderTotal, isNotNull);
+      expect(previewOrderResponse.commissionTotal, isNotNull);
+      expect(double.parse(previewOrderResponse.orderTotal!),
+          greaterThanOrEqualTo(2.0));
     }, skip: constants.ciSkip);
   });
 }
