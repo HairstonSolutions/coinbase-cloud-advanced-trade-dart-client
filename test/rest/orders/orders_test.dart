@@ -1,5 +1,6 @@
 import 'package:coinbase_cloud_advanced_trade_client/advanced_trade.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/error.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/preview_order.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/stop_direction.dart';
 import 'package:http/http.dart' as http;
 import 'package:logging/logging.dart';
@@ -612,5 +613,55 @@ void main() {
       expect(cancelResult!.canceledOrderResults![0].success, isTrue);
       expect(cancelResult.canceledOrderResults![1].success, isTrue);
     });
+  });
+
+  group('Preview Order', () {
+    test('previews a market order', () async {
+      final mockClient = MockClient();
+      final successResponse =
+          await getJsonFromFile('mocks/rest/orders/preview_order_success.json');
+
+      when(mockClient.post(any,
+              headers: anyNamed('headers'), body: anyNamed('body')))
+          .thenAnswer((_) async => http.Response(successResponse, 200));
+
+      final PreviewOrderResponse previewOrderResponse = await previewOrder(
+          client: mockClient,
+          credential: constants.credentials,
+          productId: 'BTC-USD',
+          side: OrderSide.buy,
+          orderConfiguration: {
+            'market_market_ioc': {'quote_size': '10.0'}
+          });
+
+      expect(previewOrderResponse, isNotNull);
+      expect(previewOrderResponse.orderTotal, '10.00');
+      expect(previewOrderResponse.commissionTotal, '0.05');
+      expect(previewOrderResponse.quoteSize, 10.00);
+      expect(previewOrderResponse.baseSize, 0.001);
+      expect(previewOrderResponse.bestBid, '9999.00');
+      expect(previewOrderResponse.bestAsk, '10001.00');
+      expect(previewOrderResponse.previewId, 'PREVIEW-ID-12345');
+    });
+  });
+
+  group('Preview Order Integration', () {
+    test('previews a market order', () async {
+      final PreviewOrderResponse previewOrderResponse = await previewOrder(
+          credential: constants.credentials,
+          productId: 'BTC-USD',
+          side: OrderSide.buy,
+          orderConfiguration: {
+            'market_market_ioc': {'quote_size': '2.0'}
+          });
+
+      logger.info('Preview Order Response: ${previewOrderResponse.toString()}');
+
+      expect(previewOrderResponse, isNotNull);
+      expect(previewOrderResponse.orderTotal, isNotNull);
+      expect(previewOrderResponse.commissionTotal, isNotNull);
+      expect(double.parse(previewOrderResponse.orderTotal!),
+          greaterThanOrEqualTo(2.0));
+    }, skip: constants.ciSkip);
   });
 }
