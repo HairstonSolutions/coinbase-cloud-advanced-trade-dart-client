@@ -26,7 +26,7 @@ https://docs.cdp.coinbase.com/coinbase-app/advanced-trade-apis/rest-api
 - [x] [GET /v3/brokerage/orders/historical/fills - List Fills](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/list-fills)
 - [x] [POST /v3/brokerage/orders - Create Order](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/create-order)
 - [x] [POST /v3/brokerage/orders/batch_cancel - Cancel Orders](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/cancel-order)
-- [ ] [POST /v3/brokerage/orders/preview - Preview Orders](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/preview-orders)
+- [x] [POST /v3/brokerage/orders/preview - Preview Orders](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/preview-orders)
 - [ ] [POST /v3/brokerage/orders/edit - Edit Order](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/edit-order)
 - [ ] [POST /v3/brokerage/orders/edit_preview - Edit Order Preview](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/edit-order-preview)
 - [x] [POST /v3/brokerage/orders/close_position - Close Position](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/close-position)

@@ -1,3 +1,9 @@
+# 0.x.0
+
+- Implement Preview Order
+- Example: Create market order
+- Example: Get ticket price for BTC
+
 # 0.8.0
 
 - Implement Get Best Bid Ask
