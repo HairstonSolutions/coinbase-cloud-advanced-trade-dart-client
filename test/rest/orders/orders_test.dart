@@ -652,7 +652,7 @@ void main() {
           productId: 'BTC-USD',
           side: OrderSide.buy,
           orderConfiguration: {
-            'market_market_ioc': {'quote_size': '2'}
+            'market_market_ioc': {'quote_size': '2.0'}
           });
 
       logger.info('Preview Order Response: ${previewOrderResponse.toString()}');
