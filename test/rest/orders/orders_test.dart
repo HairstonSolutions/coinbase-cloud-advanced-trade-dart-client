@@ -631,7 +631,7 @@ void main() {
           productId: 'BTC-USD',
           side: OrderSide.buy,
           orderConfiguration: {
-            'market_market_ioc': {'quote_size': '10'}
+            'market_market_ioc': {'quote_size': '10.0'}
           });
 
       expect(previewOrderResponse, isNotNull);
