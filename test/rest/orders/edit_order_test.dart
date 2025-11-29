@@ -1,5 +1,3 @@
-import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/edit_order_preview_response.dart';
-import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/edit_order_response.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/rest/orders/orders.dart';
 import 'package:http/http.dart' as http;
 import 'package:mockito/mockito.dart';
