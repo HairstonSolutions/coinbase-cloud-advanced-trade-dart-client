@@ -63,36 +63,38 @@ void main() {
       expect(result.orderTotal, '100.0');
     });
 
-    test('editOrder failure throws CoinbaseException', () {
+    test('editOrder failure', () async {
+      final mockResponse = '{"error": "bad request"}';
+
       when(mockClient.post(any,
               headers: anyNamed('headers'), body: anyNamed('body')))
-          .thenAnswer((_) async => http.Response('{}', 400));
+          .thenAnswer((_) async => http.Response(mockResponse, 400));
 
-      final future = editOrder(
-        orderId: '123',
-        price: '100',
-        size: '1',
-        credential: constants.credentials,
-        client: mockClient,
-      );
-
-      expect(future, throwsA(isA<CoinbaseException>()));
+      expect(
+          () async => await editOrder(
+              orderId: '123',
+              price: '100',
+              size: '1',
+              credential: constants.credentials,
+              client: mockClient),
+          throwsA(isA<CoinbaseException>()));
     });
 
-    test('editOrderPreview failure throws CoinbaseException', () {
+    test('editOrderPreview failure', () async {
+      final mockResponse = '{"error": "bad request"}';
+
       when(mockClient.post(any,
               headers: anyNamed('headers'), body: anyNamed('body')))
-          .thenAnswer((_) async => http.Response('{}', 400));
+          .thenAnswer((_) async => http.Response(mockResponse, 400));
 
-      final future = editOrderPreview(
-        orderId: '123',
-        price: '100',
-        size: '1',
-        credential: constants.credentials,
-        client: mockClient,
-      );
-
-      expect(future, throwsA(isA<CoinbaseException>()));
+      expect(
+          () async => await editOrderPreview(
+              orderId: '123',
+              price: '100',
+              size: '1',
+              credential: constants.credentials,
+              client: mockClient),
+          throwsA(isA<CoinbaseException>()));
     });
   });
 }
