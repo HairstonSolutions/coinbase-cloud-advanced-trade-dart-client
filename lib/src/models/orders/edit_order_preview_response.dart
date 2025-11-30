@@ -61,16 +61,6 @@ class EditOrderPreviewResponse {
 
   @override
   String toString() {
-    return '''EditOrderPreviewResponse{
-      errors: $errors,
-      slippage: $slippage,
-      orderTotal: $orderTotal,
-      commissionTotal: $commissionTotal,
-      quoteSize: $quoteSize,
-      baseSize: $baseSize,
-      bestBid: $bestBid,
-      bestAsk: $bestAsk,
-      averageFilledPrice: $averageFilledPrice
-    }''';
+    return 'EditOrderPreviewResponse{errors: $errors, slippage: $slippage, orderTotal: $orderTotal, commissionTotal: $commissionTotal, quoteSize: $quoteSize, baseSize: $baseSize, bestBid: $bestBid, bestAsk: $bestAsk, averageFilledPrice: $averageFilledPrice}';
   }
 }

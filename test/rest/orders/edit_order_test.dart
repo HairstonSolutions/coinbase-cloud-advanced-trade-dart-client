@@ -1,3 +1,4 @@
+import 'package:coinbase_cloud_advanced_trade_client/src/models/error.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/rest/orders/orders.dart';
 import 'package:http/http.dart' as http;
 import 'package:mockito/mockito.dart';
@@ -60,6 +61,38 @@ void main() {
 
       expect(result.errors, isEmpty);
       expect(result.orderTotal, '100.0');
+    });
+
+    test('editOrder failure throws CoinbaseException', () {
+      when(mockClient.post(any,
+              headers: anyNamed('headers'), body: anyNamed('body')))
+          .thenAnswer((_) async => http.Response('{}', 400));
+
+      final future = editOrder(
+        orderId: '123',
+        price: '100',
+        size: '1',
+        credential: constants.credentials,
+        client: mockClient,
+      );
+
+      expect(future, throwsA(isA<CoinbaseException>()));
+    });
+
+    test('editOrderPreview failure throws CoinbaseException', () {
+      when(mockClient.post(any,
+              headers: anyNamed('headers'), body: anyNamed('body')))
+          .thenAnswer((_) async => http.Response('{}', 400));
+
+      final future = editOrderPreview(
+        orderId: '123',
+        price: '100',
+        size: '1',
+        credential: constants.credentials,
+        client: mockClient,
+      );
+
+      expect(future, throwsA(isA<CoinbaseException>()));
     });
   });
 }
