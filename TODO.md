@@ -72,7 +72,7 @@ https://docs.cdp.coinbase.com/coinbase-app/advanced-trade-apis/rest-api
 
 - [ ] [GET /v3/brokerage/cfm/balance_summary - Get Futures Balance Summary](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/futures/get-futures-balance-summary)
 - [ ] [GET /v3/brokerage/cfm/positions - List Futures Positions](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/futures/list-futures-positions)
-- [ ] [GET /v3/brokerage/cfm/positions/{product_id} - Get Futures Position](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/futures/get-futures-position)
+- [x] [GET /v3/brokerage/cfm/positions/{product_id} - Get Futures Position](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/futures/get-futures-position)
 - [ ] [POST /v3/brokerage/cfm/sweeps/schedule - Schedule Futures Sweep](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/futures/schedule-futures-sweep)
 - [ ] [GET /v3/brokerage/cfm/sweeps - List Futures Sweeps](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/futures/list-futures-sweeps)
 - [ ] [DELETE /v3/brokerage/cfm/sweeps - Cancel Pending Futures Sweep](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/futures/cancel-pending-futures-sweep)
