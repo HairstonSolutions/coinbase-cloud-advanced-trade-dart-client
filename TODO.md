@@ -76,7 +76,7 @@ https://docs.cdp.coinbase.com/coinbase-app/advanced-trade-apis/rest-api
 - [ ] [POST /v3/brokerage/cfm/sweeps/schedule - Schedule Futures Sweep](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/futures/schedule-futures-sweep)
 - [ ] [GET /v3/brokerage/cfm/sweeps - List Futures Sweeps](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/futures/list-futures-sweeps)
 - [ ] [DELETE /v3/brokerage/cfm/sweeps - Cancel Pending Futures Sweep](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/futures/cancel-pending-futures-sweep)
-- [ ] [GET /v3/brokerage/cfm/intraday/margin_setting - Get Intraday Margin Setting](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/futures/get-intraday-margin-setting)
+- [x] [GET /v3/brokerage/cfm/intraday/margin_setting - Get Intraday Margin Setting](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/futures/get-intraday-margin-setting)
 - [ ] [POST /v3/brokerage/cfm/intraday/margin_setting - Set Intraday Margin Setting](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/futures/set-intraday-margin-settings)
 - [ ] [GET /v3/brokerage/cfm/intraday/current_margin_window - Get Current Margin Window](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/futures/get-current-margin-window)
 
