@@ -79,16 +79,42 @@ Future<Account?> getAccountByCurrency(String currency,
     {http.Client? client,
     required Credential credential,
     bool isSandbox = false}) async {
-  List<Account> accounts = await getAccounts(
-      client: client, credential: credential, isSandbox: isSandbox);
+  String? cursor;
+  int limit = 250;
 
-  if (accounts.isNotEmpty) {
-    for (Account account in accounts) {
-      if (account.currency == currency) {
-        return account;
+  while (true) {
+    Map<String, dynamic>? queryParameters = {'limit': '$limit'};
+    if (cursor != null) queryParameters['cursor'] = cursor;
+
+    http.Response response = await getAuthorized('/accounts',
+        queryParameters: queryParameters,
+        client: client,
+        credential: credential,
+        isSandbox: isSandbox);
+
+    if (response.statusCode == 200) {
+      var jsonResponse = jsonDecode(response.body);
+      var jsonAccounts = jsonResponse['accounts'];
+      String? jsonCursor = jsonResponse['cursor'];
+
+      for (var jsonObject in jsonAccounts) {
+        Account account = Account.fromCBJson(jsonObject);
+        if (account.currency == currency) {
+          return account;
+        }
       }
+
+      if (jsonCursor != null && jsonCursor != '') {
+        cursor = jsonCursor;
+      } else {
+        break;
+      }
+    } else {
+      throw CoinbaseException(
+          'Failed to get accounts', response.statusCode, response.body);
     }
   }
+
   return null;
 }
 
