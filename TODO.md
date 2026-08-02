@@ -62,7 +62,7 @@ https://docs.cdp.coinbase.com/coinbase-app/advanced-trade-apis/rest-api
 ### Payment Methods
 
 - [ ] [GET /v3/brokerage/payment_methods - List Payment Methods](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/payment-methods/list-payment-methods)
-- [ ] [GET /v3/brokerage/payment_methods/{payment_method_id} - Get Payment Method](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/payment-methods/get-payment-method)
+- [x] [GET /v3/brokerage/payment_methods/{payment_method_id} - Get Payment Method](https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/payment-methods/get-payment-method)
 
 ### Data API
 

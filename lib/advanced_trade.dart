@@ -35,6 +35,8 @@ export 'src/models/volume_breakdown.dart';
 export 'src/rest/accounts.dart';
 export 'src/rest/data.dart';
 export 'src/rest/fees.dart';
+export 'src/models/payment_method.dart';
+export 'src/rest/payment_methods.dart';
 export 'src/rest/orders/fills.dart';
 export 'src/rest/orders/orders.dart';
 export 'src/rest/portfolios.dart';
