@@ -23,9 +23,7 @@ Future<List<PaymentMethod>> getPaymentMethods(
   List<PaymentMethod> paymentMethods = [];
 
   http.Response response = await getAuthorized('/payment_methods',
-      client: client,
-      credential: credential,
-      isSandbox: isSandbox);
+      client: client, credential: credential, isSandbox: isSandbox);
 
   if (response.statusCode == 200) {
     String data = response.body;
@@ -34,7 +32,8 @@ Future<List<PaymentMethod>> getPaymentMethods(
     if (jsonList == null) {
       throw Exception('payment_methods key is missing or null');
     }
-    paymentMethods = jsonList.map((item) => PaymentMethod.fromCBJson(item)).toList();
+    paymentMethods =
+        jsonList.map((item) => PaymentMethod.fromCBJson(item)).toList();
   } else {
     throw CoinbaseException(
         'Failed to get payment methods', response.statusCode, response.body);
@@ -59,14 +58,18 @@ Future<PaymentMethod> getPaymentMethod(
     http.Client? client,
     required Credential credential,
     bool isSandbox = false}) async {
-  http.Response response = await getAuthorized('/payment_methods/$paymentMethodId',
-      client: client, credential: credential, isSandbox: isSandbox);
+  http.Response response = await getAuthorized(
+      '/payment_methods/$paymentMethodId',
+      client: client,
+      credential: credential,
+      isSandbox: isSandbox);
 
   if (response.statusCode == 200) {
     var jsonResponse = jsonDecode(response.body);
     final jsonPaymentMethod = jsonResponse['payment_method'];
     if (jsonPaymentMethod == null) {
-      throw CoinbaseException('Payment method data missing', response.statusCode, response.body);
+      throw CoinbaseException(
+          'Payment method data missing', response.statusCode, response.body);
     }
     return PaymentMethod.fromCBJson(jsonPaymentMethod);
   } else {

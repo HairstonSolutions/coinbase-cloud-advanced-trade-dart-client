@@ -17,8 +17,8 @@ void main() {
     });
 
     test('Get a list of payment methods', () async {
-      final String mockResponse =
-          await getJsonFromFile('rest/payment_methods/list_payment_methods.json');
+      final String mockResponse = await getJsonFromFile(
+          'rest/payment_methods/list_payment_methods.json');
 
       when(mockClient.get(any, headers: anyNamed('headers')))
           .thenAnswer((_) async => http.Response(mockResponse, 200));
