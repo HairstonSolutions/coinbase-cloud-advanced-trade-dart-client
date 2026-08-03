@@ -30,11 +30,11 @@ Future<List<PaymentMethod>> getPaymentMethods(
   if (response.statusCode == 200) {
     String data = response.body;
     var jsonResponse = jsonDecode(data);
-    var jsonPaymentMethods = jsonResponse['payment_methods'];
-
-    for (var jsonObject in jsonPaymentMethods) {
-      paymentMethods.add(PaymentMethod.fromCBJson(jsonObject));
+    final jsonList = jsonResponse['payment_methods'] as List<dynamic>?;
+    if (jsonList == null) {
+      throw Exception('payment_methods key is missing or null');
     }
+    paymentMethods = jsonList.map((item) => PaymentMethod.fromCBJson(item)).toList();
   } else {
     throw CoinbaseException(
         'Failed to get payment methods', response.statusCode, response.body);
@@ -64,8 +64,10 @@ Future<PaymentMethod> getPaymentMethod(
 
   if (response.statusCode == 200) {
     var jsonResponse = jsonDecode(response.body);
-    var jsonPaymentMethod = jsonResponse['payment_method'];
-
+    final jsonPaymentMethod = jsonResponse['payment_method'];
+    if (jsonPaymentMethod == null) {
+      throw CoinbaseException('Payment method data missing', response.statusCode, response.body);
+    }
     return PaymentMethod.fromCBJson(jsonPaymentMethod);
   } else {
     throw CoinbaseException(
