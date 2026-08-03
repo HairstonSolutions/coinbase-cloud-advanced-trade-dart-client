@@ -82,12 +82,9 @@ Future<Account?> getAccountByCurrency(String currency,
   List<Account> accounts = await getAccounts(
       client: client, credential: credential, isSandbox: isSandbox);
 
-  if (accounts.isNotEmpty) {
-    for (Account account in accounts) {
-      if (account.currency == currency) {
-        return account;
-      }
-    }
+  int index = accounts.indexWhere((account) => account.currency == currency);
+  if (index != -1) {
+    return accounts[index];
   }
   return null;
 }
