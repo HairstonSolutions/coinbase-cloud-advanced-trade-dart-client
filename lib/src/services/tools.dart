@@ -49,21 +49,9 @@ num? nullableNumber(Map<String, dynamic> jsonObject, String key,
 ///
 /// Returns a string representation of the query parameters.
 String? convertParamsToString(Map<String, dynamic> queryParameters) {
-  late String conversion;
-  conversion = "";
-
-  if (queryParameters.isNotEmpty) {
-    conversion = "?";
-    int count = 0;
-
-    for (var entry in queryParameters.entries) {
-      if (count > 0) {
-        conversion = "$conversion&";
-      }
-      conversion = "$conversion${entry.key}=${entry.value}";
-      count++;
-    }
+  if (queryParameters.isEmpty) {
+    return "";
   }
 
-  return conversion;
+  return "?${queryParameters.entries.map((entry) => '${entry.key}=${entry.value}').join('&')}";
 }
