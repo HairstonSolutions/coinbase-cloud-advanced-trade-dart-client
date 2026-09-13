@@ -94,6 +94,18 @@ Future<http.Response> get(String endpoint,
 }
 
 /// Makes an authorized GET request to the Coinbase Advanced Trade API.
+///
+/// This function generates a JWT, and then makes a GET request to the specified
+/// endpoint with the JWT in the Authorization header.
+///
+/// [endpoint] - The API endpoint to make the request to.
+/// [queryParameters] - Optional query parameters to include in the request.
+/// [client] - Optional http.Client to use for the request.
+/// [options] - Optional configurations like baseUrl, timeout, and client.
+/// [credential] - The user's API credentials.
+/// [isSandbox] - Whether to use the sandbox environment.
+///
+/// Returns an [http.Response] object.
 Future<http.Response> getAuthorized(String endpoint,
     {Map<String, dynamic>? queryParameters,
     http.Client? client,
@@ -111,6 +123,18 @@ Future<http.Response> getAuthorized(String endpoint,
 }
 
 /// Makes an authorized POST request to the Coinbase Advanced Trade API.
+///
+/// This function generates a JWT, and then makes a POST request to the specified
+/// endpoint with the JWT in the Authorization header.
+///
+/// [endpoint] - The API endpoint to make the request to.
+/// [body] - The body of the request.
+/// [client] - Optional http.Client to use for the request.
+/// [options] - Optional configurations like baseUrl, timeout, and client.
+/// [credential] - The user's API credentials.
+/// [isSandbox] - Whether to use the sandbox environment.
+///
+/// Returns an [http.Response] object.
 Future<http.Response> postAuthorized(String endpoint,
     {String? body,
     http.Client? client,
@@ -128,6 +152,18 @@ Future<http.Response> postAuthorized(String endpoint,
 }
 
 /// Makes an authorized PUT request to the Coinbase Advanced Trade API.
+///
+/// This function generates a JWT, and then makes a PUT request to the specified
+/// endpoint with the JWT in the Authorization header.
+///
+/// [endpoint] - The API endpoint to make the request to.
+/// [body] - The body of the request.
+/// [client] - Optional http.Client to use for the request.
+/// [options] - Optional configurations like baseUrl, timeout, and client.
+/// [credential] - The user's API credentials.
+/// [isSandbox] - Whether to use the sandbox environment.
+///
+/// Returns an [http.Response] object.
 Future<http.Response> putAuthorized(String endpoint,
     {String? body,
     http.Client? client,
@@ -145,6 +181,17 @@ Future<http.Response> putAuthorized(String endpoint,
 }
 
 /// Makes an authorized DELETE request to the Coinbase Advanced Trade API.
+///
+/// This function generates a JWT, and then makes a DELETE request to the specified
+/// endpoint with the JWT in the Authorization header.
+///
+/// [endpoint] - The API endpoint to make the request to.
+/// [client] - Optional http.Client to use for the request.
+/// [options] - Optional configurations like baseUrl, timeout, and client.
+/// [credential] - The user's API credentials.
+/// [isSandbox] - Whether to use the sandbox environment.
+///
+/// Returns an [http.Response] object.
 Future<http.Response> deleteAuthorized(String endpoint,
     {http.Client? client,
     CoinbaseHttpOptions? options,

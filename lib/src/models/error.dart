@@ -29,6 +29,7 @@ class CoinbaseException implements Exception {
 
 /// Custom exception for Timeout errors.
 class CoinbaseTimeoutException extends CoinbaseException {
+  /// CoinbaseTimeoutException constructor
   CoinbaseTimeoutException(String message)
       : super(message, 408, 'Request timed out');
 }
