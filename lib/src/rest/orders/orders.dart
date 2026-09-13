@@ -31,21 +31,74 @@ final Logger _logger = setupLogger('OrdersRest');
 /// [isSandbox] - Whether to use the sandbox environment.
 ///
 /// Returns a list of [Order] objects.
-Future<List<Order>> getOrders(
-    {int? limit = 1000,
-    String? cursor,
-    http.Client? client,
-    required Credential credential,
-    bool isSandbox = false}) async {
+Future<List<Order>> getOrders({
+  int? limit = 1000,
+  List<String>? productIds,
+  List<String>? orderStatus,
+  String? orderSide,
+  String? orderType,
+  String? orderPlacementSource,
+  String? contractExpiryType,
+  List<String>? assetFilters,
+  List<String>? timeInForces,
+  String? startDate,
+  String? endDate,
+  String? sortBy,
+  String? retailPortfolioId,
+  String? cursor,
+  http.Client? client,
+  required Credential credential,
+  bool isSandbox = false,
+}) async {
   List<Order> orders = [];
-  Map<String, dynamic>? queryParameters = {'limit': '$limit'};
-  (cursor != null) ? queryParameters.addAll({'cursor': cursor}) : null;
+  Map<String, dynamic> queryParameters = {'limit': '$limit'};
+  if (productIds != null && productIds.isNotEmpty) {
+    queryParameters['product_ids'] = productIds;
+  }
+  if (orderStatus != null && orderStatus.isNotEmpty) {
+    queryParameters['order_status'] = orderStatus;
+  }
+  if (orderSide != null) {
+    queryParameters['order_side'] = orderSide;
+  }
+  if (orderType != null) {
+    queryParameters['order_types'] = orderType;
+  }
+  if (orderPlacementSource != null) {
+    queryParameters['order_placement_source'] = orderPlacementSource;
+  }
+  if (contractExpiryType != null) {
+    queryParameters['contract_expiry_type'] = contractExpiryType;
+  }
+  if (assetFilters != null && assetFilters.isNotEmpty) {
+    queryParameters['asset_filters'] = assetFilters;
+  }
+  if (timeInForces != null && timeInForces.isNotEmpty) {
+    queryParameters['time_in_forces'] = timeInForces;
+  }
+  if (startDate != null) {
+    queryParameters['start_date'] = startDate;
+  }
+  if (endDate != null) {
+    queryParameters['end_date'] = endDate;
+  }
+  if (sortBy != null) {
+    queryParameters['sort_by'] = sortBy;
+  }
+  if (retailPortfolioId != null) {
+    queryParameters['retail_portfolio_id'] = retailPortfolioId;
+  }
+  if (cursor != null) {
+    queryParameters['cursor'] = cursor;
+  }
 
-  http.Response response = await getAuthorized('/orders/historical/batch',
-      queryParameters: queryParameters,
-      client: client,
-      credential: credential,
-      isSandbox: isSandbox);
+  http.Response response = await getAuthorized(
+    '/orders/historical/batch',
+    queryParameters: queryParameters,
+    client: client,
+    credential: credential,
+    isSandbox: isSandbox,
+  );
 
   if (response.statusCode == 200) {
     String data = response.body;
@@ -60,16 +113,32 @@ Future<List<Order>> getOrders(
     if (jsonCursor != null && jsonCursor != '') {
       // Recursive Call
       List<Order> paginatedOrders = await getOrders(
-          limit: limit,
-          cursor: jsonCursor,
-          client: client,
-          credential: credential,
-          isSandbox: isSandbox);
+        limit: limit,
+        productIds: productIds,
+        orderStatus: orderStatus,
+        orderSide: orderSide,
+        orderType: orderType,
+        orderPlacementSource: orderPlacementSource,
+        contractExpiryType: contractExpiryType,
+        assetFilters: assetFilters,
+        timeInForces: timeInForces,
+        startDate: startDate,
+        endDate: endDate,
+        sortBy: sortBy,
+        retailPortfolioId: retailPortfolioId,
+        cursor: jsonCursor,
+        client: client,
+        credential: credential,
+        isSandbox: isSandbox,
+      );
       orders.addAll(paginatedOrders);
     }
   } else {
     throw CoinbaseException(
-        'Failed to get orders', response.statusCode, response.body);
+      'Failed to get orders',
+      response.statusCode,
+      response.body,
+    );
   }
 
   return orders;
@@ -89,15 +158,20 @@ Future<List<Order>> getOrders(
 ///
 /// Returns an [Order] object, or null if no order is found for the given
 /// order ID.
-Future<Order?> getOrder(
-    {required String orderId,
-    http.Client? client,
-    required Credential credential,
-    bool isSandbox = false}) async {
+Future<Order?> getOrder({
+  required String orderId,
+  http.Client? client,
+  required Credential credential,
+  bool isSandbox = false,
+}) async {
   Order? order;
 
-  http.Response response = await getAuthorized('/orders/historical/$orderId',
-      client: client, credential: credential, isSandbox: isSandbox);
+  http.Response response = await getAuthorized(
+    '/orders/historical/$orderId',
+    client: client,
+    credential: credential,
+    isSandbox: isSandbox,
+  );
 
   if (response.statusCode == 200) {
     String data = response.body;
@@ -106,7 +180,10 @@ Future<Order?> getOrder(
     order = Order.fromCBJson(jsonOrder);
   } else {
     throw CoinbaseException(
-        'Failed to get order', response.statusCode, response.body);
+      'Failed to get order',
+      response.statusCode,
+      response.body,
+    );
   }
 
   return order;
@@ -130,15 +207,16 @@ Future<Order?> getOrder(
 ///
 /// Returns a map containing the result of the order creation, or null if the
 /// request fails.
-Future<Map<String, dynamic>?> createMarketOrder(
-    {required String clientOrderId,
-    required String productId,
-    required OrderSide side,
-    String? quoteSize,
-    String? baseSize,
-    required Credential credential,
-    bool isSandbox = false,
-    Client? client}) async {
+Future<Map<String, dynamic>?> createMarketOrder({
+  required String clientOrderId,
+  required String productId,
+  required OrderSide side,
+  String? quoteSize,
+  String? baseSize,
+  required Credential credential,
+  bool isSandbox = false,
+  Client? client,
+}) async {
   if (quoteSize == null && baseSize == null) {
     throw ArgumentError('Either quoteSize or baseSize must be provided.');
   }
@@ -157,13 +235,14 @@ Future<Map<String, dynamic>?> createMarketOrder(
   final orderConfiguration = {'market_market_ioc': marketMarketIOC};
 
   return _createOrder(
-      clientOrderId: clientOrderId,
-      productId: productId,
-      side: side,
-      orderConfiguration: orderConfiguration,
-      credential: credential,
-      isSandbox: isSandbox,
-      client: client);
+    clientOrderId: clientOrderId,
+    productId: productId,
+    side: side,
+    orderConfiguration: orderConfiguration,
+    credential: credential,
+    isSandbox: isSandbox,
+    client: client,
+  );
 }
 
 /// Creates a limit order. GTC: Good Till Cancelled.
@@ -184,32 +263,34 @@ Future<Map<String, dynamic>?> createMarketOrder(
 ///
 /// Returns a map containing the result of the order creation, or null if the
 /// request fails.
-Future<Map<String, dynamic>?> createLimitOrder(
-    {required String clientOrderId,
-    required String productId,
-    required OrderSide side,
-    required String baseSize,
-    required String limitPrice,
-    bool postOnly = false,
-    required Credential credential,
-    bool isSandbox = false,
-    Client? client}) async {
+Future<Map<String, dynamic>?> createLimitOrder({
+  required String clientOrderId,
+  required String productId,
+  required OrderSide side,
+  required String baseSize,
+  required String limitPrice,
+  bool postOnly = false,
+  required Credential credential,
+  bool isSandbox = false,
+  Client? client,
+}) async {
   final orderConfiguration = {
     'limit_limit_gtc': {
       'base_size': baseSize,
       'limit_price': limitPrice,
       'post_only': postOnly,
-    }
+    },
   };
 
   return _createOrder(
-      clientOrderId: clientOrderId,
-      productId: productId,
-      side: side,
-      orderConfiguration: orderConfiguration,
-      credential: credential,
-      isSandbox: isSandbox,
-      client: client);
+    clientOrderId: clientOrderId,
+    productId: productId,
+    side: side,
+    orderConfiguration: orderConfiguration,
+    credential: credential,
+    isSandbox: isSandbox,
+    client: client,
+  );
 }
 
 /// Creates a stop limit order. GTC: Good Till Cancelled.
@@ -230,34 +311,36 @@ Future<Map<String, dynamic>?> createLimitOrder(
 ///
 /// Returns a map containing the result of the order creation, or null if the
 /// request fails.
-Future<Map<String, dynamic>?> createStopLimitOrderGTC(
-    {required String clientOrderId,
-    required String productId,
-    required OrderSide side,
-    required String baseSize,
-    required String limitPrice,
-    required String stopPrice,
-    required StopDirection stopDirection,
-    required Credential credential,
-    bool isSandbox = false,
-    Client? client}) async {
+Future<Map<String, dynamic>?> createStopLimitOrderGTC({
+  required String clientOrderId,
+  required String productId,
+  required OrderSide side,
+  required String baseSize,
+  required String limitPrice,
+  required String stopPrice,
+  required StopDirection stopDirection,
+  required Credential credential,
+  bool isSandbox = false,
+  Client? client,
+}) async {
   final orderConfiguration = {
     'stop_limit_stop_limit_gtc': {
       'base_size': baseSize,
       'limit_price': limitPrice,
       'stop_price': stopPrice,
       'stop_direction': stopDirection.toCB(),
-    }
+    },
   };
 
   return _createOrder(
-      clientOrderId: clientOrderId,
-      productId: productId,
-      side: side,
-      orderConfiguration: orderConfiguration,
-      credential: credential,
-      isSandbox: isSandbox,
-      client: client);
+    clientOrderId: clientOrderId,
+    productId: productId,
+    side: side,
+    orderConfiguration: orderConfiguration,
+    credential: credential,
+    isSandbox: isSandbox,
+    client: client,
+  );
 }
 
 /// Creates a stop limit order. GTD: Good Till Date.
@@ -280,18 +363,19 @@ Future<Map<String, dynamic>?> createStopLimitOrderGTC(
 ///
 /// Returns a map containing the result of the order creation, or null if the
 /// request fails.
-Future<Map<String, dynamic>?> createStopLimitOrderGTD(
-    {required String clientOrderId,
-    required String productId,
-    required OrderSide side,
-    required String baseSize,
-    required String limitPrice,
-    required String stopPrice,
-    required StopDirection stopDirection,
-    required DateTime endTime,
-    required Credential credential,
-    bool isSandbox = false,
-    Client? client}) async {
+Future<Map<String, dynamic>?> createStopLimitOrderGTD({
+  required String clientOrderId,
+  required String productId,
+  required OrderSide side,
+  required String baseSize,
+  required String limitPrice,
+  required String stopPrice,
+  required StopDirection stopDirection,
+  required DateTime endTime,
+  required Credential credential,
+  bool isSandbox = false,
+  Client? client,
+}) async {
   final orderConfiguration = {
     'stop_limit_stop_limit_gtd': {
       'base_size': baseSize,
@@ -299,27 +383,29 @@ Future<Map<String, dynamic>?> createStopLimitOrderGTD(
       'stop_price': stopPrice,
       'stop_direction': stopDirection.toCB(),
       'end_time': endTime.toUtc().toIso8601String(),
-    }
+    },
   };
 
   return _createOrder(
-      clientOrderId: clientOrderId,
-      productId: productId,
-      side: side,
-      orderConfiguration: orderConfiguration,
-      credential: credential,
-      isSandbox: isSandbox,
-      client: client);
+    clientOrderId: clientOrderId,
+    productId: productId,
+    side: side,
+    orderConfiguration: orderConfiguration,
+    credential: credential,
+    isSandbox: isSandbox,
+    client: client,
+  );
 }
 
-Future<Map<String, dynamic>?> _createOrder(
-    {required String clientOrderId,
-    required String productId,
-    required OrderSide side,
-    required Map<String, dynamic> orderConfiguration,
-    required Credential credential,
-    bool isSandbox = false,
-    Client? client}) async {
+Future<Map<String, dynamic>?> _createOrder({
+  required String clientOrderId,
+  required String productId,
+  required OrderSide side,
+  required Map<String, dynamic> orderConfiguration,
+  required Credential credential,
+  bool isSandbox = false,
+  Client? client,
+}) async {
   Map<String, dynamic>? result;
 
   final body = {
@@ -329,11 +415,13 @@ Future<Map<String, dynamic>?> _createOrder(
     'order_configuration': orderConfiguration,
   };
 
-  http.Response response = await postAuthorized('/orders',
-      body: jsonEncode(body),
-      credential: credential,
-      isSandbox: isSandbox,
-      client: client);
+  http.Response response = await postAuthorized(
+    '/orders',
+    body: jsonEncode(body),
+    credential: credential,
+    isSandbox: isSandbox,
+    client: client,
+  );
 
   if (response.statusCode == 200) {
     String data = response.body;
@@ -341,7 +429,10 @@ Future<Map<String, dynamic>?> _createOrder(
     result = jsonResponse;
   } else {
     throw CoinbaseException(
-        'Failed to create order', response.statusCode, response.body);
+      'Failed to create order',
+      response.statusCode,
+      response.body,
+    );
   }
 
   return result;
@@ -359,31 +450,33 @@ Future<Map<String, dynamic>?> _createOrder(
 /// [isSandbox] - Whether to use the sandbox environment.
 ///
 /// Returns an [EditOrderResponse] object.
-Future<EditOrderResponse> editOrder(
-    {required String orderId,
-    required String price,
-    required String size,
-    required Credential credential,
-    bool isSandbox = false,
-    Client? client}) async {
-  final body = {
-    'order_id': orderId,
-    'price': price,
-    'size': size,
-  };
+Future<EditOrderResponse> editOrder({
+  required String orderId,
+  required String price,
+  required String size,
+  required Credential credential,
+  bool isSandbox = false,
+  Client? client,
+}) async {
+  final body = {'order_id': orderId, 'price': price, 'size': size};
 
-  http.Response response = await postAuthorized('/orders/edit',
-      body: jsonEncode(body),
-      credential: credential,
-      isSandbox: isSandbox,
-      client: client);
+  http.Response response = await postAuthorized(
+    '/orders/edit',
+    body: jsonEncode(body),
+    credential: credential,
+    isSandbox: isSandbox,
+    client: client,
+  );
 
   if (response.statusCode == 200) {
     var jsonResponse = jsonDecode(response.body);
     return EditOrderResponse.fromCBJson(jsonResponse);
   } else {
     throw CoinbaseException(
-        'Failed to edit order', response.statusCode, response.body);
+      'Failed to edit order',
+      response.statusCode,
+      response.body,
+    );
   }
 }
 
@@ -399,31 +492,33 @@ Future<EditOrderResponse> editOrder(
 /// [isSandbox] - Whether to use the sandbox environment.
 ///
 /// Returns an [EditOrderPreviewResponse] object.
-Future<EditOrderPreviewResponse> editOrderPreview(
-    {required String orderId,
-    required String price,
-    required String size,
-    required Credential credential,
-    bool isSandbox = false,
-    Client? client}) async {
-  final body = {
-    'order_id': orderId,
-    'price': price,
-    'size': size,
-  };
+Future<EditOrderPreviewResponse> editOrderPreview({
+  required String orderId,
+  required String price,
+  required String size,
+  required Credential credential,
+  bool isSandbox = false,
+  Client? client,
+}) async {
+  final body = {'order_id': orderId, 'price': price, 'size': size};
 
-  http.Response response = await postAuthorized('/orders/edit_preview',
-      body: jsonEncode(body),
-      credential: credential,
-      isSandbox: isSandbox,
-      client: client);
+  http.Response response = await postAuthorized(
+    '/orders/edit_preview',
+    body: jsonEncode(body),
+    credential: credential,
+    isSandbox: isSandbox,
+    client: client,
+  );
 
   if (response.statusCode == 200) {
     var jsonResponse = jsonDecode(response.body);
     return EditOrderPreviewResponse.fromCBJson(jsonResponse);
   } else {
     throw CoinbaseException(
-        'Failed to preview edit order', response.statusCode, response.body);
+      'Failed to preview edit order',
+      response.statusCode,
+      response.body,
+    );
   }
 }
 
@@ -439,31 +534,37 @@ Future<EditOrderPreviewResponse> editOrderPreview(
 /// [isSandbox] - Whether to use the sandbox environment.
 ///
 /// Returns a [PreviewOrderResponse] object.
-Future<PreviewOrderResponse> previewOrder(
-    {required String productId,
-    required OrderSide side,
-    required Map<String, dynamic> orderConfiguration,
-    required Credential credential,
-    bool isSandbox = false,
-    Client? client}) async {
+Future<PreviewOrderResponse> previewOrder({
+  required String productId,
+  required OrderSide side,
+  required Map<String, dynamic> orderConfiguration,
+  required Credential credential,
+  bool isSandbox = false,
+  Client? client,
+}) async {
   final body = {
     'product_id': productId,
     'side': side.toCB(),
     'order_configuration': orderConfiguration,
   };
 
-  http.Response response = await postAuthorized('/orders/preview',
-      body: jsonEncode(body),
-      credential: credential,
-      isSandbox: isSandbox,
-      client: client);
+  http.Response response = await postAuthorized(
+    '/orders/preview',
+    body: jsonEncode(body),
+    credential: credential,
+    isSandbox: isSandbox,
+    client: client,
+  );
 
   if (response.statusCode == 200) {
     var jsonResponse = jsonDecode(response.body);
     return PreviewOrderResponse.fromCBJson(jsonResponse);
   } else {
     throw CoinbaseException(
-        'Failed to preview order', response.statusCode, response.body);
+      'Failed to preview order',
+      response.statusCode,
+      response.body,
+    );
   }
 }
 
@@ -477,22 +578,23 @@ Future<PreviewOrderResponse> previewOrder(
 /// [isSandbox] - Whether to use the sandbox environment.
 ///
 /// Returns a [CanceledOrders] object.
-Future<CanceledOrders?> cancelOrders(
-    {required List<String> orderIds,
-    required Credential credential,
-    bool isSandbox = false,
-    Client? client}) async {
+Future<CanceledOrders?> cancelOrders({
+  required List<String> orderIds,
+  required Credential credential,
+  bool isSandbox = false,
+  Client? client,
+}) async {
   CanceledOrders? result;
 
-  final body = {
-    'order_ids': orderIds,
-  };
+  final body = {'order_ids': orderIds};
 
-  http.Response response = await postAuthorized('/orders/batch_cancel',
-      body: jsonEncode(body),
-      credential: credential,
-      isSandbox: isSandbox,
-      client: client);
+  http.Response response = await postAuthorized(
+    '/orders/batch_cancel',
+    body: jsonEncode(body),
+    credential: credential,
+    isSandbox: isSandbox,
+    client: client,
+  );
 
   if (response.statusCode == 200) {
     String data = response.body;
@@ -500,7 +602,10 @@ Future<CanceledOrders?> cancelOrders(
     result = CanceledOrders.fromCBJson(jsonResponse);
   } else {
     throw CoinbaseException(
-        'Failed to cancel orders', response.statusCode, response.body);
+      'Failed to cancel orders',
+      response.statusCode,
+      response.body,
+    );
   }
 
   return result;
@@ -516,33 +621,38 @@ Future<CanceledOrders?> cancelOrders(
 /// [isSandbox] - Whether to use the sandbox environment.
 ///
 /// Returns a map containing the result of the close position request.
-Future<Map<String, dynamic>?> closePosition(
-    {required String productId,
-    required Credential credential,
-    bool isSandbox = false,
-    Client? client}) async {
+Future<Map<String, dynamic>?> closePosition({
+  required String productId,
+  required Credential credential,
+  bool isSandbox = false,
+  Client? client,
+}) async {
   Map<String, dynamic>? result;
 
-  final body = {
-    'product_id': productId,
-  };
+  final body = {'product_id': productId};
 
-  http.Response response = await postAuthorized('/orders/close_position',
-      body: jsonEncode(body),
-      credential: credential,
-      isSandbox: isSandbox,
-      client: client);
+  http.Response response = await postAuthorized(
+    '/orders/close_position',
+    body: jsonEncode(body),
+    credential: credential,
+    isSandbox: isSandbox,
+    client: client,
+  );
 
   if (response.statusCode == 200) {
     var url = response.request?.url.toString();
     _logger.fine(
-        'Request to URL $url Success: Response code ${response.statusCode}');
+      'Request to URL $url Success: Response code ${response.statusCode}',
+    );
     String data = response.body;
     var jsonResponse = jsonDecode(data);
     result = jsonResponse;
   } else {
     throw CoinbaseException(
-        'Failed to close position', response.statusCode, response.body);
+      'Failed to close position',
+      response.statusCode,
+      response.body,
+    );
   }
 
   return result;
