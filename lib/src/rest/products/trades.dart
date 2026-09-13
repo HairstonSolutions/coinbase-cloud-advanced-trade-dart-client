@@ -50,7 +50,6 @@ Future<List<Trade>> getTrades(
     var url = response.request?.url.toString();
     _logger.severe(
         'Request to URL $url failed: Response code ${response.statusCode}');
-    _logger.severe('Error Response Message: ${response.body}');
   }
 
   return trades;

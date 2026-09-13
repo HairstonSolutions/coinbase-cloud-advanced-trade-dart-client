@@ -402,6 +402,34 @@ void main() {
       expect(result, isNotNull);
       expect(result!['success'], isTrue);
     });
+
+    test('closePosition does not log response body at INFO level', () async {
+      Logger.root.level = Level.INFO;
+      final List<LogRecord> logs = [];
+      final subscription = Logger.root.onRecord.listen((record) {
+        logs.add(record);
+      });
+
+      final String mockResponse = await getJsonFromFile(
+          'mocks/rest/orders/close_position_success.json');
+
+      when(mockClient.post(any,
+              headers: anyNamed('headers'), body: anyNamed('body')))
+          .thenAnswer((_) async => http.Response(mockResponse, 200));
+
+      await closePosition(
+        productId: 'BTC-USD',
+        credential: constants.credentials,
+        client: mockClient,
+      );
+
+      await subscription.cancel();
+
+      for (var log in logs) {
+        // Assert no response body is in the info logs or above
+        expect(log.message.contains('success_response'), isFalse);
+      }
+    });
   });
 
   group('Test Create Orders to Coinbase AT API Endpoints',

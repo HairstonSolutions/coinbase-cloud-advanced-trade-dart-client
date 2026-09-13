@@ -535,9 +535,8 @@ Future<Map<String, dynamic>?> closePosition(
 
   if (response.statusCode == 200) {
     var url = response.request?.url.toString();
-    _logger.info(
+    _logger.fine(
         'Request to URL $url Success: Response code ${response.statusCode}');
-    _logger.info('Success Response Message: ${response.body}');
     String data = response.body;
     var jsonResponse = jsonDecode(data);
     result = jsonResponse;
