@@ -10,4 +10,6 @@ build/
 # https://dart.dev/guides/libraries/private-files#pubspeclock.
 pubspec.lock
 
+scratch/
+
 /test/advanced_trade/rest/orders/*.json
