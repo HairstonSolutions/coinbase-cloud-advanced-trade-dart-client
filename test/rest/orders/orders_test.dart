@@ -44,7 +44,8 @@ void main() {
           await getJsonFromFile('rest/orders/get_orders_page_2.json');
 
       var callCount = 0;
-      when(mockClient.get(any, headers: anyNamed('headers'))).thenAnswer((_) async {
+      when(mockClient.get(any, headers: anyNamed('headers')))
+          .thenAnswer((_) async {
         if (callCount == 0) {
           callCount++;
           return http.Response(mockResponsePage1, 200);
