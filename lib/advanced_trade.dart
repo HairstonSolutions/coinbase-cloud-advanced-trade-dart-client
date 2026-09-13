@@ -1,5 +1,6 @@
 export 'src/models/account.dart';
 export 'src/models/candle.dart';
+export 'src/models/coinbase_http_options.dart';
 export 'src/models/credential.dart';
 export 'src/models/fee_tier.dart';
 export 'src/models/fill.dart';
