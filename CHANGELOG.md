@@ -1,8 +1,17 @@
-# Unreleased
+# 0.9.0
 
-- Implement Preview Order
-- Example: Create market order
-- Example: Get ticket price for BTC
+- Implement Preview Orders Endpoint (`POST /v3/brokerage/orders/preview`)
+- Implement Edit Order Endpoint (`POST /v3/brokerage/orders/edit`)
+- Implement Edit Order Preview Endpoint (`POST /v3/brokerage/orders/edit_preview`)
+- Implement List Payment Methods Endpoint (`GET /v3/brokerage/payment_methods`)
+- Implement Get Payment Method Endpoint (`GET /v3/brokerage/payment_methods/{payment_method_id}`)
+- Add `PaymentMethod` model and exports
+- ⚡ Performance: Optimize `convertParamsToString` with `Iterable.join()`
+- ⚡ Performance: Optimize `getAccountByCurrency` search with `indexWhere`
+- Add BTC Price Example (`example/get_btc_price_example.dart`)
+- Add Market Order Example (`example/market_order_example.dart`)
+- Security: Bump `jose` to `^0.3.5+2` to resolve GHSA-vm9r-h74p-hg97
+- Update `lints` to `^6.1.0`
 
 # 0.8.0
 
