@@ -78,6 +78,35 @@ void main() async {
 
 For more detailed examples, please see the `example/` directory.
 
+### Query Open Orders for a Specific Product
+
+Here is an example of how to query open orders for a specific product using filters:
+
+```dart
+import 'package:coinbase_cloud_advanced_trade_client/coinbase_cloud_advanced_trade_client.dart';
+
+void main() async {
+  final credential = Credential(
+    apiKeyName: 'YOUR_API_KEY_NAME',
+    privateKeyPEM: 'YOUR_PRIVATE_KEY',
+  );
+
+  // Get a list of open orders for BTC-USD
+  try {
+    List<Order> orders = await getOrders(
+      productIds: ['BTC-USD'],
+      orderStatus: ['OPEN'],
+      credential: credential,
+    );
+    for (var order in orders) {
+      print('Order: ${order.orderId}, Status: ${order.status}, Side: ${order.side}');
+    }
+  } catch (e) {
+    print('Error getting orders: $e');
+  }
+}
+```
+
 ### Create an Order
 
 Here is an example of how to create a limit order:

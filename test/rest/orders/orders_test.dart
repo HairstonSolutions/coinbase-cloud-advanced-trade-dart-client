@@ -64,6 +64,53 @@ void main() {
       verify(mockClient.get(any, headers: anyNamed('headers'))).called(2);
     });
 
+    test('Get orders with all filters correctly constructs query string',
+        () async {
+      final String mockResponse =
+          await getJsonFromFile('rest/orders/get_orders.json');
+
+      Uri? capturedUri;
+      when(mockClient.get(any, headers: anyNamed('headers')))
+          .thenAnswer((Invocation invocation) async {
+        capturedUri = invocation.positionalArguments.first as Uri;
+        return http.Response(mockResponse, 200);
+      });
+
+      await getOrders(
+          limit: 50,
+          productIds: ['BTC-USD', 'ETH-USD'],
+          orderStatus: ['OPEN', 'PENDING'],
+          orderSide: 'BUY',
+          orderType: 'LIMIT',
+          orderPlacementSource: 'RETAIL_ADVANCED',
+          contractExpiryType: 'EXPIRING',
+          assetFilters: ['BTC', 'ETH'],
+          timeInForces: ['GTC', 'IOC'],
+          startDate: '2023-01-01T00:00:00Z',
+          endDate: '2023-01-31T23:59:59Z',
+          sortBy: 'LIMIT_PRICE',
+          retailPortfolioId: 'portfolio-123',
+          client: mockClient,
+          credential: constants.credentials);
+
+      expect(capturedUri, isNotNull);
+      final queryParams = capturedUri!.queryParametersAll;
+
+      expect(queryParams['limit'], ['50']);
+      expect(queryParams['product_ids'], ['BTC-USD', 'ETH-USD']);
+      expect(queryParams['order_status'], ['OPEN', 'PENDING']);
+      expect(queryParams['order_side'], ['BUY']);
+      expect(queryParams['order_types'], ['LIMIT']);
+      expect(queryParams['order_placement_source'], ['RETAIL_ADVANCED']);
+      expect(queryParams['contract_expiry_type'], ['EXPIRING']);
+      expect(queryParams['asset_filters'], ['BTC', 'ETH']);
+      expect(queryParams['time_in_forces'], ['GTC', 'IOC']);
+      expect(queryParams['start_date'], ['2023-01-01T00:00:00Z']);
+      expect(queryParams['end_date'], ['2023-01-31T23:59:59Z']);
+      expect(queryParams['sort_by'], ['LIMIT_PRICE']);
+      expect(queryParams['retail_portfolio_id'], ['portfolio-123']);
+    });
+
     test('Get a single order by ID', () async {
       final String mockResponse =
           await getJsonFromFile('rest/orders/get_order.json');
