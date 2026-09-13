@@ -35,6 +35,25 @@ void main() {
       expect(orders, isNotNull);
       expect(orders.length, 1);
       expect(orders[0].orderId, "b0313b63-a2a1-4d30-a506-936337b52978");
+      verify(mockClient.get(any, headers: anyNamed('headers'))).called(1);
+    });
+
+    test('Get a single page of orders', () async {
+      final String mockResponse =
+          await getJsonFromFile('rest/orders/get_orders_page_1.json');
+
+      when(mockClient.get(any, headers: anyNamed('headers')))
+          .thenAnswer((_) async => http.Response(mockResponse, 200));
+
+      var page = await getOrdersPage(
+          client: mockClient, credential: constants.credentials);
+
+      expect(page, isNotNull);
+      expect(page.items.length, 1);
+      expect(page.hasNext, true);
+      expect(page.nextCursor, "cursor-123");
+      expect(page.items[0].orderId, "order-1");
+      verify(mockClient.get(any, headers: anyNamed('headers'))).called(1);
     });
 
     test('Get orders with pagination', () async {

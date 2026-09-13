@@ -22,6 +22,7 @@ export 'src/models/orders/product_type.dart';
 export 'src/models/orders/reject_reason.dart';
 export 'src/models/orders/time_in_force.dart';
 export 'src/models/orders/trigger_status.dart';
+export 'src/models/page.dart';
 export 'src/models/portfolio.dart';
 export 'src/models/portfolio_breakdown.dart';
 export 'src/models/product.dart';

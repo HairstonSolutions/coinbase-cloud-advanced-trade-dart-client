@@ -21,7 +21,7 @@ void main() {
       mockClient = MockClient();
     });
 
-    test('Get a list of accounts', () async {
+    test('Get a list of accounts (recursive / full)', () async {
       final String mockResponse =
           await getJsonFromFile('rest/accounts/get_accounts.json');
 
@@ -37,6 +37,27 @@ void main() {
       expect(accounts[0].uuid, "8bfc20d7-f7c6-4422-9181-51268ba51372");
       expect(accounts[0].currency, "BTC");
       expect(accounts[1].currency, "USD");
+      verify(mockClient.get(any, headers: anyNamed('headers'))).called(1);
+    });
+
+    test('Get a single page of accounts', () async {
+      final String mockResponse =
+          await getJsonFromFile('rest/accounts/get_accounts.json');
+
+      when(mockClient.get(any, headers: anyNamed('headers')))
+          .thenAnswer((_) async => http.Response(mockResponse, 200));
+
+      var page = await getAccountsPage(
+          client: mockClient,
+          credential: constants.credentials,
+          isSandbox: false);
+
+      expect(page.items.length, 2);
+      expect(page.hasNext, false);
+      expect(page.nextCursor, "");
+      expect(page.items[0].uuid, "8bfc20d7-f7c6-4422-9181-51268ba51372");
+      expect(page.items[0].currency, "BTC");
+      verify(mockClient.get(any, headers: anyNamed('headers'))).called(1);
     });
 
     test('Get a single account by UUID', () async {

@@ -4,7 +4,62 @@ import 'package:coinbase_cloud_advanced_trade_client/src/models/account.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/credential.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/error.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/services/network.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/models/page.dart';
 import 'package:http/http.dart' as http;
+
+/// Gets a single page of accounts for the current user.
+///
+/// GET /api/v3/brokerage/accounts
+/// https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/accounts/list-accounts
+///
+/// This function makes a GET request to the /accounts endpoint of the Coinbase
+/// Advanced Trade API. It supports pagination using a cursor.
+///
+/// [limit] - A limit on the number of accounts to be returned.
+/// [cursor] - A cursor for pagination.
+/// [credential] - The user's API credentials.
+/// [isSandbox] - Whether to use the sandbox environment.
+///
+/// Returns a [Page] of [Account] objects.
+Future<Page<Account>> getAccountsPage(
+    {int? limit = 250,
+    String? cursor,
+    http.Client? client,
+    required Credential credential,
+    bool isSandbox = false}) async {
+  List<Account> accounts = [];
+  Map<String, dynamic>? queryParameters = {'limit': '$limit'};
+  if (cursor != null) {
+    queryParameters['cursor'] = cursor;
+  }
+
+  http.Response response = await getAuthorized('/accounts',
+      queryParameters: queryParameters,
+      client: client,
+      credential: credential,
+      isSandbox: isSandbox);
+
+  if (response.statusCode == 200) {
+    String data = response.body;
+    var jsonResponse = jsonDecode(data);
+    var jsonAccounts = jsonResponse['accounts'];
+    String? jsonCursor = jsonResponse['cursor'];
+    bool hasNext = jsonResponse['has_next'] ?? false;
+
+    for (var jsonObject in jsonAccounts) {
+      accounts.add(Account.fromCBJson(jsonObject));
+    }
+
+    return Page<Account>(
+      items: accounts,
+      nextCursor: jsonCursor,
+      hasNext: hasNext,
+    );
+  } else {
+    throw CoinbaseException(
+        'Failed to get accounts page', response.statusCode, response.body);
+  }
+}
 
 /// Gets a list of accounts for the current user.
 ///
@@ -27,38 +82,23 @@ Future<List<Account>> getAccounts(
     required Credential credential,
     bool isSandbox = false}) async {
   List<Account> accounts = [];
-  Map<String, dynamic>? queryParameters = {'limit': '$limit'};
-  (cursor != null) ? queryParameters.addAll({'cursor': cursor}) : null;
+  String? currentCursor = cursor;
 
-  http.Response response = await getAuthorized('/accounts',
-      queryParameters: queryParameters,
-      client: client,
-      credential: credential,
-      isSandbox: isSandbox);
+  while (true) {
+    Page<Account> page = await getAccountsPage(
+        limit: limit,
+        cursor: currentCursor,
+        client: client,
+        credential: credential,
+        isSandbox: isSandbox);
 
-  if (response.statusCode == 200) {
-    String data = response.body;
-    var jsonResponse = jsonDecode(data);
-    var jsonAccounts = jsonResponse['accounts'];
-    String? jsonCursor = jsonResponse['cursor'];
+    accounts.addAll(page.items);
 
-    for (var jsonObject in jsonAccounts) {
-      accounts.add(Account.fromCBJson(jsonObject));
+    if (page.nextCursor != null && page.nextCursor != '') {
+      currentCursor = page.nextCursor;
+    } else {
+      break;
     }
-    // Recursive Break
-    if (jsonCursor != null && jsonCursor != '') {
-      // Recursive Call
-      List<Account> paginatedAccounts = await getAccounts(
-          limit: limit,
-          cursor: jsonCursor,
-          client: client,
-          credential: credential,
-          isSandbox: isSandbox);
-      accounts.addAll(paginatedAccounts);
-    }
-  } else {
-    throw CoinbaseException(
-        'Failed to get accounts', response.statusCode, response.body);
   }
 
   return accounts;

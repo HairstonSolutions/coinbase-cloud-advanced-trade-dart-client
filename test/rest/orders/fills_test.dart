@@ -36,6 +36,25 @@ void main() {
       expect(fills, isNotNull);
       expect(fills.length, 1);
       expect(fills[0].orderId, "b0313b63-a2a1-4d30-a506-936337b52978");
+      verify(mockClient.get(any, headers: anyNamed('headers'))).called(1);
+    });
+
+    test('Get a single page of fills', () async {
+      final String mockResponse =
+          await getJsonFromFile('rest/orders/get_fills.json');
+
+      when(mockClient.get(any, headers: anyNamed('headers')))
+          .thenAnswer((_) async => http.Response(mockResponse, 200));
+
+      var page = await getFillsPage(
+          client: mockClient, credential: constants.credentials);
+
+      expect(page, isNotNull);
+      expect(page.items.length, 1);
+      expect(page.hasNext, false);
+      expect(page.nextCursor, "");
+      expect(page.items[0].orderId, "b0313b63-a2a1-4d30-a506-936337b52978");
+      verify(mockClient.get(any, headers: anyNamed('headers'))).called(1);
     });
     test('Get fills with array query parameters', () async {
       final String mockResponse =

@@ -8,6 +8,7 @@ import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/edit_orde
 import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/order.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/order_side.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/preview_order.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/models/page.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/stop_direction.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/services/logger.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/services/network.dart';
@@ -17,7 +18,7 @@ import 'package:logging/logging.dart';
 
 final Logger _logger = setupLogger('OrdersRest');
 
-/// Gets a list of historical orders for the current user.
+/// Gets a single page of historical orders for the current user.
 ///
 /// GET /v3/brokerage/orders/historical/batch
 /// https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/list-orders
@@ -30,8 +31,8 @@ final Logger _logger = setupLogger('OrdersRest');
 /// [credential] - The user's API credentials.
 /// [isSandbox] - Whether to use the sandbox environment.
 ///
-/// Returns a list of [Order] objects.
-Future<List<Order>> getOrders({
+/// Returns a [Page] of [Order] objects.
+Future<Page<Order>> getOrdersPage({
   int? limit = 1000,
   List<String>? productIds,
   List<String>? orderStatus,
@@ -105,40 +106,90 @@ Future<List<Order>> getOrders({
     var jsonResponse = jsonDecode(data);
     var jsonAccounts = jsonResponse['orders'];
     String? jsonCursor = jsonResponse['cursor'];
+    bool hasNext = jsonResponse['has_next'] ?? false;
 
     for (var jsonObject in jsonAccounts) {
       orders.add(Order.fromCBJson(jsonObject));
     }
-    // Recursive Break
-    if (jsonCursor != null && jsonCursor != '') {
-      // Recursive Call
-      List<Order> paginatedOrders = await getOrders(
-        limit: limit,
-        productIds: productIds,
-        orderStatus: orderStatus,
-        orderSide: orderSide,
-        orderType: orderType,
-        orderPlacementSource: orderPlacementSource,
-        contractExpiryType: contractExpiryType,
-        assetFilters: assetFilters,
-        timeInForces: timeInForces,
-        startDate: startDate,
-        endDate: endDate,
-        sortBy: sortBy,
-        retailPortfolioId: retailPortfolioId,
-        cursor: jsonCursor,
-        client: client,
-        credential: credential,
-        isSandbox: isSandbox,
-      );
-      orders.addAll(paginatedOrders);
-    }
+
+    return Page<Order>(
+      items: orders,
+      nextCursor: jsonCursor,
+      hasNext: hasNext,
+    );
   } else {
     throw CoinbaseException(
-      'Failed to get orders',
+      'Failed to get orders page',
       response.statusCode,
       response.body,
     );
+  }
+}
+
+/// Gets a list of historical orders for the current user.
+///
+/// GET /v3/brokerage/orders/historical/batch
+/// https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/list-orders
+///
+/// This function makes a GET request to the /orders/historical/batch endpoint
+/// of the Coinbase Advanced Trade API. It supports pagination using a cursor.
+///
+/// [limit] - A limit on the number of orders to be returned.
+/// [cursor] - A cursor for pagination.
+/// [credential] - The user's API credentials.
+/// [isSandbox] - Whether to use the sandbox environment.
+///
+/// Returns a list of [Order] objects.
+Future<List<Order>> getOrders({
+  int? limit = 1000,
+  List<String>? productIds,
+  List<String>? orderStatus,
+  String? orderSide,
+  String? orderType,
+  String? orderPlacementSource,
+  String? contractExpiryType,
+  List<String>? assetFilters,
+  List<String>? timeInForces,
+  String? startDate,
+  String? endDate,
+  String? sortBy,
+  String? retailPortfolioId,
+  String? cursor,
+  http.Client? client,
+  required Credential credential,
+  bool isSandbox = false,
+}) async {
+  List<Order> orders = [];
+  String? currentCursor = cursor;
+
+  while (true) {
+    Page<Order> page = await getOrdersPage(
+      limit: limit,
+      productIds: productIds,
+      orderStatus: orderStatus,
+      orderSide: orderSide,
+      orderType: orderType,
+      orderPlacementSource: orderPlacementSource,
+      contractExpiryType: contractExpiryType,
+      assetFilters: assetFilters,
+      timeInForces: timeInForces,
+      startDate: startDate,
+      endDate: endDate,
+      sortBy: sortBy,
+      retailPortfolioId: retailPortfolioId,
+      cursor: currentCursor,
+      client: client,
+      credential: credential,
+      isSandbox: isSandbox,
+    );
+
+    orders.addAll(page.items);
+
+    if (page.nextCursor != null && page.nextCursor != '') {
+      currentCursor = page.nextCursor;
+    } else {
+      break;
+    }
   }
 
   return orders;
