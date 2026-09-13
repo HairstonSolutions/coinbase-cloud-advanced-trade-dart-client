@@ -4,16 +4,16 @@ import 'package:coinbase_cloud_advanced_trade_client/src/models/credential.dart'
 import 'package:coinbase_cloud_advanced_trade_client/src/models/error.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/fill.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/services/network.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/models/page.dart';
 import 'package:http/http.dart' as http;
 
-/// Gets a list of fills for the current user.
+/// Gets a single page of fills for the current user.
 ///
 /// GET /v3/brokerage/orders/historical/fills
 /// https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/list-fills
 ///
 /// This function makes a GET request to the /orders/historical/fills endpoint
 /// of the Coinbase Advanced Trade API. It supports pagination using a cursor.
-/// Paginated requests use recursion.
 ///
 /// [limit] - A limit on the number of fills to be returned.
 /// [orderId] - An optional order ID to filter fills by.
@@ -22,8 +22,8 @@ import 'package:http/http.dart' as http;
 /// [credential] - The user's API credentials.
 /// [isSandbox] - Whether to use the sandbox environment.
 ///
-/// Returns a list of [Fill] objects.
-Future<List<Fill>> getFills(
+/// Returns a [Page] of [Fill] objects.
+Future<Page<Fill>> getFillsPage(
     {int? limit = 1000,
     @Deprecated('Use orderIds instead') String? orderId,
     List<String>? orderIds,
@@ -35,7 +35,7 @@ Future<List<Fill>> getFills(
     http.Client? client,
     required Credential credential,
     bool isSandbox = false}) async {
-  List<Fill> orders = [];
+  List<Fill> fills = [];
   Map<String, dynamic> queryParameters = {'limit': '$limit'};
 
   List<String> combinedOrderIds = [
@@ -73,33 +73,79 @@ Future<List<Fill>> getFills(
   if (response.statusCode == 200) {
     String data = response.body;
     var jsonResponse = jsonDecode(data);
-    var jsonAccounts = jsonResponse['fills'];
+    var jsonFills = jsonResponse['fills'];
     String? jsonCursor = jsonResponse['cursor'];
+    bool hasNext = jsonResponse['has_next'] ?? false;
 
-    for (var jsonObject in jsonAccounts) {
-      orders.add(Fill.fromCBJson(jsonObject));
+    for (var jsonObject in jsonFills) {
+      fills.add(Fill.fromCBJson(jsonObject));
     }
-    // Recursive Break
-    if (jsonCursor != null && jsonCursor != '') {
-      // Recursive Call
-      List<Fill> paginatedAccounts = await getFills(
-          limit: limit,
-          orderId: orderId,
-          orderIds: orderIds,
-          productId: productId,
-          productIds: productIds,
-          startSequenceTimestamp: startSequenceTimestamp,
-          endSequenceTimestamp: endSequenceTimestamp,
-          cursor: jsonCursor,
-          client: client,
-          credential: credential,
-          isSandbox: isSandbox);
-      orders.addAll(paginatedAccounts);
-    }
+
+    return Page<Fill>(
+      items: fills,
+      nextCursor: jsonCursor,
+      hasNext: hasNext,
+    );
   } else {
     throw CoinbaseException(
-        'Failed to get fills', response.statusCode, response.body);
+        'Failed to get fills page', response.statusCode, response.body);
+  }
+}
+
+/// Gets a list of fills for the current user.
+///
+/// GET /v3/brokerage/orders/historical/fills
+/// https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/orders/list-fills
+///
+/// This function makes a GET request to the /orders/historical/fills endpoint
+/// of the Coinbase Advanced Trade API. It supports pagination using a cursor.
+/// Paginated requests use recursion.
+///
+/// [limit] - A limit on the number of fills to be returned.
+/// [orderId] - An optional order ID to filter fills by.
+/// [productId] - An optional product ID to filter fills by.
+/// [cursor] - A cursor for pagination.
+/// [credential] - The user's API credentials.
+/// [isSandbox] - Whether to use the sandbox environment.
+///
+/// Returns a list of [Fill] objects.
+Future<List<Fill>> getFills(
+    {int? limit = 1000,
+    @Deprecated('Use orderIds instead') String? orderId,
+    List<String>? orderIds,
+    @Deprecated('Use productIds instead') String? productId,
+    List<String>? productIds,
+    String? startSequenceTimestamp,
+    String? endSequenceTimestamp,
+    String? cursor,
+    http.Client? client,
+    required Credential credential,
+    bool isSandbox = false}) async {
+  List<Fill> fills = [];
+  String? currentCursor = cursor;
+
+  while (true) {
+    Page<Fill> page = await getFillsPage(
+        limit: limit,
+        orderId: orderId,
+        orderIds: orderIds,
+        productId: productId,
+        productIds: productIds,
+        startSequenceTimestamp: startSequenceTimestamp,
+        endSequenceTimestamp: endSequenceTimestamp,
+        cursor: currentCursor,
+        client: client,
+        credential: credential,
+        isSandbox: isSandbox);
+
+    fills.addAll(page.items);
+
+    if (page.nextCursor != null && page.nextCursor != '') {
+      currentCursor = page.nextCursor;
+    } else {
+      break;
+    }
   }
 
-  return orders;
+  return fills;
 }
