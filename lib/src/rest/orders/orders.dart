@@ -59,12 +59,13 @@ Future<List<Order>> getOrders(
     // Recursive Break
     if (jsonCursor != null && jsonCursor != '') {
       // Recursive Call
-      List<Order> paginatedAccounts = await getOrders(
+      List<Order> paginatedOrders = await getOrders(
           limit: limit,
           cursor: jsonCursor,
+          client: client,
           credential: credential,
           isSandbox: isSandbox);
-      orders.addAll(paginatedAccounts);
+      orders.addAll(paginatedOrders);
     }
   } else {
     throw CoinbaseException(
