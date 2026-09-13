@@ -37,6 +37,33 @@ void main() {
       expect(orders[0].orderId, "b0313b63-a2a1-4d30-a506-936337b52978");
     });
 
+    test('Get orders with pagination', () async {
+      final String mockResponsePage1 =
+          await getJsonFromFile('rest/orders/get_orders_page_1.json');
+      final String mockResponsePage2 =
+          await getJsonFromFile('rest/orders/get_orders_page_2.json');
+
+      var callCount = 0;
+      when(mockClient.get(any, headers: anyNamed('headers')))
+          .thenAnswer((_) async {
+        if (callCount == 0) {
+          callCount++;
+          return http.Response(mockResponsePage1, 200);
+        } else {
+          return http.Response(mockResponsePage2, 200);
+        }
+      });
+
+      List<Order>? orders = await getOrders(
+          client: mockClient, credential: constants.credentials);
+
+      expect(orders, isNotNull);
+      expect(orders.length, 2);
+      expect(orders[0].orderId, "order-1");
+      expect(orders[1].orderId, "order-2");
+      verify(mockClient.get(any, headers: anyNamed('headers'))).called(2);
+    });
+
     test('Get a single order by ID', () async {
       final String mockResponse =
           await getJsonFromFile('rest/orders/get_order.json');
