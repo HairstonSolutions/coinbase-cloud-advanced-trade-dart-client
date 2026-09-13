@@ -128,16 +128,19 @@ void main() async {
 
   // Create a limit order.
   try {
-    Map<String, dynamic>? result = await createLimitOrder(
+    CreateOrderResult result = await createLimitOrder(
       clientOrderId: clientOrderId,
       productId: 'BTC-USD',
-      side: 'BUY',
+      side: OrderSide.buy,
       baseSize: '0.001',
       limitPrice: '10000.00',
       credential: credential,
     );
-    if (result != null) {
-      print('Order created successfully: $result');
+    switch (result) {
+      case OrderSuccess():
+        print('Order created successfully: ${result.orderId}');
+      case OrderRejected():
+        print('Order rejected: ${result.reason} - ${result.message}');
     }
   } catch (e) {
     print('Error creating order: $e');

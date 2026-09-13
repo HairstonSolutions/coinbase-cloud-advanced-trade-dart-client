@@ -1,0 +1,14 @@
+{
+  "success": false,
+  "failure_reason": "DUPLICATE_CLIENT_ORDER_ID",
+  "order_id": "1111-2222-3333-4444",
+  "success_response": null,
+  "error_response": {
+    "error": "UNKNOWN_FAILURE_REASON",
+    "message": "Duplicate client order id",
+    "error_details": "",
+    "preview_failure_reason": "UNKNOWN_PREVIEW_FAILURE_REASON",
+    "new_order_failure_reason": "DUPLICATE_CLIENT_ORDER_ID"
+  },
+  "order_configuration": {}
+}

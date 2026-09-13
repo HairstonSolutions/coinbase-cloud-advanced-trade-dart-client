@@ -1,5 +1,6 @@
 import 'package:coinbase_cloud_advanced_trade_client/advanced_trade.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/error.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/create_order_result.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/preview_order.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/stop_direction.dart';
 import 'package:http/http.dart' as http;
@@ -273,8 +274,8 @@ void main() {
         client: mockClient,
       );
 
-      expect(result, isNotNull);
-      expect(result!['success'], isTrue);
+      expect(result, isA<OrderSuccess>());
+      expect((result as OrderSuccess).orderId, isNotEmpty);
     });
 
     test('Create a new stop limit GTC order (integration)',
@@ -293,11 +294,11 @@ void main() {
             false, // Sandbox API doesnt respond like the production version. Set to Prod for a true integration test.
       );
 
-      expect(result, isNotNull);
-      expect(result!['success'], isTrue);
+      expect(result, isA<OrderSuccess>());
+      expect((result as OrderSuccess).orderId, isNotEmpty);
 
       // Cancel order after test
-      final successResponse = result['success_response'];
+      final successResponse = result.raw['success_response'];
       final orderId = successResponse['order_id'];
 
       final cancelResult = await cancelOrders(
@@ -323,11 +324,11 @@ void main() {
             false, // Sandbox API doesnt respond like the production version. Set to Prod for a true integration test.
       );
 
-      expect(result, isNotNull);
-      expect(result!['success'], isTrue);
+      expect(result, isA<OrderSuccess>());
+      expect((result as OrderSuccess).orderId, isNotEmpty);
 
       // Cancel order after test
-      final successResponse = result['success_response'];
+      final successResponse = result.raw['success_response'];
       final orderId = successResponse['order_id'];
 
       final cancelResult = await cancelOrders(
@@ -357,8 +358,8 @@ void main() {
         client: mockClient,
       );
 
-      expect(result, isNotNull);
-      expect(result!['success'], isTrue);
+      expect(result, isA<OrderSuccess>());
+      expect((result as OrderSuccess).orderId, isNotEmpty);
     });
 
     test('Create a new stop limit GTD order (mocked)', () async {
@@ -383,8 +384,8 @@ void main() {
         client: mockClient,
       );
 
-      expect(result, isNotNull);
-      expect(result!['success'], isTrue);
+      expect(result, isA<OrderSuccess>());
+      expect((result as OrderSuccess).orderId, isNotEmpty);
     });
 
     test('Create a new market order with base size', () async {
@@ -405,8 +406,8 @@ void main() {
         client: mockClient,
       );
 
-      expect(result, isNotNull);
-      expect(result!['success'], isTrue);
+      expect(result, isA<OrderSuccess>());
+      expect((result as OrderSuccess).orderId, isNotEmpty);
     });
 
     test('Create a new market order with both quote and base size', () async {
@@ -441,8 +442,8 @@ void main() {
         client: mockClient,
       );
 
-      expect(result, isNotNull);
-      expect(result!['success'], isTrue);
+      expect(result, isA<OrderSuccess>());
+      expect((result as OrderSuccess).orderId, isNotEmpty);
     });
 
     test('Create a new post-only limit order', () async {
@@ -465,8 +466,8 @@ void main() {
         client: mockClient,
       );
 
-      expect(result, isNotNull);
-      expect(result!['success'], isTrue);
+      expect(result, isA<OrderSuccess>());
+      expect((result as OrderSuccess).orderId, isNotEmpty);
     });
 
     test('closePosition does not log response body at INFO level', () async {
@@ -511,8 +512,8 @@ void main() {
         isSandbox: true,
       );
 
-      expect(result, isNotNull);
-      expect(result!['success'], isTrue);
+      expect(result, isA<OrderSuccess>());
+      expect((result as OrderSuccess).orderId, isNotEmpty);
     });
   });
 
@@ -566,8 +567,8 @@ void main() {
         isSandbox: true,
       );
 
-      expect(result, isNotNull);
-      expect(result!['success'], isTrue);
+      expect(result, isA<OrderSuccess>());
+      expect((result as OrderSuccess).orderId, isNotEmpty);
     });
 
     test('Create a new market order with both quote and base size', () async {
@@ -596,8 +597,8 @@ void main() {
         isSandbox: true,
       );
 
-      expect(result, isNotNull);
-      expect(result!['success'], isTrue);
+      expect(result, isA<OrderSuccess>());
+      expect((result as OrderSuccess).orderId, isNotEmpty);
     });
 
     test('Create a new post-only limit order', () async {
@@ -613,8 +614,8 @@ void main() {
         isSandbox: true,
       );
 
-      expect(result, isNotNull);
-      expect(result!['success'], isTrue);
+      expect(result, isA<OrderSuccess>());
+      expect((result as OrderSuccess).orderId, isNotEmpty);
     });
   });
 
@@ -659,10 +660,10 @@ void main() {
         isSandbox: true,
       );
 
-      expect(result, isNotNull);
-      expect(result!['success'], isTrue);
+      expect(result, isA<OrderSuccess>());
+      expect((result as OrderSuccess).orderId, isNotEmpty);
 
-      final successResponse = result['success_response'];
+      final successResponse = result.raw['success_response'];
       final orderId = successResponse['order_id'];
 
       final cancelResult = await cancelOrders(
@@ -696,16 +697,14 @@ void main() {
         credential: constants.credentials,
       );
 
-      expect(result, isNotNull);
-      if (result!['success'] == false) {
-        var errorResponse = result['error_response'];
+      expect(result, isA<OrderSuccess>());
+      if (result is OrderRejected) {
+        var errorResponse = result.raw['error_response'];
         var failureReason = errorResponse['preview_failure_reason'];
         logger.info('failure Reason: $failureReason');
       }
 
-      expect(result['success'], isTrue);
-
-      final successResponse = result['success_response'];
+      final successResponse = result.raw['success_response'];
       final orderId1 = successResponse['order_id'];
 
       final clientOrderId2 = DateTime.now().millisecondsSinceEpoch.toString();
@@ -719,10 +718,9 @@ void main() {
         credential: constants.credentials,
       );
 
-      expect(result2, isNotNull);
-      expect(result2!['success'], isTrue);
+      expect(result2, isA<OrderSuccess>());
 
-      final successResponse2 = result2['success_response'];
+      final successResponse2 = result2.raw['success_response'];
       final orderId2 = successResponse2['order_id'];
 
       final cancelResult = await cancelOrders(
@@ -784,5 +782,84 @@ void main() {
       expect(double.parse(previewOrderResponse.orderTotal!),
           greaterThanOrEqualTo(2.0));
     }, skip: constants.ciSkip);
+    test('Create order rejected - Duplicate Client Order ID', () async {
+      final String mockResponse = await getJsonFromFile(
+          'rest/orders/create_order_rejected_duplicate.json');
+
+      final mockClient = MockClient();
+      when(mockClient.post(any,
+              headers: anyNamed('headers'), body: anyNamed('body')))
+          .thenAnswer((_) async => http.Response(mockResponse, 200));
+
+      final clientOrderId = DateTime.now().millisecondsSinceEpoch.toString();
+      final result = await createLimitOrder(
+        clientOrderId: clientOrderId,
+        productId: 'BTC-USD',
+        side: OrderSide.buy,
+        baseSize: '0.1',
+        limitPrice: '10000',
+        credential: constants.credentials,
+        client: mockClient,
+      );
+
+      expect(result, isA<OrderRejected>());
+      final rejected = result as OrderRejected;
+      expect(rejected.reason, OrderRejectReason.duplicateClientOrderId);
+      expect(rejected.orderId, '1111-2222-3333-4444');
+      expect(rejected.message, 'Duplicate client order id');
+    });
+
+    test('Create order rejected - Insufficient Funds', () async {
+      final String mockResponse = await getJsonFromFile(
+          'rest/orders/create_order_rejected_insufficient_funds.json');
+
+      final mockClient = MockClient();
+      when(mockClient.post(any,
+              headers: anyNamed('headers'), body: anyNamed('body')))
+          .thenAnswer((_) async => http.Response(mockResponse, 200));
+
+      final clientOrderId = DateTime.now().millisecondsSinceEpoch.toString();
+      final result = await createLimitOrder(
+        clientOrderId: clientOrderId,
+        productId: 'BTC-USD',
+        side: OrderSide.buy,
+        baseSize: '0.1',
+        limitPrice: '10000',
+        credential: constants.credentials,
+        client: mockClient,
+      );
+
+      expect(result, isA<OrderRejected>());
+      final rejected = result as OrderRejected;
+      expect(rejected.reason, OrderRejectReason.insufficientFunds);
+      expect(rejected.message, 'Insufficient funds');
+    });
+
+    test('Create order rejected - Post Only', () async {
+      final String mockResponse = await getJsonFromFile(
+          'rest/orders/create_order_rejected_post_only.json');
+
+      final mockClient = MockClient();
+      when(mockClient.post(any,
+              headers: anyNamed('headers'), body: anyNamed('body')))
+          .thenAnswer((_) async => http.Response(mockResponse, 200));
+
+      final clientOrderId = DateTime.now().millisecondsSinceEpoch.toString();
+      final result = await createLimitOrder(
+        clientOrderId: clientOrderId,
+        productId: 'BTC-USD',
+        side: OrderSide.buy,
+        baseSize: '0.1',
+        limitPrice: '10000',
+        credential: constants.credentials,
+        client: mockClient,
+      );
+
+      expect(result, isA<OrderRejected>());
+      final rejected = result as OrderRejected;
+      expect(rejected.reason, OrderRejectReason.postOnlyWouldCross);
+      expect(
+          rejected.message, 'Post only limit order would cross the order book');
+    });
   });
 }
