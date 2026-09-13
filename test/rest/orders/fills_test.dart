@@ -37,6 +37,28 @@ void main() {
       expect(fills.length, 1);
       expect(fills[0].orderId, "b0313b63-a2a1-4d30-a506-936337b52978");
     });
+    test('Get fills with array query parameters', () async {
+      final String mockResponse =
+          await getJsonFromFile('rest/orders/get_fills.json');
+
+      when(mockClient.get(any, headers: anyNamed('headers')))
+          .thenAnswer((Invocation invocation) async {
+        Uri url = invocation.positionalArguments[0] as Uri;
+        expect(url.queryParametersAll['order_ids'], ['order1', 'order2']);
+        expect(url.queryParametersAll['product_ids'], ['BTC-USD']);
+        expect(url.queryParametersAll['start_sequence_timestamp'], ['1000']);
+        return http.Response(mockResponse, 200);
+      });
+
+      List<Fill>? fills = await getFills(
+          orderIds: ['order1', 'order2'],
+          productIds: ['BTC-USD'],
+          startSequenceTimestamp: '1000',
+          client: mockClient,
+          credential: constants.credentials);
+
+      expect(fills, isNotNull);
+    });
   });
 
   group('Test Get Fills Requests to Coinbase AT API Endpoints',
@@ -69,7 +91,7 @@ void main() {
           await getOrders(credential: constants.credentials, isSandbox: false);
       String? orderId = orders.last.orderId;
       List<Fill>? fills = await getFills(
-          orderId: orderId,
+          orderIds: orderId != null ? [orderId] : null,
           credential: constants.credentials,
           isSandbox: false);
       logger.info('Fills: $fills');
@@ -83,7 +105,7 @@ void main() {
           await getOrders(credential: constants.credentials, isSandbox: false);
       String? productId = orders.last.productId;
       List<Fill>? fills = await getFills(
-          productId: productId,
+          productIds: productId != null ? [productId] : null,
           credential: constants.credentials,
           isSandbox: false);
       logger.info('Fills: $fills');

@@ -25,19 +25,44 @@ import 'package:http/http.dart' as http;
 /// Returns a list of [Fill] objects.
 Future<List<Fill>> getFills(
     {int? limit = 1000,
-    String? orderId,
-    String? productId,
+    @Deprecated('Use orderIds instead') String? orderId,
+    List<String>? orderIds,
+    @Deprecated('Use productIds instead') String? productId,
+    List<String>? productIds,
+    String? startSequenceTimestamp,
+    String? endSequenceTimestamp,
     String? cursor,
     http.Client? client,
     required Credential credential,
     bool isSandbox = false}) async {
   List<Fill> orders = [];
-  Map<String, dynamic>? queryParameters = {'limit': '$limit'};
-  (orderId != null) ? queryParameters.addAll({'order_id': orderId}) : null;
-  (productId != null)
-      ? queryParameters.addAll({'product_id': productId})
-      : null;
-  (cursor != null) ? queryParameters.addAll({'cursor': cursor}) : null;
+  Map<String, dynamic> queryParameters = {'limit': '$limit'};
+
+  List<String> combinedOrderIds = [
+    if (orderId != null) orderId,
+    if (orderIds != null) ...orderIds,
+  ];
+  if (combinedOrderIds.isNotEmpty) {
+    queryParameters['order_ids'] = combinedOrderIds;
+  }
+
+  List<String> combinedProductIds = [
+    if (productId != null) productId,
+    if (productIds != null) ...productIds,
+  ];
+  if (combinedProductIds.isNotEmpty) {
+    queryParameters['product_ids'] = combinedProductIds;
+  }
+
+  if (startSequenceTimestamp != null) {
+    queryParameters['start_sequence_timestamp'] = startSequenceTimestamp;
+  }
+  if (endSequenceTimestamp != null) {
+    queryParameters['end_sequence_timestamp'] = endSequenceTimestamp;
+  }
+  if (cursor != null) {
+    queryParameters['cursor'] = cursor;
+  }
 
   http.Response response = await getAuthorized('/orders/historical/fills',
       queryParameters: queryParameters,
@@ -59,6 +84,12 @@ Future<List<Fill>> getFills(
       // Recursive Call
       List<Fill> paginatedAccounts = await getFills(
           limit: limit,
+          orderId: orderId,
+          orderIds: orderIds,
+          productId: productId,
+          productIds: productIds,
+          startSequenceTimestamp: startSequenceTimestamp,
+          endSequenceTimestamp: endSequenceTimestamp,
           cursor: jsonCursor,
           client: client,
           credential: credential,
