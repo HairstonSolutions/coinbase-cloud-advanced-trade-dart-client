@@ -1,0 +1,54 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+
+jobs:
+  checks:
+    name: Format, analyze, test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Pinned rather than `stable`, so a new SDK release cannot turn a green
+      # branch red. It must stay within the `environment: sdk` range in
+      # pubspec.yaml.
+      - uses: dart-lang/setup-dart@v1
+        with:
+          sdk: 3.13.3
+
+      - name: Install dependencies
+        run: dart pub get
+
+      - name: Verify formatting
+        run: dart format --output=none --set-exit-if-changed .
+
+      - name: Analyze
+        run: dart analyze --fatal-infos --fatal-warnings
+
+      # Groups that need live credentials skip themselves unless SKIP_TESTS is
+      # set to 'false', so no secrets are required here. The public-endpoint
+      # integration tests do run, and hit the live Coinbase API.
+      - name: Run tests
+        run: dart test --reporter=expanded
+
+  publish-dry-run:
+    name: Publish dry run
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dart-lang/setup-dart@v1
+        with:
+          sdk: 3.13.3
+
+      - name: Install dependencies
+        run: dart pub get
+
+      - name: Validate the package
+        run: dart pub publish --dry-run

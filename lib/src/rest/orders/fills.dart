@@ -17,13 +17,18 @@ import 'package:http/http.dart' as http;
 /// of the Coinbase Advanced Trade API. It supports pagination using a cursor.
 ///
 /// [limit] - A limit on the number of fills to be returned.
-/// [orderId] - An optional order ID to filter fills by.
-/// [productId] - An optional product ID to filter fills by.
+/// [orderIds] - Optional order IDs to filter fills by.
+/// [productIds] - Optional product IDs to filter fills by.
+/// [startSequenceTimestamp] - Only return fills at or after this timestamp.
+/// [endSequenceTimestamp] - Only return fills before this timestamp.
 /// [cursor] - A cursor for pagination.
 /// [credential] - The user's API credentials.
 /// [options] - Optional HTTP options such as a custom base URL, timeout,
 /// and http client.
 /// [isSandbox] - Whether to use the sandbox environment.
+///
+/// The deprecated `orderId` and `productId` parameters are still accepted and
+/// are merged into `orderIds` and `productIds`.
 ///
 /// Returns a [Page] of [Fill] objects.
 Future<Page<Fill>> getFillsPage(
@@ -107,13 +112,18 @@ Future<Page<Fill>> getFillsPage(
 /// Paginated requests use recursion.
 ///
 /// [limit] - A limit on the number of fills to be returned.
-/// [orderId] - An optional order ID to filter fills by.
-/// [productId] - An optional product ID to filter fills by.
+/// [orderIds] - Optional order IDs to filter fills by.
+/// [productIds] - Optional product IDs to filter fills by.
+/// [startSequenceTimestamp] - Only return fills at or after this timestamp.
+/// [endSequenceTimestamp] - Only return fills before this timestamp.
 /// [cursor] - A cursor for pagination.
 /// [credential] - The user's API credentials.
 /// [options] - Optional HTTP options such as a custom base URL, timeout,
 /// and http client.
 /// [isSandbox] - Whether to use the sandbox environment.
+///
+/// The deprecated `orderId` and `productId` parameters are still accepted and
+/// are merged into `orderIds` and `productIds`.
 ///
 /// Returns a list of [Fill] objects.
 Future<List<Fill>> getFills(
@@ -132,13 +142,22 @@ Future<List<Fill>> getFills(
   List<Fill> fills = [];
   String? currentCursor = cursor;
 
+  // Fold the deprecated single-value filters into the list parameters so the
+  // paged call below never passes this package's own deprecated arguments.
+  List<String> combinedOrderIds = [
+    if (orderId != null) orderId,
+    if (orderIds != null) ...orderIds,
+  ];
+  List<String> combinedProductIds = [
+    if (productId != null) productId,
+    if (productIds != null) ...productIds,
+  ];
+
   while (true) {
     Page<Fill> page = await getFillsPage(
         limit: limit,
-        orderId: orderId,
-        orderIds: orderIds,
-        productId: productId,
-        productIds: productIds,
+        orderIds: combinedOrderIds.isEmpty ? null : combinedOrderIds,
+        productIds: combinedProductIds.isEmpty ? null : combinedProductIds,
         startSequenceTimestamp: startSequenceTimestamp,
         endSequenceTimestamp: endSequenceTimestamp,
         cursor: currentCursor,
