@@ -50,6 +50,30 @@ final page = await getOrdersPage(credential: credential, options: options);
   library, so a caller configuring a timeout can catch them without importing
   `src/`.
 
+- `CoinbaseTransportException`, a `CoinbaseException` subclass thrown when a
+  request never produced a response.
+  Fixes [#109](https://github.com/HairstonSolutions/coinbase-cloud-advanced-trade-dart-client/issues/109).
+  The transport mapped a timeout to `CoinbaseTimeoutException` but let every
+  other network failure escape raw, so callers had to catch `package:http` and
+  `dart:io` types from inside the library to tell "the exchange was
+  unreachable" apart from a programming error, and a dropped connection went
+  unhandled by code that caught only `CoinbaseException`.
+  `http.ClientException`, `SocketException`, `HandshakeException` and
+  `TlsException` are now wrapped in it at the same point the timeout is mapped,
+  carrying the request's `method` and `path` and the original error as `cause`.
+  Its `statusCode` is `0`, since no response was received. Timeout behaviour is
+  unchanged.
+
+```dart
+try {
+  Page<Order> page = await getOrdersPage(credential: credential);
+} on CoinbaseTimeoutException catch (e) {
+  print('Timed out: $e');
+} on CoinbaseTransportException catch (e) {
+  print('Coinbase unreachable on ${e.method} ${e.path}: ${e.cause}');
+}
+```
+
 ### Fixed
 
 - `Account.fromJson` threw `type 'Null' is not a subtype of type 'String'` when
