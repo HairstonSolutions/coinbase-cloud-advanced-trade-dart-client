@@ -34,6 +34,30 @@ void main() {
       expect(product!.productId, 'BTC-USD');
     });
 
+    test('Get Product - Not Found returns null', () async {
+      final client = MockClient();
+
+      when(client.get(any, headers: anyNamed('headers'))).thenAnswer(
+          (_) async => http.Response(testError, 404, headers: testHeader));
+
+      final product =
+          await getProduct(productId: 'NOT-A-PRODUCT', client: client);
+
+      expect(product, isNull);
+    });
+
+    test('Get Product - Server error throws', () async {
+      final client = MockClient();
+
+      when(client.get(any, headers: anyNamed('headers'))).thenAnswer(
+          (_) async => http.Response(testError, 500, headers: testHeader));
+
+      expect(
+          getProduct(productId: 'BTC-USD', client: client),
+          throwsA(isA<CoinbaseException>()
+              .having((e) => e.statusCode, 'statusCode', 500)));
+    });
+
     test('Get Products', () async {
       final client = MockClient();
       final String productsJson =
