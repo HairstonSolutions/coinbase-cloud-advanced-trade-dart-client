@@ -50,9 +50,9 @@ void main() {
       expect(nullableDecimal(jsonObject, 'key'), isNull);
     });
 
-    test('should return null when the value is not a number', () {
+    test('should throw FormatException when the value is not a number', () {
       final jsonObject = {'key': 'not-a-number'};
-      expect(nullableDecimal(jsonObject, 'key'), isNull);
+      expect(() => nullableDecimal(jsonObject, 'key'), throwsFormatException);
     });
 
     test('should pass through a value that is already a Decimal', () {
@@ -60,22 +60,21 @@ void main() {
       expect(nullableDecimal(jsonObject, 'key'), Decimal.parse('7.5'));
     });
 
-    test('should accept a JSON number', () {
-      final jsonObject = {'key': 10000.0};
-      expect(nullableDecimal(jsonObject, 'key'), Decimal.fromInt(10000));
-    });
-
-    test('should return zero when notNullable is true and value is null', () {
-      final jsonObject = {'key': null};
-      expect(
-          nullableDecimal(jsonObject, 'key', notNullable: true), Decimal.zero);
-    });
-
-    test('should return zero when notNullable is true and value is unparsable',
+    test('should throw FormatException for JSON number when allowNum is false',
         () {
-      final jsonObject = {'key': 'not-a-number'};
-      expect(
-          nullableDecimal(jsonObject, 'key', notNullable: true), Decimal.zero);
+      final jsonObject = {'key': 10000.0};
+      expect(() => nullableDecimal(jsonObject, 'key'), throwsFormatException);
+    });
+
+    test('should accept a JSON number when allowNum is true', () {
+      final jsonObject = {'key': 10000.0};
+      expect(nullableDecimal(jsonObject, 'key', allowNum: true),
+          Decimal.fromInt(10000));
+    });
+
+    test('should throw FormatException when invalid string is passed', () {
+      final jsonObject = {'key': 'abc'};
+      expect(() => nullableDecimal(jsonObject, 'key'), throwsFormatException);
     });
   });
 
@@ -85,9 +84,19 @@ void main() {
       expect(requiredDecimal(jsonObject, 'key'), Decimal.parse('678.90'));
     });
 
-    test('should return zero when the value is missing', () {
+    test('should throw FormatException when the value is missing', () {
       final jsonObject = <String, dynamic>{};
-      expect(requiredDecimal(jsonObject, 'key'), Decimal.zero);
+      expect(() => requiredDecimal(jsonObject, 'key'), throwsFormatException);
+    });
+
+    test('should throw FormatException when the value is empty', () {
+      final jsonObject = {'key': ''};
+      expect(() => requiredDecimal(jsonObject, 'key'), throwsFormatException);
+    });
+
+    test('should throw FormatException when the value is unparsable', () {
+      final jsonObject = {'key': 'not-a-number'};
+      expect(() => requiredDecimal(jsonObject, 'key'), throwsFormatException);
     });
   });
 

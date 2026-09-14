@@ -16,7 +16,7 @@ class VolumeBreakdown {
   factory VolumeBreakdown.fromCBJson(Map<String, dynamic> json) {
     return VolumeBreakdown(
       volumeType: json['volume_type'],
-      volume: requiredDecimal(json, 'volume'),
+      volume: requiredDecimal(json, 'volume', allowNum: true),
     );
   }
 

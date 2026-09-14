@@ -9,25 +9,30 @@ import 'package:decimal/decimal.dart';
 ///
 /// [jsonObject] - The JSON object to parse the decimal from.
 /// [key] - The key of the decimal to parse.
-/// [notNullable] - Whether to return [Decimal.zero] if the value is null,
-/// empty or unparsable.
+/// [allowNum] - Whether to allow JSON numbers (int, double) rather than strictly requiring strings.
 ///
-/// Returns a [Decimal], or null if the value is null, empty or unparsable.
+/// Returns a [Decimal], or null if the value is null or empty.
+/// Throws a [FormatException] if the value is unparsable or is a disallowed number.
 Decimal? nullableDecimal(Map<String, dynamic> jsonObject, String key,
-    {bool notNullable = false}) {
+    {bool allowNum = false}) {
   final value = jsonObject[key];
 
   if (value == null || value == '') {
-    return notNullable ? Decimal.zero : null;
+    return null;
   }
 
   if (value is Decimal) {
     return value;
   }
 
+  if (!allowNum && value is num) {
+    throw FormatException(
+        'Monetary fields must be strings, not numbers for key "$key".', value);
+  }
+
   final parsedValue = Decimal.tryParse(value.toString());
-  if (parsedValue == null && notNullable) {
-    return Decimal.zero;
+  if (parsedValue == null) {
+    throw FormatException('Invalid decimal value for key "$key"', value);
   }
 
   return parsedValue;
@@ -35,15 +40,22 @@ Decimal? nullableDecimal(Map<String, dynamic> jsonObject, String key,
 
 /// Parses a required [Decimal] from a JSON object.
 ///
-/// Used for fields the Coinbase API always sends. Falls back to [Decimal.zero]
+/// Used for fields the Coinbase API always sends. Throws a [FormatException]
 /// when the value is missing, empty or unparsable.
 ///
 /// [jsonObject] - The JSON object to parse the decimal from.
 /// [key] - The key of the decimal to parse.
+/// [allowNum] - Whether to allow JSON numbers (int, double) rather than strictly requiring strings.
 ///
 /// Returns a [Decimal], never null.
-Decimal requiredDecimal(Map<String, dynamic> jsonObject, String key) =>
-    nullableDecimal(jsonObject, key, notNullable: true)!;
+Decimal requiredDecimal(Map<String, dynamic> jsonObject, String key,
+    {bool allowNum = false}) {
+  final value = nullableDecimal(jsonObject, key, allowNum: allowNum);
+  if (value == null) {
+    throw FormatException('Required key "$key" is missing or empty.');
+  }
+  return value;
+}
 
 /// Parses an int from a JSON object, returning null if the value is null or an
 /// empty string.
