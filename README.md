@@ -1,6 +1,7 @@
 # Coinbase Advanced Trade API Client
 
 [![pub version](https://img.shields.io/pub/v/coinbase_cloud_advanced_trade_client.svg)](https://pub.dev/packages/coinbase_cloud_advanced_trade_client)
+[![CI](https://github.com/HairstonSolutions/coinbase-cloud-advanced-trade-dart-client/actions/workflows/ci.yml/badge.svg)](https://github.com/HairstonSolutions/coinbase-cloud-advanced-trade-dart-client/actions/workflows/ci.yml)
 
 A Dart client for the Coinbase Advanced Trade API. This package provides an easy-to-use interface for interacting with
 the Coinbase Advanced Trade API, allowing you to manage your account, place orders, and get market data.

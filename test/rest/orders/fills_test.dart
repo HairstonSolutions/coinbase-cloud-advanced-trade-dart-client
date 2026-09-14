@@ -78,6 +78,33 @@ void main() {
 
       expect(fills, isNotNull);
     });
+
+    test('Get fills merges the deprecated orderId and productId filters',
+        () async {
+      final String mockResponse =
+          await getJsonFromFile('rest/orders/get_fills.json');
+
+      when(mockClient.get(any, headers: anyNamed('headers')))
+          .thenAnswer((Invocation invocation) async {
+        Uri url = invocation.positionalArguments[0] as Uri;
+        expect(url.queryParametersAll['order_ids'], ['order1', 'order2']);
+        expect(url.queryParametersAll['product_ids'], ['BTC-USD', 'ETH-USD']);
+        return http.Response(mockResponse, 200);
+      });
+
+      List<Fill>? fills = await getFills(
+          // ignore: deprecated_member_use_from_same_package
+          orderId: 'order1',
+          orderIds: ['order2'],
+          // ignore: deprecated_member_use_from_same_package
+          productId: 'BTC-USD',
+          productIds: ['ETH-USD'],
+          client: mockClient,
+          credential: constants.credentials);
+
+      expect(fills, isNotNull);
+      verify(mockClient.get(any, headers: anyNamed('headers'))).called(1);
+    });
   });
 
   group('Test Get Fills Requests to Coinbase AT API Endpoints',

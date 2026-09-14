@@ -89,6 +89,21 @@ try {
   a null value and return their unknown/unspecified member, matching the
   existing behaviour for an unrecognised string.
 
+### Internal
+
+- GitHub Actions CI runs `dart format`, `dart analyze --fatal-infos
+  --fatal-warnings` and `dart test` on every pull request and every push to
+  `main`, and validates the package with `dart pub publish --dry-run` on `v*`
+  tags.
+  Fixes [#113](https://github.com/HairstonSolutions/coinbase-cloud-advanced-trade-dart-client/issues/113).
+  Until now nothing ran outside a contributor's machine, so a regression in
+  parsing or signing could be tagged without any automated gate.
+- `getFills` now merges the deprecated `orderId` and `productId` filters into
+  `orderIds` and `productIds` itself rather than forwarding them to
+  `getFillsPage`, which clears the `deprecated_member_use_from_same_package`
+  infos that `--fatal-infos` would have failed on. The request it sends is
+  unchanged.
+
 ### Migrating
 
 ```dart
