@@ -61,18 +61,21 @@ class TransactionSummary {
     }
 
     return TransactionSummary(
-      totalVolume: requiredDecimal(json, 'total_volume'),
-      totalFees: requiredDecimal(json, 'total_fees'),
+      totalVolume: requiredDecimal(json, 'total_volume', allowNum: true),
+      totalFees: requiredDecimal(json, 'total_fees', allowNum: true),
       feeTier: FeeTier.fromCBJson(json['fee_tier']),
-      marginRate: nullableDecimal(json, 'margin_rate'),
+      marginRate: nullableDecimal(json, 'margin_rate', allowNum: true),
       goodsAndServicesTax: json['goods_and_services_tax'] != null
           ? GoodsAndServicesTax.fromCBJson(json['goods_and_services_tax'])
           : null,
       advancedTradeOnlyVolume:
-          requiredDecimal(json, 'advanced_trade_only_volume'),
-      advancedTradeOnlyFees: requiredDecimal(json, 'advanced_trade_only_fees'),
-      coinbaseProVolume: requiredDecimal(json, 'coinbase_pro_volume'),
-      coinbaseProFees: requiredDecimal(json, 'coinbase_pro_fees'),
+          requiredDecimal(json, 'advanced_trade_only_volume', allowNum: true),
+      advancedTradeOnlyFees:
+          requiredDecimal(json, 'advanced_trade_only_fees', allowNum: true),
+      coinbaseProVolume:
+          requiredDecimal(json, 'coinbase_pro_volume', allowNum: true),
+      coinbaseProFees:
+          requiredDecimal(json, 'coinbase_pro_fees', allowNum: true),
       totalBalance: json['total_balance'],
       volumeBreakdown: volumeBreakdown,
     );
