@@ -1,10 +1,13 @@
+import 'package:coinbase_cloud_advanced_trade_client/src/services/tools.dart';
+import 'package:decimal/decimal.dart';
+
 /// A representation of a volume breakdown.
 class VolumeBreakdown {
   /// The type of volume.
   final String volumeType;
 
   /// The volume.
-  final num volume;
+  final Decimal volume;
 
   /// VolumeBreakdown constructor
   VolumeBreakdown({required this.volumeType, required this.volume});
@@ -13,7 +16,7 @@ class VolumeBreakdown {
   factory VolumeBreakdown.fromCBJson(Map<String, dynamic> json) {
     return VolumeBreakdown(
       volumeType: json['volume_type'],
-      volume: json['volume'],
+      volume: requiredDecimal(json, 'volume'),
     );
   }
 

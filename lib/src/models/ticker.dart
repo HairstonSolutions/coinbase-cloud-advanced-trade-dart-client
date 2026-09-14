@@ -1,5 +1,6 @@
 import 'package:coinbase_cloud_advanced_trade_client/src/models/trade.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/services/tools.dart';
+import 'package:decimal/decimal.dart';
 
 /// A representation of a ticker.
 class Ticker {
@@ -7,10 +8,10 @@ class Ticker {
   final List<Trade>? trades;
 
   /// The best bid for the ticker.
-  final double? bestBid;
+  final Decimal? bestBid;
 
   /// The best ask for the ticker.
-  final double? bestAsk;
+  final Decimal? bestAsk;
 
   /// Ticker constructor
   Ticker(this.trades, this.bestBid, this.bestAsk);
@@ -20,8 +21,8 @@ class Ticker {
       : trades = (json['trades'] as List<dynamic>?)
             ?.map((trade) => Trade.fromCBJson(trade as Map<String, dynamic>))
             .toList(),
-        bestBid = nullableDouble(json, 'best_bid'),
-        bestAsk = nullableDouble(json, 'best_ask');
+        bestBid = nullableDecimal(json, 'best_bid'),
+        bestAsk = nullableDecimal(json, 'best_ask');
 
   @override
   String toString() =>

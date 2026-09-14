@@ -20,7 +20,7 @@ To use this package, add `coinbase_cloud_advanced_trade_client` as a dependency 
 
 ```yaml
 dependencies:
-  coinbase_cloud_advanced_trade_client: ^1.0.0 # Replace with the latest version
+  coinbase_cloud_advanced_trade_client: ^0.10.0 # Replace with the latest version
 ```
 
 Then, run `dart pub get` or `flutter pub get`.
@@ -38,6 +38,43 @@ the [Coinbase documentation](https://docs.cdp.coinbase.com/coinbase-app/authenti
 
 All authenticated functions require a Credentials Object Passed in.
 This allows for your code using the client to handle multiple accounts.
+
+### Money is never a `double`
+
+Every monetary and quantity field — prices, sizes, balances, fees, increments
+and notionals — is typed as
+[`Decimal`](https://pub.dev/packages/decimal), never `double`. Coinbase sends
+these values as decimal strings, and this client keeps them exact all the way
+to your code.
+
+This matters because binary floating point cannot represent most decimal money
+values. A balance of `61250.10` is not exactly representable as a `double`, and
+`Product.baseIncrement` (`0.00000001`) and `quoteIncrement` (`0.01`) — the tick
+sizes every order must be quantized to — cannot be used for exact quantization
+once they have been through a `double`.
+
+```dart
+import 'package:decimal/decimal.dart';
+
+final product = await getProduct(productId: 'BTC-USD');
+
+// Exact tick quantization.
+final increment = product!.baseIncrement!;          // Decimal('0.00000001')
+final size = Decimal.parse('0.30000000');
+final ticks = (size / increment).toDecimal();       // exactly 30000000
+
+// Exact arithmetic; no drift.
+final fees = Decimal.parse('12480.55') + Decimal.parse('0.45');  // 12481
+```
+
+`Decimal` normalizes trailing zeros, so a wire value of `'61250.10'` parses to
+`61250.1`. The value is preserved exactly; only its textual form is normalized.
+
+Integral fields stay integral: `Order.numberOfFills` is an `int`, and epoch
+timestamps on `ServerTime` remain `num`.
+
+If you need a `double` at the edge of your application — for charting or
+display — convert explicitly with `.toDouble()`.
 
 ## Usage
 

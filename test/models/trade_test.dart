@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:coinbase_cloud_advanced_trade_client/src/models/trade.dart';
 import 'package:logging/logging.dart';
+import 'package:decimal/decimal.dart';
 import 'package:test/test.dart';
 
 import '../test_helpers.dart';
@@ -28,12 +29,12 @@ void main() {
 
       expect(exampleTrade.tradeId, '34b080bf-fcfd-445a-832b-46b5ddc65601');
       expect(exampleTrade.productId, 'BTC-USD');
-      expect(exampleTrade.price, 140.91);
-      expect(exampleTrade.size, 4);
+      expect(exampleTrade.price, Decimal.parse('140.91'));
+      expect(exampleTrade.size, Decimal.parse('4'));
       expect(exampleTrade.time, DateTime.parse('2021-05-31T09:59:59Z'));
       expect(exampleTrade.side, 'UNKNOWN_ORDER_SIDE');
-      expect(exampleTrade.bid, 291.13);
-      expect(exampleTrade.ask, 292.40);
+      expect(exampleTrade.bid, Decimal.parse('291.13'));
+      expect(exampleTrade.ask, Decimal.parse('292.40'));
     });
 
     test('Example Trade JSON Import, Serialize, deserialize', () {
@@ -47,12 +48,12 @@ void main() {
 
       expect(deserializedTrade.tradeId, '34b080bf-fcfd-445a-832b-46b5ddc65601');
       expect(deserializedTrade.productId, 'BTC-USD');
-      expect(deserializedTrade.price, 140.91);
-      expect(deserializedTrade.size, 4);
+      expect(deserializedTrade.price, Decimal.parse('140.91'));
+      expect(deserializedTrade.size, Decimal.parse('4'));
       expect(deserializedTrade.time, DateTime.parse('2021-05-31T09:59:59Z'));
       expect(deserializedTrade.side, 'UNKNOWN_ORDER_SIDE');
-      expect(deserializedTrade.bid, 291.13);
-      expect(deserializedTrade.ask, 292.40);
+      expect(deserializedTrade.bid, Decimal.parse('291.13'));
+      expect(deserializedTrade.ask, Decimal.parse('292.40'));
     });
   });
 }

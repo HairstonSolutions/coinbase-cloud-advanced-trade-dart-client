@@ -2,35 +2,36 @@ import 'package:coinbase_cloud_advanced_trade_client/src/models/fee_tier.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/goods_and_services_tax.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/volume_breakdown.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/services/tools.dart';
+import 'package:decimal/decimal.dart';
 
 /// A representation of a transaction summary.
 class TransactionSummary {
   /// The total volume.
-  final num totalVolume;
+  final Decimal totalVolume;
 
   /// The total fees.
-  final num totalFees;
+  final Decimal totalFees;
 
   /// The fee tier.
   final FeeTier feeTier;
 
   /// The margin rate.
-  final num? marginRate;
+  final Decimal? marginRate;
 
   /// The goods and services tax.
   final GoodsAndServicesTax? goodsAndServicesTax;
 
   /// The advanced trade only volume.
-  final num advancedTradeOnlyVolume;
+  final Decimal advancedTradeOnlyVolume;
 
   /// The advanced trade only fees.
-  final num advancedTradeOnlyFees;
+  final Decimal advancedTradeOnlyFees;
 
   /// The Coinbase Pro volume.
-  final num coinbaseProVolume;
+  final Decimal coinbaseProVolume;
 
   /// The Coinbase Pro fees.
-  final num coinbaseProFees;
+  final Decimal coinbaseProFees;
 
   /// The total balance.
   final String totalBalance;
@@ -60,17 +61,18 @@ class TransactionSummary {
     }
 
     return TransactionSummary(
-      totalVolume: json['total_volume'],
-      totalFees: json['total_fees'],
+      totalVolume: requiredDecimal(json, 'total_volume'),
+      totalFees: requiredDecimal(json, 'total_fees'),
       feeTier: FeeTier.fromCBJson(json['fee_tier']),
-      marginRate: nullableNumber(json, 'margin_rate'),
+      marginRate: nullableDecimal(json, 'margin_rate'),
       goodsAndServicesTax: json['goods_and_services_tax'] != null
           ? GoodsAndServicesTax.fromCBJson(json['goods_and_services_tax'])
           : null,
-      advancedTradeOnlyVolume: json['advanced_trade_only_volume'],
-      advancedTradeOnlyFees: json['advanced_trade_only_fees'],
-      coinbaseProVolume: json['coinbase_pro_volume'],
-      coinbaseProFees: json['coinbase_pro_fees'],
+      advancedTradeOnlyVolume:
+          requiredDecimal(json, 'advanced_trade_only_volume'),
+      advancedTradeOnlyFees: requiredDecimal(json, 'advanced_trade_only_fees'),
+      coinbaseProVolume: requiredDecimal(json, 'coinbase_pro_volume'),
+      coinbaseProFees: requiredDecimal(json, 'coinbase_pro_fees'),
       totalBalance: json['total_balance'],
       volumeBreakdown: volumeBreakdown,
     );

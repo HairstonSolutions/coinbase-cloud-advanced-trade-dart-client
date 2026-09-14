@@ -1,4 +1,5 @@
 import 'package:coinbase_cloud_advanced_trade_client/src/services/tools.dart';
+import 'package:decimal/decimal.dart';
 
 /// A fill for an order.
 class Fill {
@@ -18,13 +19,13 @@ class Fill {
   final String? tradeType;
 
   /// The price of the trade.
-  final double? price;
+  final Decimal? price;
 
   /// The size of the trade.
-  final double? size;
+  final Decimal? size;
 
   /// The commission for the trade.
-  final double? commission;
+  final Decimal? commission;
 
   /// The product ID.
   final String? productId;
@@ -68,9 +69,9 @@ class Fill {
         orderId = json['orderId'],
         tradeTime = DateTime.parse(json['tradeTime']),
         tradeType = json['tradeType'],
-        price = json['price'],
-        size = json['size'],
-        commission = json['commission'],
+        price = nullableDecimal(json, 'price'),
+        size = nullableDecimal(json, 'size'),
+        commission = nullableDecimal(json, 'commission'),
         productId = json['productId'],
         sequenceTimestamp = DateTime.parse(json['sequenceTimestamp']),
         liquidityIndicator = json['liquidityIndicator'],
@@ -85,9 +86,9 @@ class Fill {
         'orderId': orderId,
         'tradeTime': tradeTime?.toIso8601String(),
         'tradeType': tradeType,
-        'price': price,
-        'size': size,
-        'commission': commission,
+        'price': price?.toString(),
+        'size': size?.toString(),
+        'commission': commission?.toString(),
         'productId': productId,
         'sequenceTimestamp': sequenceTimestamp?.toIso8601String(),
         'liquidityIndicator': liquidityIndicator,
@@ -103,9 +104,9 @@ class Fill {
         orderId = json['order_id'] ?? '',
         tradeTime = DateTime.parse(json['trade_time']),
         tradeType = json['trade_type'] ?? '',
-        price = nullableDouble(json, 'price'),
-        size = nullableDouble(json, 'size'),
-        commission = nullableDouble(json, 'commission'),
+        price = nullableDecimal(json, 'price'),
+        size = nullableDecimal(json, 'size'),
+        commission = nullableDecimal(json, 'commission'),
         productId = json['product_id'] ?? '',
         sequenceTimestamp = DateTime.parse(json['sequence_timestamp']),
         liquidityIndicator = json['liquidity_indicator'] ?? '',

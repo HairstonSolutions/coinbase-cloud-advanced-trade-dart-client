@@ -26,7 +26,8 @@ enum OrderType {
   }
 
   /// Creates an OrderType from a Coinbase string.
-  static OrderType fromCB(String cb) {
+  static OrderType fromCB(String? cb) {
+    if (cb == null) return OrderType.unknownOrderType;
     return OrderType.values.firstWhere((e) => e.value == cb,
         orElse: () => OrderType.unknownOrderType);
   }

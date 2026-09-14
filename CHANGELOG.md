@@ -1,3 +1,65 @@
+# 0.10.0
+
+**Breaking:** Monetary and quantity fields are now `Decimal` (from
+[`package:decimal`](https://pub.dev/packages/decimal)) instead of `double`.
+Fixes [#91](https://github.com/HairstonSolutions/coinbase-cloud-advanced-trade-dart-client/issues/91).
+
+Coinbase sends prices, sizes, balances, fees and increments as decimal strings.
+Parsing them into IEEE `double` lost precision before the caller ever saw the
+value, and there was no way to opt out. `Product.baseIncrement` and
+`quoteIncrement` — the tick sizes every order must be quantized to — could not
+be used for exact quantization, and balances such as `61250.10` drifted under
+arithmetic.
+
+- `Decimal` now types every price, size, balance, fee, increment and notional
+  field in `Product`, `Order`, `Fill`, `Account`, `Ticker`, `Trade`,
+  `PreviewOrderResponse`, `TransactionSummary`, `VolumeBreakdown`,
+  `SpotPosition` and all five order configurations.
+- `Order.numberOfFills` is now `int?`, matching what it actually is: a count.
+- `getAccountBalance` returns `Future<Decimal?>`.
+- `toJson()` / `toCBJson()` serialize decimals as strings, so payloads stay
+  `jsonEncode`-able and round-trip without loss.
+- `nullableDouble` has been removed. Use `nullableDecimal` for money and
+  quantities, `nullableInt` for counts, or `nullableNumber` for non-monetary
+  numbers such as epoch timestamps.
+- Added `nullableDecimal`, `requiredDecimal` and `nullableInt` to
+  `services/tools.dart`.
+- Adds a `decimal: ^3.2.6` dependency.
+
+### Fixed
+
+- `Account.fromJson` threw `type 'Null' is not a subtype of type 'String'` when
+  `createdAt`, `updatedAt` or `deletedAt` was null. Since `deletedAt` is null
+  for every account that has not been deleted, round-tripping a live account
+  through `toJson()` / `fromJson()` always threw. All three are now null-guarded,
+  matching `fromCBJson`.
+- The order enums' `fromCB` threw `type 'Null' is not a subtype of type 'String'`
+  on a payload that omitted the field, so `Order.fromCBJson` could not parse an
+  order without `trigger_status`, `order_type`, `reject_reason` or
+  `product_type`. `OrderSide`, `OrderStatus`, `OrderType`, `ProductType`,
+  `RejectReason`, `TimeInForce`, `TriggerStatus` and `StopDirection` now accept
+  a null value and return their unknown/unspecified member, matching the
+  existing behaviour for an unrecognised string.
+
+### Migrating
+
+```dart
+// Before
+final double? price = product.price;
+final double total = order.filledSize! * order.averageFilledPrice!;
+
+// After
+final Decimal? price = product.price;
+final Decimal total = order.filledSize! * order.averageFilledPrice!;
+
+// Need a double at the edge of your app (display, charting)?
+final double asDouble = product.price!.toDouble();
+```
+
+Note that `Decimal` normalizes trailing zeros: a wire value of `'61250.10'`
+parses to the exact value `61250.1`. The value is preserved exactly; only its
+textual form is normalized.
+
 # 0.9.0
 
 - Implement Preview Orders Endpoint (`POST /v3/brokerage/orders/preview`)

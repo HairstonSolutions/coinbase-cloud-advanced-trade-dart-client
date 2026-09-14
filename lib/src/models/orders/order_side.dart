@@ -20,7 +20,8 @@ enum OrderSide {
   }
 
   /// Creates an OrderSide from a Coinbase string.
-  static OrderSide fromCB(String cb) {
+  static OrderSide fromCB(String? cb) {
+    if (cb == null) return OrderSide.unknownOrderSide;
     return OrderSide.values.firstWhere((e) => e.value == cb,
         orElse: () => OrderSide.unknownOrderSide);
   }

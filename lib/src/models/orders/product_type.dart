@@ -17,7 +17,11 @@ enum ProductType {
   }
 
   /// Creates a ProductType from a Coinbase string.
-  static ProductType fromCB(String cb) {
+  ///
+  /// Returns [ProductType.unknownProductType] when [cb] is null or
+  /// unrecognised, so a payload that omits the field does not throw.
+  static ProductType fromCB(String? cb) {
+    if (cb == null) return ProductType.unknownProductType;
     return ProductType.values.firstWhere((e) => e.value == cb,
         orElse: () => ProductType.unknownProductType);
   }
