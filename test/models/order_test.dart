@@ -1,11 +1,16 @@
 import 'dart:convert';
 
 import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/order.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/order_side.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/product_type.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/reject_reason.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/trigger_status.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/order_status.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/order_type.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/stop_direction.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/time_in_force.dart';
 import 'package:logging/logging.dart';
+import 'package:decimal/decimal.dart';
 import 'package:test/test.dart';
 
 import '../test_helpers.dart';
@@ -44,11 +49,14 @@ void main() {
     test('Example Order JSON Import Object conversion order configuration', () {
       var jsonAsMap = jsonDecode(exampleOrderJson!);
       Order? exampleOrder = Order.fromCBJson(jsonAsMap);
-      expect(exampleOrder.orderConfiguration?.marketIOC?.quoteSize, 10.00);
-      expect(exampleOrder.orderConfiguration?.limitGTC?.limitPrice, 10000.00);
-      expect(exampleOrder.orderConfiguration?.limitGTD?.quoteSize, 10.00);
-      expect(
-          exampleOrder.orderConfiguration?.stopLimitGTC?.stopPrice, 20000.00);
+      expect(exampleOrder.orderConfiguration?.marketIOC?.quoteSize,
+          Decimal.parse('10.00'));
+      expect(exampleOrder.orderConfiguration?.limitGTC?.limitPrice,
+          Decimal.parse('10000.00'));
+      expect(exampleOrder.orderConfiguration?.limitGTD?.quoteSize,
+          Decimal.parse('10.00'));
+      expect(exampleOrder.orderConfiguration?.stopLimitGTC?.stopPrice,
+          Decimal.parse('20000.00'));
       expect(exampleOrder.orderConfiguration?.stopLimitGTD?.stopDirection,
           StopDirection.unknownStopDirection);
     });
@@ -78,7 +86,8 @@ void main() {
       expect(marketOrder.status, OrderStatus.filled);
       expect(marketOrder.timeInForce, TimeInForce.immediateOrCancel);
       expect(marketOrder.settled, true);
-      expect(marketOrder.orderConfiguration?.marketIOC?.quoteSize, 25);
+      expect(marketOrder.orderConfiguration?.marketIOC?.quoteSize,
+          Decimal.parse('25'));
     });
 
     test('Example Order JSON Import, Serialize, deserialize', () {
@@ -91,12 +100,14 @@ void main() {
       logger.info('Deserialized Order Object: $deserializedOrder');
       logger.info(jsonEncode(deserializedOrder));
 
-      expect(deserializedOrder.orderConfiguration?.marketIOC?.quoteSize, 10.00);
-      expect(
-          deserializedOrder.orderConfiguration?.limitGTC?.limitPrice, 10000.00);
-      expect(deserializedOrder.orderConfiguration?.limitGTD?.quoteSize, 10.00);
+      expect(deserializedOrder.orderConfiguration?.marketIOC?.quoteSize,
+          Decimal.parse('10.00'));
+      expect(deserializedOrder.orderConfiguration?.limitGTC?.limitPrice,
+          Decimal.parse('10000.00'));
+      expect(deserializedOrder.orderConfiguration?.limitGTD?.quoteSize,
+          Decimal.parse('10.00'));
       expect(deserializedOrder.orderConfiguration?.stopLimitGTC?.stopPrice,
-          20000.00);
+          Decimal.parse('20000.00'));
       expect(deserializedOrder.orderConfiguration?.stopLimitGTD?.stopDirection,
           StopDirection.unknownStopDirection);
 
@@ -104,6 +115,55 @@ void main() {
       logger.info(deserializedOrder.orderConfiguration?.toJson());
       logger.info(deserializedOrder.orderConfiguration?.toCBJson());
       logger.info(jsonEncode(deserializedOrder.orderConfiguration?.toCBJson()));
+    });
+
+    test('Order parses when the optional enum fields are absent', () {
+      // Coinbase omits these on orders that were never rejected or triggered.
+      final order = Order.fromCBJson({
+        'order_id': '0000-000000-000000',
+        'product_id': 'BTC-USD',
+        'user_id': '2222-000000-000000',
+        'order_configuration': {
+          'market_market_ioc': {'quote_size': '10.00'},
+        },
+        'client_order_id': '11111-000000-000000',
+        'created_time': '2021-05-31T09:59:59Z',
+      });
+
+      expect(order.orderId, '0000-000000-000000');
+      expect(order.side, OrderSide.unknownOrderSide);
+      expect(order.status, OrderStatus.unknownOrderStatus);
+      expect(order.timeInForce, TimeInForce.unknownTimeInForce);
+      expect(order.triggerStatus, TriggerStatus.unknownTriggerStatus);
+      expect(order.orderType, OrderType.unknownOrderType);
+      expect(order.rejectReason, RejectReason.rejectReasonUnspecified);
+      expect(order.productType, ProductType.unknownProductType);
+    });
+
+    test('Order parses when the optional enum fields are empty strings', () {
+      final order = Order.fromCBJson({
+        'order_id': '0000-000000-000000',
+        'product_id': 'BTC-USD',
+        'user_id': '2222-000000-000000',
+        'order_configuration': {
+          'market_market_ioc': {'quote_size': '10.00'},
+        },
+        'side': 'BUY',
+        'client_order_id': '11111-000000-000000',
+        'status': 'FILLED',
+        'time_in_force': 'IMMEDIATE_OR_CANCEL',
+        'created_time': '2021-05-31T09:59:59Z',
+        'trigger_status': '',
+        'order_type': 'MARKET',
+        'reject_reason': '',
+        'product_type': 'SPOT',
+      });
+
+      expect(order.side, OrderSide.buy);
+      expect(order.status, OrderStatus.filled);
+      expect(order.orderType, OrderType.market);
+      expect(order.triggerStatus, TriggerStatus.unknownTriggerStatus);
+      expect(order.rejectReason, RejectReason.rejectReasonUnspecified);
     });
 
     test('Example Order JSON Import, Serialize, II', () {
@@ -120,7 +180,8 @@ void main() {
       logger.info(deserializedOrder.orderConfiguration);
       logger.info(jsonEncode(deserializedOrder.orderConfiguration?.toCBJson()));
 
-      expect(deserializedOrder.orderConfiguration?.marketIOC?.quoteSize, 10.00);
+      expect(deserializedOrder.orderConfiguration?.marketIOC?.quoteSize,
+          Decimal.parse('10.00'));
       expect(deserializedOrder.orderConfiguration?.limitGTC, null);
       expect(deserializedOrder.orderConfiguration?.limitGTD, null);
       expect(deserializedOrder.orderConfiguration?.stopLimitGTC, null);

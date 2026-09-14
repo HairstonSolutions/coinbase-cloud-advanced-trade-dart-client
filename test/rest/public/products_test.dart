@@ -4,6 +4,7 @@ import 'package:coinbase_cloud_advanced_trade_client/src/rest/public/products.da
 import 'package:http/http.dart' as http;
 import 'package:logging/logging.dart';
 import 'package:mockito/mockito.dart';
+import 'package:decimal/decimal.dart';
 import 'package:test/test.dart';
 
 import '../../mocks.mocks.dart';
@@ -60,8 +61,8 @@ void main() {
 
       expect(ticker, isNot(null));
       expect(ticker?.trades?[0].tradeId, equals('testId'));
-      expect(ticker?.bestBid, equals(100.00));
-      expect(ticker?.bestAsk, equals(101.00));
+      expect(ticker?.bestBid, equals(Decimal.parse('100.00')));
+      expect(ticker?.bestAsk, equals(Decimal.parse('101.00')));
     });
 
     test('Get Market Trades - Failure', () async {

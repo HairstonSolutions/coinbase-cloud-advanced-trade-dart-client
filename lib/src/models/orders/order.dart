@@ -7,6 +7,7 @@ import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/reject_re
 import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/time_in_force.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/trigger_status.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/services/tools.dart';
+import 'package:decimal/decimal.dart';
 
 /// An order.
 class Order {
@@ -38,22 +39,22 @@ class Order {
   final DateTime? createdTime;
 
   /// The completion percentage of the order.
-  final double? completionPercentage;
+  final Decimal? completionPercentage;
 
   /// The filled size of the order.
-  final double? filledSize;
+  final Decimal? filledSize;
 
   /// The average filled price of the order.
-  final double? averageFilledPrice;
+  final Decimal? averageFilledPrice;
 
   /// The fee for the order.
   final String? fee;
 
   /// The number of fills for the order.
-  final double? numberOfFills;
+  final int? numberOfFills;
 
   /// The filled value of the order.
-  final double? filledValue;
+  final Decimal? filledValue;
 
   /// Whether the order is pending cancellation.
   final bool? pendingCancel;
@@ -62,13 +63,13 @@ class Order {
   final bool? sizeInQuote;
 
   /// The total fees for the order.
-  final double? totalFees;
+  final Decimal? totalFees;
 
   /// Whether the size is inclusive of fees.
   final bool? sizeInclusiveOfFees;
 
   /// The total value after fees.
-  final double? totalValueAfterFees;
+  final Decimal? totalValueAfterFees;
 
   /// The trigger status of the order.
   final TriggerStatus? triggerStatus;
@@ -132,17 +133,17 @@ class Order {
         status = OrderStatus.fromCB(json['status']),
         timeInForce = TimeInForce.fromCB(json['timeInForce']),
         createdTime = DateTime.parse(json['createdTime']),
-        completionPercentage = json['completionPercentage'],
-        filledSize = json['filledSize'],
-        averageFilledPrice = json['averageFilledPrice'],
+        completionPercentage = nullableDecimal(json, 'completionPercentage'),
+        filledSize = nullableDecimal(json, 'filledSize'),
+        averageFilledPrice = nullableDecimal(json, 'averageFilledPrice'),
         fee = json['fee'],
-        numberOfFills = json['numberOfFills'],
-        filledValue = json['filledValue'],
+        numberOfFills = nullableInt(json, 'numberOfFills'),
+        filledValue = nullableDecimal(json, 'filledValue'),
         pendingCancel = json['pendingCancel'],
         sizeInQuote = json['sizeInQuote'],
-        totalFees = json['totalFees'],
+        totalFees = nullableDecimal(json, 'totalFees'),
         sizeInclusiveOfFees = json['sizeInclusiveOfFees'],
-        totalValueAfterFees = json['totalValueAfterFees'],
+        totalValueAfterFees = nullableDecimal(json, 'totalValueAfterFees'),
         triggerStatus = TriggerStatus.fromCB(json['triggerStatus']),
         orderType = OrderType.fromCB(json['orderType']),
         rejectReason = RejectReason.fromCB(json['rejectReason']),
@@ -162,17 +163,17 @@ class Order {
         'status': status?.toCB(),
         'timeInForce': timeInForce?.toCB(),
         'createdTime': createdTime?.toIso8601String(),
-        'completionPercentage': completionPercentage,
-        'filledSize': filledSize,
-        'averageFilledPrice': averageFilledPrice,
+        'completionPercentage': completionPercentage?.toString(),
+        'filledSize': filledSize?.toString(),
+        'averageFilledPrice': averageFilledPrice?.toString(),
         'fee': fee,
         'numberOfFills': numberOfFills,
-        'filledValue': filledValue,
+        'filledValue': filledValue?.toString(),
         'pendingCancel': pendingCancel,
         'sizeInQuote': sizeInQuote,
-        'totalFees': totalFees,
+        'totalFees': totalFees?.toString(),
         'sizeInclusiveOfFees': sizeInclusiveOfFees,
-        'totalValueAfterFees': totalValueAfterFees,
+        'totalValueAfterFees': totalValueAfterFees?.toString(),
         'triggerStatus': triggerStatus?.toCB(),
         'orderType': orderType?.toCB(),
         'rejectReason': rejectReason?.toCB(),
@@ -194,17 +195,17 @@ class Order {
         status = OrderStatus.fromCB(json['status']),
         timeInForce = TimeInForce.fromCB(json['time_in_force']),
         createdTime = DateTime.parse(json['created_time']),
-        completionPercentage = nullableDouble(json, 'completion_percentage'),
-        filledSize = nullableDouble(json, 'filled_size'),
-        averageFilledPrice = nullableDouble(json, 'average_filled_price'),
+        completionPercentage = nullableDecimal(json, 'completion_percentage'),
+        filledSize = nullableDecimal(json, 'filled_size'),
+        averageFilledPrice = nullableDecimal(json, 'average_filled_price'),
         fee = json['fee'],
-        numberOfFills = nullableDouble(json, 'number_of_fills'),
-        filledValue = nullableDouble(json, 'filled_value'),
+        numberOfFills = nullableInt(json, 'number_of_fills'),
+        filledValue = nullableDecimal(json, 'filled_value'),
         pendingCancel = json['pending_cancel'],
         sizeInQuote = json['size_in_quote'],
-        totalFees = nullableDouble(json, 'total_fees'),
+        totalFees = nullableDecimal(json, 'total_fees'),
         sizeInclusiveOfFees = json['size_inclusive_of_fees'],
-        totalValueAfterFees = nullableDouble(json, 'total_value_after_fees'),
+        totalValueAfterFees = nullableDecimal(json, 'total_value_after_fees'),
         triggerStatus = TriggerStatus.fromCB(json['trigger_status']),
         orderType = OrderType.fromCB(json['order_type']),
         rejectReason = RejectReason.fromCB(json['reject_reason']),
@@ -224,17 +225,17 @@ class Order {
         'status': status?.toCB(),
         'time_in_force': timeInForce?.toCB(),
         'created_time': createdTime?.toIso8601String(),
-        'completion_percentage': completionPercentage,
-        'filled_size': filledSize,
-        'average_filled_price': averageFilledPrice,
+        'completion_percentage': completionPercentage?.toString(),
+        'filled_size': filledSize?.toString(),
+        'average_filled_price': averageFilledPrice?.toString(),
         'fee': fee,
         'number_of_fills': numberOfFills,
-        'filled_value': filledValue,
+        'filled_value': filledValue?.toString(),
         'pending_cancel': pendingCancel,
         'size_in_quote': sizeInQuote,
-        'total_fees': totalFees,
+        'total_fees': totalFees?.toString(),
         'size_inclusive_of_fees': sizeInclusiveOfFees,
-        'total_value_after_fees': totalValueAfterFees,
+        'total_value_after_fees': totalValueAfterFees?.toString(),
         'trigger_status': triggerStatus?.toCB(),
         'order_type': orderType?.toCB(),
         'reject_reason': rejectReason?.toCB(),

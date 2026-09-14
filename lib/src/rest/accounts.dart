@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:decimal/decimal.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/account.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/credential.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/error.dart';
@@ -171,9 +172,9 @@ Future<Account?> getAccount(
 /// [credential] - The user's API credentials.
 /// [isSandbox] - Whether to use the sandbox environment.
 ///
-/// Returns the available balance of the account as a double, or null if the
-/// account is not found.
-Future<double?> getAccountBalance(
+/// Returns the available balance of the account as a [Decimal], or null if
+/// the account is not found.
+Future<Decimal?> getAccountBalance(
     {String? uuid,
     String? currency,
     http.Client? client,

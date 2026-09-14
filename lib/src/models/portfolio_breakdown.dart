@@ -1,4 +1,6 @@
 import 'package:coinbase_cloud_advanced_trade_client/src/models/portfolio.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/services/tools.dart';
+import 'package:decimal/decimal.dart';
 
 /// A representation of money.
 class Money {
@@ -84,16 +86,16 @@ class SpotPosition {
   final String accountUuid;
 
   /// The total balance in fiat.
-  final num totalBalanceFiat;
+  final Decimal totalBalanceFiat;
 
   /// The total balance in crypto.
-  final num totalBalanceCrypto;
+  final Decimal totalBalanceCrypto;
 
   /// The available to trade balance in fiat.
-  final num availableToTradeFiat;
+  final Decimal availableToTradeFiat;
 
   /// The allocation.
-  final num allocation;
+  final Decimal allocation;
 
   /// The cost basis.
   final Money costBasis;
@@ -111,16 +113,16 @@ class SpotPosition {
   final String assetUuid;
 
   /// The available to trade balance in crypto.
-  final num availableToTradeCrypto;
+  final Decimal availableToTradeCrypto;
 
   /// The unrealized PNL.
-  final num unrealizedPnl;
+  final Decimal unrealizedPnl;
 
   /// The available to transfer balance in fiat.
-  final num availableToTransferFiat;
+  final Decimal availableToTransferFiat;
 
   /// The available to transfer balance in crypto.
-  final num availableToTransferCrypto;
+  final Decimal availableToTransferCrypto;
 
   /// The asset color.
   final String assetColor;
@@ -129,13 +131,13 @@ class SpotPosition {
   final String accountType;
 
   /// The funding PNL.
-  final num fundingPnl;
+  final Decimal fundingPnl;
 
   /// The available to send balance in fiat.
-  final num availableToSendFiat;
+  final Decimal availableToSendFiat;
 
   /// The available to send balance in crypto.
-  final num availableToSendCrypto;
+  final Decimal availableToSendCrypto;
 
   /// SpotPosition constructor
   SpotPosition(
@@ -165,24 +167,27 @@ class SpotPosition {
     return SpotPosition(
       asset: json['asset'],
       accountUuid: json['account_uuid'],
-      totalBalanceFiat: json['total_balance_fiat'],
-      totalBalanceCrypto: json['total_balance_crypto'],
-      availableToTradeFiat: json['available_to_trade_fiat'],
-      allocation: json['allocation'],
+      totalBalanceFiat: requiredDecimal(json, 'total_balance_fiat'),
+      totalBalanceCrypto: requiredDecimal(json, 'total_balance_crypto'),
+      availableToTradeFiat: requiredDecimal(json, 'available_to_trade_fiat'),
+      allocation: requiredDecimal(json, 'allocation'),
       costBasis: Money.fromCBJson(json['cost_basis']),
       assetImgUrl: json['asset_img_url'],
       isCash: json['is_cash'],
       averageEntryPrice: Money.fromCBJson(json['average_entry_price']),
       assetUuid: json['asset_uuid'],
-      availableToTradeCrypto: json['available_to_trade_crypto'],
-      unrealizedPnl: json['unrealized_pnl'],
-      availableToTransferFiat: json['available_to_transfer_fiat'],
-      availableToTransferCrypto: json['available_to_transfer_crypto'],
+      availableToTradeCrypto:
+          requiredDecimal(json, 'available_to_trade_crypto'),
+      unrealizedPnl: requiredDecimal(json, 'unrealized_pnl'),
+      availableToTransferFiat:
+          requiredDecimal(json, 'available_to_transfer_fiat'),
+      availableToTransferCrypto:
+          requiredDecimal(json, 'available_to_transfer_crypto'),
       assetColor: json['asset_color'],
       accountType: json['account_type'],
-      fundingPnl: json['funding_pnl'],
-      availableToSendFiat: json['available_to_send_fiat'],
-      availableToSendCrypto: json['available_to_send_crypto'],
+      fundingPnl: requiredDecimal(json, 'funding_pnl'),
+      availableToSendFiat: requiredDecimal(json, 'available_to_send_fiat'),
+      availableToSendCrypto: requiredDecimal(json, 'available_to_send_crypto'),
     );
   }
 

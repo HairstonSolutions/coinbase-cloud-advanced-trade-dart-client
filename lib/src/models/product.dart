@@ -1,4 +1,5 @@
 import 'package:coinbase_cloud_advanced_trade_client/src/services/tools.dart';
+import 'package:decimal/decimal.dart';
 
 /// A representation of a product.
 class Product {
@@ -6,34 +7,34 @@ class Product {
   final String? productId;
 
   /// The price of the product.
-  final double? price;
+  final Decimal? price;
 
   /// The percentage change in price over the last 24 hours.
   final String? pricePercentageChange24h;
 
   /// The volume over the last 24 hours.
-  final double? volume24h;
+  final Decimal? volume24h;
 
   /// The percentage change in volume over the last 24 hours.
   final String? volumePercentageChange24h;
 
   /// The base increment.
-  final double? baseIncrement;
+  final Decimal? baseIncrement;
 
   /// The quote increment.
-  final double? quoteIncrement;
+  final Decimal? quoteIncrement;
 
   /// The minimum quote size.
-  final double? quoteMinSize;
+  final Decimal? quoteMinSize;
 
   /// The maximum quote size.
-  final double? quoteMaxSize;
+  final Decimal? quoteMaxSize;
 
   /// The minimum base size.
-  final double? baseMinSize;
+  final Decimal? baseMinSize;
 
   /// The maximum base size.
-  final double? baseMaxSize;
+  final Decimal? baseMaxSize;
 
   /// The base name.
   final String? baseName;
@@ -81,7 +82,7 @@ class Product {
   final Map<String, dynamic>? fcmTradingSessionDetails;
 
   /// The mid-market price.
-  final double? midMarketPrice;
+  final Decimal? midMarketPrice;
 
   /// The alias for the product.
   final String? alias;
@@ -99,7 +100,7 @@ class Product {
   final bool? viewOnly;
 
   /// The price increment.
-  final double? priceIncrement;
+  final Decimal? priceIncrement;
 
   /// The display name.
   final String? displayName;
@@ -108,13 +109,13 @@ class Product {
   final String? productVenue;
 
   /// The approximate quote volume over the last 24 hours.
-  final double? approximateQuote24hVolume;
+  final Decimal? approximateQuote24hVolume;
 
   /// The time the product was created.
   final DateTime? newAt;
 
   /// The market cap.
-  final double? marketCap;
+  final Decimal? marketCap;
 
   /// The future product details.
   final Map<String, dynamic>? futureProductDetails;
@@ -169,16 +170,16 @@ class Product {
   /// Creates a Product from a Coinbase JSON object.
   Product.fromCBJson(Map<String, dynamic> json)
       : productId = json['product_id'],
-        price = double.tryParse(json['price'] ?? ''),
+        price = nullableDecimal(json, 'price'),
         pricePercentageChange24h = json['price_percentage_change_24h'],
-        volume24h = double.tryParse(json['volume_24h'] ?? ''),
+        volume24h = nullableDecimal(json, 'volume_24h'),
         volumePercentageChange24h = json['volume_percentage_change_24h'],
-        baseIncrement = double.tryParse(json['base_increment'] ?? ''),
-        quoteIncrement = double.tryParse(json['quote_increment'] ?? ''),
-        quoteMinSize = double.tryParse(json['quote_min_size'] ?? ''),
-        quoteMaxSize = double.tryParse(json['quote_max_size'] ?? ''),
-        baseMinSize = double.tryParse(json['base_min_size'] ?? ''),
-        baseMaxSize = double.tryParse(json['base_max_size'] ?? ''),
+        baseIncrement = nullableDecimal(json, 'base_increment'),
+        quoteIncrement = nullableDecimal(json, 'quote_increment'),
+        quoteMinSize = nullableDecimal(json, 'quote_min_size'),
+        quoteMaxSize = nullableDecimal(json, 'quote_max_size'),
+        baseMinSize = nullableDecimal(json, 'base_min_size'),
+        baseMaxSize = nullableDecimal(json, 'base_max_size'),
         baseName = json['base_name'],
         quoteName = json['quote_name'],
         watched = json['watched'],
@@ -194,19 +195,19 @@ class Product {
         quoteCurrencyId = json['quote_currency_id'],
         baseCurrencyId = json['base_currency_id'],
         fcmTradingSessionDetails = json['fcm_trading_session_details'],
-        midMarketPrice = nullableDouble(json, 'mid_market_price'),
+        midMarketPrice = nullableDecimal(json, 'mid_market_price'),
         alias = json['alias'],
         aliasTo = List<String>.from(json['alias_to'] ?? []),
         baseDisplaySymbol = json['base_display_symbol'],
         quoteDisplaySymbol = json['quote_display_symbol'],
         viewOnly = json['view_only'],
-        priceIncrement = double.tryParse(json['price_increment'] ?? ''),
+        priceIncrement = nullableDecimal(json, 'price_increment'),
         displayName = json['display_name'],
         productVenue = json['product_venue'],
         approximateQuote24hVolume =
-            double.tryParse(json['approximate_quote_24h_volume'] ?? ''),
+            nullableDecimal(json, 'approximate_quote_24h_volume'),
         newAt = DateTime.tryParse(json['new_at'] ?? ''),
-        marketCap = double.tryParse(json['market_cap'] ?? ''),
+        marketCap = nullableDecimal(json, 'market_cap'),
         futureProductDetails = json['future_product_details'],
         predictionMarketProductDetails =
             json['prediction_market_product_details'];
@@ -214,16 +215,16 @@ class Product {
   /// Creates a Product from a JSON object.
   Product.fromJson(Map<String, dynamic> json)
       : productId = json['productId'],
-        price = json['price'],
+        price = nullableDecimal(json, 'price'),
         pricePercentageChange24h = json['pricePercentageChange24h'],
-        volume24h = json['volume24h'],
+        volume24h = nullableDecimal(json, 'volume24h'),
         volumePercentageChange24h = json['volumePercentageChange24h'],
-        baseIncrement = json['baseIncrement'],
-        quoteIncrement = json['quoteIncrement'],
-        quoteMinSize = json['quoteMinSize'],
-        quoteMaxSize = json['quoteMaxSize'],
-        baseMinSize = json['baseMinSize'],
-        baseMaxSize = json['baseMaxSize'],
+        baseIncrement = nullableDecimal(json, 'baseIncrement'),
+        quoteIncrement = nullableDecimal(json, 'quoteIncrement'),
+        quoteMinSize = nullableDecimal(json, 'quoteMinSize'),
+        quoteMaxSize = nullableDecimal(json, 'quoteMaxSize'),
+        baseMinSize = nullableDecimal(json, 'baseMinSize'),
+        baseMaxSize = nullableDecimal(json, 'baseMaxSize'),
         baseName = json['baseName'],
         quoteName = json['quoteName'],
         watched = json['watched'],
@@ -239,34 +240,35 @@ class Product {
         quoteCurrencyId = json['quoteCurrencyId'],
         baseCurrencyId = json['baseCurrencyId'],
         fcmTradingSessionDetails = json['fcmTradingSessionDetails'],
-        midMarketPrice = json['midMarketPrice'],
+        midMarketPrice = nullableDecimal(json, 'midMarketPrice'),
         alias = json['alias'],
         aliasTo = List<String>.from(json['aliasTo'] ?? []),
         baseDisplaySymbol = json['baseDisplaySymbol'],
         quoteDisplaySymbol = json['quoteDisplaySymbol'],
         viewOnly = json['viewOnly'],
-        priceIncrement = json['priceIncrement'],
+        priceIncrement = nullableDecimal(json, 'priceIncrement'),
         displayName = json['displayName'],
         productVenue = json['productVenue'],
-        approximateQuote24hVolume = json['approximateQuote24hVolume'],
+        approximateQuote24hVolume =
+            nullableDecimal(json, 'approximateQuote24hVolume'),
         newAt = DateTime.tryParse(json['newAt'] ?? ''),
-        marketCap = json['marketCap'],
+        marketCap = nullableDecimal(json, 'marketCap'),
         futureProductDetails = json['futureProductDetails'],
         predictionMarketProductDetails = json['predictionMarketProductDetails'];
 
   /// Converts a Product to a JSON object.
   Map<String, dynamic> toJson() => {
         'productId': productId,
-        'price': price,
+        'price': price?.toString(),
         'pricePercentageChange24h': pricePercentageChange24h,
-        'volume24h': volume24h,
+        'volume24h': volume24h?.toString(),
         'volumePercentageChange24h': volumePercentageChange24h,
-        'baseIncrement': baseIncrement,
-        'quoteIncrement': quoteIncrement,
-        'quoteMinSize': quoteMinSize,
-        'quoteMaxSize': quoteMaxSize,
-        'baseMinSize': baseMinSize,
-        'baseMaxSize': baseMaxSize,
+        'baseIncrement': baseIncrement?.toString(),
+        'quoteIncrement': quoteIncrement?.toString(),
+        'quoteMinSize': quoteMinSize?.toString(),
+        'quoteMaxSize': quoteMaxSize?.toString(),
+        'baseMinSize': baseMinSize?.toString(),
+        'baseMaxSize': baseMaxSize?.toString(),
         'baseName': baseName,
         'quoteName': quoteName,
         'watched': watched,
@@ -282,18 +284,18 @@ class Product {
         'quoteCurrencyId': quoteCurrencyId,
         'baseCurrencyId': baseCurrencyId,
         'fcmTradingSessionDetails': fcmTradingSessionDetails,
-        'midMarketPrice': midMarketPrice,
+        'midMarketPrice': midMarketPrice?.toString(),
         'alias': alias,
         'aliasTo': aliasTo,
         'baseDisplaySymbol': baseDisplaySymbol,
         'quoteDisplaySymbol': quoteDisplaySymbol,
         'viewOnly': viewOnly,
-        'priceIncrement': priceIncrement,
+        'priceIncrement': priceIncrement?.toString(),
         'displayName': displayName,
         'productVenue': productVenue,
-        'approximateQuote24hVolume': approximateQuote24hVolume,
+        'approximateQuote24hVolume': approximateQuote24hVolume?.toString(),
         'newAt': newAt?.toIso8601String(),
-        'marketCap': marketCap,
+        'marketCap': marketCap?.toString(),
         'futureProductDetails': futureProductDetails,
         'predictionMarketProductDetails': predictionMarketProductDetails,
       };

@@ -35,7 +35,11 @@ enum RejectReason {
   }
 
   /// Creates a RejectReason from a Coinbase string.
-  static RejectReason fromCB(String cb) {
+  ///
+  /// Returns [RejectReason.rejectReasonUnspecified] when [cb] is null or
+  /// unrecognised, so a payload that omits the field does not throw.
+  static RejectReason fromCB(String? cb) {
+    if (cb == null) return RejectReason.rejectReasonUnspecified;
     return RejectReason.values.firstWhere((e) => e.value == cb,
         orElse: () => RejectReason.rejectReasonUnspecified);
   }

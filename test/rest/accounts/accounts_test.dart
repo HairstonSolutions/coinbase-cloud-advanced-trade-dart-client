@@ -4,6 +4,7 @@ import 'package:coinbase_cloud_advanced_trade_client/src/services/network.dart';
 import 'package:http/http.dart' as http;
 import 'package:logging/logging.dart';
 import 'package:mockito/mockito.dart';
+import 'package:decimal/decimal.dart';
 import 'package:test/test.dart';
 
 import '../../mocks.mocks.dart';
@@ -76,7 +77,7 @@ void main() {
       expect(account, isNotNull);
       expect(account?.uuid, "8bfc20d7-f7c6-4422-9181-51268ba51372");
       expect(account?.currency, "BTC");
-      expect(account?.availableBalance, 100.00);
+      expect(account?.availableBalance, Decimal.parse('100.00'));
     });
 
     test('Get a single account by currency', () async {
@@ -102,13 +103,13 @@ void main() {
       when(mockClient.get(any, headers: anyNamed('headers')))
           .thenAnswer((_) async => http.Response(mockResponse, 200));
 
-      double? balance = await getAccountBalance(
+      Decimal? balance = await getAccountBalance(
           currency: 'BTC',
           client: mockClient,
           credential: constants.credentials);
 
       expect(balance, isNotNull);
-      expect(balance, 100.00);
+      expect(balance, Decimal.parse('100.00'));
     });
 
     test('Get account balance by UUID', () async {
@@ -118,17 +119,17 @@ void main() {
       when(mockClient.get(any, headers: anyNamed('headers')))
           .thenAnswer((_) async => http.Response(mockResponse, 200));
 
-      double? balance = await getAccountBalance(
+      Decimal? balance = await getAccountBalance(
           uuid: '8bfc20d7-f7c6-4422-9181-51268ba51372',
           client: mockClient,
           credential: constants.credentials);
 
       expect(balance, isNotNull);
-      expect(balance, 100.00);
+      expect(balance, Decimal.parse('100.00'));
     });
 
     test('Return null balance when no uuid or currency is provided', () async {
-      double? balance = await getAccountBalance(
+      Decimal? balance = await getAccountBalance(
           client: mockClient, credential: constants.credentials);
       expect(balance, isNull);
     });
@@ -229,7 +230,7 @@ void main() {
 
     test('Get Account Balance by Account Currency', () async {
       String currency = 'BTC';
-      double? balance = await getAccountBalance(
+      Decimal? balance = await getAccountBalance(
           currency: currency,
           credential: constants.credentials,
           isSandbox: false);
@@ -241,7 +242,7 @@ void main() {
       Account? account = await getAccountByCurrency(currency,
           credential: constants.credentials, isSandbox: false);
       String? uuid = account?.uuid;
-      double? balance = await getAccountBalance(
+      Decimal? balance = await getAccountBalance(
           uuid: uuid, credential: constants.credentials, isSandbox: false);
       expect(balance != null, true);
     });
@@ -249,7 +250,7 @@ void main() {
     test(
         'Get Account Balance cancels when neither a uuid or currency is provided',
         () async {
-      double? balance = await getAccountBalance(
+      Decimal? balance = await getAccountBalance(
           credential: constants.credentials, isSandbox: false);
       expect(balance, null);
     });

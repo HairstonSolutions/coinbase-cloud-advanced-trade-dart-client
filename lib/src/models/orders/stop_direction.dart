@@ -20,7 +20,11 @@ enum StopDirection {
   }
 
   /// Creates a StopDirection from a Coinbase string.
-  static StopDirection fromCB(String cb) {
+  ///
+  /// Returns [StopDirection.unknownStopDirection] when [cb] is null or
+  /// unrecognised, so a payload that omits the field does not throw.
+  static StopDirection fromCB(String? cb) {
+    if (cb == null) return StopDirection.unknownStopDirection;
     return StopDirection.values.firstWhere((e) => e.value == cb,
         orElse: () => StopDirection.unknownStopDirection);
   }

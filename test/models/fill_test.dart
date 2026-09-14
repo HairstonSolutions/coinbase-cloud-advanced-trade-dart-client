@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:coinbase_cloud_advanced_trade_client/src/models/fill.dart';
 import 'package:logging/logging.dart';
+import 'package:decimal/decimal.dart';
 import 'package:test/test.dart';
 
 import '../test_helpers.dart';
@@ -31,9 +32,9 @@ void main() {
       expect(exampleFill.orderId, '0000-000000-000000');
       expect(exampleFill.tradeTime, DateTime.parse('2021-05-31T09:59:59Z'));
       expect(exampleFill.tradeType, 'FILL');
-      expect(exampleFill.price, 10000.00);
-      expect(exampleFill.size, 0.001);
-      expect(exampleFill.commission, 1.25);
+      expect(exampleFill.price, Decimal.parse('10000.00'));
+      expect(exampleFill.size, Decimal.parse('0.001'));
+      expect(exampleFill.commission, Decimal.parse('1.25'));
       expect(exampleFill.productId, 'BTC-USD');
       expect(exampleFill.sizeInQuote, false);
     });
@@ -48,9 +49,9 @@ void main() {
       expect(exampleFill.orderId, '0000-000000-000000');
       expect(exampleFill.tradeTime, DateTime.parse('2021-05-31T09:59:59Z'));
       expect(exampleFill.tradeType, 'FILL');
-      expect(exampleFill.price, 10000.00);
-      expect(exampleFill.size, 0.00000001);
-      expect(exampleFill.commission, 0.0000000028064);
+      expect(exampleFill.price, Decimal.parse('10000.00'));
+      expect(exampleFill.size, Decimal.parse('0.00000001'));
+      expect(exampleFill.commission, Decimal.parse('0.0000000028064'));
       expect(exampleFill.productId, 'BTC-USD');
       expect(exampleFill.sizeInQuote, false);
     });

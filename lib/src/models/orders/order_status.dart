@@ -32,7 +32,8 @@ enum OrderStatus {
   }
 
   /// Creates an OrderStatus from a Coinbase string.
-  static OrderStatus fromCB(String cb) {
+  static OrderStatus fromCB(String? cb) {
+    if (cb == null) return OrderStatus.unknownOrderStatus;
     return OrderStatus.values.firstWhere((e) => e.value == cb,
         orElse: () => OrderStatus.unknownOrderStatus);
   }

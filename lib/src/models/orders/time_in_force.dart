@@ -26,7 +26,11 @@ enum TimeInForce {
   }
 
   /// Creates a TimeInForce from a Coinbase string.
-  static TimeInForce fromCB(String cb) {
+  ///
+  /// Returns [TimeInForce.unknownTimeInForce] when [cb] is null or
+  /// unrecognised, so a payload that omits the field does not throw.
+  static TimeInForce fromCB(String? cb) {
+    if (cb == null) return TimeInForce.unknownTimeInForce;
     return TimeInForce.values.firstWhere((e) => e.value == cb,
         orElse: () => TimeInForce.unknownTimeInForce);
   }

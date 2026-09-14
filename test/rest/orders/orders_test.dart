@@ -6,6 +6,7 @@ import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/stop_dire
 import 'package:http/http.dart' as http;
 import 'package:logging/logging.dart';
 import 'package:mockito/mockito.dart';
+import 'package:decimal/decimal.dart';
 import 'package:test/test.dart';
 
 import '../../mocks.mocks.dart';
@@ -683,8 +684,8 @@ void main() {
       final bitcoinPrice = bitcoinTicker?.trades?.first.price;
 
       // Set Prices of both Orders
-      final orderPrice = bitcoinPrice! * 0.5;
-      final secondOrderPrice = orderPrice - 1.0;
+      final orderPrice = bitcoinPrice! * Decimal.parse('0.5');
+      final secondOrderPrice = orderPrice - Decimal.one;
 
       final clientOrderId = DateTime.now().millisecondsSinceEpoch.toString();
       final result = await createLimitOrder(
@@ -756,8 +757,8 @@ void main() {
       expect(previewOrderResponse, isNotNull);
       expect(previewOrderResponse.orderTotal, '10.00');
       expect(previewOrderResponse.commissionTotal, '0.05');
-      expect(previewOrderResponse.quoteSize, 10.00);
-      expect(previewOrderResponse.baseSize, 0.001);
+      expect(previewOrderResponse.quoteSize, Decimal.parse('10.00'));
+      expect(previewOrderResponse.baseSize, Decimal.parse('0.001'));
       expect(previewOrderResponse.bestBid, '9999.00');
       expect(previewOrderResponse.bestAsk, '10001.00');
       expect(previewOrderResponse.previewId, 'PREVIEW-ID-12345');

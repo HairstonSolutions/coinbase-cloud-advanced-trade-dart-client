@@ -1,4 +1,5 @@
 import 'package:coinbase_cloud_advanced_trade_client/src/services/tools.dart';
+import 'package:decimal/decimal.dart';
 
 /// The response from a preview order request.
 class PreviewOrderResponse {
@@ -15,10 +16,10 @@ class PreviewOrderResponse {
   final List<String>? warning;
 
   /// The size of the quote currency.
-  final double? quoteSize;
+  final Decimal? quoteSize;
 
   /// The size of the base currency.
-  final double? baseSize;
+  final Decimal? baseSize;
 
   /// The best bid price.
   final String? bestBid;
@@ -89,8 +90,8 @@ class PreviewOrderResponse {
       commissionTotal: json['commission_total'],
       errs: json['errs']?.cast<String>(),
       warning: json['warning']?.cast<String>(),
-      quoteSize: nullableDouble(json, 'quote_size'),
-      baseSize: nullableDouble(json, 'base_size'),
+      quoteSize: nullableDecimal(json, 'quote_size'),
+      baseSize: nullableDecimal(json, 'base_size'),
       bestBid: json['best_bid'],
       bestAsk: json['best_ask'],
       isMax: json['is_max'],

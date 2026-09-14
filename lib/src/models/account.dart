@@ -1,4 +1,5 @@
 import 'package:coinbase_cloud_advanced_trade_client/src/services/tools.dart';
+import 'package:decimal/decimal.dart';
 
 /// Account information.
 class Account {
@@ -12,7 +13,7 @@ class Account {
   final String? currency;
 
   /// The account's available balance.
-  final double? availableBalance;
+  final Decimal? availableBalance;
 
   /// Whether the account is the default account.
   final bool? isDefault;
@@ -36,7 +37,7 @@ class Account {
   final bool? ready;
 
   /// The account's hold value.
-  final double? holdValue;
+  final Decimal? holdValue;
 
   /// Account constructor
   Account(
@@ -58,22 +59,28 @@ class Account {
       : uuid = json['uuid'],
         name = json['name'],
         currency = json['currency'],
-        availableBalance = json['availableBalance'],
+        availableBalance = nullableDecimal(json, 'availableBalance'),
         isDefault = json['isDefault'],
         active = json['active'],
-        createdAt = DateTime.parse(json['createdAt']),
-        updatedAt = DateTime.parse(json['updatedAt']),
-        deletedAt = DateTime.parse(json['deletedAt']),
+        createdAt = (json['createdAt'] != null)
+            ? DateTime.parse(json['createdAt'])
+            : null,
+        updatedAt = (json['updatedAt'] != null)
+            ? DateTime.parse(json['updatedAt'])
+            : null,
+        deletedAt = (json['deletedAt'] != null)
+            ? DateTime.parse(json['deletedAt'])
+            : null,
         type = json['type'],
         ready = json['ready'],
-        holdValue = json['holdValue'];
+        holdValue = nullableDecimal(json, 'holdValue');
 
   /// Converts an Account to a JSON object.
   Map<String, dynamic> toJson() => {
         'uuid': uuid,
         'name': name,
         'currency': currency,
-        'availableBalance': availableBalance,
+        'availableBalance': availableBalance?.toString(),
         'isDefault': isDefault,
         'active': active,
         'createdAt': createdAt?.toIso8601String(),
@@ -81,7 +88,7 @@ class Account {
         'deletedAt': deletedAt?.toIso8601String(),
         'type': type,
         'ready': ready,
-        'holdValue': holdValue
+        'holdValue': holdValue?.toString()
       };
 
   /// Creates an Account from a Coinbase JSON object.
@@ -117,7 +124,7 @@ class Account {
 /// The available balance for an account.
 class AvailableBalance {
   /// The value of the available balance.
-  double? value;
+  Decimal? value;
 
   /// The currency of the available balance.
   String? currency;
@@ -127,14 +134,14 @@ class AvailableBalance {
 
   /// Creates an AvailableBalance from a Coinbase JSON object.
   AvailableBalance.fromCBJson(Map<String, dynamic> json)
-      : value = nullableDouble(json, 'value'),
+      : value = nullableDecimal(json, 'value'),
         currency = json['currency'];
 }
 
 /// The hold value for an account.
 class Hold {
   /// The value of the hold.
-  double? value;
+  Decimal? value;
 
   /// The currency of the hold.
   String? currency;
@@ -144,6 +151,6 @@ class Hold {
 
   /// Creates a Hold from a Coinbase JSON object.
   Hold.fromCBJson(Map<String, dynamic> json)
-      : value = nullableDouble(json, 'value'),
+      : value = nullableDecimal(json, 'value'),
         currency = json['currency'];
 }

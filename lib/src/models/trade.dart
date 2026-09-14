@@ -1,4 +1,5 @@
 import 'package:coinbase_cloud_advanced_trade_client/src/services/tools.dart';
+import 'package:decimal/decimal.dart';
 
 /// A representation of a trade.
 class Trade {
@@ -9,10 +10,10 @@ class Trade {
   final String? productId;
 
   /// The price of the trade.
-  final double? price;
+  final Decimal? price;
 
   /// The size of the trade.
-  final double? size;
+  final Decimal? size;
 
   /// The time of the trade.
   final DateTime? time;
@@ -21,10 +22,10 @@ class Trade {
   final String? side;
 
   /// The bid price at the time of the trade.
-  final double? bid;
+  final Decimal? bid;
 
   /// The ask price at the time of the trade.
-  final double? ask;
+  final Decimal? ask;
 
   /// Trade constructor
   Trade(this.tradeId, this.productId, this.price, this.size, this.time,
@@ -34,46 +35,46 @@ class Trade {
   Trade.fromCBJson(Map<String, dynamic> json)
       : tradeId = json['trade_id'],
         productId = json['product_id'],
-        price = double.parse(json['price']),
-        size = double.parse(json['size']),
+        price = nullableDecimal(json, 'price'),
+        size = nullableDecimal(json, 'size'),
         time = DateTime.parse(json['time']),
         side = json['side'],
-        bid = nullableDouble(json, 'bid'),
-        ask = nullableDouble(json, 'ask');
+        bid = nullableDecimal(json, 'bid'),
+        ask = nullableDecimal(json, 'ask');
 
   /// Converts a Trade to a Coinbase JSON object.
   Map<String, dynamic> toCBJson() => {
         'trade_id': tradeId,
         'product_id': productId,
-        'price': price,
-        'size': size,
+        'price': price?.toString(),
+        'size': size?.toString(),
         'time': time?.toIso8601String(),
         'side': side,
-        'bid': bid,
-        'ask': ask,
+        'bid': bid?.toString(),
+        'ask': ask?.toString(),
       };
 
   /// Creates a Trade from a JSON object.
   Trade.fromJson(Map<String, dynamic> json)
       : tradeId = json['tradeId'],
         productId = json['productId'],
-        price = json['price'],
-        size = json['size'],
+        price = nullableDecimal(json, 'price'),
+        size = nullableDecimal(json, 'size'),
         time = DateTime.parse(json['time']),
         side = json['side'],
-        bid = json['bid'],
-        ask = json['ask'];
+        bid = nullableDecimal(json, 'bid'),
+        ask = nullableDecimal(json, 'ask');
 
   /// Converts a Trade to a JSON object.
   Map<String, dynamic> toJson() => {
         'tradeId': tradeId,
         'productId': productId,
-        'price': price,
-        'size': size,
+        'price': price?.toString(),
+        'size': size?.toString(),
         'time': time?.toIso8601String(),
         'side': side,
-        'bid': bid,
-        'ask': ask,
+        'bid': bid?.toString(),
+        'ask': ask?.toString(),
       };
 
   @override

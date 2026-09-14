@@ -1,20 +1,21 @@
 import 'package:coinbase_cloud_advanced_trade_client/src/services/tools.dart';
+import 'package:decimal/decimal.dart';
 
 import '../stop_direction.dart';
 
 /// A stop-limit order that is good until canceled.
 class StopLimitGTC {
   /// The amount of quote currency to spend on the order.
-  final double? quoteSize;
+  final Decimal? quoteSize;
 
   /// The amount of base currency to spend on the order.
-  final double? baseSize;
+  final Decimal? baseSize;
 
   /// The price at which to limit the order.
-  final double? limitPrice;
+  final Decimal? limitPrice;
 
   /// The price at which to stop the order.
-  final double? stopPrice;
+  final Decimal? stopPrice;
 
   /// The direction of the stop.
   final StopDirection? stopDirection;
@@ -25,39 +26,39 @@ class StopLimitGTC {
 
   /// Creates a StopLimitGTC from a JSON object.
   StopLimitGTC.fromJson(Map<String, dynamic> json)
-      : quoteSize = json['quoteSize'],
-        baseSize = json['baseSize'],
-        limitPrice = json['limitPrice'],
-        stopPrice = json['stopPrice'],
+      : quoteSize = nullableDecimal(json, 'quoteSize'),
+        baseSize = nullableDecimal(json, 'baseSize'),
+        limitPrice = nullableDecimal(json, 'limitPrice'),
+        stopPrice = nullableDecimal(json, 'stopPrice'),
         stopDirection = json['stopDirection'] != null
             ? StopDirection.fromCB(json['stopDirection'])
             : null;
 
   /// Converts a StopLimitGTC to a JSON object.
   Map<String, dynamic> toJson() => {
-        'quoteSize': quoteSize,
-        'baseSize': baseSize,
-        'limitPrice': limitPrice,
-        'stopPrice': stopPrice,
+        'quoteSize': quoteSize?.toString(),
+        'baseSize': baseSize?.toString(),
+        'limitPrice': limitPrice?.toString(),
+        'stopPrice': stopPrice?.toString(),
         'stopDirection': stopDirection?.toCB()
       };
 
   /// Creates a StopLimitGTC from a Coinbase JSON object.
   StopLimitGTC.fromCBJson(Map<String, dynamic> json)
-      : quoteSize = nullableDouble(json, 'quote_size'),
-        baseSize = nullableDouble(json, 'base_size'),
-        limitPrice = nullableDouble(json, 'limit_price'),
-        stopPrice = nullableDouble(json, 'stop_price'),
+      : quoteSize = nullableDecimal(json, 'quote_size'),
+        baseSize = nullableDecimal(json, 'base_size'),
+        limitPrice = nullableDecimal(json, 'limit_price'),
+        stopPrice = nullableDecimal(json, 'stop_price'),
         stopDirection = json['stop_direction'] != null
             ? StopDirection.fromCB(json['stop_direction'])
             : null;
 
   /// Converts a StopLimitGTC to a Coinbase JSON object.
   Map<String, dynamic> toCBJson() => {
-        'quote_size': quoteSize,
-        'base_size': baseSize,
-        'limit_price': limitPrice,
-        'stop_price': stopPrice,
+        'quote_size': quoteSize?.toString(),
+        'base_size': baseSize?.toString(),
+        'limit_price': limitPrice?.toString(),
+        'stop_price': stopPrice?.toString(),
         'stop_direction': stopDirection?.toCB(),
       };
 
