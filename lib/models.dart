@@ -8,6 +8,7 @@ export 'src/models/key_permissions.dart';
 export 'src/models/orders/edit_order_error.dart';
 export 'src/models/orders/edit_order_preview_response.dart';
 export 'src/models/orders/edit_order_response.dart';
+export 'src/models/orders/create_order_result.dart';
 export 'src/models/orders/order.dart';
 export 'src/models/orders/order_configuration.dart';
 export 'src/models/orders/order_configuration/limit_gtc.dart';

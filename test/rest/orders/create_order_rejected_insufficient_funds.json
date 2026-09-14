@@ -1,0 +1,14 @@
+{
+  "success": false,
+  "failure_reason": "INSUFFICIENT_FUNDS",
+  "order_id": "",
+  "success_response": null,
+  "error_response": {
+    "error": "UNKNOWN_FAILURE_REASON",
+    "message": "Insufficient funds",
+    "error_details": "",
+    "preview_failure_reason": "UNKNOWN_PREVIEW_FAILURE_REASON",
+    "new_order_failure_reason": "INSUFFICIENT_FUND"
+  },
+  "order_configuration": {}
+}

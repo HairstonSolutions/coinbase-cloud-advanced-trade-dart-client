@@ -4,6 +4,7 @@ import 'package:coinbase_cloud_advanced_trade_client/src/models/cancel_orders.da
 import 'package:coinbase_cloud_advanced_trade_client/src/models/credential.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/error.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/edit_order_preview_response.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/create_order_result.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/edit_order_response.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/order.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/order_side.dart';
@@ -258,7 +259,7 @@ Future<Order?> getOrder({
 ///
 /// Returns a map containing the result of the order creation, or null if the
 /// request fails.
-Future<Map<String, dynamic>?> createMarketOrder({
+Future<CreateOrderResult> createMarketOrder({
   required String clientOrderId,
   required String productId,
   required OrderSide side,
@@ -314,7 +315,7 @@ Future<Map<String, dynamic>?> createMarketOrder({
 ///
 /// Returns a map containing the result of the order creation, or null if the
 /// request fails.
-Future<Map<String, dynamic>?> createLimitOrder({
+Future<CreateOrderResult> createLimitOrder({
   required String clientOrderId,
   required String productId,
   required OrderSide side,
@@ -362,7 +363,7 @@ Future<Map<String, dynamic>?> createLimitOrder({
 ///
 /// Returns a map containing the result of the order creation, or null if the
 /// request fails.
-Future<Map<String, dynamic>?> createStopLimitOrderGTC({
+Future<CreateOrderResult> createStopLimitOrderGTC({
   required String clientOrderId,
   required String productId,
   required OrderSide side,
@@ -414,7 +415,7 @@ Future<Map<String, dynamic>?> createStopLimitOrderGTC({
 ///
 /// Returns a map containing the result of the order creation, or null if the
 /// request fails.
-Future<Map<String, dynamic>?> createStopLimitOrderGTD({
+Future<CreateOrderResult> createStopLimitOrderGTD({
   required String clientOrderId,
   required String productId,
   required OrderSide side,
@@ -448,7 +449,7 @@ Future<Map<String, dynamic>?> createStopLimitOrderGTD({
   );
 }
 
-Future<Map<String, dynamic>?> _createOrder({
+Future<CreateOrderResult> _createOrder({
   required String clientOrderId,
   required String productId,
   required OrderSide side,
@@ -457,8 +458,6 @@ Future<Map<String, dynamic>?> _createOrder({
   bool isSandbox = false,
   Client? client,
 }) async {
-  Map<String, dynamic>? result;
-
   final body = {
     'client_order_id': clientOrderId,
     'product_id': productId,
@@ -477,7 +476,13 @@ Future<Map<String, dynamic>?> _createOrder({
   if (response.statusCode == 200) {
     String data = response.body;
     var jsonResponse = jsonDecode(data);
-    result = jsonResponse;
+
+    bool isSuccess = jsonResponse['success'] == true;
+    if (isSuccess) {
+      return OrderSuccess.fromCBJson(jsonResponse);
+    } else {
+      return OrderRejected.fromCBJson(jsonResponse);
+    }
   } else {
     throw CoinbaseException(
       'Failed to create order',
@@ -485,8 +490,6 @@ Future<Map<String, dynamic>?> _createOrder({
       response.body,
     );
   }
-
-  return result;
 }
 
 /// Edit an order.
