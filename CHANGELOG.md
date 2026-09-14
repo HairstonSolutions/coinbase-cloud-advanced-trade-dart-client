@@ -26,6 +26,30 @@ arithmetic.
   `services/tools.dart`.
 - Adds a `decimal: ^3.2.6` dependency.
 
+### Added
+
+- `CoinbaseHttpOptions` (base URL, timeout, http client) is now accepted by
+  every public REST function as an optional `options` parameter and forwarded
+  to the network layer.
+  Fixes [#107](https://github.com/HairstonSolutions/coinbase-cloud-advanced-trade-dart-client/issues/107).
+  Previously only the low-level helpers in `services/network.dart` took it, so
+  the base URL override and the request timeout were unreachable through the
+  package's public API. A custom `baseUrl` is also what the JWT `uri` claim is
+  signed with, which wrapping the `http.Client` cannot do.
+
+```dart
+final options = CoinbaseHttpOptions(
+  baseUrl: Uri.parse('http://localhost:8080'),
+  timeout: const Duration(seconds: 10),
+);
+
+final page = await getOrdersPage(credential: credential, options: options);
+```
+
+- `CoinbaseException` and `CoinbaseTimeoutException` are now exported from the
+  library, so a caller configuring a timeout can catch them without importing
+  `src/`.
+
 ### Fixed
 
 - `Account.fromJson` threw `type 'Null' is not a subtype of type 'String'` when

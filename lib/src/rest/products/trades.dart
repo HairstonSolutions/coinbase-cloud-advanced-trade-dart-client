@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:coinbase_cloud_advanced_trade_client/src/models/coinbase_http_options.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/credential.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/trade.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/services/logger.dart';
@@ -20,6 +21,8 @@ final Logger _logger = setupLogger('TradesRest');
 /// [productId] - The ID of the product to get trades for.
 /// [limit] - A limit on the number of trades to be returned.
 /// [credential] - The user's API credentials.
+/// [options] - Optional HTTP options such as a custom base URL, timeout,
+/// and http client.
 /// [isSandbox] - Whether to use the sandbox environment.
 ///
 /// Returns a list of [Trade] objects.
@@ -27,6 +30,7 @@ Future<List<Trade>> getTrades(
     {required String? productId,
     int? limit = 10,
     http.Client? client,
+    CoinbaseHttpOptions? options,
     required Credential credential,
     bool isSandbox = false}) async {
   List<Trade> trades = [];
@@ -35,6 +39,7 @@ Future<List<Trade>> getTrades(
   http.Response response = await getAuthorized('/products/$productId/ticker',
       queryParameters: queryParameters,
       client: client,
+      options: options,
       credential: credential,
       isSandbox: isSandbox);
 

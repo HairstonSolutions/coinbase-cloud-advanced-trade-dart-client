@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:coinbase_cloud_advanced_trade_client/src/models/cancel_orders.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/models/coinbase_http_options.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/credential.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/error.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/edit_order_preview_response.dart';
@@ -30,6 +31,8 @@ final Logger _logger = setupLogger('OrdersRest');
 /// [limit] - A limit on the number of orders to be returned.
 /// [cursor] - A cursor for pagination.
 /// [credential] - The user's API credentials.
+/// [options] - Optional HTTP options such as a custom base URL, timeout,
+/// and http client.
 /// [isSandbox] - Whether to use the sandbox environment.
 ///
 /// Returns a [Page] of [Order] objects.
@@ -49,6 +52,7 @@ Future<Page<Order>> getOrdersPage({
   String? retailPortfolioId,
   String? cursor,
   http.Client? client,
+  CoinbaseHttpOptions? options,
   required Credential credential,
   bool isSandbox = false,
 }) async {
@@ -98,6 +102,7 @@ Future<Page<Order>> getOrdersPage({
     '/orders/historical/batch',
     queryParameters: queryParameters,
     client: client,
+    options: options,
     credential: credential,
     isSandbox: isSandbox,
   );
@@ -138,6 +143,8 @@ Future<Page<Order>> getOrdersPage({
 /// [limit] - A limit on the number of orders to be returned.
 /// [cursor] - A cursor for pagination.
 /// [credential] - The user's API credentials.
+/// [options] - Optional HTTP options such as a custom base URL, timeout,
+/// and http client.
 /// [isSandbox] - Whether to use the sandbox environment.
 ///
 /// Returns a list of [Order] objects.
@@ -157,6 +164,7 @@ Future<List<Order>> getOrders({
   String? retailPortfolioId,
   String? cursor,
   http.Client? client,
+  CoinbaseHttpOptions? options,
   required Credential credential,
   bool isSandbox = false,
 }) async {
@@ -180,6 +188,7 @@ Future<List<Order>> getOrders({
       retailPortfolioId: retailPortfolioId,
       cursor: currentCursor,
       client: client,
+      options: options,
       credential: credential,
       isSandbox: isSandbox,
     );
@@ -206,6 +215,8 @@ Future<List<Order>> getOrders({
 ///
 /// [orderId] - The ID of the order to be returned.
 /// [credential] - The user's API credentials.
+/// [options] - Optional HTTP options such as a custom base URL, timeout,
+/// and http client.
 /// [isSandbox] - Whether to use the sandbox environment.
 ///
 /// Returns an [Order] object, or null if no order is found for the given
@@ -213,6 +224,7 @@ Future<List<Order>> getOrders({
 Future<Order?> getOrder({
   required String orderId,
   http.Client? client,
+  CoinbaseHttpOptions? options,
   required Credential credential,
   bool isSandbox = false,
 }) async {
@@ -221,6 +233,7 @@ Future<Order?> getOrder({
   http.Response response = await getAuthorized(
     '/orders/historical/$orderId',
     client: client,
+    options: options,
     credential: credential,
     isSandbox: isSandbox,
   );
@@ -255,6 +268,8 @@ Future<Order?> getOrder({
 /// [baseSize] - The amount of base currency to buy on a BUY order, or the
 /// amount of quote currency to receive on a SELL order.
 /// [credential] - The user's API credentials.
+/// [options] - Optional HTTP options such as a custom base URL, timeout,
+/// and http client.
 /// [isSandbox] - Whether to use the sandbox environment.
 ///
 /// Returns a map containing the result of the order creation, or null if the
@@ -268,6 +283,7 @@ Future<CreateOrderResult> createMarketOrder({
   required Credential credential,
   bool isSandbox = false,
   Client? client,
+  CoinbaseHttpOptions? options,
 }) async {
   if (quoteSize == null && baseSize == null) {
     throw ArgumentError('Either quoteSize or baseSize must be provided.');
@@ -294,6 +310,7 @@ Future<CreateOrderResult> createMarketOrder({
     credential: credential,
     isSandbox: isSandbox,
     client: client,
+    options: options,
   );
 }
 
@@ -311,6 +328,8 @@ Future<CreateOrderResult> createMarketOrder({
 /// [limitPrice] - The price at which to buy or sell the base currency.
 /// [postOnly] - Whether the order should be a post-only order.
 /// [credential] - The user's API credentials.
+/// [options] - Optional HTTP options such as a custom base URL, timeout,
+/// and http client.
 /// [isSandbox] - Whether to use the sandbox environment.
 ///
 /// Returns a map containing the result of the order creation, or null if the
@@ -325,6 +344,7 @@ Future<CreateOrderResult> createLimitOrder({
   required Credential credential,
   bool isSandbox = false,
   Client? client,
+  CoinbaseHttpOptions? options,
 }) async {
   final orderConfiguration = {
     'limit_limit_gtc': {
@@ -342,6 +362,7 @@ Future<CreateOrderResult> createLimitOrder({
     credential: credential,
     isSandbox: isSandbox,
     client: client,
+    options: options,
   );
 }
 
@@ -359,6 +380,8 @@ Future<CreateOrderResult> createLimitOrder({
 /// [stopPrice] - The price at which the order should be triggered.
 /// [stopDirection] - The direction of the stop price (ABOVE or BELOW).
 /// [credential] - The user's API credentials.
+/// [options] - Optional HTTP options such as a custom base URL, timeout,
+/// and http client.
 /// [isSandbox] - Whether to use the sandbox environment.
 ///
 /// Returns a map containing the result of the order creation, or null if the
@@ -374,6 +397,7 @@ Future<CreateOrderResult> createStopLimitOrderGTC({
   required Credential credential,
   bool isSandbox = false,
   Client? client,
+  CoinbaseHttpOptions? options,
 }) async {
   final orderConfiguration = {
     'stop_limit_stop_limit_gtc': {
@@ -392,6 +416,7 @@ Future<CreateOrderResult> createStopLimitOrderGTC({
     credential: credential,
     isSandbox: isSandbox,
     client: client,
+    options: options,
   );
 }
 
@@ -411,6 +436,8 @@ Future<CreateOrderResult> createStopLimitOrderGTC({
 /// [stopDirection] - The direction of the stop price (ABOVE or BELOW).
 /// [endTime] - The time at which the order should be cancelled if it is not filled.
 /// [credential] - The user's API credentials.
+/// [options] - Optional HTTP options such as a custom base URL, timeout,
+/// and http client.
 /// [isSandbox] - Whether to use the sandbox environment.
 ///
 /// Returns a map containing the result of the order creation, or null if the
@@ -427,6 +454,7 @@ Future<CreateOrderResult> createStopLimitOrderGTD({
   required Credential credential,
   bool isSandbox = false,
   Client? client,
+  CoinbaseHttpOptions? options,
 }) async {
   final orderConfiguration = {
     'stop_limit_stop_limit_gtd': {
@@ -446,6 +474,7 @@ Future<CreateOrderResult> createStopLimitOrderGTD({
     credential: credential,
     isSandbox: isSandbox,
     client: client,
+    options: options,
   );
 }
 
@@ -457,6 +486,7 @@ Future<CreateOrderResult> _createOrder({
   required Credential credential,
   bool isSandbox = false,
   Client? client,
+  CoinbaseHttpOptions? options,
 }) async {
   final body = {
     'client_order_id': clientOrderId,
@@ -471,6 +501,7 @@ Future<CreateOrderResult> _createOrder({
     credential: credential,
     isSandbox: isSandbox,
     client: client,
+    options: options,
   );
 
   if (response.statusCode == 200) {
@@ -501,6 +532,8 @@ Future<CreateOrderResult> _createOrder({
 /// [price] - The new price for the order.
 /// [size] - The new size for the order.
 /// [credential] - The user's API credentials.
+/// [options] - Optional HTTP options such as a custom base URL, timeout,
+/// and http client.
 /// [isSandbox] - Whether to use the sandbox environment.
 ///
 /// Returns an [EditOrderResponse] object.
@@ -511,6 +544,7 @@ Future<EditOrderResponse> editOrder({
   required Credential credential,
   bool isSandbox = false,
   Client? client,
+  CoinbaseHttpOptions? options,
 }) async {
   final body = {'order_id': orderId, 'price': price, 'size': size};
 
@@ -520,6 +554,7 @@ Future<EditOrderResponse> editOrder({
     credential: credential,
     isSandbox: isSandbox,
     client: client,
+    options: options,
   );
 
   if (response.statusCode == 200) {
@@ -543,6 +578,8 @@ Future<EditOrderResponse> editOrder({
 /// [price] - The new price for the order.
 /// [size] - The new size for the order.
 /// [credential] - The user's API credentials.
+/// [options] - Optional HTTP options such as a custom base URL, timeout,
+/// and http client.
 /// [isSandbox] - Whether to use the sandbox environment.
 ///
 /// Returns an [EditOrderPreviewResponse] object.
@@ -553,6 +590,7 @@ Future<EditOrderPreviewResponse> editOrderPreview({
   required Credential credential,
   bool isSandbox = false,
   Client? client,
+  CoinbaseHttpOptions? options,
 }) async {
   final body = {'order_id': orderId, 'price': price, 'size': size};
 
@@ -562,6 +600,7 @@ Future<EditOrderPreviewResponse> editOrderPreview({
     credential: credential,
     isSandbox: isSandbox,
     client: client,
+    options: options,
   );
 
   if (response.statusCode == 200) {
@@ -585,6 +624,8 @@ Future<EditOrderPreviewResponse> editOrderPreview({
 /// [side] - The side of the order (BUY or SELL).
 /// [orderConfiguration] - The configuration of the order.
 /// [credential] - The user's API credentials.
+/// [options] - Optional HTTP options such as a custom base URL, timeout,
+/// and http client.
 /// [isSandbox] - Whether to use the sandbox environment.
 ///
 /// Returns a [PreviewOrderResponse] object.
@@ -595,6 +636,7 @@ Future<PreviewOrderResponse> previewOrder({
   required Credential credential,
   bool isSandbox = false,
   Client? client,
+  CoinbaseHttpOptions? options,
 }) async {
   final body = {
     'product_id': productId,
@@ -608,6 +650,7 @@ Future<PreviewOrderResponse> previewOrder({
     credential: credential,
     isSandbox: isSandbox,
     client: client,
+    options: options,
   );
 
   if (response.statusCode == 200) {
@@ -629,6 +672,8 @@ Future<PreviewOrderResponse> previewOrder({
 ///
 /// [orderIds] - A list of order IDs to cancel.
 /// [credential] - The user's API credentials.
+/// [options] - Optional HTTP options such as a custom base URL, timeout,
+/// and http client.
 /// [isSandbox] - Whether to use the sandbox environment.
 ///
 /// Returns a [CanceledOrders] object.
@@ -637,6 +682,7 @@ Future<CanceledOrders?> cancelOrders({
   required Credential credential,
   bool isSandbox = false,
   Client? client,
+  CoinbaseHttpOptions? options,
 }) async {
   CanceledOrders? result;
 
@@ -648,6 +694,7 @@ Future<CanceledOrders?> cancelOrders({
     credential: credential,
     isSandbox: isSandbox,
     client: client,
+    options: options,
   );
 
   if (response.statusCode == 200) {
@@ -672,6 +719,8 @@ Future<CanceledOrders?> cancelOrders({
 ///
 /// [productId] - The ID of the product to close the position for.
 /// [credential] - The user's API credentials.
+/// [options] - Optional HTTP options such as a custom base URL, timeout,
+/// and http client.
 /// [isSandbox] - Whether to use the sandbox environment.
 ///
 /// Returns a map containing the result of the close position request.
@@ -680,6 +729,7 @@ Future<Map<String, dynamic>?> closePosition({
   required Credential credential,
   bool isSandbox = false,
   Client? client,
+  CoinbaseHttpOptions? options,
 }) async {
   Map<String, dynamic>? result;
 
@@ -691,6 +741,7 @@ Future<Map<String, dynamic>?> closePosition({
     credential: credential,
     isSandbox: isSandbox,
     client: client,
+    options: options,
   );
 
   if (response.statusCode == 200) {

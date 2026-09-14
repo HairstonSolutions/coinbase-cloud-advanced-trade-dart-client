@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:coinbase_cloud_advanced_trade_client/src/models/coinbase_http_options.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/credential.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/error.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/fill.dart';
@@ -20,6 +21,8 @@ import 'package:http/http.dart' as http;
 /// [productId] - An optional product ID to filter fills by.
 /// [cursor] - A cursor for pagination.
 /// [credential] - The user's API credentials.
+/// [options] - Optional HTTP options such as a custom base URL, timeout,
+/// and http client.
 /// [isSandbox] - Whether to use the sandbox environment.
 ///
 /// Returns a [Page] of [Fill] objects.
@@ -33,6 +36,7 @@ Future<Page<Fill>> getFillsPage(
     String? endSequenceTimestamp,
     String? cursor,
     http.Client? client,
+    CoinbaseHttpOptions? options,
     required Credential credential,
     bool isSandbox = false}) async {
   List<Fill> fills = [];
@@ -67,6 +71,7 @@ Future<Page<Fill>> getFillsPage(
   http.Response response = await getAuthorized('/orders/historical/fills',
       queryParameters: queryParameters,
       client: client,
+      options: options,
       credential: credential,
       isSandbox: isSandbox);
 
@@ -106,6 +111,8 @@ Future<Page<Fill>> getFillsPage(
 /// [productId] - An optional product ID to filter fills by.
 /// [cursor] - A cursor for pagination.
 /// [credential] - The user's API credentials.
+/// [options] - Optional HTTP options such as a custom base URL, timeout,
+/// and http client.
 /// [isSandbox] - Whether to use the sandbox environment.
 ///
 /// Returns a list of [Fill] objects.
@@ -119,6 +126,7 @@ Future<List<Fill>> getFills(
     String? endSequenceTimestamp,
     String? cursor,
     http.Client? client,
+    CoinbaseHttpOptions? options,
     required Credential credential,
     bool isSandbox = false}) async {
   List<Fill> fills = [];
@@ -135,6 +143,7 @@ Future<List<Fill>> getFills(
         endSequenceTimestamp: endSequenceTimestamp,
         cursor: currentCursor,
         client: client,
+        options: options,
         credential: credential,
         isSandbox: isSandbox);
 

@@ -1,5 +1,4 @@
 import 'package:coinbase_cloud_advanced_trade_client/advanced_trade.dart';
-import 'package:coinbase_cloud_advanced_trade_client/src/models/error.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/create_order_result.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/preview_order.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/stop_direction.dart';

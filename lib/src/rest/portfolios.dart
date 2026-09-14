@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:coinbase_cloud_advanced_trade_client/src/models/coinbase_http_options.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/credential.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/error.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/portfolio.dart';
@@ -16,17 +17,23 @@ import 'package:http/http.dart' as http;
 /// Advanced Trade API.
 ///
 /// [credential] - The user's API credentials.
+/// [options] - Optional HTTP options such as a custom base URL, timeout,
+/// and http client.
 /// [isSandbox] - Whether to use the sandbox environment.
 ///
 /// Returns a list of [Portfolio] objects.
 Future<List<Portfolio>> listPortfolios(
     {http.Client? client,
+    CoinbaseHttpOptions? options,
     required Credential credential,
     bool isSandbox = false}) async {
   List<Portfolio> portfolios = [];
 
   http.Response response = await getAuthorized('/portfolios',
-      client: client, credential: credential, isSandbox: isSandbox);
+      client: client,
+      options: options,
+      credential: credential,
+      isSandbox: isSandbox);
 
   if (response.statusCode == 200) {
     String data = response.body;
@@ -54,12 +61,15 @@ Future<List<Portfolio>> listPortfolios(
 ///
 /// [name] - The name of the portfolio to be created.
 /// [credential] - The user's API credentials.
+/// [options] - Optional HTTP options such as a custom base URL, timeout,
+/// and http client.
 /// [isSandbox] - Whether to use the sandbox environment.
 ///
 /// Returns a [Portfolio] object.
 Future<Portfolio?> createPortfolio(
     {required String name,
     http.Client? client,
+    CoinbaseHttpOptions? options,
     required Credential credential,
     bool isSandbox = false}) async {
   Map<String, dynamic> body = {'name': name};
@@ -67,6 +77,7 @@ Future<Portfolio?> createPortfolio(
   http.Response response = await postAuthorized('/portfolios',
       body: jsonEncode(body),
       client: client,
+      options: options,
       credential: credential,
       isSandbox: isSandbox);
 
@@ -90,6 +101,8 @@ Future<Portfolio?> createPortfolio(
 /// [uuid] - The UUID of the portfolio to be edited.
 /// [name] - The new name of the portfolio.
 /// [credential] - The user's API credentials.
+/// [options] - Optional HTTP options such as a custom base URL, timeout,
+/// and http client.
 /// [isSandbox] - Whether to use the sandbox environment.
 ///
 /// Returns a [Portfolio] object.
@@ -97,6 +110,7 @@ Future<Portfolio?> editPortfolio(
     {required String uuid,
     required String name,
     http.Client? client,
+    CoinbaseHttpOptions? options,
     required Credential credential,
     bool isSandbox = false}) async {
   Map<String, dynamic> body = {'name': name};
@@ -104,6 +118,7 @@ Future<Portfolio?> editPortfolio(
   http.Response response = await putAuthorized('/portfolios/$uuid',
       body: jsonEncode(body),
       client: client,
+      options: options,
       credential: credential,
       isSandbox: isSandbox);
 
@@ -126,16 +141,22 @@ Future<Portfolio?> editPortfolio(
 ///
 /// [uuid] - The UUID of the portfolio to be deleted.
 /// [credential] - The user's API credentials.
+/// [options] - Optional HTTP options such as a custom base URL, timeout,
+/// and http client.
 /// [isSandbox] - Whether to use the sandbox environment.
 ///
 /// Returns true if the portfolio was deleted successfully.
 Future<bool> deletePortfolio(
     {required String uuid,
     http.Client? client,
+    CoinbaseHttpOptions? options,
     required Credential credential,
     bool isSandbox = false}) async {
   http.Response response = await deleteAuthorized('/portfolios/$uuid',
-      client: client, credential: credential, isSandbox: isSandbox);
+      client: client,
+      options: options,
+      credential: credential,
+      isSandbox: isSandbox);
 
   if (response.statusCode == 200) {
     return true;
@@ -155,16 +176,22 @@ Future<bool> deletePortfolio(
 ///
 /// [uuid] - The UUID of the portfolio to be retrieved.
 /// [credential] - The user's API credentials.
+/// [options] - Optional HTTP options such as a custom base URL, timeout,
+/// and http client.
 /// [isSandbox] - Whether to use the sandbox environment.
 ///
 /// Returns a [PortfolioBreakdown] object.
 Future<PortfolioBreakdown?> getPortfolioBreakdown(
     {required String uuid,
     http.Client? client,
+    CoinbaseHttpOptions? options,
     required Credential credential,
     bool isSandbox = false}) async {
   http.Response response = await getAuthorized('/portfolios/$uuid',
-      client: client, credential: credential, isSandbox: isSandbox);
+      client: client,
+      options: options,
+      credential: credential,
+      isSandbox: isSandbox);
 
   if (response.statusCode == 200) {
     var jsonResponse = jsonDecode(response.body);
@@ -187,6 +214,8 @@ Future<PortfolioBreakdown?> getPortfolioBreakdown(
 /// [sourcePortfolioUuid] - The UUID of the source portfolio.
 /// [targetPortfolioUuid] - The UUID of the target portfolio.
 /// [credential] - The user's API credentials.
+/// [options] - Optional HTTP options such as a custom base URL, timeout,
+/// and http client.
 /// [isSandbox] - Whether to use the sandbox environment.
 ///
 /// Returns true if the funds were moved successfully.
@@ -195,6 +224,7 @@ Future<bool> movePortfolioFunds(
     required String sourcePortfolioUuid,
     required String targetPortfolioUuid,
     http.Client? client,
+    CoinbaseHttpOptions? options,
     required Credential credential,
     bool isSandbox = false}) async {
   Map<String, dynamic> body = {
@@ -206,6 +236,7 @@ Future<bool> movePortfolioFunds(
   http.Response response = await postAuthorized('/portfolios/move_funds',
       body: jsonEncode(body),
       client: client,
+      options: options,
       credential: credential,
       isSandbox: isSandbox);
 
