@@ -33,3 +33,33 @@ class CoinbaseTimeoutException extends CoinbaseException {
   CoinbaseTimeoutException(String message)
       : super(message, 408, 'Request timed out');
 }
+
+/// Custom exception for network transport failures.
+///
+/// Thrown when the request never produced an HTTP response: the connection was
+/// refused, reset or dropped, DNS lookup failed, or the TLS handshake failed.
+/// It wraps the underlying `package:http` or `dart:io` error so callers can
+/// treat "the exchange was unreachable" as a Coinbase error rather than having
+/// to catch transport types from inside this package.
+///
+/// Its [statusCode] is `0`, because no response was ever received.
+class CoinbaseTransportException extends CoinbaseException {
+  /// The HTTP method of the request that failed, e.g. `GET`.
+  final String method;
+
+  /// The path of the request that failed, e.g. `/api/v3/brokerage/accounts`.
+  final String path;
+
+  /// The underlying transport error, typically an `http.ClientException`,
+  /// `SocketException`, `HandshakeException` or `TlsException`.
+  final Object cause;
+
+  /// CoinbaseTransportException constructor
+  CoinbaseTransportException(this.method, this.path, this.cause)
+      : super('Network error on $method $path: $cause', 0, 'No response');
+
+  @override
+  String toString() =>
+      'CoinbaseTransportException: $message (Method: $method, Path: $path, '
+      'Cause: $cause)';
+}

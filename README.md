@@ -219,6 +219,33 @@ void main() async {
 }
 ```
 
+### Handling network errors
+
+Every failure the client raises is a `CoinbaseException`, so a single `on
+CoinbaseException` clause covers API errors and network errors alike.
+
+Requests that never reach Coinbase — a refused, reset or dropped connection, a
+DNS failure, or a failed TLS handshake — throw a `CoinbaseTransportException`
+carrying the request's `method` and `path` and the original
+`http.ClientException`, `SocketException`, `HandshakeException` or
+`TlsException` as its `cause`. A request that got no response in time still
+throws `CoinbaseTimeoutException`. Both are `CoinbaseException` subclasses, so
+a retry policy or circuit breaker can treat the two common transient failures
+together without catching `package:http` or `dart:io` types.
+
+```dart
+try {
+  Page<Order> page = await getOrdersPage(credential: credential);
+  print('Fetched ${page.items.length} orders');
+} on CoinbaseTimeoutException catch (e) {
+  print('Timed out, retrying: $e');
+} on CoinbaseTransportException catch (e) {
+  print('Coinbase unreachable on ${e.method} ${e.path}: ${e.cause}');
+} on CoinbaseException catch (e) {
+  print('API error ${e.statusCode}: ${e.message}');
+}
+```
+
 ## Additional information
 
 ### Coinbase Advanced Trade API Documentation

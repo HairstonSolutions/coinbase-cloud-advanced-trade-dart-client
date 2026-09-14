@@ -1,5 +1,11 @@
 import 'dart:async';
-import 'dart:io' show HttpDate, HttpHeaders;
+import 'dart:io'
+    show
+        HandshakeException,
+        HttpDate,
+        HttpHeaders,
+        SocketException,
+        TlsException;
 
 import 'package:coinbase_cloud_advanced_trade_client/src/models/coinbase_http_options.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/credential.dart';
@@ -29,8 +35,18 @@ Duration? _parseRetryAfter(String? retryAfterHeader) {
   }
 }
 
-Future<http.Response> _executeWithTimeout(
-    Future<http.Response> Function() requestFuture, Duration? timeout) async {
+/// Runs [requestFuture], applying [timeout] when one is configured, and maps
+/// transport failures onto the [CoinbaseException] hierarchy.
+///
+/// A timeout becomes a [CoinbaseTimeoutException]; a connection that was
+/// refused, reset or dropped, and a failed TLS handshake, become a
+/// [CoinbaseTransportException] carrying [method], [path] and the original
+/// error as its cause. Anything else is left alone.
+Future<http.Response> _executeRequest(
+    Future<http.Response> Function() requestFuture,
+    Duration? timeout,
+    String method,
+    String path) async {
   try {
     if (timeout != null) {
       return await requestFuture().timeout(timeout);
@@ -38,6 +54,14 @@ Future<http.Response> _executeWithTimeout(
     return await requestFuture();
   } on TimeoutException catch (_) {
     throw CoinbaseTimeoutException('Request timed out after $timeout');
+  } on http.ClientException catch (e) {
+    throw CoinbaseTransportException(method, path, e);
+  } on SocketException catch (e) {
+    throw CoinbaseTransportException(method, path, e);
+  } on HandshakeException catch (e) {
+    throw CoinbaseTransportException(method, path, e);
+  } on TlsException catch (e) {
+    throw CoinbaseTransportException(method, path, e);
   }
 }
 
@@ -86,8 +110,11 @@ Future<http.Response> get(String endpoint,
     HttpHeaders.acceptHeader: 'application/json',
   };
 
-  var response = await _executeWithTimeout(
-      () => activeClient.get(url, headers: requestHeaders), options?.timeout);
+  var response = await _executeRequest(
+      () => activeClient.get(url, headers: requestHeaders),
+      options?.timeout,
+      'GET',
+      url.path);
 
   _checkResponseForErrors(response);
   return response;
@@ -264,7 +291,7 @@ Future<http.Response> _makeAuthorizedRequest(
     requestHeaders[HttpHeaders.contentTypeHeader] = 'application/json';
   }
 
-  var response = await _executeWithTimeout(() async {
+  var response = await _executeRequest(() async {
     switch (method) {
       case _HttpMethod.get:
         return await activeClient.get(url, headers: requestHeaders);
@@ -276,7 +303,7 @@ Future<http.Response> _makeAuthorizedRequest(
       case _HttpMethod.delete:
         return await activeClient.delete(url, headers: requestHeaders);
     }
-  }, options?.timeout);
+  }, options?.timeout, method.name.toUpperCase(), url.path);
 
   _checkResponseForErrors(response);
   return response;
