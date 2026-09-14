@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:decimal/decimal.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/account.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/models/coinbase_http_options.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/credential.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/error.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/services/network.dart';
@@ -19,6 +20,8 @@ import 'package:http/http.dart' as http;
 /// [limit] - A limit on the number of accounts to be returned.
 /// [cursor] - A cursor for pagination.
 /// [credential] - The user's API credentials.
+/// [options] - Optional HTTP options such as a custom base URL, timeout,
+/// and http client.
 /// [isSandbox] - Whether to use the sandbox environment.
 ///
 /// Returns a [Page] of [Account] objects.
@@ -26,6 +29,7 @@ Future<Page<Account>> getAccountsPage(
     {int? limit = 250,
     String? cursor,
     http.Client? client,
+    CoinbaseHttpOptions? options,
     required Credential credential,
     bool isSandbox = false}) async {
   List<Account> accounts = [];
@@ -37,6 +41,7 @@ Future<Page<Account>> getAccountsPage(
   http.Response response = await getAuthorized('/accounts',
       queryParameters: queryParameters,
       client: client,
+      options: options,
       credential: credential,
       isSandbox: isSandbox);
 
@@ -73,6 +78,8 @@ Future<Page<Account>> getAccountsPage(
 /// [limit] - A limit on the number of accounts to be returned.
 /// [cursor] - A cursor for pagination.
 /// [credential] - The user's API credentials.
+/// [options] - Optional HTTP options such as a custom base URL, timeout,
+/// and http client.
 /// [isSandbox] - Whether to use the sandbox environment.
 ///
 /// Returns a list of [Account] objects.
@@ -80,6 +87,7 @@ Future<List<Account>> getAccounts(
     {int? limit = 250,
     String? cursor,
     http.Client? client,
+    CoinbaseHttpOptions? options,
     required Credential credential,
     bool isSandbox = false}) async {
   List<Account> accounts = [];
@@ -90,6 +98,7 @@ Future<List<Account>> getAccounts(
         limit: limit,
         cursor: currentCursor,
         client: client,
+        options: options,
         credential: credential,
         isSandbox: isSandbox);
 
@@ -112,16 +121,22 @@ Future<List<Account>> getAccounts(
 ///
 /// [currency] - The currency of the account to be returned.
 /// [credential] - The user's API credentials.
+/// [options] - Optional HTTP options such as a custom base URL, timeout,
+/// and http client.
 /// [isSandbox] - Whether to use the sandbox environment.
 ///
 /// Returns an [Account] object, or null if no account is found for the given
 /// currency.
 Future<Account?> getAccountByCurrency(String currency,
     {http.Client? client,
+    CoinbaseHttpOptions? options,
     required Credential credential,
     bool isSandbox = false}) async {
   List<Account> accounts = await getAccounts(
-      client: client, credential: credential, isSandbox: isSandbox);
+      client: client,
+      options: options,
+      credential: credential,
+      isSandbox: isSandbox);
 
   int index = accounts.indexWhere((account) => account.currency == currency);
   if (index != -1) {
@@ -140,6 +155,8 @@ Future<Account?> getAccountByCurrency(String currency,
 ///
 /// [uuid] - The UUID of the account to be returned.
 /// [credential] - The user's API credentials.
+/// [options] - Optional HTTP options such as a custom base URL, timeout,
+/// and http client.
 /// [isSandbox] - Whether to use the sandbox environment.
 ///
 /// Returns an [Account] object, or null if no account is found for the given
@@ -147,10 +164,14 @@ Future<Account?> getAccountByCurrency(String currency,
 Future<Account?> getAccount(
     {required String? uuid,
     http.Client? client,
+    CoinbaseHttpOptions? options,
     required Credential credential,
     bool isSandbox = false}) async {
   http.Response response = await getAuthorized('/accounts/$uuid',
-      client: client, credential: credential, isSandbox: isSandbox);
+      client: client,
+      options: options,
+      credential: credential,
+      isSandbox: isSandbox);
 
   if (response.statusCode == 200) {
     var jsonResponse = jsonDecode(response.body);
@@ -170,6 +191,8 @@ Future<Account?> getAccount(
 /// [uuid] - The UUID of the account.
 /// [currency] - The currency of the account.
 /// [credential] - The user's API credentials.
+/// [options] - Optional HTTP options such as a custom base URL, timeout,
+/// and http client.
 /// [isSandbox] - Whether to use the sandbox environment.
 ///
 /// Returns the available balance of the account as a [Decimal], or null if
@@ -178,12 +201,14 @@ Future<Decimal?> getAccountBalance(
     {String? uuid,
     String? currency,
     http.Client? client,
+    CoinbaseHttpOptions? options,
     required Credential credential,
     bool isSandbox = false}) async {
   if (uuid != null) {
     Account? account = await getAccount(
         uuid: uuid,
         client: client,
+        options: options,
         credential: credential,
         isSandbox: isSandbox);
     return account?.availableBalance;
@@ -191,7 +216,10 @@ Future<Decimal?> getAccountBalance(
 
   if (currency != null) {
     Account? account = await getAccountByCurrency(currency,
-        client: client, credential: credential, isSandbox: isSandbox);
+        client: client,
+        options: options,
+        credential: credential,
+        isSandbox: isSandbox);
     return account?.availableBalance;
   }
 

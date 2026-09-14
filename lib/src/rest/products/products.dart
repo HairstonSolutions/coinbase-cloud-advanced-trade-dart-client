@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:coinbase_cloud_advanced_trade_client/src/models/candle.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/models/coinbase_http_options.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/credential.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/error.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/product.dart';
@@ -20,6 +21,8 @@ import 'package:http/http.dart' as http;
 /// [productType] - An optional product type to filter by.
 /// [contractExpiryType] - An optional contract expiry type to filter by.
 /// [credential] - The user's API credentials.
+/// [options] - Optional HTTP options such as a custom base URL, timeout,
+/// and http client.
 /// [isSandbox] - Whether to use the sandbox environment.
 ///
 /// Returns a list of [Product] objects.
@@ -28,6 +31,7 @@ Future<List<Product>> getProductsAuthorized(
     String? productType,
     String? contractExpiryType,
     http.Client? client,
+    CoinbaseHttpOptions? options,
     required Credential credential,
     bool isSandbox = false}) async {
   List<Product> products = [];
@@ -40,6 +44,7 @@ Future<List<Product>> getProductsAuthorized(
   http.Response response = await getAuthorized('/products',
       queryParameters: queryParameters,
       client: client,
+      options: options,
       credential: credential,
       isSandbox: isSandbox);
 
@@ -70,6 +75,8 @@ Future<List<Product>> getProductsAuthorized(
 /// [productId] - The ID of the product to be returned.
 /// [getTradabilityStatus] - An optional flag to get the tradability status.
 /// [credential] - The user's API credentials.
+/// [options] - Optional HTTP options such as a custom base URL, timeout,
+/// and http client.
 /// [isSandbox] - Whether to use the sandbox environment.
 ///
 /// Returns a [Product] object, or null if no product is found for the given
@@ -78,6 +85,7 @@ Future<Product?> getProductAuthorized(
     {required String? productId,
     bool? getTradabilityStatus,
     http.Client? client,
+    CoinbaseHttpOptions? options,
     required Credential credential,
     bool isSandbox = false}) async {
   Map<String, String> queryParameters = {
@@ -88,6 +96,7 @@ Future<Product?> getProductAuthorized(
   http.Response response = await getAuthorized('/products/$productId',
       queryParameters: queryParameters,
       client: client,
+      options: options,
       credential: credential,
       isSandbox: isSandbox);
 
@@ -114,6 +123,8 @@ Future<Product?> getProductAuthorized(
 /// [end] - A end time for the candles.
 /// [granularity] - The granularity of the candles.
 /// [credential] - The user's API credentials.
+/// [options] - Optional HTTP options such as a custom base URL, timeout,
+/// and http client.
 /// [isSandbox] - Whether to use the sandbox environment.
 ///
 /// Returns a list of [Candle] objects.
@@ -123,6 +134,7 @@ Future<List<Candle>> getProductCandlesAuthorized(
     required String end,
     required String granularity,
     http.Client? client,
+    CoinbaseHttpOptions? options,
     required Credential credential,
     bool isSandbox = false}) async {
   List<Candle> candles = [];
@@ -135,6 +147,7 @@ Future<List<Candle>> getProductCandlesAuthorized(
   http.Response response = await getAuthorized('/products/$productId/candles',
       queryParameters: queryParameters,
       client: client,
+      options: options,
       credential: credential,
       isSandbox: isSandbox);
 
@@ -163,6 +176,8 @@ Future<List<Candle>> getProductCandlesAuthorized(
 /// [productId] - The ID of the product to be returned.
 /// [limit] - A limit for the number of products to be returned.
 /// [credential] - The user's API credentials.
+/// [options] - Optional HTTP options such as a custom base URL, timeout,
+/// and http client.
 /// [isSandbox] - Whether to use the sandbox environment.
 ///
 /// Returns a [ProductBook] object, or null if no product book is found for the
@@ -171,6 +186,7 @@ Future<ProductBook?> getProductBookAuthorized(
     {required String productId,
     int? limit,
     http.Client? client,
+    CoinbaseHttpOptions? options,
     required Credential credential,
     bool isSandbox = false}) async {
   Map<String, String> queryParameters = {
@@ -181,6 +197,7 @@ Future<ProductBook?> getProductBookAuthorized(
   http.Response response = await getAuthorized('/product_book',
       queryParameters: queryParameters,
       client: client,
+      options: options,
       credential: credential,
       isSandbox: isSandbox);
 
@@ -204,12 +221,15 @@ Future<ProductBook?> getProductBookAuthorized(
 ///
 /// [productIds] - A list of product IDs to return the best bid and ask for.
 /// [credential] - The user's API credentials.
+/// [options] - Optional HTTP options such as a custom base URL, timeout,
+/// and http client.
 /// [isSandbox] - Whether to use the sandbox environment.
 ///
 /// Returns a list of [ProductBook] objects.
 Future<List<ProductBook>> getBestBidAsk(
     {required List<String> productIds,
     http.Client? client,
+    CoinbaseHttpOptions? options,
     required Credential credential,
     bool isSandbox = false}) async {
   List<ProductBook> productBooks = [];
@@ -220,6 +240,7 @@ Future<List<ProductBook>> getBestBidAsk(
   http.Response response = await getAuthorized('/best_bid_ask',
       queryParameters: multiQueryParameters,
       client: client,
+      options: options,
       credential: credential,
       isSandbox: isSandbox);
 

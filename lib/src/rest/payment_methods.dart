@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:coinbase_cloud_advanced_trade_client/src/models/coinbase_http_options.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/credential.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/error.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/payment_method.dart';
@@ -13,17 +14,23 @@ import 'package:http/http.dart' as http;
 ///
 /// [client] - Optional http client.
 /// [credential] - The user's API credentials.
+/// [options] - Optional HTTP options such as a custom base URL, timeout,
+/// and http client.
 /// [isSandbox] - Whether to use the sandbox environment.
 ///
 /// Returns a list of [PaymentMethod] objects.
 Future<List<PaymentMethod>> getPaymentMethods(
     {http.Client? client,
+    CoinbaseHttpOptions? options,
     required Credential credential,
     bool isSandbox = false}) async {
   List<PaymentMethod> paymentMethods = [];
 
   http.Response response = await getAuthorized('/payment_methods',
-      client: client, credential: credential, isSandbox: isSandbox);
+      client: client,
+      options: options,
+      credential: credential,
+      isSandbox: isSandbox);
 
   if (response.statusCode == 200) {
     String data = response.body;
@@ -50,17 +57,21 @@ Future<List<PaymentMethod>> getPaymentMethods(
 /// [paymentMethodId] - The ID of the payment method to be returned.
 /// [client] - Optional http client.
 /// [credential] - The user's API credentials.
+/// [options] - Optional HTTP options such as a custom base URL, timeout,
+/// and http client.
 /// [isSandbox] - Whether to use the sandbox environment.
 ///
 /// Returns a [PaymentMethod] object.
 Future<PaymentMethod> getPaymentMethod(
     {required String paymentMethodId,
     http.Client? client,
+    CoinbaseHttpOptions? options,
     required Credential credential,
     bool isSandbox = false}) async {
   http.Response response = await getAuthorized(
       '/payment_methods/$paymentMethodId',
       client: client,
+      options: options,
       credential: credential,
       isSandbox: isSandbox);
 

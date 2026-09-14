@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:coinbase_cloud_advanced_trade_client/src/models/coinbase_http_options.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/error.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/server_time.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/services/network.dart';
@@ -10,11 +11,17 @@ import 'package:http/http.dart' as http;
 /// GET /api/v3/brokerage/time
 /// https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/public/get-server-time
 ///
+/// [options] - Optional HTTP options such as a custom base URL, timeout,
+/// and http client.
+/// [isSandbox] - Whether to use the sandbox environment.
+///
 /// Returns a [ServerTime] object.
 Future<ServerTime?> getServerTime(
-    {http.Client? client, bool isSandbox = false}) async {
-  http.Response response =
-      await get('/time', client: client, isSandbox: isSandbox);
+    {http.Client? client,
+    CoinbaseHttpOptions? options,
+    bool isSandbox = false}) async {
+  http.Response response = await get('/time',
+      client: client, options: options, isSandbox: isSandbox);
 
   if (response.statusCode == 200) {
     var jsonResponse = jsonDecode(response.body);

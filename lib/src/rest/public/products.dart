@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:coinbase_cloud_advanced_trade_client/src/models/candle.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/models/coinbase_http_options.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/error.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/product.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/product_book.dart';
@@ -17,6 +18,8 @@ import 'package:http/http.dart' as http;
 /// the Coinbase Advanced Trade API.
 ///
 /// [productId] - The ID of the product to be returned.
+/// [options] - Optional HTTP options such as a custom base URL, timeout,
+/// and http client.
 /// [isSandbox] - Whether to use the sandbox environment.
 ///
 /// Returns a [Product] object, or null if no product is found for the given
@@ -24,9 +27,10 @@ import 'package:http/http.dart' as http;
 Future<Product?> getProduct(
     {required String productId,
     http.Client? client,
+    CoinbaseHttpOptions? options,
     bool isSandbox = false}) async {
   http.Response response = await get('/market/products/$productId',
-      client: client, isSandbox: isSandbox);
+      client: client, options: options, isSandbox: isSandbox);
 
   if (response.statusCode == 200) {
     var jsonResponse = jsonDecode(response.body);
@@ -50,6 +54,8 @@ Future<Product?> getProduct(
 /// [start] - A start time for the candles.
 /// [end] - A end time for the candles.
 /// [granularity] - The granularity of the candles.
+/// [options] - Optional HTTP options such as a custom base URL, timeout,
+/// and http client.
 /// [isSandbox] - Whether to use the sandbox environment.
 ///
 /// Returns a list of [Candle] objects.
@@ -59,6 +65,7 @@ Future<List<Candle>> getProductCandles(
     required String end,
     required String granularity,
     http.Client? client,
+    CoinbaseHttpOptions? options,
     bool isSandbox = false}) async {
   List<Candle> candles = [];
   Map<String, String> queryParameters = {
@@ -68,7 +75,10 @@ Future<List<Candle>> getProductCandles(
   };
 
   http.Response response = await get('/market/products/$productId/candles',
-      queryParameters: queryParameters, client: client, isSandbox: isSandbox);
+      queryParameters: queryParameters,
+      client: client,
+      options: options,
+      isSandbox: isSandbox);
 
   if (response.statusCode == 200) {
     var jsonResponse = jsonDecode(response.body);
@@ -97,6 +107,8 @@ Future<List<Candle>> getProductCandles(
 /// [productType] - An optional product type to filter by.
 /// [productIds] - An optional list of product IDs to filter by.
 /// [contractExpiryType] - An optional contract expiry type to filter by.
+/// [options] - Optional HTTP options such as a custom base URL, timeout,
+/// and http client.
 /// [isSandbox] - Whether to use the sandbox environment.
 ///
 /// Returns a list of [Product] objects.
@@ -107,6 +119,7 @@ Future<List<Product>> getProducts(
     List<String>? productIds,
     String? contractExpiryType,
     http.Client? client,
+    CoinbaseHttpOptions? options,
     bool isSandbox = false}) async {
   List<Product> products = [];
   Map<String, String> queryParameters = {
@@ -118,7 +131,10 @@ Future<List<Product>> getProducts(
   };
 
   http.Response response = await get('/market/products',
-      queryParameters: queryParameters, client: client, isSandbox: isSandbox);
+      queryParameters: queryParameters,
+      client: client,
+      options: options,
+      isSandbox: isSandbox);
 
   if (response.statusCode == 200) {
     String data = response.body;
@@ -146,6 +162,8 @@ Future<List<Product>> getProducts(
 ///
 /// [productId] - The ID of the product to be returned.
 /// [limit] - A limit for the number of products to be returned.
+/// [options] - Optional HTTP options such as a custom base URL, timeout,
+/// and http client.
 /// [isSandbox] - Whether to use the sandbox environment.
 ///
 /// Returns a [ProductBook] object, or null if no product book is found for the
@@ -154,6 +172,7 @@ Future<ProductBook?> getProductBook(
     {required String productId,
     int? limit,
     http.Client? client,
+    CoinbaseHttpOptions? options,
     bool isSandbox = false}) async {
   Map<String, String> queryParameters = {
     'product_id': productId,
@@ -161,7 +180,10 @@ Future<ProductBook?> getProductBook(
   };
 
   http.Response response = await get('/market/product_book',
-      queryParameters: queryParameters, client: client, isSandbox: isSandbox);
+      queryParameters: queryParameters,
+      client: client,
+      options: options,
+      isSandbox: isSandbox);
 
   if (response.statusCode == 200) {
     var jsonResponse = jsonDecode(response.body);
@@ -183,6 +205,8 @@ Future<ProductBook?> getProductBook(
 ///
 /// [productId] - The ID of the product to be returned.
 /// [limit] - A limit for the number of trades to be returned.
+/// [options] - Optional HTTP options such as a custom base URL, timeout,
+/// and http client.
 /// [isSandbox] - Whether to use the sandbox environment.
 ///
 /// Returns a [Ticker] object.
@@ -190,13 +214,17 @@ Future<Ticker?> getMarketTrades(
     {required String productId,
     int? limit,
     http.Client? client,
+    CoinbaseHttpOptions? options,
     bool isSandbox = false}) async {
   Map<String, String> queryParameters = {
     if (limit != null) 'limit': '$limit',
   };
 
   http.Response response = await get('/market/products/$productId/ticker',
-      queryParameters: queryParameters, client: client, isSandbox: isSandbox);
+      queryParameters: queryParameters,
+      client: client,
+      options: options,
+      isSandbox: isSandbox);
 
   if (response.statusCode == 200) {
     var jsonResponse = jsonDecode(response.body);

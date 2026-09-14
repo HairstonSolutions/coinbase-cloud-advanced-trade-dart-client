@@ -185,6 +185,40 @@ void main() async {
 }
 ```
 
+### Configuring the base URL, timeout and http client
+
+Every REST function takes an optional `CoinbaseHttpOptions`, which sets the
+base URL, the request timeout and the `http.Client` used for the call. A custom
+base URL is also what the request's JWT is signed against, so pointing the
+client at a proxy or a local test server keeps authentication valid.
+
+```dart
+import 'package:coinbase_cloud_advanced_trade_client/coinbase_cloud_advanced_trade_client.dart';
+
+void main() async {
+  final credential = Credential(
+    apiKeyName: 'YOUR_API_KEY_NAME',
+    privateKeyPEM: 'YOUR_PRIVATE_KEY',
+  );
+
+  final options = CoinbaseHttpOptions(
+    baseUrl: Uri.parse('http://localhost:8080'), // Optional; defaults to api.coinbase.com.
+    timeout: const Duration(seconds: 10),
+  );
+
+  try {
+    Page<Order> page = await getOrdersPage(
+      productIds: ['BTC-USD'],
+      credential: credential,
+      options: options,
+    );
+    print('Fetched ${page.items.length} orders, hasNext: ${page.hasNext}');
+  } on CoinbaseTimeoutException catch (e) {
+    print('Request timed out: $e');
+  }
+}
+```
+
 ## Additional information
 
 ### Coinbase Advanced Trade API Documentation
