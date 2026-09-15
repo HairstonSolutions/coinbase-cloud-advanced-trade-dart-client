@@ -10,13 +10,13 @@ class Product {
   final Decimal? price;
 
   /// The percentage change in price over the last 24 hours.
-  final String? pricePercentageChange24h;
+  final Decimal? pricePercentageChange24h;
 
   /// The volume over the last 24 hours.
   final Decimal? volume24h;
 
   /// The percentage change in volume over the last 24 hours.
-  final String? volumePercentageChange24h;
+  final Decimal? volumePercentageChange24h;
 
   /// The base increment.
   final Decimal? baseIncrement;
@@ -171,9 +171,11 @@ class Product {
   Product.fromCBJson(Map<String, dynamic> json)
       : productId = json['product_id'],
         price = nullableDecimal(json, 'price'),
-        pricePercentageChange24h = json['price_percentage_change_24h'],
+        pricePercentageChange24h =
+            nullableDecimal(json, 'price_percentage_change_24h'),
         volume24h = nullableDecimal(json, 'volume_24h'),
-        volumePercentageChange24h = json['volume_percentage_change_24h'],
+        volumePercentageChange24h =
+            nullableDecimal(json, 'volume_percentage_change_24h'),
         baseIncrement = nullableDecimal(json, 'base_increment'),
         quoteIncrement = nullableDecimal(json, 'quote_increment'),
         quoteMinSize = nullableDecimal(json, 'quote_min_size'),
@@ -216,9 +218,11 @@ class Product {
   Product.fromJson(Map<String, dynamic> json)
       : productId = json['productId'],
         price = nullableDecimal(json, 'price'),
-        pricePercentageChange24h = json['pricePercentageChange24h'],
+        pricePercentageChange24h =
+            nullableDecimal(json, 'pricePercentageChange24h'),
         volume24h = nullableDecimal(json, 'volume24h'),
-        volumePercentageChange24h = json['volumePercentageChange24h'],
+        volumePercentageChange24h =
+            nullableDecimal(json, 'volumePercentageChange24h'),
         baseIncrement = nullableDecimal(json, 'baseIncrement'),
         quoteIncrement = nullableDecimal(json, 'quoteIncrement'),
         quoteMinSize = nullableDecimal(json, 'quoteMinSize'),
@@ -260,9 +264,9 @@ class Product {
   Map<String, dynamic> toJson() => {
         'productId': productId,
         'price': price?.toString(),
-        'pricePercentageChange24h': pricePercentageChange24h,
+        'pricePercentageChange24h': pricePercentageChange24h?.toString(),
         'volume24h': volume24h?.toString(),
-        'volumePercentageChange24h': volumePercentageChange24h,
+        'volumePercentageChange24h': volumePercentageChange24h?.toString(),
         'baseIncrement': baseIncrement?.toString(),
         'quoteIncrement': quoteIncrement?.toString(),
         'quoteMinSize': quoteMinSize?.toString(),

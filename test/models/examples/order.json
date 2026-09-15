@@ -44,7 +44,7 @@
   "completion_percentage": "50",
   "filled_size": "0.001",
   "average_filled_price": "50",
-  "fee": "string",
+  "fee": "0.50",
   "number_of_fills": "2",
   "filled_value": "10000",
   "pending_cancel": true,

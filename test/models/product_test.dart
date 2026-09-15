@@ -27,9 +27,9 @@ void main() {
 
       expect(exampleProduct.productId, 'BTC-USD');
       expect(exampleProduct.price, Decimal.parse('43423.01'));
-      expect(exampleProduct.pricePercentageChange24h, '0.45');
+      expect(exampleProduct.pricePercentageChange24h, Decimal.parse('0.45'));
       expect(exampleProduct.volume24h, Decimal.parse('12345.67'));
-      expect(exampleProduct.volumePercentageChange24h, '2.34');
+      expect(exampleProduct.volumePercentageChange24h, Decimal.parse('2.34'));
       expect(exampleProduct.baseIncrement, Decimal.parse('0.00000001'));
       expect(exampleProduct.quoteIncrement, Decimal.parse('0.01'));
       expect(exampleProduct.quoteMinSize, Decimal.parse('1.00'));
@@ -76,9 +76,11 @@ void main() {
 
       expect(deserializedProduct.productId, 'BTC-USD');
       expect(deserializedProduct.price, Decimal.parse('43423.01'));
-      expect(deserializedProduct.pricePercentageChange24h, '0.45');
+      expect(
+          deserializedProduct.pricePercentageChange24h, Decimal.parse('0.45'));
       expect(deserializedProduct.volume24h, Decimal.parse('12345.67'));
-      expect(deserializedProduct.volumePercentageChange24h, '2.34');
+      expect(
+          deserializedProduct.volumePercentageChange24h, Decimal.parse('2.34'));
       expect(deserializedProduct.baseIncrement, Decimal.parse('0.00000001'));
       expect(deserializedProduct.quoteIncrement, Decimal.parse('0.01'));
       expect(deserializedProduct.quoteMinSize, Decimal.parse('1.00'));

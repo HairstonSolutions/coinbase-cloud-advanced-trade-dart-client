@@ -105,7 +105,9 @@ final net = preview.orderTotal! - preview.commissionTotal!;
 form is normalized.
 
 Integral fields stay integral: `Order.numberOfFills` is an `int`, and epoch
-timestamps on `ServerTime` remain `num`.
+timestamps on `ServerTime` remain `num`. Fields that name a category rather
+than an amount — `VolumeBreakdown.volumeType`, `PerpPosition.marginType` — stay
+`String`.
 
 If you need a `double` at the edge of your application — for charting or
 display — convert explicitly with `.toDouble()`.
