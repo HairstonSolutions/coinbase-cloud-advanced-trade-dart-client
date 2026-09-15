@@ -61,6 +61,50 @@ void main() {
       verify(mockClient.get(any, headers: anyNamed('headers'))).called(1);
     });
 
+    test('Get accounts follows the cursor while has_next is true', () async {
+      final String mockResponsePage1 =
+          await getJsonFromFile('rest/accounts/get_accounts_page_1.json');
+      final String mockResponsePage2 = await getJsonFromFile(
+          'rest/accounts/get_accounts_page_2_stale_cursor.json');
+
+      var callCount = 0;
+      when(mockClient.get(any, headers: anyNamed('headers')))
+          .thenAnswer((_) async {
+        callCount++;
+        return http.Response(
+            callCount == 1 ? mockResponsePage1 : mockResponsePage2, 200);
+      });
+
+      List<Account> accounts = await getAccounts(
+          client: mockClient,
+          credential: constants.credentials,
+          isSandbox: false);
+
+      // Page 2 sets has_next to false while still carrying a cursor, so the
+      // loop stops there instead of re-requesting with the stale cursor.
+      expect(accounts.length, 2);
+      expect(accounts[0].currency, "BTC");
+      expect(accounts[1].currency, "USD");
+      verify(mockClient.get(any, headers: anyNamed('headers'))).called(2);
+    });
+
+    test('Get accounts stops when a page repeats the cursor it was given',
+        () async {
+      final String mockResponsePage1 =
+          await getJsonFromFile('rest/accounts/get_accounts_page_1.json');
+
+      when(mockClient.get(any, headers: anyNamed('headers')))
+          .thenAnswer((_) async => http.Response(mockResponsePage1, 200));
+
+      List<Account> accounts = await getAccounts(
+          client: mockClient,
+          credential: constants.credentials,
+          isSandbox: false);
+
+      expect(accounts.length, 2);
+      verify(mockClient.get(any, headers: anyNamed('headers'))).called(2);
+    });
+
     test('Get a single account by UUID', () async {
       final String mockResponse =
           await getJsonFromFile('rest/accounts/get_account.json');

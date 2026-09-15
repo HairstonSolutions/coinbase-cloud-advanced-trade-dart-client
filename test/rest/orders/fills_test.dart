@@ -56,6 +56,56 @@ void main() {
       expect(page.items[0].orderId, "b0313b63-a2a1-4d30-a506-936337b52978");
       verify(mockClient.get(any, headers: anyNamed('headers'))).called(1);
     });
+    test('Get fills follows the cursor when has_next is absent', () async {
+      final String mockResponsePage1 =
+          await getJsonFromFile('rest/orders/get_fills_page_1.json');
+      final String mockResponsePage2 =
+          await getJsonFromFile('rest/orders/get_fills_page_2.json');
+
+      var callCount = 0;
+      when(mockClient.get(any, headers: anyNamed('headers')))
+          .thenAnswer((_) async {
+        callCount++;
+        return http.Response(
+            callCount == 1 ? mockResponsePage1 : mockResponsePage2, 200);
+      });
+
+      List<Fill> fills =
+          await getFills(client: mockClient, credential: constants.credentials);
+
+      // List Fills does not document has_next, so the cursor alone drives the
+      // loop for fills.
+      expect(fills.length, 2);
+      expect(fills[0].orderId, "fill-order-1");
+      expect(fills[1].orderId, "fill-order-2");
+      verify(mockClient.get(any, headers: anyNamed('headers'))).called(2);
+    });
+
+    test('Get fills stops when a page repeats the cursor it was given',
+        () async {
+      final String mockResponsePage1 =
+          await getJsonFromFile('rest/orders/get_fills_page_1.json');
+      final String mockResponsePage2 = await getJsonFromFile(
+          'rest/orders/get_fills_page_2_repeat_cursor.json');
+
+      var callCount = 0;
+      when(mockClient.get(any, headers: anyNamed('headers')))
+          .thenAnswer((_) async {
+        callCount++;
+        return http.Response(
+            callCount == 1 ? mockResponsePage1 : mockResponsePage2, 200);
+      });
+
+      List<Fill> fills =
+          await getFills(client: mockClient, credential: constants.credentials);
+
+      // Page 2 hands back the same cursor it was asked for, so following it
+      // would replay the identical request forever.
+      expect(fills.length, 2);
+      expect(fills[1].orderId, "fill-order-3");
+      verify(mockClient.get(any, headers: anyNamed('headers'))).called(2);
+    });
+
     test('Get fills with array query parameters', () async {
       final String mockResponse =
           await getJsonFromFile('rest/orders/get_fills.json');

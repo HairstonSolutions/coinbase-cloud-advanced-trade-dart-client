@@ -86,6 +86,47 @@ void main() {
       verify(mockClient.get(any, headers: anyNamed('headers'))).called(2);
     });
 
+    test('Get orders stops on has_next false even with a stale cursor',
+        () async {
+      final String mockResponsePage1 =
+          await getJsonFromFile('rest/orders/get_orders_page_1.json');
+      final String mockResponsePage2 = await getJsonFromFile(
+          'rest/orders/get_orders_page_2_stale_cursor.json');
+
+      var callCount = 0;
+      when(mockClient.get(any, headers: anyNamed('headers')))
+          .thenAnswer((_) async {
+        callCount++;
+        return http.Response(
+            callCount == 1 ? mockResponsePage1 : mockResponsePage2, 200);
+      });
+
+      List<Order> orders = await getOrders(
+          client: mockClient, credential: constants.credentials);
+
+      expect(orders.length, 2);
+      expect(orders[0].orderId, "order-1");
+      expect(orders[1].orderId, "order-2");
+      verify(mockClient.get(any, headers: anyNamed('headers'))).called(2);
+    });
+
+    test('Get orders stops when a page repeats the cursor it was given',
+        () async {
+      final String mockResponsePage1 =
+          await getJsonFromFile('rest/orders/get_orders_page_1.json');
+
+      when(mockClient.get(any, headers: anyNamed('headers')))
+          .thenAnswer((_) async => http.Response(mockResponsePage1, 200));
+
+      List<Order> orders = await getOrders(
+          client: mockClient, credential: constants.credentials);
+
+      // Page 1 advertises has_next with cursor-123, so it is followed once;
+      // the reply repeats cursor-123, which would replay the same request.
+      expect(orders.length, 2);
+      verify(mockClient.get(any, headers: anyNamed('headers'))).called(2);
+    });
+
     test('Get orders with all filters correctly constructs query string',
         () async {
       final String mockResponse =

@@ -5,6 +5,7 @@ import 'package:coinbase_cloud_advanced_trade_client/src/models/credential.dart'
 import 'package:coinbase_cloud_advanced_trade_client/src/models/error.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/fill.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/services/network.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/services/pagination.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/page.dart';
 import 'package:http/http.dart' as http;
 
@@ -109,7 +110,8 @@ Future<Page<Fill>> getFillsPage(
 ///
 /// This function makes a GET request to the /orders/historical/fills endpoint
 /// of the Coinbase Advanced Trade API. It supports pagination using a cursor.
-/// Paginated requests use recursion.
+/// List Fills does not document `has_next`, so pages are followed while the
+/// response returns a new, non-empty cursor; a repeated cursor ends the loop.
 ///
 /// [limit] - A limit on the number of fills to be returned.
 /// [orderIds] - Optional order IDs to filter fills by.
@@ -168,11 +170,14 @@ Future<List<Fill>> getFills(
 
     fills.addAll(page.items);
 
-    if (page.nextCursor != null && page.nextCursor != '') {
-      currentCursor = page.nextCursor;
-    } else {
+    // List Fills does not document has_next, so the cursor drives the loop
+    // here; nextPageCursor still stops if a page repeats its own cursor.
+    String? nextCursor =
+        nextPageCursor(page, currentCursor, requireHasNext: false);
+    if (nextCursor == null) {
       break;
     }
+    currentCursor = nextCursor;
   }
 
   return fills;

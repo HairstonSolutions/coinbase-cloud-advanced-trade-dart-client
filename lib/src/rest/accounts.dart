@@ -6,6 +6,7 @@ import 'package:coinbase_cloud_advanced_trade_client/src/models/coinbase_http_op
 import 'package:coinbase_cloud_advanced_trade_client/src/models/credential.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/error.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/services/network.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/services/pagination.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/page.dart';
 import 'package:http/http.dart' as http;
 
@@ -73,7 +74,9 @@ Future<Page<Account>> getAccountsPage(
 /// https://docs.cdp.coinbase.com/api-reference/advanced-trade-api/rest-api/accounts/list-accounts
 ///
 /// This function makes a GET request to the /accounts endpoint of the Coinbase
-/// Advanced Trade API. It supports pagination using a cursor.
+/// Advanced Trade API. It supports pagination using a cursor. Pages are
+/// followed while the response reports `has_next` and returns a new cursor,
+/// so a final page that still carries a cursor ends the loop.
 ///
 /// [limit] - A limit on the number of accounts to be returned.
 /// [cursor] - A cursor for pagination.
@@ -104,11 +107,11 @@ Future<List<Account>> getAccounts(
 
     accounts.addAll(page.items);
 
-    if (page.nextCursor != null && page.nextCursor != '') {
-      currentCursor = page.nextCursor;
-    } else {
+    String? nextCursor = nextPageCursor(page, currentCursor);
+    if (nextCursor == null) {
       break;
     }
+    currentCursor = nextCursor;
   }
 
   return accounts;
