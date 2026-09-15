@@ -1,4 +1,6 @@
 import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/edit_order_error.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/services/tools.dart';
+import 'package:decimal/decimal.dart';
 
 /// Response from edit order preview request.
 class EditOrderPreviewResponse {
@@ -6,28 +8,28 @@ class EditOrderPreviewResponse {
   final List<EditOrderError>? errors;
 
   /// The slippage of the order.
-  final String? slippage;
+  final Decimal? slippage;
 
   /// The total order amount.
-  final String? orderTotal;
+  final Decimal? orderTotal;
 
   /// The total commission.
-  final String? commissionTotal;
+  final Decimal? commissionTotal;
 
   /// The size of the quote currency.
-  final String? quoteSize;
+  final Decimal? quoteSize;
 
   /// The size of the base currency.
-  final String? baseSize;
+  final Decimal? baseSize;
 
   /// The best bid price.
-  final String? bestBid;
+  final Decimal? bestBid;
 
   /// The best ask price.
-  final String? bestAsk;
+  final Decimal? bestAsk;
 
   /// The average filled price.
-  final String? averageFilledPrice;
+  final Decimal? averageFilledPrice;
 
   /// Creates a new [EditOrderPreviewResponse] instance.
   EditOrderPreviewResponse({
@@ -48,14 +50,14 @@ class EditOrderPreviewResponse {
       errors: (json['errors'] as List<dynamic>?)
           ?.map((e) => EditOrderError.fromCBJson(e as Map<String, dynamic>))
           .toList(),
-      slippage: json['slippage'],
-      orderTotal: json['order_total'],
-      commissionTotal: json['commission_total'],
-      quoteSize: json['quote_size'],
-      baseSize: json['base_size'],
-      bestBid: json['best_bid'],
-      bestAsk: json['best_ask'],
-      averageFilledPrice: json['average_filled_price'],
+      slippage: nullableDecimal(json, 'slippage'),
+      orderTotal: nullableDecimal(json, 'order_total'),
+      commissionTotal: nullableDecimal(json, 'commission_total'),
+      quoteSize: nullableDecimal(json, 'quote_size'),
+      baseSize: nullableDecimal(json, 'base_size'),
+      bestBid: nullableDecimal(json, 'best_bid'),
+      bestAsk: nullableDecimal(json, 'best_ask'),
+      averageFilledPrice: nullableDecimal(json, 'average_filled_price'),
     );
   }
 

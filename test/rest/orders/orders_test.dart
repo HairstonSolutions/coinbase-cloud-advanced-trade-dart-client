@@ -953,13 +953,53 @@ void main() {
           });
 
       expect(previewOrderResponse, isNotNull);
-      expect(previewOrderResponse.orderTotal, '10.00');
-      expect(previewOrderResponse.commissionTotal, '0.05');
+      expect(previewOrderResponse.orderTotal, Decimal.parse('10.00'));
+      expect(previewOrderResponse.commissionTotal, Decimal.parse('0.05'));
       expect(previewOrderResponse.quoteSize, Decimal.parse('10.00'));
       expect(previewOrderResponse.baseSize, Decimal.parse('0.001'));
-      expect(previewOrderResponse.bestBid, '9999.00');
-      expect(previewOrderResponse.bestAsk, '10001.00');
+      expect(previewOrderResponse.bestBid, Decimal.parse('9999.00'));
+      expect(previewOrderResponse.bestAsk, Decimal.parse('10001.00'));
+      expect(previewOrderResponse.orderMarginTotal, Decimal.zero);
+      expect(previewOrderResponse.leverage, Decimal.parse('1.0'));
+      expect(previewOrderResponse.longLeverage, Decimal.parse('1.0'));
+      expect(previewOrderResponse.shortLeverage, Decimal.parse('1.0'));
+      expect(previewOrderResponse.slippage, Decimal.parse('0.01'));
+      expect(previewOrderResponse.currentLiquidationBuffer,
+          Decimal.parse('1000.00'));
+      expect(previewOrderResponse.projectedLiquidationBuffer,
+          Decimal.parse('990.00'));
+      expect(previewOrderResponse.maxLeverage, Decimal.parse('5.0'));
+      expect(previewOrderResponse.estAverageFilledPrice,
+          Decimal.parse('10000.00'));
       expect(previewOrderResponse.previewId, 'PREVIEW-ID-12345');
+    });
+
+    test('parses an empty max_leverage as null', () async {
+      final mockClient = MockClient();
+      // Spot previews carry no leverage cap, and Coinbase sends an empty
+      // string rather than omitting the field.
+      const successResponse = '''{
+        "order_total": "10.00",
+        "commission_total": "0.05",
+        "max_leverage": "",
+        "preview_id": "PREVIEW-ID-12345"
+      }''';
+
+      when(mockClient.post(any,
+              headers: anyNamed('headers'), body: anyNamed('body')))
+          .thenAnswer((_) async => http.Response(successResponse, 200));
+
+      final PreviewOrderResponse previewOrderResponse = await previewOrder(
+          client: mockClient,
+          credential: constants.credentials,
+          productId: 'BTC-USD',
+          side: OrderSide.buy,
+          orderConfiguration: {
+            'market_market_ioc': {'quote_size': '10.0'}
+          });
+
+      expect(previewOrderResponse.maxLeverage, isNull);
+      expect(previewOrderResponse.orderTotal, Decimal.parse('10.00'));
     });
   });
 
@@ -978,8 +1018,8 @@ void main() {
       expect(previewOrderResponse, isNotNull);
       expect(previewOrderResponse.orderTotal, isNotNull);
       expect(previewOrderResponse.commissionTotal, isNotNull);
-      expect(double.parse(previewOrderResponse.orderTotal!),
-          greaterThanOrEqualTo(2.0));
+      expect(previewOrderResponse.orderTotal!,
+          greaterThanOrEqualTo(Decimal.parse('2.0')));
     }, skip: constants.ciSkip);
     test('Create order rejected - Duplicate Client Order ID', () async {
       final String mockResponse = await getJsonFromFile(

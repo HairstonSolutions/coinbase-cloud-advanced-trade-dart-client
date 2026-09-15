@@ -82,6 +82,23 @@ Order inputs are `Decimal` too: `createMarketOrder`, `createLimitOrder`,
 wire themselves, so a `double` formatted with `toStringAsFixed` or a localised
 `'61,250.10'` cannot reach the API.
 
+The preview responses are symmetric with those inputs: `previewOrder` and
+`editOrderPreview` return `Decimal` totals, commissions, sizes and prices, so
+the cost of an order is arithmetic rather than `double.parse`.
+
+```dart
+final preview = await previewOrder(
+  productId: 'BTC-USD',
+  side: OrderSide.buy,
+  orderConfiguration: {
+    'market_market_ioc': {'quote_size': '10.00'}
+  },
+  credential: credential,
+);
+
+final net = preview.orderTotal! - preview.commissionTotal!;
+```
+
 `Decimal` normalizes trailing zeros, so a wire value of `'61250.10'` parses to
 `61250.1`, and `limitPrice: Decimal.parse('61250.10')` is sent as
 `"limit_price":"61250.1"`. The value is preserved exactly; only its textual

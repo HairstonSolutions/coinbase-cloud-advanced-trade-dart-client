@@ -122,7 +122,13 @@ void main() {
       );
 
       expect(result.errors, isEmpty);
-      expect(result.orderTotal, '100.0');
+      expect(result.orderTotal, Decimal.parse('100.0'));
+      expect(result.commissionTotal, Decimal.parse('1.0'));
+      expect(result.bestBid, Decimal.parse('99.0'));
+      expect(result.bestAsk, Decimal.parse('100.0'));
+      // The preview answers "what will this edit cost me?" as arithmetic.
+      expect(
+          result.orderTotal! - result.commissionTotal!, Decimal.parse('99.0'));
     });
 
     test('editOrder failure', () async {

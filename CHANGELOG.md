@@ -23,6 +23,21 @@ arithmetic.
 - `FeeTier.aopTo` and `VolumeTypesAndRange.volTo` are `Decimal?`. Coinbase sends
   an empty string for the highest tier, which has no upper bound; that now
   parses to `null` rather than throwing.
+- The two order **preview** responses are `Decimal` throughout.
+  Fixes [#123](https://github.com/HairstonSolutions/coinbase-cloud-advanced-trade-dart-client/issues/123).
+  `EditOrderPreviewResponse` had been missed entirely and `PreviewOrderResponse`
+  was only half-converted, so `previewOrder` and `editOrderPreview` — the two
+  calls whose whole job is to answer "what will this cost me?" — handed back
+  `String` totals the caller had to run through `double.parse` to use.
+  `slippage`, `orderTotal`, `commissionTotal`, `bestBid`, `bestAsk` and
+  `averageFilledPrice` on `EditOrderPreviewResponse`, and `orderTotal`,
+  `commissionTotal`, `bestBid`, `bestAsk`, `orderMarginTotal`, `slippage`,
+  `currentLiquidationBuffer`, `projectedLiquidationBuffer` and
+  `estAverageFilledPrice` on `PreviewOrderResponse`, are now `Decimal?`. The
+  leverage multipliers (`leverage`, `longLeverage`, `shortLeverage`,
+  `maxLeverage`) are `Decimal?` too — they are not money, but they are decimal
+  strings on the wire. `max_leverage` comes back as an empty string on spot
+  previews, which parses to `null` rather than throwing.
 - Order creation and edit **inputs** are `Decimal` too, so the API is symmetric
   in both directions.
   Fixes [#111](https://github.com/HairstonSolutions/coinbase-cloud-advanced-trade-dart-client/issues/111).
