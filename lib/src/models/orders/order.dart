@@ -48,7 +48,7 @@ class Order {
   final Decimal? averageFilledPrice;
 
   /// The fee for the order.
-  final String? fee;
+  final Decimal? fee;
 
   /// The number of fills for the order.
   final int? numberOfFills;
@@ -136,7 +136,7 @@ class Order {
         completionPercentage = nullableDecimal(json, 'completionPercentage'),
         filledSize = nullableDecimal(json, 'filledSize'),
         averageFilledPrice = nullableDecimal(json, 'averageFilledPrice'),
-        fee = json['fee'],
+        fee = nullableDecimal(json, 'fee'),
         numberOfFills = nullableInt(json, 'numberOfFills'),
         filledValue = nullableDecimal(json, 'filledValue'),
         pendingCancel = json['pendingCancel'],
@@ -166,7 +166,7 @@ class Order {
         'completionPercentage': completionPercentage?.toString(),
         'filledSize': filledSize?.toString(),
         'averageFilledPrice': averageFilledPrice?.toString(),
-        'fee': fee,
+        'fee': fee?.toString(),
         'numberOfFills': numberOfFills,
         'filledValue': filledValue?.toString(),
         'pendingCancel': pendingCancel,
@@ -198,7 +198,7 @@ class Order {
         completionPercentage = nullableDecimal(json, 'completion_percentage'),
         filledSize = nullableDecimal(json, 'filled_size'),
         averageFilledPrice = nullableDecimal(json, 'average_filled_price'),
-        fee = json['fee'],
+        fee = nullableDecimal(json, 'fee'),
         numberOfFills = nullableInt(json, 'number_of_fills'),
         filledValue = nullableDecimal(json, 'filled_value'),
         pendingCancel = json['pending_cancel'],
@@ -228,7 +228,7 @@ class Order {
         'completion_percentage': completionPercentage?.toString(),
         'filled_size': filledSize?.toString(),
         'average_filled_price': averageFilledPrice?.toString(),
-        'fee': fee,
+        'fee': fee?.toString(),
         'number_of_fills': numberOfFills,
         'filled_value': filledValue?.toString(),
         'pending_cancel': pendingCancel,

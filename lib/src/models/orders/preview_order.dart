@@ -4,10 +4,10 @@ import 'package:decimal/decimal.dart';
 /// The response from a preview order request.
 class PreviewOrderResponse {
   /// The total cost of the order.
-  final String? orderTotal;
+  final Decimal? orderTotal;
 
   /// The total commission for the order.
-  final String? commissionTotal;
+  final Decimal? commissionTotal;
 
   /// A list of errors, if any.
   final List<String>? errs;
@@ -22,43 +22,43 @@ class PreviewOrderResponse {
   final Decimal? baseSize;
 
   /// The best bid price.
-  final String? bestBid;
+  final Decimal? bestBid;
 
   /// The best ask price.
-  final String? bestAsk;
+  final Decimal? bestAsk;
 
   /// Whether the order is a max order.
   final bool? isMax;
 
   /// The total margin for the order.
-  final String? orderMarginTotal;
+  final Decimal? orderMarginTotal;
 
   /// The leverage for the order.
-  final String? leverage;
+  final Decimal? leverage;
 
   /// The long leverage for the order.
-  final String? longLeverage;
+  final Decimal? longLeverage;
 
   /// The short leverage for the order.
-  final String? shortLeverage;
+  final Decimal? shortLeverage;
 
   /// The slippage for the order.
-  final String? slippage;
+  final Decimal? slippage;
 
   /// The ID of the preview.
   final String? previewId;
 
   /// The current liquidation buffer.
-  final String? currentLiquidationBuffer;
+  final Decimal? currentLiquidationBuffer;
 
   /// The projected liquidation buffer.
-  final String? projectedLiquidationBuffer;
+  final Decimal? projectedLiquidationBuffer;
 
   /// The maximum leverage for the order.
-  final String? maxLeverage;
+  final Decimal? maxLeverage;
 
   /// The estimated average filled price.
-  final String? estAverageFilledPrice;
+  final Decimal? estAverageFilledPrice;
 
   /// The constructor for the [PreviewOrderResponse] class.
   PreviewOrderResponse({
@@ -86,25 +86,27 @@ class PreviewOrderResponse {
   /// Creates a [PreviewOrderResponse] from a JSON object.
   factory PreviewOrderResponse.fromCBJson(Map<String, dynamic> json) {
     return PreviewOrderResponse(
-      orderTotal: json['order_total'],
-      commissionTotal: json['commission_total'],
+      orderTotal: nullableDecimal(json, 'order_total'),
+      commissionTotal: nullableDecimal(json, 'commission_total'),
       errs: json['errs']?.cast<String>(),
       warning: json['warning']?.cast<String>(),
       quoteSize: nullableDecimal(json, 'quote_size'),
       baseSize: nullableDecimal(json, 'base_size'),
-      bestBid: json['best_bid'],
-      bestAsk: json['best_ask'],
+      bestBid: nullableDecimal(json, 'best_bid'),
+      bestAsk: nullableDecimal(json, 'best_ask'),
       isMax: json['is_max'],
-      orderMarginTotal: json['order_margin_total'],
-      leverage: json['leverage'],
-      longLeverage: json['long_leverage'],
-      shortLeverage: json['short_leverage'],
-      slippage: json['slippage'],
+      orderMarginTotal: nullableDecimal(json, 'order_margin_total'),
+      leverage: nullableDecimal(json, 'leverage'),
+      longLeverage: nullableDecimal(json, 'long_leverage'),
+      shortLeverage: nullableDecimal(json, 'short_leverage'),
+      slippage: nullableDecimal(json, 'slippage'),
       previewId: json['preview_id'],
-      currentLiquidationBuffer: json['current_liquidation_buffer'],
-      projectedLiquidationBuffer: json['projected_liquidation_buffer'],
-      maxLeverage: json['max_leverage'],
-      estAverageFilledPrice: json['est_average_filled_price'],
+      currentLiquidationBuffer:
+          nullableDecimal(json, 'current_liquidation_buffer'),
+      projectedLiquidationBuffer:
+          nullableDecimal(json, 'projected_liquidation_buffer'),
+      maxLeverage: nullableDecimal(json, 'max_leverage'),
+      estAverageFilledPrice: nullableDecimal(json, 'est_average_filled_price'),
     );
   }
 
