@@ -1,7 +1,10 @@
+import 'package:coinbase_cloud_advanced_trade_client/src/services/tools.dart';
+import 'package:decimal/decimal.dart';
+
 /// A goods and services tax.
 class GoodsAndServicesTax {
   /// The rate of the tax.
-  final String rate;
+  final Decimal rate;
 
   /// The type of the tax.
   final String type;
@@ -12,7 +15,7 @@ class GoodsAndServicesTax {
   /// Creates a GoodsAndServicesTax from a Coinbase JSON object.
   factory GoodsAndServicesTax.fromCBJson(Map<String, dynamic> json) {
     return GoodsAndServicesTax(
-      rate: json['rate'],
+      rate: requiredDecimal(json, 'rate', allowNum: true),
       type: json['type'],
     );
   }

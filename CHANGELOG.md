@@ -11,11 +11,18 @@ value, and there was no way to opt out. `Product.baseIncrement` and
 be used for exact quantization, and balances such as `61250.10` drifted under
 arithmetic.
 
-- `Decimal` now types every price, size, balance, fee, increment and notional
-  field in `Product`, `Order`, `Fill`, `Account`, `Ticker`, `Trade`,
+- `Decimal` now types every price, size, balance, fee, fee rate, increment and
+  notional field in `Product`, `Order`, `Fill`, `Account`, `Ticker`, `Trade`,
   `PreviewOrderResponse`, `TransactionSummary`, `VolumeBreakdown`,
-  `SpotPosition` and all five order configurations.
+  `SpotPosition` and all five order configurations, and — as of
+  [#112](https://github.com/HairstonSolutions/coinbase-cloud-advanced-trade-dart-client/issues/112)
+  — in `PriceLevel`, `FeeTier`, `VolumeTypesAndRange`, `GoodsAndServicesTax`,
+  `Candle`, `Money`, `PerpPosition` and `FuturesPosition`. No `String` price,
+  size, rate or balance field remains under `lib/src/models`.
 - `Order.numberOfFills` is now `int?`, matching what it actually is: a count.
+- `FeeTier.aopTo` and `VolumeTypesAndRange.volTo` are `Decimal?`. Coinbase sends
+  an empty string for the highest tier, which has no upper bound; that now
+  parses to `null` rather than throwing.
 - `getAccountBalance` returns `Future<Decimal?>`.
 - `toJson()` / `toCBJson()` serialize decimals as strings, so payloads stay
   `jsonEncode`-able and round-trip without loss.
@@ -135,6 +142,18 @@ final Decimal total = order.filledSize! * order.averageFilledPrice!;
 
 // Need a double at the edge of your app (display, charting)?
 final double asDouble = product.price!.toDouble();
+
+// Before — the two values you most need arithmetic on were left for you to parse.
+final spread = double.parse(book.asks.first.price) -
+    double.parse(book.bids.first.price);
+final withFee = double.parse(summary.feeTier.takerFeeRate) * price;
+
+// After
+final Decimal spread = book.asks.first.price - book.bids.first.price;
+final Decimal withFee = summary.feeTier.takerFeeRate * price;
+
+// The unbounded top fee tier is now null rather than an empty string.
+final Decimal? aopTo = summary.feeTier.aopTo;
 ```
 
 Note that `Decimal` normalizes trailing zeros: a wire value of `'61250.10'`

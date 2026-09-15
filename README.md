@@ -42,8 +42,8 @@ This allows for your code using the client to handle multiple accounts.
 
 ### Money is never a `double`
 
-Every monetary and quantity field — prices, sizes, balances, fees, increments
-and notionals — is typed as
+Every monetary and quantity field — prices, sizes, balances, fees, fee rates,
+increments and notionals — is typed as
 [`Decimal`](https://pub.dev/packages/decimal), never `double`. Coinbase sends
 these values as decimal strings, and this client keeps them exact all the way
 to your code.
@@ -66,6 +66,14 @@ final ticks = (size / increment).toDecimal();       // exactly 30000000
 
 // Exact arithmetic; no drift.
 final fees = Decimal.parse('12480.55') + Decimal.parse('0.45');  // 12481
+
+// The spread and a fee-inclusive price are arithmetic, not String parsing.
+final books = await getBestBidAsk(productIds: ['BTC-USD'], credential: credential);
+final spread = books.first.asks.first.price - books.first.bids.first.price;
+
+final summary = await getTransactionSummary(credential: credential);
+final withFee = books.first.asks.first.price *
+    (Decimal.one + summary!.feeTier.takerFeeRate);
 ```
 
 `Decimal` normalizes trailing zeros, so a wire value of `'61250.10'` parses to

@@ -1,5 +1,6 @@
 import 'package:coinbase_cloud_advanced_trade_client/src/models/portfolio.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/portfolio_breakdown.dart';
+import 'package:decimal/decimal.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/rest/portfolios.dart';
 import 'package:http/http.dart' as http;
 import 'package:logging/logging.dart';
@@ -122,6 +123,9 @@ void main() {
 
       expect(breakdown, isA<PortfolioBreakdown>());
       expect(breakdown?.portfolio.name, 'portfolio1');
+      expect(breakdown?.portfolioBalances.totalBalance.value,
+          equals(Decimal.parse('100')));
+      expect(breakdown?.portfolioBalances.totalBalance.currency, equals('USD'));
     });
   });
 

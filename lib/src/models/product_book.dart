@@ -1,10 +1,13 @@
+import 'package:coinbase_cloud_advanced_trade_client/src/services/tools.dart';
+import 'package:decimal/decimal.dart';
+
 /// A representation of a price level.
 class PriceLevel {
   /// The price of the level.
-  final String price;
+  final Decimal price;
 
   /// The size of the level.
-  final String size;
+  final Decimal size;
 
   /// PriceLevel constructor
   PriceLevel({required this.price, required this.size});
@@ -12,8 +15,8 @@ class PriceLevel {
   /// Creates a PriceLevel from a JSON object.
   factory PriceLevel.fromJson(Map<String, dynamic> json) {
     return PriceLevel(
-      price: json['price'],
-      size: json['size'],
+      price: requiredDecimal(json, 'price'),
+      size: requiredDecimal(json, 'size'),
     );
   }
 
