@@ -219,8 +219,10 @@ Future<List<Order>> getOrders({
 /// and http client.
 /// [isSandbox] - Whether to use the sandbox environment.
 ///
-/// Returns an [Order] object, or null if no order is found for the given
-/// order ID.
+/// Returns an [Order] object, or null if the API responds with a 404 for the
+/// given order ID.
+///
+/// Throws a [CoinbaseException] for any other non-200 response.
 Future<Order?> getOrder({
   required String orderId,
   http.Client? client,
@@ -243,7 +245,7 @@ Future<Order?> getOrder({
     var jsonResponse = jsonDecode(data);
     var jsonOrder = jsonResponse['order'];
     order = Order.fromCBJson(jsonOrder);
-  } else {
+  } else if (response.statusCode != 404) {
     throw CoinbaseException(
       'Failed to get order',
       response.statusCode,

@@ -79,8 +79,10 @@ Future<List<Product>> getProductsAuthorized(
 /// and http client.
 /// [isSandbox] - Whether to use the sandbox environment.
 ///
-/// Returns a [Product] object, or null if no product is found for the given
-/// product ID.
+/// Returns a [Product] object, or null if the API responds with a 404 for the
+/// given product ID.
+///
+/// Throws a [CoinbaseException] for any other non-200 response.
 Future<Product?> getProductAuthorized(
     {required String? productId,
     bool? getTradabilityStatus,
@@ -104,6 +106,8 @@ Future<Product?> getProductAuthorized(
     var jsonResponse = jsonDecode(response.body);
 
     return Product.fromCBJson(jsonResponse);
+  } else if (response.statusCode == 404) {
+    return null;
   } else {
     throw CoinbaseException(
         'Failed to get product', response.statusCode, response.body);

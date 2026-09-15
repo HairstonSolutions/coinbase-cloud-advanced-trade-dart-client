@@ -172,12 +172,12 @@ void main() {
       when(mockClient.get(any, headers: anyNamed('headers')))
           .thenAnswer((_) async => http.Response(mockResponse, 404));
 
-      expect(
-          () async => await getOrder(
-              orderId: specificOrderId,
-              client: mockClient,
-              credential: constants.credentials),
-          throwsA(isA<CoinbaseException>()));
+      Order? order = await getOrder(
+          orderId: specificOrderId,
+          client: mockClient,
+          credential: constants.credentials);
+
+      expect(order, isNull);
     });
 
     test('Return null when order not found', () async {
@@ -187,12 +187,25 @@ void main() {
       when(mockClient.get(any, headers: anyNamed('headers')))
           .thenAnswer((_) async => http.Response(mockResponse, 404));
 
+      Order? order = await getOrder(
+          orderId: "non-existent-id",
+          client: mockClient,
+          credential: constants.credentials);
+
+      expect(order, isNull);
+    });
+
+    test('Throw a CoinbaseException on a server error', () async {
+      when(mockClient.get(any, headers: anyNamed('headers')))
+          .thenAnswer((_) async => http.Response('{"error":"INTERNAL"}', 500));
+
       expect(
           () async => await getOrder(
-              orderId: "non-existent-id",
+              orderId: "any-order-id",
               client: mockClient,
               credential: constants.credentials),
-          throwsA(isA<CoinbaseException>()));
+          throwsA(isA<CoinbaseException>()
+              .having((e) => e.statusCode, 'statusCode', 500)));
     });
   });
 

@@ -1,3 +1,4 @@
+import 'package:coinbase_cloud_advanced_trade_client/src/models/error.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/product.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/rest/products/products.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/services/network.dart';
@@ -50,6 +51,31 @@ void main() {
 
       expect(product, isNotNull);
       expect(product?.productId, "BTC-USD");
+    });
+
+    test('Get a single product by ID that is not found', () async {
+      when(mockClient.get(any, headers: anyNamed('headers')))
+          .thenAnswer((_) async => http.Response('{"error":"NOT_FOUND"}', 404));
+
+      Product? product = await getProductAuthorized(
+          productId: "NOT-A-PRODUCT",
+          client: mockClient,
+          credential: constants.credentials);
+
+      expect(product, isNull);
+    });
+
+    test('Get a single product throws on a server error', () async {
+      when(mockClient.get(any, headers: anyNamed('headers')))
+          .thenAnswer((_) async => http.Response('{"error":"INTERNAL"}', 500));
+
+      expect(
+          () async => await getProductAuthorized(
+              productId: "BTC-USD",
+              client: mockClient,
+              credential: constants.credentials),
+          throwsA(isA<CoinbaseException>()
+              .having((e) => e.statusCode, 'statusCode', 500)));
     });
   });
 

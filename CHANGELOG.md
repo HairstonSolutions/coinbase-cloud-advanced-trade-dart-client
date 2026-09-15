@@ -88,6 +88,24 @@ try {
   `RejectReason`, `TimeInForce`, `TriggerStatus` and `StopDirection` now accept
   a null value and return their unknown/unspecified member, matching the
   existing behaviour for an unrecognised string.
+- `getOrder`, `getProduct` and `getProductAuthorized` declare a nullable return
+  type but threw `CoinbaseException` on a `404`, so the `null` branch their
+  signatures promise was dead code and "does this order exist?" had to be
+  answered by catching the exception and inspecting `statusCode`.
+  Fixes [#110](https://github.com/HairstonSolutions/coinbase-cloud-advanced-trade-dart-client/issues/110).
+  All three now return `null` on a `404` and keep throwing `CoinbaseException`
+  on every other non-200 response.
+
+```dart
+final Order? order = await getOrder(
+  orderId: 'an-order-that-may-not-exist',
+  credential: credential,
+);
+
+if (order == null) {
+  // Coinbase has no such order — a 500 or a 401 still throws.
+}
+```
 
 ### Internal
 
