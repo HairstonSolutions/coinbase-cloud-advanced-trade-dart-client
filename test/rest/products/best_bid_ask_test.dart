@@ -2,6 +2,7 @@ import 'package:coinbase_cloud_advanced_trade_client/src/models/credential.dart'
 import 'package:coinbase_cloud_advanced_trade_client/src/models/error.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/product_book.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/rest/products/products.dart';
+import 'package:decimal/decimal.dart';
 import 'package:http/http.dart' as http;
 import 'package:logging/logging.dart';
 import 'package:mockito/mockito.dart';
@@ -42,11 +43,24 @@ void main() {
       expect(productBooks[0].bids.length, 1);
       expect(productBooks[0].asks.length, 1);
       expect(productBooks[0].time, isNotNull);
+      expect(
+          productBooks[0].bids.first.price, equals(Decimal.parse('10000.00')));
+      expect(productBooks[0].bids.first.size, equals(Decimal.parse('1')));
+      expect(
+          productBooks[0].asks.first.price, equals(Decimal.parse('10001.00')));
 
       expect(productBooks[1].productId, equals('ETH-USD'));
       expect(productBooks[1].bids.length, 1);
       expect(productBooks[1].asks.length, 1);
       expect(productBooks[1].time, isNotNull);
+      expect(
+          productBooks[1].bids.first.price, equals(Decimal.parse('1000.00')));
+      expect(productBooks[1].bids.first.size, equals(Decimal.parse('10')));
+
+      // The spread is exact arithmetic, not a String the caller must parse.
+      expect(
+          productBooks[0].asks.first.price - productBooks[0].bids.first.price,
+          equals(Decimal.parse('1.00')));
     });
 
     test('Get Best Bid Ask Throws CoinbaseException on Error', () async {

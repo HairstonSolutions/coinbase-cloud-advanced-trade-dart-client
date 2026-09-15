@@ -34,7 +34,7 @@ class TransactionSummary {
   final Decimal coinbaseProFees;
 
   /// The total balance.
-  final String totalBalance;
+  final Decimal totalBalance;
 
   /// The volume breakdown.
   final List<VolumeBreakdown> volumeBreakdown;
@@ -76,7 +76,7 @@ class TransactionSummary {
           requiredDecimal(json, 'coinbase_pro_volume', allowNum: true),
       coinbaseProFees:
           requiredDecimal(json, 'coinbase_pro_fees', allowNum: true),
-      totalBalance: json['total_balance'],
+      totalBalance: requiredDecimal(json, 'total_balance', allowNum: true),
       volumeBreakdown: volumeBreakdown,
     );
   }

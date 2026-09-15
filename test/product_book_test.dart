@@ -6,6 +6,7 @@ import 'package:coinbase_cloud_advanced_trade_client/src/rest/products/products.
     as authorized;
 import 'package:coinbase_cloud_advanced_trade_client/src/rest/public/products.dart'
     as public;
+import 'package:decimal/decimal.dart';
 import 'package:http/http.dart' as http;
 import 'package:logging/logging.dart';
 import 'package:mockito/mockito.dart';
@@ -61,6 +62,9 @@ void main() {
       expect(productBook!.productId, equals('BTC-USD'));
       expect(productBook.bids.length, 1);
       expect(productBook.asks.length, 1);
+      expect(productBook.bids.first.price, equals(Decimal.parse('10000.00')));
+      expect(productBook.bids.first.size, equals(Decimal.parse('1')));
+      expect(productBook.asks.first.price, equals(Decimal.parse('10001.00')));
     });
 
     test('Get Authorized Product Book', () async {
@@ -97,17 +101,23 @@ void main() {
       expect(productBook!.productId, equals('BTC-USD'));
       expect(productBook.bids.length, 1);
       expect(productBook.asks.length, 1);
+      expect(productBook.bids.first.price, equals(Decimal.parse('10000.00')));
+      expect(productBook.asks.first.price, equals(Decimal.parse('10001.00')));
     });
 
     test('Test toString()', () {
       ProductBook productBook = ProductBook(
         productId: 'BTC-USD',
-        bids: [PriceLevel(price: '10000.00', size: '1')],
-        asks: [PriceLevel(price: '10001.00', size: '1')],
+        bids: [
+          PriceLevel(price: Decimal.parse('10000.00'), size: Decimal.parse('1'))
+        ],
+        asks: [
+          PriceLevel(price: Decimal.parse('10001.00'), size: Decimal.parse('1'))
+        ],
       );
 
       String expectedString =
-          '{productId: BTC-USD, bids: [{price: 10000.00, size: 1}], asks: [{price: 10001.00, size: 1}], time: null}';
+          '{productId: BTC-USD, bids: [{price: 10000, size: 1}], asks: [{price: 10001, size: 1}], time: null}';
 
       expect(productBook.toString(), equals(expectedString));
     });

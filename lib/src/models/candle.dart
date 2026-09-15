@@ -1,22 +1,25 @@
+import 'package:coinbase_cloud_advanced_trade_client/src/services/tools.dart';
+import 'package:decimal/decimal.dart';
+
 /// A candle for a product.
 class Candle {
   /// The start time of the candle.
   final String start;
 
   /// The highest price of the candle.
-  final String high;
+  final Decimal high;
 
   /// The lowest price of the candle.
-  final String low;
+  final Decimal low;
 
   /// The opening price of the candle.
-  final String open;
+  final Decimal open;
 
   /// The closing price of the candle.
-  final String close;
+  final Decimal close;
 
   /// The volume of the candle.
-  final String volume;
+  final Decimal volume;
 
   /// Candle constructor
   Candle({
@@ -32,11 +35,11 @@ class Candle {
   factory Candle.fromJson(Map<String, dynamic> json) {
     return Candle(
       start: json['start'],
-      high: json['high'],
-      low: json['low'],
-      open: json['open'],
-      close: json['close'],
-      volume: json['volume'],
+      high: requiredDecimal(json, 'high'),
+      low: requiredDecimal(json, 'low'),
+      open: requiredDecimal(json, 'open'),
+      close: requiredDecimal(json, 'close'),
+      volume: requiredDecimal(json, 'volume'),
     );
   }
 

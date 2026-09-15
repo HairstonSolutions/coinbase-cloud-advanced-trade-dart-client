@@ -5,7 +5,7 @@ import 'package:decimal/decimal.dart';
 /// A representation of money.
 class Money {
   /// The value of the money.
-  final String value;
+  final Decimal value;
 
   /// The currency of the money.
   final String currency;
@@ -16,7 +16,7 @@ class Money {
   /// Creates a Money from a Coinbase JSON object.
   factory Money.fromCBJson(Map<String, dynamic> json) {
     return Money(
-      value: json['value'],
+      value: requiredDecimal(json, 'value'),
       currency: json['currency'],
     );
   }
@@ -218,16 +218,16 @@ class PerpPosition {
   final String positionSide;
 
   /// The net size.
-  final String netSize;
+  final Decimal netSize;
 
   /// The buy order size.
-  final String buyOrderSize;
+  final Decimal buyOrderSize;
 
   /// The sell order size.
-  final String sellOrderSize;
+  final Decimal sellOrderSize;
 
   /// The IM contribution.
-  final String imContribution;
+  final Decimal imContribution;
 
   /// The unrealized PNL.
   final CurrencyPair unrealizedPnl;
@@ -239,7 +239,7 @@ class PerpPosition {
   final CurrencyPair liquidationPrice;
 
   /// The leverage.
-  final String leverage;
+  final Decimal leverage;
 
   /// The IM notional.
   final CurrencyPair imNotional;
@@ -254,10 +254,10 @@ class PerpPosition {
   final String marginType;
 
   /// The liquidation buffer.
-  final String liquidationBuffer;
+  final Decimal liquidationBuffer;
 
   /// The liquidation percentage.
-  final String liquidationPercentage;
+  final Decimal liquidationPercentage;
 
   /// The asset color.
   final String assetColor;
@@ -295,20 +295,20 @@ class PerpPosition {
       assetImageUrl: json['asset_image_url'],
       vwap: Vwap.fromCBJson(json['vwap']),
       positionSide: json['position_side'],
-      netSize: json['net_size'],
-      buyOrderSize: json['buy_order_size'],
-      sellOrderSize: json['sell_order_size'],
-      imContribution: json['im_contribution'],
+      netSize: requiredDecimal(json, 'net_size'),
+      buyOrderSize: requiredDecimal(json, 'buy_order_size'),
+      sellOrderSize: requiredDecimal(json, 'sell_order_size'),
+      imContribution: requiredDecimal(json, 'im_contribution'),
       unrealizedPnl: CurrencyPair.fromCBJson(json['unrealized_pnl']),
       markPrice: CurrencyPair.fromCBJson(json['mark_price']),
       liquidationPrice: CurrencyPair.fromCBJson(json['liquidation_price']),
-      leverage: json['leverage'],
+      leverage: requiredDecimal(json, 'leverage'),
       imNotional: CurrencyPair.fromCBJson(json['im_notional']),
       mmNotional: CurrencyPair.fromCBJson(json['mm_notional']),
       positionNotional: CurrencyPair.fromCBJson(json['position_notional']),
       marginType: json['margin_type'],
-      liquidationBuffer: json['liquidation_buffer'],
-      liquidationPercentage: json['liquidation_percentage'],
+      liquidationBuffer: requiredDecimal(json, 'liquidation_buffer'),
+      liquidationPercentage: requiredDecimal(json, 'liquidation_percentage'),
       assetColor: json['asset_color'],
     );
   }
@@ -325,22 +325,22 @@ class FuturesPosition {
   final String productId;
 
   /// The contract size.
-  final String contractSize;
+  final Decimal contractSize;
 
   /// The side.
   final String side;
 
   /// The amount.
-  final String amount;
+  final Decimal amount;
 
   /// The average entry price.
-  final String avgEntryPrice;
+  final Decimal avgEntryPrice;
 
   /// The current price.
-  final String currentPrice;
+  final Decimal currentPrice;
 
   /// The unrealized PNL.
-  final String unrealizedPnl;
+  final Decimal unrealizedPnl;
 
   /// The expiry.
   final String expiry;
@@ -358,7 +358,7 @@ class FuturesPosition {
   final String venue;
 
   /// The notional value.
-  final String notionalValue;
+  final Decimal notionalValue;
 
   /// The asset color.
   final String assetColor;
@@ -392,18 +392,18 @@ class FuturesPosition {
   factory FuturesPosition.fromCBJson(Map<String, dynamic> json) {
     return FuturesPosition(
       productId: json['product_id'],
-      contractSize: json['contract_size'],
+      contractSize: requiredDecimal(json, 'contract_size'),
       side: json['side'],
-      amount: json['amount'],
-      avgEntryPrice: json['avg_entry_price'],
-      currentPrice: json['current_price'],
-      unrealizedPnl: json['unrealized_pnl'],
+      amount: requiredDecimal(json, 'amount'),
+      avgEntryPrice: requiredDecimal(json, 'avg_entry_price'),
+      currentPrice: requiredDecimal(json, 'current_price'),
+      unrealizedPnl: requiredDecimal(json, 'unrealized_pnl'),
       expiry: json['expiry'],
       underlyingAsset: json['underlying_asset'],
       assetImgUrl: json['asset_img_url'],
       productName: json['product_name'],
       venue: json['venue'],
-      notionalValue: json['notional_value'],
+      notionalValue: requiredDecimal(json, 'notional_value'),
       assetColor: json['asset_color'],
       lastTradedAt: json['last_traded_at'],
       rollDate: json['roll_date'],

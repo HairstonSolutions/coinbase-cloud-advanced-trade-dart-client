@@ -2,6 +2,7 @@ import 'package:coinbase_cloud_advanced_trade_client/src/models/credential.dart'
 import 'package:coinbase_cloud_advanced_trade_client/src/rest/products/products.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/rest/public/products.dart'
     as public;
+import 'package:decimal/decimal.dart';
 import 'package:http/http.dart' as http;
 import 'package:logging/logging.dart';
 import 'package:mockito/mockito.dart';
@@ -36,6 +37,11 @@ void main() {
 
         expect(candles.length, 1);
         expect(candles[0].start, "1672531200");
+        expect(candles[0].high, equals(Decimal.parse('16600')));
+        expect(candles[0].low, equals(Decimal.parse('16500')));
+        expect(candles[0].open, equals(Decimal.parse('16550')));
+        expect(candles[0].close, equals(Decimal.parse('16580')));
+        expect(candles[0].volume, equals(Decimal.parse('1234.56')));
       });
 
       test('Get Product Candles (Private)', () async {
