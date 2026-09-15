@@ -1,0 +1,26 @@
+{
+  "accounts": [
+    {
+      "uuid": "00f35d2d-0a95-4834-a81c-8245355a293c",
+      "name": "USD Wallet",
+      "currency": "USD",
+      "type": "ACCOUNT_TYPE_FIAT",
+      "active": true,
+      "created_at": "2021-05-31T09:59:59Z",
+      "updated_at": "2021-05-31T09:59:59Z",
+      "deleted_at": null,
+      "hold": {
+        "value": "0.00",
+        "currency": "USD"
+      },
+      "available_balance": {
+        "value": "1000.00",
+        "currency": "USD"
+      },
+      "default": true
+    }
+  ],
+  "has_next": false,
+  "cursor": "stale",
+  "size": 1
+}

@@ -14,6 +14,7 @@ import 'package:coinbase_cloud_advanced_trade_client/src/models/page.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/stop_direction.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/services/logger.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/services/network.dart';
+import 'package:coinbase_cloud_advanced_trade_client/src/services/pagination.dart';
 import 'package:decimal/decimal.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
@@ -140,6 +141,8 @@ Future<Page<Order>> getOrdersPage({
 ///
 /// This function makes a GET request to the /orders/historical/batch endpoint
 /// of the Coinbase Advanced Trade API. It supports pagination using a cursor.
+/// Pages are followed while the response reports `has_next` and returns a new
+/// cursor, so a final page that still carries a cursor ends the loop.
 ///
 /// [limit] - A limit on the number of orders to be returned.
 /// [cursor] - A cursor for pagination.
@@ -196,11 +199,11 @@ Future<List<Order>> getOrders({
 
     orders.addAll(page.items);
 
-    if (page.nextCursor != null && page.nextCursor != '') {
-      currentCursor = page.nextCursor;
-    } else {
+    String? nextCursor = nextPageCursor(page, currentCursor);
+    if (nextCursor == null) {
       break;
     }
+    currentCursor = nextCursor;
   }
 
   return orders;
