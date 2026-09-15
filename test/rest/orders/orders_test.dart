@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:coinbase_cloud_advanced_trade_client/advanced_trade.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/create_order_result.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/preview_order.dart';
@@ -282,7 +284,7 @@ void main() {
         clientOrderId: clientOrderId,
         productId: 'BTC-USD',
         side: OrderSide.buy,
-        quoteSize: '10',
+        quoteSize: Decimal.parse('10'),
         credential: constants.credentials,
         client: mockClient,
       );
@@ -298,9 +300,9 @@ void main() {
         clientOrderId: clientOrderId,
         productId: 'BTC-USD',
         side: OrderSide.buy,
-        baseSize: '0.00001',
-        limitPrice: '100008',
-        stopPrice: '100009',
+        baseSize: Decimal.parse('0.00001'),
+        limitPrice: Decimal.parse('100008'),
+        stopPrice: Decimal.parse('100009'),
         stopDirection: StopDirection.stopDirectionStopUp,
         credential: constants.credentials,
         isSandbox:
@@ -327,9 +329,9 @@ void main() {
         clientOrderId: clientOrderId,
         productId: 'BTC-USD',
         side: OrderSide.buy,
-        baseSize: '0.00001',
-        limitPrice: '100004',
-        stopPrice: '100005',
+        baseSize: Decimal.parse('0.00001'),
+        limitPrice: Decimal.parse('100004'),
+        stopPrice: Decimal.parse('100005'),
         stopDirection: StopDirection.stopDirectionStopUp,
         endTime: DateTime.now().add(const Duration(days: 1)),
         credential: constants.credentials,
@@ -363,9 +365,9 @@ void main() {
         clientOrderId: clientOrderId,
         productId: 'BTC-USD',
         side: OrderSide.buy,
-        baseSize: '0.1',
-        limitPrice: '10000',
-        stopPrice: '10001',
+        baseSize: Decimal.parse('0.1'),
+        limitPrice: Decimal.parse('10000'),
+        stopPrice: Decimal.parse('10001'),
         stopDirection: StopDirection.stopDirectionStopUp,
         credential: constants.credentials,
         client: mockClient,
@@ -388,9 +390,9 @@ void main() {
         clientOrderId: clientOrderId,
         productId: 'BTC-USD',
         side: OrderSide.buy,
-        baseSize: '0.1',
-        limitPrice: '10000',
-        stopPrice: '10001',
+        baseSize: Decimal.parse('0.1'),
+        limitPrice: Decimal.parse('10000'),
+        stopPrice: Decimal.parse('10001'),
         stopDirection: StopDirection.stopDirectionStopUp,
         endTime: DateTime.now().add(const Duration(days: 1)),
         credential: constants.credentials,
@@ -414,7 +416,7 @@ void main() {
         clientOrderId: clientOrderId,
         productId: 'BTC-USD',
         side: OrderSide.sell,
-        baseSize: '0.1',
+        baseSize: Decimal.parse('0.1'),
         credential: constants.credentials,
         client: mockClient,
       );
@@ -429,8 +431,8 @@ void main() {
                 clientOrderId: 'test',
                 productId: 'BTC-USD',
                 side: OrderSide.buy,
-                quoteSize: '10',
-                baseSize: '0.1',
+                quoteSize: Decimal.parse('10'),
+                baseSize: Decimal.parse('0.1'),
                 credential: constants.credentials,
               ),
           throwsArgumentError);
@@ -449,8 +451,8 @@ void main() {
         clientOrderId: clientOrderId,
         productId: 'BTC-USD',
         side: OrderSide.buy,
-        baseSize: '0.1',
-        limitPrice: '10000',
+        baseSize: Decimal.parse('0.1'),
+        limitPrice: Decimal.parse('10000'),
         credential: constants.credentials,
         client: mockClient,
       );
@@ -472,8 +474,8 @@ void main() {
         clientOrderId: clientOrderId,
         productId: 'BTC-USD',
         side: OrderSide.buy,
-        baseSize: '0.1',
-        limitPrice: '10000',
+        baseSize: Decimal.parse('0.1'),
+        limitPrice: Decimal.parse('10000'),
         postOnly: true,
         credential: constants.credentials,
         client: mockClient,
@@ -512,6 +514,149 @@ void main() {
     });
   });
 
+  group('Decimal order inputs are serialized as plain decimal strings', () {
+    late MockClient mockClient;
+
+    setUp(() async {
+      mockClient = MockClient();
+
+      final String mockResponse =
+          await getJsonFromFile('rest/orders/create_order_success.json');
+
+      when(mockClient.post(any,
+              headers: anyNamed('headers'), body: anyNamed('body')))
+          .thenAnswer((_) async => http.Response(mockResponse, 200));
+    });
+
+    Map<String, dynamic> capturedRequestBody() {
+      final captured = verify(mockClient.post(any,
+              headers: anyNamed('headers'), body: captureAnyNamed('body')))
+          .captured
+          .single as String;
+      return jsonDecode(captured) as Map<String, dynamic>;
+    }
+
+    test('createLimitOrder sends base_size and limit_price as strings',
+        () async {
+      await createLimitOrder(
+        clientOrderId: 'client-order-id',
+        productId: 'BTC-USD',
+        side: OrderSide.buy,
+        baseSize: Decimal.parse('0.12345678'),
+        limitPrice: Decimal.parse('61250.10'),
+        credential: constants.credentials,
+        client: mockClient,
+      );
+
+      final configuration = capturedRequestBody()['order_configuration']
+          ['limit_limit_gtc'] as Map<String, dynamic>;
+
+      // Decimal normalizes trailing zeros: '61250.10' is sent as '61250.1'.
+      expect(configuration['base_size'], '0.12345678');
+      expect(configuration['limit_price'], '61250.1');
+      expect(configuration['post_only'], isFalse);
+    });
+
+    test('createMarketOrder sends quote_size as a string', () async {
+      await createMarketOrder(
+        clientOrderId: 'client-order-id',
+        productId: 'BTC-USD',
+        side: OrderSide.buy,
+        quoteSize: Decimal.parse('10.00'),
+        credential: constants.credentials,
+        client: mockClient,
+      );
+
+      final configuration = capturedRequestBody()['order_configuration']
+          ['market_market_ioc'] as Map<String, dynamic>;
+
+      expect(configuration['quote_size'], '10');
+      expect(configuration.containsKey('base_size'), isFalse);
+    });
+
+    test('createMarketOrder sends base_size as a string', () async {
+      await createMarketOrder(
+        clientOrderId: 'client-order-id',
+        productId: 'BTC-USD',
+        side: OrderSide.sell,
+        baseSize: Decimal.parse('0.00000001'),
+        credential: constants.credentials,
+        client: mockClient,
+      );
+
+      final configuration = capturedRequestBody()['order_configuration']
+          ['market_market_ioc'] as Map<String, dynamic>;
+
+      // No exponent notation, even for very small sizes.
+      expect(configuration['base_size'], '0.00000001');
+      expect(configuration.containsKey('quote_size'), isFalse);
+    });
+
+    test('createStopLimitOrderGTC sends prices and size as strings', () async {
+      await createStopLimitOrderGTC(
+        clientOrderId: 'client-order-id',
+        productId: 'BTC-USD',
+        side: OrderSide.buy,
+        baseSize: Decimal.parse('0.00001'),
+        limitPrice: Decimal.parse('100008.00'),
+        stopPrice: Decimal.parse('100009.50'),
+        stopDirection: StopDirection.stopDirectionStopUp,
+        credential: constants.credentials,
+        client: mockClient,
+      );
+
+      final configuration = capturedRequestBody()['order_configuration']
+          ['stop_limit_stop_limit_gtc'] as Map<String, dynamic>;
+
+      expect(configuration['base_size'], '0.00001');
+      expect(configuration['limit_price'], '100008');
+      expect(configuration['stop_price'], '100009.5');
+    });
+
+    test('createStopLimitOrderGTD sends prices and size as strings', () async {
+      final endTime = DateTime.utc(2030, 1, 1);
+
+      await createStopLimitOrderGTD(
+        clientOrderId: 'client-order-id',
+        productId: 'BTC-USD',
+        side: OrderSide.buy,
+        baseSize: Decimal.parse('0.00001'),
+        limitPrice: Decimal.parse('100004'),
+        stopPrice: Decimal.parse('100005'),
+        stopDirection: StopDirection.stopDirectionStopUp,
+        endTime: endTime,
+        credential: constants.credentials,
+        client: mockClient,
+      );
+
+      final configuration = capturedRequestBody()['order_configuration']
+          ['stop_limit_stop_limit_gtd'] as Map<String, dynamic>;
+
+      expect(configuration['base_size'], '0.00001');
+      expect(configuration['limit_price'], '100004');
+      expect(configuration['stop_price'], '100005');
+      expect(configuration['end_time'], endTime.toIso8601String());
+    });
+
+    test('large sizes are sent without exponent notation', () async {
+      await createLimitOrder(
+        clientOrderId: 'client-order-id',
+        productId: 'SHIB-USD',
+        side: OrderSide.buy,
+        baseSize: Decimal.parse('1e21'),
+        limitPrice: Decimal.parse('0.00001234'),
+        credential: constants.credentials,
+        client: mockClient,
+      );
+
+      final configuration = capturedRequestBody()['order_configuration']
+          ['limit_limit_gtc'] as Map<String, dynamic>;
+
+      expect(configuration['base_size'], '1000000000000000000000');
+      expect(configuration['limit_price'], '0.00001234');
+    });
+  });
+
   group('Test Create Orders to Coinbase AT API Endpoints',
       skip: constants.ciSkip, () {
     test('Create a new market order with quote size', () async {
@@ -520,7 +665,7 @@ void main() {
         clientOrderId: clientOrderId,
         productId: 'BTC-USD',
         side: OrderSide.buy,
-        quoteSize: '10',
+        quoteSize: Decimal.parse('10'),
         credential: constants.credentials,
         isSandbox: true,
       );
@@ -575,7 +720,7 @@ void main() {
         clientOrderId: clientOrderId,
         productId: 'BTC-USD',
         side: OrderSide.sell,
-        baseSize: '0.1',
+        baseSize: Decimal.parse('0.1'),
         credential: constants.credentials,
         isSandbox: true,
       );
@@ -590,8 +735,8 @@ void main() {
                 clientOrderId: 'test',
                 productId: 'BTC-USD',
                 side: OrderSide.buy,
-                quoteSize: '10',
-                baseSize: '0.1',
+                quoteSize: Decimal.parse('10'),
+                baseSize: Decimal.parse('0.1'),
                 credential: constants.credentials,
                 isSandbox: true,
               ),
@@ -604,8 +749,8 @@ void main() {
         clientOrderId: clientOrderId,
         productId: 'BTC-USD',
         side: OrderSide.buy,
-        baseSize: '0.1',
-        limitPrice: '10000',
+        baseSize: Decimal.parse('0.1'),
+        limitPrice: Decimal.parse('10000'),
         credential: constants.credentials,
         isSandbox: true,
       );
@@ -620,8 +765,8 @@ void main() {
         clientOrderId: clientOrderId,
         productId: 'BTC-USD',
         side: OrderSide.buy,
-        baseSize: '0.001',
-        limitPrice: '10000',
+        baseSize: Decimal.parse('0.001'),
+        limitPrice: Decimal.parse('10000'),
         postOnly: true,
         credential: constants.credentials,
         isSandbox: true,
@@ -666,8 +811,8 @@ void main() {
         clientOrderId: clientOrderId,
         productId: 'BTC-USD',
         side: OrderSide.buy,
-        baseSize: '0.001',
-        limitPrice: '10000',
+        baseSize: Decimal.parse('0.001'),
+        limitPrice: Decimal.parse('10000'),
         postOnly: true,
         credential: constants.credentials,
         isSandbox: true,
@@ -704,8 +849,8 @@ void main() {
         clientOrderId: clientOrderId,
         productId: 'BTC-USD',
         side: OrderSide.buy,
-        baseSize: '0.0001',
-        limitPrice: orderPrice.toString(),
+        baseSize: Decimal.parse('0.0001'),
+        limitPrice: orderPrice,
         postOnly: true,
         credential: constants.credentials,
       );
@@ -725,8 +870,8 @@ void main() {
         clientOrderId: clientOrderId2,
         productId: 'BTC-USD',
         side: OrderSide.buy,
-        baseSize: '0.0001',
-        limitPrice: secondOrderPrice.toString(),
+        baseSize: Decimal.parse('0.0001'),
+        limitPrice: secondOrderPrice,
         postOnly: true,
         credential: constants.credentials,
       );
@@ -809,8 +954,8 @@ void main() {
         clientOrderId: clientOrderId,
         productId: 'BTC-USD',
         side: OrderSide.buy,
-        baseSize: '0.1',
-        limitPrice: '10000',
+        baseSize: Decimal.parse('0.1'),
+        limitPrice: Decimal.parse('10000'),
         credential: constants.credentials,
         client: mockClient,
       );
@@ -836,8 +981,8 @@ void main() {
         clientOrderId: clientOrderId,
         productId: 'BTC-USD',
         side: OrderSide.buy,
-        baseSize: '0.1',
-        limitPrice: '10000',
+        baseSize: Decimal.parse('0.1'),
+        limitPrice: Decimal.parse('10000'),
         credential: constants.credentials,
         client: mockClient,
       );
@@ -862,8 +1007,8 @@ void main() {
         clientOrderId: clientOrderId,
         productId: 'BTC-USD',
         side: OrderSide.buy,
-        baseSize: '0.1',
-        limitPrice: '10000',
+        baseSize: Decimal.parse('0.1'),
+        limitPrice: Decimal.parse('10000'),
         credential: constants.credentials,
         client: mockClient,
       );

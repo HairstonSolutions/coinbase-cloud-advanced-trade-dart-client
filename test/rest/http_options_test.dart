@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:coinbase_cloud_advanced_trade_client/advanced_trade.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/create_order_result.dart';
+import 'package:decimal/decimal.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:logging/logging.dart';
@@ -91,8 +92,8 @@ void main() {
         clientOrderId: 'client-id-123',
         productId: 'BTC-USD',
         side: OrderSide.buy,
-        baseSize: '0.1',
-        limitPrice: '10000',
+        baseSize: Decimal.parse('0.1'),
+        limitPrice: Decimal.parse('10000'),
         credential: constants.credentials,
         options:
             CoinbaseHttpOptions(baseUrl: customBaseUrl, client: mockClient),
