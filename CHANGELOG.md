@@ -23,6 +23,18 @@ arithmetic.
 - `FeeTier.aopTo` and `VolumeTypesAndRange.volTo` are `Decimal?`. Coinbase sends
   an empty string for the highest tier, which has no upper bound; that now
   parses to `null` rather than throwing.
+- Order creation and edit **inputs** are `Decimal` too, so the API is symmetric
+  in both directions.
+  Fixes [#111](https://github.com/HairstonSolutions/coinbase-cloud-advanced-trade-dart-client/issues/111).
+  `createMarketOrder` (`quoteSize`, `baseSize`), `createLimitOrder` and
+  `createStopLimitOrderGTC` / `createStopLimitOrderGTD` (`baseSize`,
+  `limitPrice`, `stopPrice`) and `editOrder` / `editOrderPreview` (`price`,
+  `size`) took `String`, so a `Decimal` had to be stringified by the caller and
+  nothing stopped `limitPrice: price.toStringAsFixed(2)` on a `double`, or a
+  localised `'61,250.10'`, from reaching Coinbase. The package now serializes
+  these with `Decimal.toString()`, which never emits an exponent or a grouping
+  separator. No `String` price or size parameter remains on the order-creation
+  and edit functions.
 - `getAccountBalance` returns `Future<Decimal?>`.
 - `toJson()` / `toCBJson()` serialize decimals as strings, so payloads stay
   `jsonEncode`-able and round-trip without loss.
@@ -154,6 +166,26 @@ final Decimal withFee = summary.feeTier.takerFeeRate * price;
 
 // The unbounded top fee tier is now null rather than an empty string.
 final Decimal? aopTo = summary.feeTier.aopTo;
+
+// Before — order inputs were Strings.
+await createLimitOrder(
+  clientOrderId: clientOrderId,
+  productId: 'BTC-USD',
+  side: OrderSide.buy,
+  baseSize: '0.12345678',
+  limitPrice: '61250.10',
+  credential: credential,
+);
+
+// After — pass the Decimal straight through; the package serializes it.
+await createLimitOrder(
+  clientOrderId: clientOrderId,
+  productId: 'BTC-USD',
+  side: OrderSide.buy,
+  baseSize: Decimal.parse('0.12345678'),  // sent as "0.12345678"
+  limitPrice: Decimal.parse('61250.10'),  // sent as "61250.1"
+  credential: credential,
+);
 ```
 
 Note that `Decimal` normalizes trailing zeros: a wire value of `'61250.10'`

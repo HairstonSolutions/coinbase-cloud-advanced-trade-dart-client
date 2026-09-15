@@ -1,6 +1,7 @@
 import 'dart:io' show Platform, exit, stderr;
 
 import 'package:coinbase_cloud_advanced_trade_client/advanced_trade.dart';
+import 'package:decimal/decimal.dart';
 
 final Map<String, String> envVars = Platform.environment;
 final String? apiKeyName = envVars['COINBASE_API_KEY_NAME'];
@@ -38,7 +39,7 @@ void main() async {
     clientOrderId: 'test-order-${DateTime.now().millisecondsSinceEpoch}',
     productId: 'BTC-USD',
     side: OrderSide.buy,
-    quoteSize: '1.0',
+    quoteSize: Decimal.parse('1.0'),
     credential: credential,
   );
 

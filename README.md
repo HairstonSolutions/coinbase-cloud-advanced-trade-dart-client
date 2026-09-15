@@ -76,8 +76,16 @@ final withFee = books.first.asks.first.price *
     (Decimal.one + summary!.feeTier.takerFeeRate);
 ```
 
+Order inputs are `Decimal` too: `createMarketOrder`, `createLimitOrder`,
+`createStopLimitOrderGTC`, `createStopLimitOrderGTD`, `editOrder` and
+`editOrderPreview` take `Decimal` prices and sizes and serialize them to the
+wire themselves, so a `double` formatted with `toStringAsFixed` or a localised
+`'61,250.10'` cannot reach the API.
+
 `Decimal` normalizes trailing zeros, so a wire value of `'61250.10'` parses to
-`61250.1`. The value is preserved exactly; only its textual form is normalized.
+`61250.1`, and `limitPrice: Decimal.parse('61250.10')` is sent as
+`"limit_price":"61250.1"`. The value is preserved exactly; only its textual
+form is normalized.
 
 Integral fields stay integral: `Order.numberOfFills` is an `int`, and epoch
 timestamps on `ServerTime` remain `num`.
@@ -159,6 +167,7 @@ Here is an example of how to create a limit order:
 
 ```dart
 import 'package:coinbase_cloud_advanced_trade_client/coinbase_cloud_advanced_trade_client.dart';
+import 'package:decimal/decimal.dart';
 import 'package:uuid/uuid.dart';
 
 void main() async {
@@ -178,8 +187,8 @@ void main() async {
       clientOrderId: clientOrderId,
       productId: 'BTC-USD',
       side: OrderSide.buy,
-      baseSize: '0.001',
-      limitPrice: '10000.00',
+      baseSize: Decimal.parse('0.001'),
+      limitPrice: Decimal.parse('10000.00'),
       credential: credential,
     );
     switch (result) {

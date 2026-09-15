@@ -14,6 +14,7 @@ import 'package:coinbase_cloud_advanced_trade_client/src/models/page.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/models/orders/stop_direction.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/services/logger.dart';
 import 'package:coinbase_cloud_advanced_trade_client/src/services/network.dart';
+import 'package:decimal/decimal.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'package:logging/logging.dart';
@@ -266,9 +267,11 @@ Future<Order?> getOrder({
 /// [productId] - The ID of the product to trade.
 /// [side] - The side of the order (BUY or SELL).
 /// [quoteSize] - The amount of quote currency to spend on a BUY order, or the
-/// amount of base currency to sell on a SELL order.
+/// amount of base currency to sell on a SELL order. Serialized with
+/// [Decimal.toString], which never emits an exponent or a grouping separator.
 /// [baseSize] - The amount of base currency to buy on a BUY order, or the
-/// amount of quote currency to receive on a SELL order.
+/// amount of quote currency to receive on a SELL order. Serialized with
+/// [Decimal.toString], which never emits an exponent or a grouping separator.
 /// [credential] - The user's API credentials.
 /// [options] - Optional HTTP options such as a custom base URL, timeout,
 /// and http client.
@@ -280,8 +283,8 @@ Future<CreateOrderResult> createMarketOrder({
   required String clientOrderId,
   required String productId,
   required OrderSide side,
-  String? quoteSize,
-  String? baseSize,
+  Decimal? quoteSize,
+  Decimal? baseSize,
   required Credential credential,
   bool isSandbox = false,
   Client? client,
@@ -298,9 +301,11 @@ Future<CreateOrderResult> createMarketOrder({
   Map<String, dynamic>? marketMarketIOC = {};
 
   (quoteSize != null)
-      ? marketMarketIOC.addAll({'quote_size': quoteSize})
+      ? marketMarketIOC.addAll({'quote_size': quoteSize.toString()})
       : null;
-  (baseSize != null) ? marketMarketIOC.addAll({'base_size': baseSize}) : null;
+  (baseSize != null)
+      ? marketMarketIOC.addAll({'base_size': baseSize.toString()})
+      : null;
 
   final orderConfiguration = {'market_market_ioc': marketMarketIOC};
 
@@ -340,8 +345,8 @@ Future<CreateOrderResult> createLimitOrder({
   required String clientOrderId,
   required String productId,
   required OrderSide side,
-  required String baseSize,
-  required String limitPrice,
+  required Decimal baseSize,
+  required Decimal limitPrice,
   bool postOnly = false,
   required Credential credential,
   bool isSandbox = false,
@@ -350,8 +355,8 @@ Future<CreateOrderResult> createLimitOrder({
 }) async {
   final orderConfiguration = {
     'limit_limit_gtc': {
-      'base_size': baseSize,
-      'limit_price': limitPrice,
+      'base_size': baseSize.toString(),
+      'limit_price': limitPrice.toString(),
       'post_only': postOnly,
     },
   };
@@ -392,9 +397,9 @@ Future<CreateOrderResult> createStopLimitOrderGTC({
   required String clientOrderId,
   required String productId,
   required OrderSide side,
-  required String baseSize,
-  required String limitPrice,
-  required String stopPrice,
+  required Decimal baseSize,
+  required Decimal limitPrice,
+  required Decimal stopPrice,
   required StopDirection stopDirection,
   required Credential credential,
   bool isSandbox = false,
@@ -403,9 +408,9 @@ Future<CreateOrderResult> createStopLimitOrderGTC({
 }) async {
   final orderConfiguration = {
     'stop_limit_stop_limit_gtc': {
-      'base_size': baseSize,
-      'limit_price': limitPrice,
-      'stop_price': stopPrice,
+      'base_size': baseSize.toString(),
+      'limit_price': limitPrice.toString(),
+      'stop_price': stopPrice.toString(),
       'stop_direction': stopDirection.toCB(),
     },
   };
@@ -448,9 +453,9 @@ Future<CreateOrderResult> createStopLimitOrderGTD({
   required String clientOrderId,
   required String productId,
   required OrderSide side,
-  required String baseSize,
-  required String limitPrice,
-  required String stopPrice,
+  required Decimal baseSize,
+  required Decimal limitPrice,
+  required Decimal stopPrice,
   required StopDirection stopDirection,
   required DateTime endTime,
   required Credential credential,
@@ -460,9 +465,9 @@ Future<CreateOrderResult> createStopLimitOrderGTD({
 }) async {
   final orderConfiguration = {
     'stop_limit_stop_limit_gtd': {
-      'base_size': baseSize,
-      'limit_price': limitPrice,
-      'stop_price': stopPrice,
+      'base_size': baseSize.toString(),
+      'limit_price': limitPrice.toString(),
+      'stop_price': stopPrice.toString(),
       'stop_direction': stopDirection.toCB(),
       'end_time': endTime.toUtc().toIso8601String(),
     },
@@ -541,14 +546,18 @@ Future<CreateOrderResult> _createOrder({
 /// Returns an [EditOrderResponse] object.
 Future<EditOrderResponse> editOrder({
   required String orderId,
-  required String price,
-  required String size,
+  required Decimal price,
+  required Decimal size,
   required Credential credential,
   bool isSandbox = false,
   Client? client,
   CoinbaseHttpOptions? options,
 }) async {
-  final body = {'order_id': orderId, 'price': price, 'size': size};
+  final body = {
+    'order_id': orderId,
+    'price': price.toString(),
+    'size': size.toString(),
+  };
 
   http.Response response = await postAuthorized(
     '/orders/edit',
@@ -587,14 +596,18 @@ Future<EditOrderResponse> editOrder({
 /// Returns an [EditOrderPreviewResponse] object.
 Future<EditOrderPreviewResponse> editOrderPreview({
   required String orderId,
-  required String price,
-  required String size,
+  required Decimal price,
+  required Decimal size,
   required Credential credential,
   bool isSandbox = false,
   Client? client,
   CoinbaseHttpOptions? options,
 }) async {
-  final body = {'order_id': orderId, 'price': price, 'size': size};
+  final body = {
+    'order_id': orderId,
+    'price': price.toString(),
+    'size': size.toString(),
+  };
 
   http.Response response = await postAuthorized(
     '/orders/edit_preview',
